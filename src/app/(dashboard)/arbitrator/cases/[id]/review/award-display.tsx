@@ -1,13 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+
 import Link from 'next/link';
+
 import { format } from 'date-fns';
 import {
   Gavel,
   FileText,
   Scale,
-  CheckCircle,
   AlertTriangle,
   ChevronRight,
   ExternalLink,
@@ -224,9 +225,10 @@ export function AwardDisplay({
               ) : (
                 <div className="space-y-2">
                   {findings.map((finding) => (
-                    <div
+                    <button
+                      type="button"
                       key={finding.id}
-                      className={`rounded-lg border p-3 cursor-pointer transition-all hover:shadow-md ${
+                      className={`w-full text-left rounded-lg border p-3 cursor-pointer transition-all hover:shadow-md ${
                         selectedFinding?.id === finding.id
                           ? 'border-primary bg-primary/5 ring-1 ring-primary'
                           : 'hover:border-muted-foreground/30'
@@ -254,7 +256,7 @@ export function AwardDisplay({
                         </div>
                         <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               )}
@@ -283,9 +285,10 @@ export function AwardDisplay({
               ) : (
                 <div className="space-y-2">
                   {conclusions.map((conclusion) => (
-                    <div
+                    <button
+                      type="button"
                       key={conclusion.id}
-                      className={`rounded-lg border p-3 cursor-pointer transition-all hover:shadow-md ${
+                      className={`w-full text-left rounded-lg border p-3 cursor-pointer transition-all hover:shadow-md ${
                         selectedConclusion?.id === conclusion.id
                           ? 'border-primary bg-primary/5 ring-1 ring-primary'
                           : 'hover:border-muted-foreground/30'
@@ -320,7 +323,7 @@ export function AwardDisplay({
                         </div>
                         <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               )}

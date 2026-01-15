@@ -1,11 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+
 import { useRouter } from 'next/navigation';
-import { useForm, useFieldArray } from 'react-hook-form';
+
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { toast } from 'sonner';
 import {
   FileText,
   Plus,
@@ -16,12 +15,19 @@ import {
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
+import { useForm, useFieldArray } from 'react-hook-form';
+import { toast } from 'sonner';
+import * as z from 'zod';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
@@ -29,11 +35,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
+import { Textarea } from '@/components/ui/textarea';
 
 const claimCategories = [
   { value: 'damages', label: 'Damages' },
@@ -159,7 +161,7 @@ export function StatementSubmissionForm({
       });
 
       if (!response.ok) {
-        const error = await response.json();
+        const error = (await response.json()) as { error?: { message?: string } };
         throw new Error(error.error?.message || 'Failed to submit statement');
       }
 
@@ -188,7 +190,7 @@ export function StatementSubmissionForm({
           <CardDescription>
             {type === 'INITIAL'
               ? 'Present your position and the facts supporting your case.'
-              : 'Respond to the other party\'s statement and provide clarifications.'}
+              : 'Respond to the other party&apos;s statement and provide clarifications.'}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -202,7 +204,7 @@ export function StatementSubmissionForm({
               placeholder={
                 type === 'INITIAL'
                   ? 'Describe your position on this dispute. Include relevant facts, your understanding of events, and the basis for your claims or defenses...'
-                  : 'Address the points raised in the other party\'s statement. Clarify any misunderstandings and provide additional context...'
+                  : 'Address the points raised in the other party&apos;s statement. Clarify any misunderstandings and provide additional context...'
               }
               className="min-h-[300px] mt-2"
             />

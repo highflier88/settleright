@@ -1,7 +1,9 @@
 import Link from 'next/link';
+
+import { KYCStatus, type Prisma, UserRole } from '@prisma/client';
 import { Search } from 'lucide-react';
 
-import { prisma } from '@/lib/db';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -19,8 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { UserRole, KYCStatus } from '@prisma/client';
+import { prisma } from '@/lib/db';
 import { ROLE_DISPLAY_NAMES } from '@/lib/rbac';
 import { formatDate } from '@/lib/utils';
 
@@ -53,10 +54,14 @@ export async function UsersTable({ searchParams }: UsersTableProps) {
   const page = parseInt(searchParams.page ?? '1', 10);
   const perPage = 20;
   const search = searchParams.search;
-  const roleFilter = searchParams.role as UserRole | undefined;
-  const kycFilter = searchParams.kycStatus as KYCStatus | undefined;
+  const roleFilter = searchParams.role && Object.values(UserRole).includes(searchParams.role as UserRole)
+    ? (searchParams.role as UserRole)
+    : undefined;
+  const kycFilter = searchParams.kycStatus && Object.values(KYCStatus).includes(searchParams.kycStatus as KYCStatus)
+    ? (searchParams.kycStatus as KYCStatus)
+    : undefined;
 
-  const where: Record<string, unknown> = {};
+  const where: Prisma.UserWhereInput = {};
 
   if (search) {
     where.OR = [

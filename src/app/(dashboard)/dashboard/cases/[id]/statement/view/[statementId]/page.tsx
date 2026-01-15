@@ -1,16 +1,18 @@
-import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
+import { notFound, redirect } from 'next/navigation';
+
+import { CaseStatus, StatementType } from '@prisma/client';
 import { ArrowLeft, FileText, Calendar, DollarSign, Edit } from 'lucide-react';
 
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getAuthUser } from '@/lib/auth';
 import { userHasAccessToCase, getCaseWithDetails } from '@/lib/services/case';
 import { getStatementById, parseStatementContent } from '@/lib/services/statement';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 
 import type { Metadata } from 'next';
-import { CaseStatus, StatementType } from '@prisma/client';
+
 
 export const metadata: Metadata = {
   title: 'View Statement',
@@ -82,7 +84,7 @@ export default async function ViewStatementPage({ params }: PageProps) {
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-4">
               <Badge variant={isOwn ? 'default' : 'secondary'}>
-                {isOwn ? 'Your Statement' : "Other Party's Statement"}
+                {isOwn ? 'Your Statement' : 'Other Party&apos;s Statement'}
               </Badge>
               <Badge variant="outline">
                 Version {statement.version}

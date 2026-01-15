@@ -1,6 +1,7 @@
+import { AuditAction, CaseStatus, StatementType } from '@prisma/client';
+
 import { prisma } from '@/lib/db';
 import { createAuditLog } from '@/lib/services/audit';
-import { AuditAction, CaseStatus, StatementType } from '@prisma/client';
 
 import type { Statement } from '@prisma/client';
 
@@ -205,7 +206,7 @@ export async function createStatement(
         submittedById: userId,
         type,
         content: content.narrative,
-        claimItems: content.claimItems ? JSON.parse(JSON.stringify(content)) : undefined,
+        claimItems: content.claimItems ? (JSON.parse(JSON.stringify(content)) as object) : undefined,
         version: 1,
       },
     });
@@ -298,7 +299,7 @@ export async function updateStatement(
       where: { id: statementId },
       data: {
         content: content.narrative,
-        claimItems: content.claimItems ? JSON.parse(JSON.stringify(content)) : undefined,
+        claimItems: content.claimItems ? (JSON.parse(JSON.stringify(content)) as object) : undefined,
         version: newVersion,
         updatedAt: new Date(),
       },
@@ -458,9 +459,9 @@ export async function canSubmitStatement(
 export function parseStatementContent(statement: Statement): StatementContent {
   try {
     if (statement.claimItems) {
-      const parsed = typeof statement.claimItems === 'string'
-        ? JSON.parse(statement.claimItems as string)
-        : statement.claimItems;
+      const parsed = (typeof statement.claimItems === 'string'
+        ? JSON.parse(statement.claimItems)
+        : statement.claimItems) as { timeline?: TimelineEntry[]; claimItems?: ClaimItem[] };
 
       return {
         narrative: statement.content,

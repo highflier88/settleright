@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 
 import { getAuthUser } from '@/lib/auth';
+
 import { OnboardingForm } from './onboarding-form';
 
 import type { Metadata } from 'next';

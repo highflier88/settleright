@@ -1,17 +1,20 @@
-import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
+import { notFound, redirect } from 'next/navigation';
+
+import { CaseStatus, StatementType } from '@prisma/client';
 import { ArrowLeft, FileText, Edit, Clock, CheckCircle } from 'lucide-react';
 
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getAuthUser } from '@/lib/auth';
 import { userHasAccessToCase, getCaseWithDetails } from '@/lib/services/case';
 import { getCaseStatements, canSubmitStatement, parseStatementContent, getStatementStatusInfo } from '@/lib/services/statement';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+
 import { StatementSubmissionForm } from './statement-form';
 
 import type { Metadata } from 'next';
-import { CaseStatus, StatementType } from '@prisma/client';
+
 
 export const metadata: Metadata = {
   title: 'Statement',
@@ -130,7 +133,7 @@ export default async function StatementPage({ params }: PageProps) {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Other Party's Statements</CardTitle>
+            <CardTitle className="text-sm font-medium">Other Party&apos;s Statements</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
@@ -287,10 +290,10 @@ export default async function StatementPage({ params }: PageProps) {
           <p>
             <strong>Initial Statement:</strong> Present your position on the dispute,
             including the facts as you understand them, relevant timeline of events,
-            and the specific claims or defenses you're making.
+            and the specific claims or defenses you&apos;re making.
           </p>
           <p>
-            <strong>Rebuttal Statement:</strong> After reviewing the other party's
+            <strong>Rebuttal Statement:</strong> After reviewing the other party&apos;s
             initial statement, you may submit a rebuttal to address their claims,
             clarify any misunderstandings, and provide additional context.
           </p>
@@ -299,7 +302,7 @@ export default async function StatementPage({ params }: PageProps) {
           </p>
           <ul className="list-disc pl-5 space-y-1">
             <li>Be clear and concise in your narrative</li>
-            <li>Reference specific evidence you've uploaded</li>
+            <li>Reference specific evidence you&apos;ve uploaded</li>
             <li>Include a timeline of key events with dates</li>
             <li>Itemize your claims with specific amounts and categories</li>
             <li>Keep a professional tone throughout</li>

@@ -1,8 +1,9 @@
 import { randomBytes } from 'crypto';
 
+import { CaseStatus, DisputeType, AuditAction, InvitationStatus } from '@prisma/client';
+
 import { prisma } from '@/lib/db';
 import { createAuditLog } from '@/lib/services/audit';
-import { CaseStatus, DisputeType, AuditAction, InvitationStatus } from '@prisma/client';
 
 import type { Case } from '@prisma/client';
 

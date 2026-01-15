@@ -4,7 +4,7 @@ export function CasesListSkeleton() {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-4">
-        {[...Array(4)].map((_, i) => (
+        {Array.from({ length: 4 }, (_, i) => (
           <Card key={i}>
             <CardHeader className="pb-2">
               <div className="h-4 w-20 animate-pulse bg-muted rounded" />
@@ -27,7 +27,7 @@ export function CasesListSkeleton() {
       </Card>
 
       <div className="space-y-4">
-        {[...Array(3)].map((_, i) => (
+        {Array.from({ length: 3 }, (_, i) => (
           <Card key={i}>
             <CardContent className="p-6">
               <div className="space-y-3">

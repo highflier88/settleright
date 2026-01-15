@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+
 import { History, ChevronDown, ChevronRight, User, Clock, FileText } from 'lucide-react';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -11,7 +13,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import {
   Collapsible,
   CollapsibleContent,
@@ -103,7 +104,7 @@ export function RevisionHistory({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
-        {revisions.map((revision, index) => {
+        {revisions.map((revision, _index) => {
           const isExpanded = expandedRevisions.has(revision.id);
           const isCurrent = revision.version === currentVersion;
           const changeTypeInfo = CHANGE_TYPE_LABELS[revision.changeType];

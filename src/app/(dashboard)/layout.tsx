@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation';
 
-import { getAuthUser } from '@/lib/auth';
-import { DashboardNav } from '@/components/layout/dashboard-nav';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
+import { DashboardNav } from '@/components/layout/dashboard-nav';
+import { getAuthUser } from '@/lib/auth';
 
 export default async function DashboardLayout({
   children,

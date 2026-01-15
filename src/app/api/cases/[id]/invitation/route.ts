@@ -1,6 +1,7 @@
 
-import { withAuth, AuthenticatedRequest } from '@/lib/api/with-auth';
+import { NotFoundError, ForbiddenError, BadRequestError } from '@/lib/api/errors';
 import { successResponse, errorResponse } from '@/lib/api/response';
+import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { userHasAccessToCase } from '@/lib/services/case';
 import {
   getInvitationByCaseId,
@@ -9,7 +10,6 @@ import {
   getInvitationStatusLabel,
   getInvitationTimeRemaining,
 } from '@/lib/services/invitation';
-import { NotFoundError, ForbiddenError, BadRequestError } from '@/lib/api/errors';
 
 // GET /api/cases/[id]/invitation - Get invitation status
 export const GET = withAuth(

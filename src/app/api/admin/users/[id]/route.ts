@@ -1,11 +1,11 @@
+import { UserRole, AuditAction } from '@prisma/client';
 import { z } from 'zod';
 
-import { prisma } from '@/lib/db';
-import { withAdmin, AuthenticatedRequest } from '@/lib/api/with-auth';
-import { successResponse } from '@/lib/api/response';
 import { NotFoundError, BadRequestError } from '@/lib/api/errors';
+import { successResponse } from '@/lib/api/response';
+import { withAdmin, type AuthenticatedRequest } from '@/lib/api/with-auth';
+import { prisma } from '@/lib/db';
 import { validateBody } from '@/lib/validations';
-import { UserRole, AuditAction } from '@prisma/client';
 
 const updateUserSchema = z.object({
   role: z.nativeEnum(UserRole).optional(),
@@ -98,7 +98,7 @@ async function handlePatch(
   if (!id) {
     throw new NotFoundError('User not found');
   }
-  const body = await request.json();
+  const body: unknown = await request.json();
   const data = validateBody(updateUserSchema, body);
 
   // Verify user exists

@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
+
 import Image from 'next/image';
+import Link from 'next/link';
+
 import { Menu, X, ChevronRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';

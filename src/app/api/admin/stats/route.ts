@@ -1,7 +1,9 @@
-import { prisma } from '@/lib/db';
-import { withAdmin, AuthenticatedRequest } from '@/lib/api/with-auth';
-import { successResponse } from '@/lib/api/response';
 import { UserRole, CaseStatus, KYCStatus } from '@prisma/client';
+
+import { successResponse } from '@/lib/api/response';
+import { withAdmin, type AuthenticatedRequest } from '@/lib/api/with-auth';
+import { prisma } from '@/lib/db';
+
 
 async function handleGet(_request: AuthenticatedRequest) {
   const [

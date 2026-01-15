@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+
 import { useRouter } from 'next/navigation';
+
 import {
   Bell,
   CheckCheck,
@@ -80,7 +82,9 @@ export function NotificationCenter({ initialUnreadCount = 0 }: NotificationCente
       const offset = reset ? 0 : notifications.length;
       const response = await fetch(`/api/notifications?limit=20&offset=${offset}`);
       if (response.ok) {
-        const data = await response.json();
+        const data = (await response.json()) as {
+          data: { notifications: Notification[]; unreadCount: number; hasMore: boolean };
+        };
         setNotifications((prev) =>
           reset ? data.data.notifications : [...prev, ...data.data.notifications]
         );
@@ -183,10 +187,11 @@ export function NotificationCenter({ initialUnreadCount = 0 }: NotificationCente
           ) : (
             <div className="divide-y">
               {notifications.map((notification) => (
-                <div
+                <button
+                  type="button"
                   key={notification.id}
                   className={cn(
-                    'flex gap-3 p-4 hover:bg-muted/50 cursor-pointer transition-colors',
+                    'flex gap-3 p-4 hover:bg-muted/50 cursor-pointer transition-colors w-full text-left',
                     !notification.readAt && 'bg-primary/5'
                   )}
                   onClick={() => {
@@ -224,7 +229,7 @@ export function NotificationCenter({ initialUnreadCount = 0 }: NotificationCente
                       <div className="h-2 w-2 rounded-full bg-primary" />
                     </div>
                   )}
-                </div>
+                </button>
               ))}
 
               {/* Load more */}

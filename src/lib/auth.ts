@@ -1,7 +1,7 @@
 import { auth, currentUser } from '@clerk/nextjs/server';
 
-import { prisma } from './db';
 import { UnauthorizedError, ForbiddenError } from './api/errors';
+import { prisma } from './db';
 
 import type { UserRole } from '@prisma/client';
 import type { User } from '@prisma/client';

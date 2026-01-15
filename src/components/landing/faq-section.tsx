@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+
 import Link from 'next/link';
+
 import {
   Scale,
   Clock,
@@ -20,6 +22,7 @@ import {
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+
 import { SectionWrapper } from './section-wrapper';
 
 interface FAQ {
@@ -207,7 +210,7 @@ export function FAQSection() {
           </div>
           <h3 className="text-lg font-semibold">Still have questions?</h3>
           <p className="mt-2 text-muted-foreground">
-            We're here to help. Reach out and we'll get back to you within 24 hours.
+            We&apos;re here to help. Reach out and we&apos;ll get back to you within 24 hours.
           </p>
           <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Link href="/contact">

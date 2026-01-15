@@ -1,6 +1,7 @@
+import { AuditAction, CaseStatus } from '@prisma/client';
+
 import { prisma } from '@/lib/db';
 import { createAuditLog } from '@/lib/services/audit';
-import { AuditAction, CaseStatus } from '@prisma/client';
 
 // Deadline configuration (in days)
 export const DEADLINE_CONFIG = {

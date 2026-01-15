@@ -1,7 +1,7 @@
 import { auth } from '@clerk/nextjs/server';
 
-import { setSession, getSession, deleteSession } from './storage/kv';
 import { prisma } from './db';
+import { setSession, getSession, deleteSession } from './storage/kv';
 
 export interface SessionMetadata {
   userId: string;

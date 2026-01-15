@@ -2,16 +2,25 @@ import { headers } from 'next/headers';
 
 import { RateLimitError } from './api/errors';
 
+// Define interface for KV client to avoid import() type annotations
+interface KVClient {
+  zremrangebyscore: (key: string, min: number, max: number) => Promise<number>;
+  zcard: (key: string) => Promise<number>;
+  zrange: <T>(key: string, start: number, stop: number, options?: { withScores?: boolean }) => Promise<T>;
+  zadd: (key: string, options: { score: number; member: string }) => Promise<number | null>;
+  expire: (key: string, seconds: number) => Promise<number>;
+}
+
 // Lazy import KV to avoid errors when environment vars are missing
-let kv: typeof import('@vercel/kv').kv | null = null;
+let kv: KVClient | null = null;
 const isKVConfigured = !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
 
-async function getKV() {
+async function getKV(): Promise<KVClient | null> {
   if (!isKVConfigured) return null;
   if (kv) return kv;
   try {
-    const module = await import('@vercel/kv');
-    kv = module.kv;
+    const kvModule = await import('@vercel/kv');
+    kv = kvModule.kv as KVClient;
     return kv;
   } catch {
     return null;

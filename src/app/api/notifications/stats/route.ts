@@ -1,6 +1,6 @@
 
-import { withAuth, AuthenticatedRequest } from '@/lib/api/with-auth';
 import { successResponse, errorResponse } from '@/lib/api/response';
+import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { getNotificationStats } from '@/lib/services/notification';
 
 // GET /api/notifications/stats - Get notification statistics

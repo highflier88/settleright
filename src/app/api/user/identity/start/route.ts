@@ -1,14 +1,15 @@
-import { NextRequest } from 'next/server';
+import { type NextRequest } from 'next/server';
+
+import { AuditAction, KYCStatus } from '@prisma/client';
 import { z } from 'zod';
 
+import { BadRequestError } from '@/lib/api/errors';
+import { successResponse, errorResponse } from '@/lib/api/response';
 import { requireAuth } from '@/lib/auth';
 import { prisma } from '@/lib/db';
-import { successResponse, errorResponse } from '@/lib/api/response';
-import { BadRequestError } from '@/lib/api/errors';
-import { validateBody } from '@/lib/validations';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { createVerificationSession } from '@/lib/services/stripe-identity';
-import { AuditAction, KYCStatus } from '@prisma/client';
+import { validateBody } from '@/lib/validations';
 
 const startVerificationSchema = z.object({
   returnUrl: z.string().url('Invalid return URL'),
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest) {
     // Rate limit: 3 attempts per hour
     await checkRateLimit(`kyc_start:${user.id}`, { limit: 3, window: 3600 });
 
-    const body = await request.json();
+    const body: unknown = await request.json();
     const { returnUrl } = validateBody(startVerificationSchema, body);
 
     // Check if user already has a pending or verified status

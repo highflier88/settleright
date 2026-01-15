@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+
 import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
+
 import { Clock, AlertTriangle, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -16,7 +18,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
@@ -24,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
 interface ExtensionRequestFormProps {
   caseId: string;
@@ -68,10 +70,10 @@ export function ExtensionRequestForm({
         }),
       });
 
-      const data = await response.json();
+      const data = (await response.json()) as { error?: { message?: string } };
 
       if (!response.ok) {
-        throw new Error(data.error?.message || 'Failed to request extension');
+        throw new Error(data.error?.message ?? 'Failed to request extension');
       }
 
       toast.success('Extension granted! Your new deadline has been set.');
@@ -183,7 +185,7 @@ export function ExtensionRequestForm({
             <div className="text-sm text-amber-800 dark:text-amber-200">
               <p className="font-medium">Please note</p>
               <p className="text-amber-700 dark:text-amber-300">
-                Extensions affect both parties' deadlines. The other party will be notified of the new deadline.
+                Extensions affect both parties&apos; deadlines. The other party will be notified of the new deadline.
               </p>
             </div>
           </div>

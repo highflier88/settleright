@@ -8,6 +8,7 @@
  */
 
 import { NextResponse } from 'next/server';
+
 import { z } from 'zod';
 
 import { withAuth } from '@/lib/api/with-auth';

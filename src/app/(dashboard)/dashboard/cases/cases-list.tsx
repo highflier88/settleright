@@ -1,8 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+
 import Link from 'next/link';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+
 import { format } from 'date-fns';
 import {
   FileText,
@@ -13,8 +15,9 @@ import {
   Filter,
 } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Select,
   SelectContent,
@@ -22,7 +25,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import type { CaseStatus, DisputeType, InvitationStatus } from '@prisma/client';
 
@@ -128,7 +130,7 @@ export function CasesList({ userId, searchParams }: CasesListProps) {
 
         const response = await fetch(`/api/cases?${params.toString()}`);
         if (response.ok) {
-          const result = await response.json();
+          const result = (await response.json()) as { data: CasesResponse };
           setData(result.data);
         }
       } catch (error) {
@@ -228,9 +230,9 @@ export function CasesList({ userId, searchParams }: CasesListProps) {
         <CardContent className="pt-6">
           <div className="flex flex-wrap items-end gap-4">
             <div className="w-[180px]">
-              <label className="text-sm font-medium mb-1 block">Status</label>
+              <label htmlFor="status-filter" className="text-sm font-medium mb-1 block">Status</label>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger>
+                <SelectTrigger id="status-filter">
                   <SelectValue placeholder="All statuses" />
                 </SelectTrigger>
                 <SelectContent>
@@ -245,9 +247,9 @@ export function CasesList({ userId, searchParams }: CasesListProps) {
             </div>
 
             <div className="w-[180px]">
-              <label className="text-sm font-medium mb-1 block">My Role</label>
+              <label htmlFor="role-filter" className="text-sm font-medium mb-1 block">My Role</label>
               <Select value={roleFilter} onValueChange={setRoleFilter}>
-                <SelectTrigger>
+                <SelectTrigger id="role-filter">
                   <SelectValue placeholder="All roles" />
                 </SelectTrigger>
                 <SelectContent>
@@ -274,7 +276,7 @@ export function CasesList({ userId, searchParams }: CasesListProps) {
               <FileText className="h-12 w-12 mx-auto text-muted-foreground/50" />
               <h3 className="mt-4 text-lg font-medium">No cases found</h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                You don't have any cases yet. Start a new case to begin.
+                You don&apos;t have any cases yet. Start a new case to begin.
               </p>
               <Button asChild className="mt-4">
                 <Link href="/dashboard/cases/new">Start New Case</Link>
@@ -400,7 +402,7 @@ export function CasesListSkeleton() {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-4">
-        {[...Array(4)].map((_, i) => (
+        {Array.from({ length: 4 }, (_, i) => (
           <Card key={i}>
             <CardHeader className="pb-2">
               <div className="h-4 w-20 animate-pulse bg-muted rounded" />
@@ -413,7 +415,7 @@ export function CasesListSkeleton() {
       </div>
 
       <div className="space-y-4">
-        {[...Array(3)].map((_, i) => (
+        {Array.from({ length: 3 }, (_, i) => (
           <Card key={i}>
             <CardContent className="p-6">
               <div className="space-y-3">

@@ -1,5 +1,5 @@
-import { withAdmin, AuthenticatedRequest } from '@/lib/api/with-auth';
 import { successResponse, errorResponse } from '@/lib/api/response';
+import { withAdmin, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { verifyAuditLogIntegrity } from '@/lib/services/audit';
 
 // GET /api/admin/audit-logs/verify - Verify audit log integrity

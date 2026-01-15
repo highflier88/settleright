@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+
 import { SectionWrapper } from './section-wrapper';
 
 interface Feature {

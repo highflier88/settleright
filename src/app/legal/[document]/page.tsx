@@ -1,11 +1,15 @@
-import { notFound } from 'next/navigation';
 import { readFile } from 'fs/promises';
 import path from 'path';
-import { Metadata } from 'next';
+
+import { notFound } from 'next/navigation';
+
 import matter from 'gray-matter';
+import { FileText, Calendar, Hash } from 'lucide-react';
+import { type Metadata } from 'next';
+
 import { MarkdownRenderer } from '@/components/legal/markdown-renderer';
 import { PrintButton } from '@/components/legal/print-button';
-import { FileText, Calendar, Hash } from 'lucide-react';
+
 
 // Document configuration mapping
 const LEGAL_DOCUMENTS = {
@@ -73,17 +77,17 @@ async function getDocumentContent(slug: string) {
     const fileContent = await readFile(filePath, 'utf-8');
 
     // Parse frontmatter if present
-    const { content, data } = matter(fileContent);
+    const { content, data } = matter(fileContent) as { content: string; data: Record<string, unknown> };
 
     // Extract version from content if not in frontmatter
-    let version = data.version || '1.0';
+    let version: string = (data.version as string | undefined) || '1.0';
     const versionMatch = content.match(/\*\*Version:\*\*\s*(\d+\.\d+)/);
     if (versionMatch && versionMatch[1]) {
       version = versionMatch[1];
     }
 
     // Extract last updated from content if not in frontmatter
-    let lastUpdated = data.lastUpdated || data['last-updated'] || null;
+    let lastUpdated: string | null = (data.lastUpdated as string | undefined) || (data['last-updated'] as string | undefined) || null;
     const lastUpdatedMatch = content.match(
       /\*\*Last Updated:\*\*\s*([^\n*]+)/
     );

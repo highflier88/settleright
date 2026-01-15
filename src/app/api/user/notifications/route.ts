@@ -1,8 +1,8 @@
-import { NextRequest } from 'next/server';
+import { type NextRequest } from 'next/server';
 
+import { successResponse, errorResponse } from '@/lib/api';
 import { requireAuth } from '@/lib/auth';
 import { prisma } from '@/lib/db';
-import { successResponse, errorResponse } from '@/lib/api';
 import { validateBody } from '@/lib/validations';
 import { notificationPreferencesSchema } from '@/lib/validations/user';
 
@@ -41,7 +41,7 @@ export async function GET() {
 export async function PATCH(request: NextRequest) {
   try {
     const user = await requireAuth();
-    const body = await request.json();
+    const body: unknown = await request.json();
     const data = validateBody(notificationPreferencesSchema, body);
 
     const prefs = await prisma.notificationPreference.upsert({

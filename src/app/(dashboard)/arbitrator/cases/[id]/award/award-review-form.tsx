@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+
 import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
+
 import {
   CheckCircle,
   Edit,
@@ -11,17 +12,8 @@ import {
   Gavel,
   Loader2,
 } from 'lucide-react';
+import { toast } from 'sonner';
 
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,10 +25,20 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
-import { RejectFeedbackForm } from './reject-feedback-form';
-import { EscalationForm } from './escalation-form';
 import { AwardEditor } from './award-editor';
+import { EscalationForm } from './escalation-form';
+import { RejectFeedbackForm } from './reject-feedback-form';
 
 type ReviewDecision = 'APPROVE' | 'MODIFY' | 'REJECT' | 'ESCALATE';
 
@@ -107,7 +109,7 @@ interface AwardModification {
 
 export function AwardReviewForm({
   caseId,
-  draftAwardId,
+  draftAwardId: _draftAwardId,
   currentStatus,
   currentNotes,
   isApproved,
@@ -143,7 +145,7 @@ export function AwardReviewForm({
       });
 
       if (!response.ok) {
-        const error = await response.json();
+        const error = (await response.json()) as { error?: { message?: string } };
         throw new Error(error.error?.message || 'Failed to approve award');
       }
 
@@ -175,11 +177,11 @@ export function AwardReviewForm({
       });
 
       if (!response.ok) {
-        const error = await response.json();
+        const error = (await response.json()) as { error?: { message?: string } };
         throw new Error(error.error?.message || 'Failed to modify award');
       }
 
-      const result = await response.json();
+      const result = (await response.json()) as { data?: { version?: number } };
       toast.success(`Award modified successfully (v${result.data?.version})`);
       setShowEditorDialog(false);
       router.refresh();
@@ -208,7 +210,7 @@ export function AwardReviewForm({
       });
 
       if (!response.ok) {
-        const error = await response.json();
+        const error = (await response.json()) as { error?: { message?: string } };
         throw new Error(error.error?.message || 'Failed to reject award');
       }
 
@@ -240,11 +242,11 @@ export function AwardReviewForm({
       });
 
       if (!response.ok) {
-        const error = await response.json();
+        const error = (await response.json()) as { error?: { message?: string } };
         throw new Error(error.error?.message || 'Failed to escalate award');
       }
 
-      const result = await response.json();
+      const result = (await response.json()) as { data?: { assignedToName?: string } };
       toast.success(
         result.data?.assignedToName
           ? `Escalated to ${result.data.assignedToName}`
@@ -272,7 +274,7 @@ export function AwardReviewForm({
       });
 
       if (!response.ok) {
-        const error = await response.json();
+        const error = (await response.json()) as { error?: { message?: string } };
         throw new Error(error.error?.message || 'Failed to finalize award');
       }
 

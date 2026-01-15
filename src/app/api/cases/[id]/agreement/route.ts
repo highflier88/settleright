@@ -1,8 +1,10 @@
 import { headers } from 'next/headers';
 
-import { withAuth, AuthenticatedRequest } from '@/lib/api/with-auth';
+import { AuditAction } from '@prisma/client';
+
+import { NotFoundError, ForbiddenError, BadRequestError } from '@/lib/api/errors';
 import { successResponse, errorResponse } from '@/lib/api/response';
-import { userHasAccessToCase } from '@/lib/services/case';
+import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import {
   getAgreementForCase,
   signAgreement,
@@ -14,8 +16,8 @@ import {
   PROCEDURAL_RULES_VERSION,
 } from '@/lib/services/agreement';
 import { createAuditLog } from '@/lib/services/audit';
-import { NotFoundError, ForbiddenError, BadRequestError } from '@/lib/api/errors';
-import { AuditAction } from '@prisma/client';
+import { userHasAccessToCase } from '@/lib/services/case';
+
 
 // GET /api/cases/[id]/agreement - Get agreement details
 export const GET = withAuth(
@@ -131,7 +133,7 @@ export const POST = withAuth(
       const userAgent = headersList.get('user-agent') ?? 'unknown';
 
       // Get device fingerprint from body if provided
-      const body = await request.json().catch(() => ({}));
+      const body = (await request.json().catch(() => ({}))) as { deviceFingerprint?: string };
       const deviceFingerprint = body.deviceFingerprint;
 
       // Sign the agreement

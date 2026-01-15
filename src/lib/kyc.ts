@@ -1,7 +1,8 @@
+import { KYCStatus } from '@prisma/client';
+
+import { ForbiddenError } from './api/errors';
 import { prisma } from './db';
 import { isVerificationValid } from './services/stripe-identity';
-import { ForbiddenError } from './api/errors';
-import { KYCStatus } from '@prisma/client';
 
 export interface KYCCheckResult {
   isVerified: boolean;

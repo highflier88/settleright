@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+
 import { format } from 'date-fns';
 import {
   FileText,
@@ -8,7 +9,6 @@ import {
   Download,
   Calendar,
   Hash,
-  ChevronRight,
   FileImage,
   FileVideo,
   FileArchive,
@@ -17,11 +17,9 @@ import {
   User,
   Clock,
   Tag,
-  Eye,
   ZoomIn,
   ZoomOut,
   RotateCw,
-  X,
   Maximize2,
   CheckCircle,
   AlertTriangle,
@@ -31,6 +29,8 @@ import {
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
 import {
   Sheet,
   SheetContent,
@@ -38,8 +38,6 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
 import {
   Tabs,
   TabsContent,
@@ -403,6 +401,7 @@ export function EvidenceViewer({ evidence, partyName, isOpen, onClose }: Evidenc
                     <ScrollArea className="flex-1 rounded-lg border">
                       <div className="p-4 flex items-center justify-center min-h-[400px]">
                         {isImage ? (
+                          /* eslint-disable-next-line @next/next/no-img-element */
                           <img
                             src={getFileUrl(evidence.storageKey)}
                             alt={evidence.fileName}

@@ -1,6 +1,6 @@
 
-import { withAuth, AuthenticatedRequest } from '@/lib/api/with-auth';
 import { successResponse, errorResponse } from '@/lib/api/response';
+import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import {
   getUserNotifications,
   markAllNotificationsRead,
@@ -32,7 +32,7 @@ export const GET = withAuth(
 export const POST = withAuth(
   async (request: AuthenticatedRequest) => {
     try {
-      const body = await request.json();
+      const body = (await request.json()) as { action?: string };
       const { action } = body;
 
       if (action === 'markAllRead') {

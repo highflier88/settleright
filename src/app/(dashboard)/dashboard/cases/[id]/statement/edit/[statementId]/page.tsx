@@ -1,14 +1,17 @@
-import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
+import { notFound, redirect } from 'next/navigation';
+
+import { CaseStatus, StatementType } from '@prisma/client';
 import { ArrowLeft } from 'lucide-react';
 
 import { getAuthUser } from '@/lib/auth';
 import { userHasAccessToCase, getCaseWithDetails } from '@/lib/services/case';
 import { getStatementById, parseStatementContent } from '@/lib/services/statement';
+
 import { StatementSubmissionForm } from '../../statement-form';
 
 import type { Metadata } from 'next';
-import { CaseStatus, StatementType } from '@prisma/client';
+
 
 export const metadata: Metadata = {
   title: 'Edit Statement',

@@ -1,10 +1,13 @@
 import { Suspense } from 'react';
+
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+
 import { PlusCircle } from 'lucide-react';
 
-import { getAuthUser } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
+import { getAuthUser } from '@/lib/auth';
+
 import { CasesList } from './cases-list';
 import { CasesListSkeleton } from './cases-list-skeleton';
 

@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+
 import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
+
 import {
   FileText,
   Image,
@@ -16,16 +17,8 @@ import {
   Calendar,
   User,
 } from 'lucide-react';
+import { toast } from 'sonner';
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -37,6 +30,15 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { formatFileSize } from '@/lib/services/evidence';
 
 import type { Evidence } from '@prisma/client';
@@ -50,7 +52,7 @@ interface EvidenceListProps {
 
 function getFileIcon(fileType: string) {
   if (fileType.startsWith('image/')) {
-    return <Image className="h-5 w-5" />;
+    return <Image className="h-5 w-5" aria-hidden="true" />;
   }
   if (fileType.includes('spreadsheet') || fileType === 'text/csv' || fileType.includes('excel')) {
     return <Table className="h-5 w-5" />;
@@ -88,7 +90,7 @@ export function EvidenceList({ caseId, evidence, userId, canDelete }: EvidenceLi
       });
 
       if (!response.ok) {
-        const error = await response.json();
+        const error = (await response.json()) as { error?: { message?: string } };
         throw new Error(error.error?.message || 'Failed to delete evidence');
       }
 
@@ -151,7 +153,7 @@ export function EvidenceList({ caseId, evidence, userId, canDelete }: EvidenceLi
           <div className="space-y-3">
             <h3 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <User className="h-4 w-4" />
-              Other Party's Evidence ({otherEvidence.length})
+              Other Party&apos;s Evidence ({otherEvidence.length})
             </h3>
             <div className="space-y-2">
               {otherEvidence.map((item) => (

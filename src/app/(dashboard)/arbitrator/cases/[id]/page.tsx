@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
+
+import { UserRole } from '@prisma/client';
 import { format } from 'date-fns';
 import {
   ArrowLeft,
@@ -16,10 +18,8 @@ import {
   ChevronRight,
 } from 'lucide-react';
 
-import { getAuthUser } from '@/lib/auth';
-import { prisma } from '@/lib/db';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -27,7 +27,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { UserRole } from '@prisma/client';
+import { getAuthUser } from '@/lib/auth';
+import { prisma } from '@/lib/db';
 
 import type { Metadata } from 'next';
 

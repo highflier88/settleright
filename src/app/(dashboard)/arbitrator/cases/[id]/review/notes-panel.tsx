@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+
 import { format } from 'date-fns';
 import {
   StickyNote,
@@ -8,31 +9,10 @@ import {
   Trash2,
   Save,
   Edit,
-  Tag,
   Clock,
   AlertCircle,
 } from 'lucide-react';
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -44,6 +24,26 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
 interface Note {
   id: string;
@@ -98,7 +98,7 @@ export function NotesPanel({ caseId }: NotesPanelProps) {
     const stored = localStorage.getItem(storageKey);
     if (stored) {
       try {
-        setNotes(JSON.parse(stored));
+        setNotes(JSON.parse(stored) as Note[]);
       } catch {
         // Invalid JSON, start fresh
       }
@@ -272,7 +272,7 @@ export function NotesPanel({ caseId }: NotesPanelProps) {
               <StickyNote className="h-12 w-12 mb-4 opacity-50" />
               <p>{notes.length === 0 ? 'No notes yet' : 'No notes in this category'}</p>
               <p className="text-sm mt-2">
-                Click "Add Note" to create your first note for this case
+                Click &quot;Add Note&quot; to create your first note for this case
               </p>
             </div>
           ) : (

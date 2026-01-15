@@ -1,12 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+
 import { format } from 'date-fns';
 import {
   MessageSquare,
-  Calendar,
   DollarSign,
-  Clock,
   AlertCircle,
   CheckCircle,
   ChevronDown,
@@ -22,12 +21,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Table,
   TableBody,
@@ -52,7 +51,7 @@ interface ClaimItem {
   supportingEvidenceIds?: string[];
 }
 
-interface TimelineEntry {
+interface _TimelineEntry {
   id: string;
   date: string;
   title: string;
@@ -210,12 +209,12 @@ function StatementPanel({ statement, partyName, partyType, isClaimant }: Stateme
 }
 
 export function StatementComparison({
-  caseId,
+  caseId: _caseId,
   claimantName,
   respondentName,
   claimantStatement,
   respondentStatement,
-  claimantId,
+  claimantId: _claimantId,
 }: StatementComparisonProps) {
   const claimantClaims = claimantStatement ? parseClaimItems(claimantStatement.claimItems) : [];
   const totalClaimed = claimantClaims.reduce((sum, item) => sum + item.amount, 0);

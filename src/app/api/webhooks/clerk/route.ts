@@ -1,10 +1,11 @@
 import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
+
+import { AuditAction } from '@prisma/client';
 import { Webhook } from 'svix';
 
 import { prisma } from '@/lib/db';
 import { createAuditLog } from '@/lib/services/audit';
-import { AuditAction } from '@prisma/client';
 
 type WebhookEvent = {
   data: {
@@ -48,7 +49,7 @@ export async function POST(req: Request) {
   }
 
   // Get the body
-  const payload = await req.json();
+  const payload: unknown = await req.json();
   const body = JSON.stringify(payload);
 
   // Create a new Svix instance with your secret

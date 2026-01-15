@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+
 import { format } from 'date-fns';
 import {
   FileText,
-  Image,
   File,
   Eye,
   Download,
@@ -25,14 +25,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
+
 import { EvidenceViewer } from './evidence-viewer';
 
 import type { Evidence } from '@prisma/client';
@@ -87,8 +81,9 @@ function EvidenceCard({ evidence, onSelect, isSelected }: EvidenceCardProps) {
   const Icon = getFileIcon(evidence.fileType);
 
   return (
-    <div
-      className={`rounded-lg border p-3 cursor-pointer transition-all hover:shadow-md ${
+    <button
+      type="button"
+      className={`w-full text-left rounded-lg border p-3 cursor-pointer transition-all hover:shadow-md ${
         isSelected ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'hover:border-muted-foreground/30'
       }`}
       onClick={() => onSelect(evidence)}
@@ -112,7 +107,7 @@ function EvidenceCard({ evidence, onSelect, isSelected }: EvidenceCardProps) {
         </div>
         {getProcessingStatusBadge(evidence.processingStatus)}
       </div>
-    </div>
+    </button>
   );
 }
 
@@ -252,7 +247,7 @@ function EvidenceDetail({ evidence, partyName, onOpenViewer }: EvidenceDetailPro
 }
 
 export function EvidenceComparison({
-  caseId,
+  caseId: _caseId,
   claimantName,
   respondentName,
   claimantEvidence,

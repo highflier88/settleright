@@ -1,19 +1,21 @@
 
-import { withAuth, AuthenticatedRequest } from '@/lib/api/with-auth';
+import { StatementType } from '@prisma/client';
+
+import { NotFoundError, ForbiddenError, BadRequestError } from '@/lib/api/errors';
 import { successResponse, errorResponse } from '@/lib/api/response';
+import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { userHasAccessToCase } from '@/lib/services/case';
 import {
   getCaseStatements,
   createStatement,
   canSubmitStatement,
   parseStatementContent,
-  StatementContent,
+  type StatementContent,
   MAX_NARRATIVE_LENGTH,
   MAX_TIMELINE_ENTRIES,
   MAX_CLAIM_ITEMS,
 } from '@/lib/services/statement';
-import { NotFoundError, ForbiddenError, BadRequestError } from '@/lib/api/errors';
-import { StatementType } from '@prisma/client';
+
 
 // GET /api/cases/[id]/statements - List statements for a case
 export const GET = withAuth(
@@ -78,8 +80,8 @@ export const POST = withAuth(
       }
 
       // Parse request body
-      const body = await request.json();
-      const { type, content } = body as { type: string; content: StatementContent };
+      const body = (await request.json()) as { type: string; content: StatementContent };
+      const { type, content } = body;
 
       // Validate type
       if (!type || !['INITIAL', 'REBUTTAL'].includes(type)) {

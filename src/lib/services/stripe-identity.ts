@@ -1,8 +1,8 @@
+import { KYCStatus, AuditAction } from '@prisma/client';
 import Stripe from 'stripe';
 
 import { prisma } from '@/lib/db';
 import { createAuditLog } from '@/lib/services/audit';
-import { KYCStatus, AuditAction } from '@prisma/client';
 
 // Initialize Stripe
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;

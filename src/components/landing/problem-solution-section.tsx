@@ -1,4 +1,5 @@
 import Link from 'next/link';
+
 import {
   Clock,
   Building2,
@@ -18,6 +19,7 @@ import {
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+
 import { SectionWrapper } from './section-wrapper';
 
 interface ComparisonItem {

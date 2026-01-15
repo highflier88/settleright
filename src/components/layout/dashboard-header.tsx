@@ -1,11 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+
 import { UserButton } from '@clerk/nextjs';
 import { Menu } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+
 import { DashboardNav } from './dashboard-nav';
 
 import type { User } from '@prisma/client';

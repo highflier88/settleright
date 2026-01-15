@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Activity, Users, Shield, FileText } from 'lucide-react';
+
+import { Activity, FileText, Shield, Users } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -22,7 +23,7 @@ export function AuditStats() {
       try {
         const response = await fetch('/api/admin/audit-logs/stats?days=30');
         if (response.ok) {
-          const data = await response.json();
+          const data = (await response.json()) as { data: AuditStatsData };
           setStats(data.data);
         }
       } catch (error) {
@@ -38,7 +39,7 @@ export function AuditStats() {
   if (isLoading) {
     return (
       <div className="grid gap-4 md:grid-cols-4">
-        {[...Array(4)].map((_, i) => (
+        {Array.from({ length: 4 }, (_, i) => (
           <Card key={i}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="h-4 w-24 animate-pulse bg-muted rounded" />

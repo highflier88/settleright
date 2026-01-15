@@ -1,4 +1,6 @@
 import { redirect } from 'next/navigation';
+
+import { UserRole } from '@prisma/client';
 import { format } from 'date-fns';
 import {
   User,
@@ -11,8 +13,6 @@ import {
   Calendar,
 } from 'lucide-react';
 
-import { getAuthUser } from '@/lib/auth';
-import { prisma } from '@/lib/db';
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -21,7 +21,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { UserRole } from '@prisma/client';
+import { getAuthUser } from '@/lib/auth';
+import { prisma } from '@/lib/db';
+
 import { ProfileEditForm } from './profile-edit-form';
 
 import type { Metadata } from 'next';
@@ -289,7 +291,7 @@ export default async function ArbitratorProfilePage() {
           barNumber: profile.barNumber,
           barState: profile.barState,
           yearsExperience: profile.yearsExperience,
-          jurisdictions: profile.jurisdictions as string[],
+          jurisdictions: profile.jurisdictions,
           specialties: profile.specialties as string[],
         }}
       />

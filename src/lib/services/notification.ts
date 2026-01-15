@@ -1,5 +1,6 @@
-import { prisma } from '@/lib/db';
 import { NotificationType } from '@prisma/client';
+
+import { prisma } from '@/lib/db';
 
 // Notification template IDs
 export const NotificationTemplates = {

@@ -1,17 +1,20 @@
 'use client';
 
 import { useState } from 'react';
+
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { toast } from 'sonner';
+import { DisputeType } from '@prisma/client';
 import { ArrowLeft, ArrowRight, Check, FileText, Users, Scale, Send } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
@@ -19,8 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { DisputeType } from '@prisma/client';
+import { Textarea } from '@/components/ui/textarea';
 
 import type { User } from '@prisma/client';
 
@@ -188,11 +190,11 @@ export function NewCaseForm({ user: _user }: NewCaseFormProps) {
       });
 
       if (!response.ok) {
-        const error = await response.json();
+        const error = (await response.json()) as { error?: { message?: string } };
         throw new Error(error.error?.message || 'Failed to create case');
       }
 
-      const result = await response.json();
+      const result = (await response.json()) as { data: { case: { id: string } } };
 
       toast.success('Case created successfully! The respondent has been notified.');
       router.push(`/dashboard/cases/${result.data.case.id}`);
@@ -319,7 +321,7 @@ export function NewCaseForm({ user: _user }: NewCaseFormProps) {
             <CardHeader>
               <CardTitle>Describe your dispute</CardTitle>
               <CardDescription>
-                Provide a clear summary of your claim and the amount you're seeking.
+                Provide a clear summary of your claim and the amount you&apos;re seeking.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -427,7 +429,7 @@ export function NewCaseForm({ user: _user }: NewCaseFormProps) {
                   <p className="text-sm text-destructive">{errors.respondentPhone.message}</p>
                 )}
                 <p className="text-xs text-muted-foreground">
-                  If provided, we'll also send an SMS notification.
+                  If provided, we&apos;ll also send an SMS notification.
                 </p>
               </div>
             </CardContent>

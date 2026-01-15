@@ -1,16 +1,19 @@
-import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
+import { notFound, redirect } from 'next/navigation';
+
+import { CaseStatus } from '@prisma/client';
 import { ArrowLeft, Upload, FileText, Image, Table } from 'lucide-react';
 
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getAuthUser } from '@/lib/auth';
 import { userHasAccessToCase, getCaseWithDetails } from '@/lib/services/case';
 import { getCaseEvidence, getEvidenceStats, formatFileSize } from '@/lib/services/evidence';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
 import { EvidenceList } from './evidence-list';
 
 import type { Metadata } from 'next';
-import { CaseStatus } from '@prisma/client';
+
 
 export const metadata: Metadata = {
   title: 'Evidence',
@@ -172,7 +175,7 @@ export default async function EvidencePage({ params }: PageProps) {
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <Image className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+            <Image className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" aria-hidden="true" />
             <div>
               <p className="font-medium">Images</p>
               <p className="text-sm text-muted-foreground">

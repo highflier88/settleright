@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { format } from 'date-fns';
+
 import {
   Scale,
   CheckCircle,
@@ -21,16 +21,15 @@ import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import { Progress } from '@/components/ui/progress';
 
 import type { AnalysisJob } from '@prisma/client';
 import type { JsonValue } from '@prisma/client/runtime/library';
@@ -140,13 +139,13 @@ function parseConclusionsOfLaw(data: JsonValue): ConclusionOfLaw[] {
   return data as unknown as ConclusionOfLaw[];
 }
 
-function parseAwardRecommendation(data: JsonValue): AwardRecommendation | null {
+function _parseAwardRecommendation(data: JsonValue): AwardRecommendation | null {
   if (!data || typeof data !== 'object') return null;
   return data as unknown as AwardRecommendation;
 }
 
 export function AnalysisDisplay({
-  caseId,
+  caseId: _caseId,
   analysisJob,
   jurisdiction,
   disputeType,
@@ -171,10 +170,10 @@ export function AnalysisDisplay({
     );
   }
 
-  const legalIssues = parseLegalIssues(analysisJob.legalIssues as JsonValue);
-  const burdenOfProof = parseBurdenOfProof(analysisJob.burdenOfProof as JsonValue);
-  const damagesCalculation = parseDamagesCalculation(analysisJob.damagesCalculation as JsonValue);
-  const conclusionsOfLaw = parseConclusionsOfLaw(analysisJob.conclusionsOfLaw as JsonValue);
+  const legalIssues = parseLegalIssues(analysisJob.legalIssues);
+  const burdenOfProof = parseBurdenOfProof(analysisJob.burdenOfProof);
+  const damagesCalculation = parseDamagesCalculation(analysisJob.damagesCalculation);
+  const conclusionsOfLaw = parseConclusionsOfLaw(analysisJob.conclusionsOfLaw);
 
   // Derive award recommendation from damages calculation and burden of proof
   const awardRecommendation: AwardRecommendation | null = damagesCalculation && burdenOfProof

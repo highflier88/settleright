@@ -1,8 +1,10 @@
+import { KYCStatus } from '@prisma/client';
+
+import { successResponse, errorResponse } from '@/lib/api/response';
 import { requireAuth } from '@/lib/auth';
 import { prisma } from '@/lib/db';
-import { successResponse, errorResponse } from '@/lib/api/response';
 import { getVerificationSession, isVerificationValid } from '@/lib/services/stripe-identity';
-import { KYCStatus } from '@prisma/client';
+
 
 export async function GET() {
   try {

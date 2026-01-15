@@ -1,6 +1,7 @@
 
-import { withAuth, AuthenticatedRequest } from '@/lib/api/with-auth';
+import { NotFoundError, ForbiddenError } from '@/lib/api/errors';
 import { successResponse, errorResponse } from '@/lib/api/response';
+import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { userHasAccessToCase } from '@/lib/services/case';
 import {
   calculateCaseDeadlines,
@@ -8,8 +9,8 @@ import {
   getDeadlineStatus,
   getDeadlineUrgency,
   DEADLINE_CONFIG,
+  type DeadlineInfo,
 } from '@/lib/services/deadline';
-import { NotFoundError, ForbiddenError } from '@/lib/api/errors';
 
 // GET /api/cases/[id]/deadlines - Get case deadlines
 export const GET = withAuth(
@@ -32,24 +33,25 @@ export const GET = withAuth(
       const enhancedDeadlines: Record<string, unknown> = {};
 
       for (const [key, deadline] of Object.entries(deadlines)) {
-        if (deadline) {
+        const typedDeadline = deadline as DeadlineInfo | null;
+        if (typedDeadline) {
           enhancedDeadlines[key] = {
-            ...deadline,
-            deadlineFormatted: formatDeadline(deadline.deadline),
-            statusText: getDeadlineStatus(deadline),
-            urgency: getDeadlineUrgency(deadline),
+            ...typedDeadline,
+            deadlineFormatted: formatDeadline(typedDeadline.deadline),
+            statusText: getDeadlineStatus(typedDeadline),
+            urgency: getDeadlineUrgency(typedDeadline),
           };
         }
       }
 
       // Calculate overall status
-      const allDeadlines = Object.values(deadlines).filter(Boolean);
-      const passedCount = allDeadlines.filter((d) => d?.isPassed).length;
+      const allDeadlines = Object.values(deadlines).filter(Boolean) as DeadlineInfo[];
+      const passedCount = allDeadlines.filter((d) => d.isPassed).length;
       const urgentCount = allDeadlines.filter(
-        (d) => d && !d.isPassed && d.hoursRemaining <= 24
+        (d) => !d.isPassed && d.hoursRemaining <= 24
       ).length;
       const warningCount = allDeadlines.filter(
-        (d) => d && !d.isPassed && d.hoursRemaining > 24 && d.daysRemaining <= 3
+        (d) => !d.isPassed && d.hoursRemaining > 24 && d.daysRemaining <= 3
       ).length;
 
       return successResponse({

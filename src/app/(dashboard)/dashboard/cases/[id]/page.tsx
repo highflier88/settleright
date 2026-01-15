@@ -1,5 +1,6 @@
-import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
+import { notFound, redirect } from 'next/navigation';
+
 import { format } from 'date-fns';
 import {
   ArrowLeft,
@@ -12,16 +13,17 @@ import {
   RefreshCw,
 } from 'lucide-react';
 
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getAuthUser } from '@/lib/auth';
 import { getCaseWithDetails, userHasAccessToCase, CASE_STATUS_LABELS, DISPUTE_TYPE_LABELS } from '@/lib/services/case';
 import { getInvitationStatusLabel, getInvitationTimeRemaining } from '@/lib/services/invitation';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
 import { CaseActions } from './case-actions';
 
-import type { Metadata } from 'next';
 import type { CaseStatus } from '@prisma/client';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Case Details',

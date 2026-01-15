@@ -429,12 +429,12 @@ export const PATCH = withAuth(
         default: {
           // Fallback to legacy behavior
           const result = await submitDraftAwardReview(caseId, {
-            reviewStatus: body.reviewStatus,
+            reviewStatus: body.reviewStatus as ReviewDecision,
             reviewNotes: body.reviewNotes,
           });
           return NextResponse.json({
             success: true,
-            message: `Draft award review submitted: ${body.reviewStatus}`,
+            message: `Draft award review submitted: ${String(body.reviewStatus)}`,
             data: {
               id: result.id,
               reviewStatus: result.reviewStatus,

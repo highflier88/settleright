@@ -6,6 +6,7 @@
  */
 
 import { NextResponse } from 'next/server';
+
 import { z } from 'zod';
 
 import { BadRequestError, ForbiddenError, NotFoundError } from '@/lib/api/errors';
@@ -105,7 +106,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context) => {
   }
 
   try {
-    const body = await request.json();
+    const body: unknown = await request.json();
     const validationResult = createPaymentSchema.safeParse(body);
 
     if (!validationResult.success) {

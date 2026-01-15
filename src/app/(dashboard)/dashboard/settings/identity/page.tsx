@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 
 import { getAuthUser } from '@/lib/auth';
 import { prisma } from '@/lib/db';
+
 import { IdentityVerificationCard } from './identity-verification-card';
 
 import type { Metadata } from 'next';

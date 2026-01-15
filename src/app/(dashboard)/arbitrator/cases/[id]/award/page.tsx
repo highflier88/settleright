@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
+
+import { UserRole } from '@prisma/client';
 import { format } from 'date-fns';
 import {
   ArrowLeft,
@@ -9,13 +11,10 @@ import {
   Scale,
   AlertTriangle,
   Download,
-  ExternalLink,
 } from 'lucide-react';
 
-import { getAuthUser } from '@/lib/auth';
-import { prisma } from '@/lib/db';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -23,11 +22,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { UserRole } from '@prisma/client';
+import { getAuthUser } from '@/lib/auth';
+import type { FindingOfFact, AwardConclusionOfLaw } from '@/lib/award/types';
+import { prisma } from '@/lib/db';
+
 import { AwardReviewForm } from './award-review-form';
 
 import type { Metadata } from 'next';
-import type { FindingOfFact, AwardConclusionOfLaw } from '@/lib/award/types';
+
 
 export const metadata: Metadata = {
   title: 'Review Award',
@@ -109,7 +111,7 @@ export default async function AwardReviewPage({ params }: PageProps) {
     notFound();
   }
 
-  const { assignment, caseData } = result;
+  const { assignment: _assignment, caseData } = result;
 
   // If award already issued, show the issued award
   if (caseData.award) {
@@ -223,7 +225,7 @@ export default async function AwardReviewPage({ params }: PageProps) {
   const draftAward = caseData.draftAward;
   const findingsOfFact = (draftAward.findingsOfFact as unknown as FindingOfFact[]) || [];
   const conclusionsOfLaw = (draftAward.conclusionsOfLaw as unknown as AwardConclusionOfLaw[]) || [];
-  const isReviewed = !!draftAward.reviewStatus;
+  const _isReviewed = !!draftAward.reviewStatus;
   const isApproved = draftAward.reviewStatus === 'APPROVE';
 
   return (

@@ -1,14 +1,14 @@
 
-import { withAuth, AuthenticatedRequest } from '@/lib/api/with-auth';
+import { NotFoundError, ForbiddenError, BadRequestError } from '@/lib/api/errors';
 import { successResponse, errorResponse } from '@/lib/api/response';
+import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { userHasAccessToCase } from '@/lib/services/case';
 import {
   calculateCaseDeadlines,
   requestExtension,
   DEADLINE_CONFIG,
-  DeadlineType,
+  type DeadlineType,
 } from '@/lib/services/deadline';
-import { NotFoundError, ForbiddenError, BadRequestError } from '@/lib/api/errors';
 
 // GET /api/cases/[id]/extension - Get extension eligibility info
 export const GET = withAuth(
@@ -56,11 +56,15 @@ export const POST = withAuth(
       }
 
       // Parse request body
-      const body = await request.json();
+      const body = (await request.json()) as {
+        deadlineType?: string;
+        requestedDays?: number;
+        reason?: string;
+      };
       const { deadlineType, requestedDays, reason } = body;
 
       // Validate deadline type
-      if (!['evidence', 'rebuttal'].includes(deadlineType)) {
+      if (!deadlineType || !['evidence', 'rebuttal'].includes(deadlineType)) {
         throw new BadRequestError('Invalid deadline type');
       }
 

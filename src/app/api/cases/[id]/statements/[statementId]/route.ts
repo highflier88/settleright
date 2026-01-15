@@ -1,14 +1,14 @@
 
-import { withAuth, AuthenticatedRequest } from '@/lib/api/with-auth';
+import { NotFoundError, ForbiddenError, BadRequestError } from '@/lib/api/errors';
 import { successResponse, errorResponse } from '@/lib/api/response';
+import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { userHasAccessToCase } from '@/lib/services/case';
 import {
   getStatementById,
   updateStatement,
   parseStatementContent,
-  StatementContent,
+  type StatementContent,
 } from '@/lib/services/statement';
-import { NotFoundError, ForbiddenError, BadRequestError } from '@/lib/api/errors';
 
 // GET /api/cases/[id]/statements/[statementId] - Get statement details
 export const GET = withAuth(
@@ -71,8 +71,8 @@ export const PUT = withAuth(
       }
 
       // Parse request body
-      const body = await request.json();
-      const { content } = body as { content: StatementContent };
+      const body = (await request.json()) as { content: StatementContent };
+      const { content } = body;
 
       // Validate content
       if (!content || !content.narrative) {

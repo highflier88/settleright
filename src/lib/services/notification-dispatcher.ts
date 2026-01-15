@@ -1,10 +1,7 @@
-import { prisma } from '@/lib/db';
 import { NotificationType } from '@prisma/client';
-import {
-  getUserNotificationPreferences,
-  createInAppNotification,
-  NotificationTemplates,
-} from './notification';
+
+import { prisma } from '@/lib/db';
+
 import {
   sendEmail,
   sendWelcomeEmail,
@@ -13,6 +10,11 @@ import {
   sendEvidenceNotificationEmail,
   sendAwardIssuedEmail,
 } from './email';
+import {
+  getUserNotificationPreferences,
+  createInAppNotification,
+  NotificationTemplates,
+} from './notification';
 import { sendSms, sendTemplatedSms } from './sms';
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://settleright.ai';

@@ -1,8 +1,9 @@
 import { createHash } from 'crypto';
 
+import { AgreementStatus, CaseRole, CaseStatus, AuditAction } from '@prisma/client';
+
 import { prisma } from '@/lib/db';
 import { createAuditLog } from '@/lib/services/audit';
-import { AgreementStatus, CaseRole, CaseStatus, AuditAction } from '@prisma/client';
 
 import type { Agreement, Signature, Case } from '@prisma/client';
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+
 import {
   FileText,
   MessageSquare,
@@ -11,11 +12,11 @@ import {
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import { EvidenceComparison } from './evidence-comparison';
-import { StatementComparison } from './statement-comparison';
 import { AnalysisDisplay } from './analysis-display';
 import { AwardDisplay } from './award-display';
+import { EvidenceComparison } from './evidence-comparison';
 import { NotesPanel } from './notes-panel';
+import { StatementComparison } from './statement-comparison';
 
 import type { Evidence, Statement, DraftAward, AnalysisJob } from '@prisma/client';
 

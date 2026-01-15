@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+
 import Link from 'next/link';
+
 import {
   Check,
   Shield,
@@ -15,6 +17,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+
 import { SectionWrapper } from './section-wrapper';
 
 interface PricingTier {
@@ -218,7 +221,7 @@ export function PricingSection() {
             <h3 className="text-lg font-semibold">Everything included with every filing</h3>
           </div>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-            {includedFeatures.map((feature, index) => (
+            {includedFeatures.map((feature) => (
               <div
                 key={feature}
                 className="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-muted/50"

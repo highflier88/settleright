@@ -1,11 +1,11 @@
 
-import { withAuth, AuthenticatedRequest } from '@/lib/api/with-auth';
+import { BadRequestError } from '@/lib/api/errors';
 import { successResponse, errorResponse } from '@/lib/api/response';
+import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import {
   getUserNotificationPreferences,
   updateNotificationPreferences,
 } from '@/lib/services/notification';
-import { BadRequestError } from '@/lib/api/errors';
 
 // GET /api/notifications/preferences - Get notification preferences
 export const GET = withAuth(
@@ -23,7 +23,7 @@ export const GET = withAuth(
 export const PUT = withAuth(
   async (request: AuthenticatedRequest) => {
     try {
-      const body = await request.json();
+      const body = (await request.json()) as Record<string, unknown>;
 
       // Validate allowed fields
       const allowedFields = [

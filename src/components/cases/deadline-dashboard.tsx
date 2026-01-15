@@ -2,11 +2,12 @@
 
 import { Clock, AlertTriangle, CheckCircle } from 'lucide-react';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { ExtensionRequestForm } from './extension-request-form';
 import { cn } from '@/lib/utils';
+
+import { ExtensionRequestForm } from './extension-request-form';
 
 interface DeadlineInfo {
   type: 'response' | 'evidence' | 'rebuttal';
@@ -174,7 +175,7 @@ function DeadlineCard({
 export function DeadlineDashboard({ caseId, deadlines, maxExtensionDays }: DeadlineDashboardProps) {
   const activeDeadlines = Object.entries(deadlines).filter(
     ([_, d]) => d !== undefined
-  ) as [string, DeadlineInfo][];
+  );
 
   if (activeDeadlines.length === 0) {
     return null;

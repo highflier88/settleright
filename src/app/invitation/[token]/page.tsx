@@ -1,12 +1,14 @@
 import { notFound } from 'next/navigation';
+
 import { format } from 'date-fns';
 import { Scale, Clock, FileText, AlertTriangle } from 'lucide-react';
 
-import { getInvitationByToken, getInvitationTimeRemaining, getInvitationStatusLabel } from '@/lib/services/invitation';
-import { DISPUTE_TYPE_LABELS } from '@/lib/services/case';
-import { getAuthUser } from '@/lib/auth';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { getAuthUser } from '@/lib/auth';
+import { DISPUTE_TYPE_LABELS } from '@/lib/services/case';
+import { getInvitationByToken, getInvitationTimeRemaining, getInvitationStatusLabel } from '@/lib/services/invitation';
+
 import { InvitationActions } from './invitation-actions';
 
 import type { Metadata } from 'next';
@@ -44,7 +46,7 @@ export default async function InvitationPage({ params }: PageProps) {
         <div className="text-center mb-8">
           <Scale className="h-16 w-16 mx-auto text-primary mb-4" />
           <h1 className="text-3xl font-bold tracking-tight">
-            You've Been Invited to Respond
+            You&apos;ve Been Invited to Respond
           </h1>
           <p className="text-muted-foreground mt-2">
             {invitation.case.claimant.name ?? 'Someone'} has filed a dispute and invited you to respond.
@@ -68,7 +70,7 @@ export default async function InvitationPage({ params }: PageProps) {
             <CardContent className="flex items-center gap-3 py-4">
               <Scale className="h-5 w-5 text-green-600" />
               <p className="text-green-700 dark:text-green-400 font-medium">
-                You've already accepted this invitation. View the case in your dashboard.
+                You&apos;ve already accepted this invitation. View the case in your dashboard.
               </p>
             </CardContent>
           </Card>

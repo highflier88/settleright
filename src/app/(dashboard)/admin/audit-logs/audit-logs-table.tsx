@@ -1,7 +1,9 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+
 import { format } from 'date-fns';
 import {
   Download,
@@ -13,9 +15,11 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -31,7 +35,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import type { AuditAction, AuditLog } from '@prisma/client';
 
@@ -124,7 +127,7 @@ export function AuditLogsTable({ searchParams }: AuditLogsTableProps) {
 
       const response = await fetch(`/api/admin/audit-logs?${params.toString()}`);
       if (response.ok) {
-        const result = await response.json();
+        const result = (await response.json()) as { data: AuditLogsResponse };
         setData(result.data);
       }
     } catch (error) {
@@ -208,7 +211,9 @@ export function AuditLogsTable({ searchParams }: AuditLogsTableProps) {
     try {
       const response = await fetch('/api/admin/audit-logs/verify');
       if (response.ok) {
-        const result = await response.json();
+        const result = (await response.json()) as {
+          data: { isValid: boolean; totalLogs: number; invalidLogs: { id: string; reason: string }[] };
+        };
         setIntegrityResult(result.data);
 
         if (result.data.isValid) {
@@ -274,8 +279,9 @@ export function AuditLogsTable({ searchParams }: AuditLogsTableProps) {
         <CardContent className="pt-6">
           <div className="flex flex-wrap items-end gap-4">
             <div className="flex-1 min-w-[200px]">
-              <label className="text-sm font-medium mb-1 block">User ID</label>
+              <Label htmlFor="userIdFilter" className="mb-1 block">User ID</Label>
               <Input
+                id="userIdFilter"
                 placeholder="Filter by user ID..."
                 value={userIdFilter}
                 onChange={(e) => setUserIdFilter(e.target.value)}
@@ -283,8 +289,9 @@ export function AuditLogsTable({ searchParams }: AuditLogsTableProps) {
             </div>
 
             <div className="flex-1 min-w-[200px]">
-              <label className="text-sm font-medium mb-1 block">Case ID</label>
+              <Label htmlFor="caseIdFilter" className="mb-1 block">Case ID</Label>
               <Input
+                id="caseIdFilter"
                 placeholder="Filter by case ID..."
                 value={caseIdFilter}
                 onChange={(e) => setCaseIdFilter(e.target.value)}
@@ -292,7 +299,7 @@ export function AuditLogsTable({ searchParams }: AuditLogsTableProps) {
             </div>
 
             <div className="w-[200px]">
-              <label className="text-sm font-medium mb-1 block">Action</label>
+              <Label htmlFor="actionFilter" className="mb-1 block">Action</Label>
               <Select value={actionFilter} onValueChange={setActionFilter}>
                 <SelectTrigger>
                   <SelectValue placeholder="All actions" />
@@ -444,9 +451,9 @@ function AuditLogsTableSkeleton() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {[...Array(10)].map((_, i) => (
+            {Array.from({ length: 10 }, (_, i) => (
               <TableRow key={i}>
-                {[...Array(6)].map((_, j) => (
+                {Array.from({ length: 6 }, (_, j) => (
                   <TableCell key={j}>
                     <div className="h-4 w-full animate-pulse bg-muted rounded" />
                   </TableCell>

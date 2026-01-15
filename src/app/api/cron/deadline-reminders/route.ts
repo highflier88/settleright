@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 
 import {
   getCasesWithApproachingDeadlines,
@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
             results.remindersSent++;
           }
         } catch (error) {
-          results.errors.push(`Failed to send reminder for case ${caseData.caseId}: ${error}`);
+          results.errors.push(`Failed to send reminder for case ${caseData.caseId}: ${error instanceof Error ? error.message : String(error)}`);
         }
       }
     }
@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
           results.casesTransitioned++;
         }
       } catch (error) {
-        results.errors.push(`Failed to transition case ${caseData.caseId}: ${error}`);
+        results.errors.push(`Failed to transition case ${caseData.caseId}: ${error instanceof Error ? error.message : String(error)}`);
       }
     }
 

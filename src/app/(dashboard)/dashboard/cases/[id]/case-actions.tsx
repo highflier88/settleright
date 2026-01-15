@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+
 import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
+
 import {
   MoreVertical,
   RefreshCw,
@@ -10,6 +11,7 @@ import {
   Trash2,
   Download,
 } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -58,7 +60,7 @@ export function CaseActions({
       });
 
       if (!response.ok) {
-        const error = await response.json();
+        const error = (await response.json()) as { error?: { message?: string } };
         throw new Error(error.error?.message || 'Failed to resend invitation');
       }
 
@@ -83,7 +85,7 @@ export function CaseActions({
       });
 
       if (!response.ok) {
-        const error = await response.json();
+        const error = (await response.json()) as { error?: { message?: string } };
         throw new Error(error.error?.message || 'Failed to cancel invitation');
       }
 
@@ -112,7 +114,7 @@ export function CaseActions({
       });
 
       if (!response.ok) {
-        const error = await response.json();
+        const error = (await response.json()) as { error?: { message?: string } };
         throw new Error(error.error?.message || 'Failed to withdraw case');
       }
 

@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+
 import Link from 'next/link';
-import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+
 import { LogIn, UserPlus, Check, AlertCircle } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -36,11 +38,11 @@ export function InvitationActions({
       });
 
       if (!response.ok) {
-        const error = await response.json();
+        const error = (await response.json()) as { error?: { message?: string } };
         throw new Error(error.error?.message || 'Failed to accept invitation');
       }
 
-      const result = await response.json();
+      const result = (await response.json()) as { data: { case: { id: string } } };
 
       toast.success('Invitation accepted! Redirecting to the case...');
       router.push(`/dashboard/cases/${result.data.case.id}`);
@@ -61,7 +63,7 @@ export function InvitationActions({
             Ready to Respond
           </CardTitle>
           <CardDescription>
-            You're logged in as {userEmail}. Click below to accept the invitation and join
+            You&apos;re logged in as {userEmail}. Click below to accept the invitation and join
             the case.
           </CardDescription>
         </CardHeader>
@@ -89,7 +91,7 @@ export function InvitationActions({
             Wrong Account
           </CardTitle>
           <CardDescription>
-            You're currently logged in as <strong>{userEmail}</strong>, but this invitation
+            You&apos;re currently logged in as <strong>{userEmail}</strong>, but this invitation
             was sent to <strong>{invitationEmail}</strong>.
           </CardDescription>
         </CardHeader>
@@ -119,7 +121,7 @@ export function InvitationActions({
       <CardHeader>
         <CardTitle>Accept This Invitation</CardTitle>
         <CardDescription>
-          To respond to this case, you'll need to create an account or log in with the
+          To respond to this case, you&apos;ll need to create an account or log in with the
           email address: <strong>{invitationEmail}</strong>
         </CardDescription>
       </CardHeader>

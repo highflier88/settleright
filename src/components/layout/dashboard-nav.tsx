@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+
+import { UserRole } from '@prisma/client';
 import {
   LayoutDashboard,
   FileText,
@@ -15,7 +17,6 @@ import {
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import { UserRole } from '@prisma/client';
 
 interface NavItem {
   title: string;

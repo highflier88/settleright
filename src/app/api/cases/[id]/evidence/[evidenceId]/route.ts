@@ -1,6 +1,7 @@
 
-import { withAuth, AuthenticatedRequest } from '@/lib/api/with-auth';
+import { NotFoundError, ForbiddenError, BadRequestError } from '@/lib/api/errors';
 import { successResponse, errorResponse } from '@/lib/api/response';
+import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { userHasAccessToCase } from '@/lib/services/case';
 import {
   getEvidenceById,
@@ -8,7 +9,6 @@ import {
   deleteEvidence,
   formatFileSize,
 } from '@/lib/services/evidence';
-import { NotFoundError, ForbiddenError, BadRequestError } from '@/lib/api/errors';
 
 // GET /api/cases/[id]/evidence/[evidenceId] - Get evidence details
 export const GET = withAuth(

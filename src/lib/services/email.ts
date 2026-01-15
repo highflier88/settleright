@@ -39,7 +39,7 @@ export async function sendEmail(options: EmailOptions): Promise<SendEmailResult>
 
   // Skip in development if configured
   if (process.env.SKIP_EMAIL === 'true') {
-    console.log(`[DEV] Would send email to ${options.to}:`, {
+    console.log(`[DEV] Would send email to ${String(options.to)}:`, {
       subject: options.subject,
       templateId: options.templateId,
     });
@@ -71,7 +71,7 @@ export async function sendEmail(options: EmailOptions): Promise<SendEmailResult>
 
     return {
       success: true,
-      messageId: response.headers['x-message-id'],
+      messageId: (response.headers as Record<string, string>)['x-message-id'],
     };
   } catch (error) {
     console.error('Failed to send email:', error);

@@ -1,5 +1,6 @@
-import { SignUp } from '@clerk/nextjs';
 import Link from 'next/link';
+
+import { SignUp } from '@clerk/nextjs';
 
 import type { Metadata } from 'next';
 

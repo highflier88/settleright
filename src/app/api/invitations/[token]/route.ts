@@ -1,8 +1,12 @@
-import { NextRequest } from 'next/server';
 import { headers } from 'next/headers';
+import { type NextRequest } from 'next/server';
 
-import { getAuthUser } from '@/lib/auth';
+import { InvitationStatus } from '@prisma/client';
+
+import { NotFoundError, BadRequestError, ForbiddenError } from '@/lib/api/errors';
 import { successResponse, errorResponse } from '@/lib/api/response';
+import { getAuthUser } from '@/lib/auth';
+import { CASE_STATUS_LABELS, DISPUTE_TYPE_LABELS } from '@/lib/services/case';
 import {
   getInvitationByToken,
   markInvitationViewed,
@@ -10,9 +14,7 @@ import {
   getInvitationTimeRemaining,
   getInvitationStatusLabel,
 } from '@/lib/services/invitation';
-import { CASE_STATUS_LABELS, DISPUTE_TYPE_LABELS } from '@/lib/services/case';
-import { NotFoundError, BadRequestError, ForbiddenError } from '@/lib/api/errors';
-import { InvitationStatus } from '@prisma/client';
+
 
 interface RouteContext {
   params: { token: string };

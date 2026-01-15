@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+
+import { UserRole } from '@prisma/client';
 import { Scale, Clock, AlertTriangle, CheckCircle, FileText, ArrowRight } from 'lucide-react';
 
-import { getAuthUser } from '@/lib/auth';
-import { prisma } from '@/lib/db';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -12,8 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { UserRole } from '@prisma/client';
+import { getAuthUser } from '@/lib/auth';
+import { prisma } from '@/lib/db';
 
 import type { Metadata } from 'next';
 

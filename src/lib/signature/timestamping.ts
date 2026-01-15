@@ -350,7 +350,12 @@ export function verifyTimestamp(
     // Try to parse as a JSON local timestamp first (development fallback)
     try {
       const decoded = Buffer.from(timestampToken, 'base64').toString('utf-8');
-      const tokenData = JSON.parse(decoded);
+      const tokenData = JSON.parse(decoded) as {
+        messageImprint?: string;
+        nonce?: string;
+        timestamp?: string;
+        tsaName?: string;
+      };
 
       const messageImprintMatch = tokenData.messageImprint === hash;
       const nonceMatch = !expectedNonce || tokenData.nonce === expectedNonce;

@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
+
+import { UserRole } from '@prisma/client';
 import { ArrowLeft } from 'lucide-react';
 
 import { getAuthUser } from '@/lib/auth';
 import { prisma } from '@/lib/db';
-import { UserRole } from '@prisma/client';
 
 import { ReviewTabs } from './review-tabs';
 
@@ -90,7 +91,7 @@ export default async function CaseReviewPage({ params }: PageProps) {
     notFound();
   }
 
-  const { assignment, caseData } = result;
+  const { assignment: _assignment, caseData } = result;
 
   // Separate evidence by party
   const claimantEvidence = caseData.evidence.filter(

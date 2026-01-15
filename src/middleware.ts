@@ -1,4 +1,4 @@
-import { NextResponse, NextRequest } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 
 // Check if we're in test/load-test mode or if Clerk is not configured
 const isTestMode = process.env.NODE_ENV === 'test' || process.env.LOAD_TEST_MODE === 'true';
@@ -54,6 +54,7 @@ async function middleware(request: NextRequest) {
     return;
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
   return clerkHandler(request, {} as any);
 }
 

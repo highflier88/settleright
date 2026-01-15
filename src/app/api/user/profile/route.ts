@@ -1,11 +1,13 @@
-import { NextRequest } from 'next/server';
+import { type NextRequest } from 'next/server';
 
+import { AuditAction } from '@prisma/client';
+
+import { successResponse, errorResponse } from '@/lib/api';
 import { requireAuth } from '@/lib/auth';
 import { prisma } from '@/lib/db';
-import { successResponse, errorResponse } from '@/lib/api';
 import { validateBody } from '@/lib/validations';
 import { updateProfileSchema } from '@/lib/validations/user';
-import { AuditAction } from '@prisma/client';
+
 
 export async function GET() {
   try {
@@ -35,7 +37,7 @@ export async function GET() {
 export async function PATCH(request: NextRequest) {
   try {
     const user = await requireAuth();
-    const body = await request.json();
+    const body: unknown = await request.json();
     const data = validateBody(updateProfileSchema, body);
 
     // Filter out undefined values

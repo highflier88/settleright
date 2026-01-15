@@ -1,15 +1,18 @@
-import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
+import { notFound, redirect } from 'next/navigation';
+
+import { CaseStatus } from '@prisma/client';
 import { ArrowLeft } from 'lucide-react';
 
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getAuthUser } from '@/lib/auth';
 import { userHasAccessToCase, getCaseWithDetails } from '@/lib/services/case';
 import { getEvidenceStats, formatFileSize, MAX_FILE_SIZE, MAX_TOTAL_SIZE_PER_CASE, MAX_FILES_PER_CASE, ALLOWED_FILE_TYPES } from '@/lib/services/evidence';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
 import { EvidenceUploadForm } from './evidence-upload-form';
 
 import type { Metadata } from 'next';
-import { CaseStatus } from '@prisma/client';
+
 
 export const metadata: Metadata = {
   title: 'Upload Evidence',

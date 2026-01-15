@@ -347,12 +347,13 @@ export function verifySignature(
     }
 
     // Extract signer name
-    const signerName = signerCert.subject.getField('CN')?.value || null;
+    const cnField = signerCert.subject.getField('CN') as { value?: string } | null;
+    const signerName = cnField?.value ?? null;
 
     return {
       valid: errors.length === 0 && documentIntact,
       signedAt,
-      signerName: signerName as string | null,
+      signerName,
       certificateValid: certValid,
       certificateExpired: certExpired,
       documentIntact,
@@ -420,18 +421,24 @@ export async function getSigningCredentials(
     };
 
     const cert = forge.pki.certificateFromPem(arbitrator.signingCertPem);
+    const subjectCN = cert.subject.getField('CN') as { value?: string } | null;
+    const subjectO = cert.subject.getField('O') as { value?: string } | null;
+    const subjectOU = cert.subject.getField('OU') as { value?: string } | null;
+    const subjectC = cert.subject.getField('C') as { value?: string } | null;
+    const issuerCN = cert.issuer.getField('CN') as { value?: string } | null;
+    const issuerO = cert.issuer.getField('O') as { value?: string } | null;
     const certificate: SigningCertificate = {
       certificate: arbitrator.signingCertPem,
       serialNumber: cert.serialNumber,
       subject: {
-        commonName: cert.subject.getField('CN')?.value as string || '',
-        organization: cert.subject.getField('O')?.value as string || '',
-        organizationalUnit: cert.subject.getField('OU')?.value as string || '',
-        country: cert.subject.getField('C')?.value as string || '',
+        commonName: subjectCN?.value ?? '',
+        organization: subjectO?.value ?? '',
+        organizationalUnit: subjectOU?.value ?? '',
+        country: subjectC?.value ?? '',
       },
       issuer: {
-        commonName: cert.issuer.getField('CN')?.value as string || '',
-        organization: cert.issuer.getField('O')?.value as string || '',
+        commonName: issuerCN?.value ?? '',
+        organization: issuerO?.value ?? '',
       },
       validFrom: cert.validity.notBefore,
       validTo: cert.validity.notAfter,

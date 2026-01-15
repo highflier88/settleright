@@ -1,14 +1,15 @@
-import { NextRequest } from 'next/server';
+import { type NextRequest } from 'next/server';
+
+import { AuditAction } from '@prisma/client';
 import { z } from 'zod';
 
+import { BadRequestError } from '@/lib/api/errors';
+import { successResponse, errorResponse } from '@/lib/api/response';
 import { requireAuth } from '@/lib/auth';
 import { prisma } from '@/lib/db';
-import { successResponse, errorResponse } from '@/lib/api/response';
-import { BadRequestError } from '@/lib/api/errors';
-import { validateBody } from '@/lib/validations';
-import { sendPhoneVerification, checkPhoneVerification } from '@/lib/services/twilio';
 import { checkRateLimit } from '@/lib/rate-limit';
-import { AuditAction } from '@prisma/client';
+import { sendPhoneVerification, checkPhoneVerification } from '@/lib/services/twilio';
+import { validateBody } from '@/lib/validations';
 
 const sendCodeSchema = z.object({
   phone: z.string().regex(/^\+[1-9]\d{1,14}$/, 'Please enter a valid phone number with country code'),
@@ -27,7 +28,7 @@ export async function POST(request: NextRequest) {
     // Rate limit: 3 requests per minute
     await checkRateLimit(`phone_verify:${user.id}`, { limit: 3, window: 60 });
 
-    const body = await request.json();
+    const body: unknown = await request.json();
     const { phone } = validateBody(sendCodeSchema, body);
 
     // Check if phone is already verified by another user
@@ -65,7 +66,7 @@ export async function PUT(request: NextRequest) {
     // Rate limit: 5 attempts per minute
     await checkRateLimit(`phone_check:${user.id}`, { limit: 5, window: 60 });
 
-    const body = await request.json();
+    const body: unknown = await request.json();
     const { phone, code } = validateBody(verifyCodeSchema, body);
 
     const result = await checkPhoneVerification(phone, code);

@@ -1,6 +1,6 @@
-import { getAuthUser } from '@/lib/auth';
 import { successResponse, errorResponse } from '@/lib/api';
 import { UnauthorizedError } from '@/lib/api/errors';
+import { getAuthUser } from '@/lib/auth';
 
 export async function GET() {
   try {

@@ -24,9 +24,9 @@ export function AuditLogsTableSkeleton() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {[...Array(10)].map((_, i) => (
+            {Array.from({ length: 10 }, (_, i) => (
               <TableRow key={i}>
-                {[...Array(6)].map((_, j) => (
+                {Array.from({ length: 6 }, (_, j) => (
                   <TableCell key={j}>
                     <div className="h-4 w-full animate-pulse bg-muted rounded" />
                   </TableCell>

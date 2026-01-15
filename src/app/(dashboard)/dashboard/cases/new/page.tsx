@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 
 import { getAuthUser } from '@/lib/auth';
 import { checkKYCStatus } from '@/lib/kyc';
+
 import { NewCaseForm } from './new-case-form';
 
 import type { Metadata } from 'next';

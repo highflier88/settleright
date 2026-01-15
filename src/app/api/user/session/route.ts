@@ -1,13 +1,13 @@
 import { headers } from 'next/headers';
 
+import { successResponse, errorResponse } from '@/lib/api';
 import { requireAuth } from '@/lib/auth';
 import { getCurrentSession, getSessionMetadata, parseUserAgent } from '@/lib/session';
-import { successResponse, errorResponse } from '@/lib/api';
 
 export async function GET() {
   try {
     const user = await requireAuth();
-    const session = await getCurrentSession();
+    const session = getCurrentSession();
 
     if (!session) {
       return successResponse({

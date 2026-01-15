@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
-import { CheckCircle, Clock, XCircle, AlertTriangle, Shield, RefreshCw } from 'lucide-react';
 
+import { useRouter } from 'next/navigation';
+
+import { CheckCircle, Clock, XCircle, AlertTriangle, Shield, RefreshCw } from 'lucide-react';
+import { toast } from 'sonner';
+
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { formatDate } from '@/lib/utils';
 
 import type { User, IdentityVerification, KYCStatus } from '@prisma/client';
@@ -85,7 +87,7 @@ export function IdentityVerificationCard({
     try {
       const response = await fetch('/api/user/identity/status');
       if (response.ok) {
-        const data = await response.json();
+        const data = (await response.json()) as { data: VerificationStatus };
         setStatus(data.data);
         return data.data;
       }
@@ -145,11 +147,11 @@ export function IdentityVerificationCard({
       });
 
       if (!response.ok) {
-        const error = await response.json();
+        const error = (await response.json()) as { error?: { message?: string } };
         throw new Error(error.error?.message || 'Failed to start verification');
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as { data?: { url?: string } };
 
       if (data.data?.url) {
         // Redirect to Stripe Identity verification
@@ -220,13 +222,13 @@ export function IdentityVerificationCard({
                 {(status?.verifiedAt || initialVerification?.verifiedAt) && (
                   <p>
                     <span className="text-muted-foreground">Verified on:</span>{' '}
-                    {formatDate(status?.verifiedAt ?? initialVerification?.verifiedAt!)}
+                    {formatDate(status?.verifiedAt ?? initialVerification?.verifiedAt ?? '')}
                   </p>
                 )}
                 {(status?.expiresAt || initialVerification?.expiresAt) && (
                   <p>
                     <span className="text-muted-foreground">Expires on:</span>{' '}
-                    {formatDate(status?.expiresAt ?? initialVerification?.expiresAt!)}
+                    {formatDate(status?.expiresAt ?? initialVerification?.expiresAt ?? '')}
                   </p>
                 )}
                 {(status?.verifiedName || initialVerification?.verifiedName) && (

@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { toast } from 'sonner';
+
 import { Bell, Mail, MessageSquare, Smartphone, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
 
 interface NotificationPreferences {
   emailEnabled: boolean;
@@ -31,7 +32,7 @@ export function NotificationPreferences() {
       try {
         const response = await fetch('/api/notifications/preferences');
         if (response.ok) {
-          const data = await response.json();
+          const data = (await response.json()) as { data: { preferences: NotificationPreferences } };
           setPreferences(data.data.preferences);
         }
       } catch (error) {

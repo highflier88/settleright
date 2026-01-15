@@ -1,8 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+
 import { Edit, Save, Loader2, Plus, Trash2, GripVertical } from 'lucide-react';
 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -12,9 +20,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -22,13 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
-import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
 
 interface FindingOfFact {
   id: string;
@@ -87,13 +88,13 @@ export function AwardEditor({
 }: AwardEditorProps) {
   // Deep clone the draft award for editing
   const [findings, setFindings] = useState<FindingOfFact[]>(
-    JSON.parse(JSON.stringify(draftAward.findingsOfFact))
+    JSON.parse(JSON.stringify(draftAward.findingsOfFact)) as FindingOfFact[]
   );
   const [conclusions, setConclusions] = useState<ConclusionOfLaw[]>(
-    JSON.parse(JSON.stringify(draftAward.conclusionsOfLaw))
+    JSON.parse(JSON.stringify(draftAward.conclusionsOfLaw)) as ConclusionOfLaw[]
   );
   const [decision, setDecision] = useState<AwardDecision>(
-    JSON.parse(JSON.stringify(draftAward.decision))
+    JSON.parse(JSON.stringify(draftAward.decision)) as AwardDecision
   );
   const [reasoning, setReasoning] = useState(draftAward.reasoning);
   const [changeSummary, setChangeSummary] = useState('');

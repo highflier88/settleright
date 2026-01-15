@@ -1,5 +1,6 @@
-import { prisma } from '@/lib/db';
 import { NotificationType } from '@prisma/client';
+
+import { prisma } from '@/lib/db';
 
 // Twilio configuration
 const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
@@ -64,7 +65,7 @@ export async function sendSms(
       }
     );
 
-    const data = await response.json();
+    const data = await response.json() as { sid?: string; message?: string };
 
     // Log notification
     if (userId) {

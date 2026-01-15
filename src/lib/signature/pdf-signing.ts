@@ -97,7 +97,7 @@ export async function signPdfDocument(
   pdfDoc.setCreator('HighTide Digital Signature Service');
 
   // Add signature annotation
-  await addSignatureAnnotation(pdfDoc, signatureInfo, options);
+  addSignatureAnnotation(pdfDoc, signatureInfo, options);
 
   // Save the modified PDF
   const signedPdfBytes = await pdfDoc.save();
@@ -125,11 +125,13 @@ function createSignatureMetadata(
   certificatePem: string
 ): Record<string, string | Date | null> {
   const cert = forge.pki.certificateFromPem(certificatePem);
+  const cnField = cert.subject.getField('CN') as { value?: string } | null;
+  const orgField = cert.subject.getField('O') as { value?: string } | null;
 
   return {
     signerName: options.signerName,
-    signerCN: cert.subject.getField('CN')?.value as string || null,
-    signerOrg: cert.subject.getField('O')?.value as string || null,
+    signerCN: cnField?.value ?? null,
+    signerOrg: orgField?.value ?? null,
     reason: options.reason,
     location: options.location,
     contactInfo: options.contactInfo || null,
@@ -148,11 +150,11 @@ function createSignatureMetadata(
  * Add a signature annotation to the PDF
  * This creates a visible signature block on the last page
  */
-async function addSignatureAnnotation(
+function addSignatureAnnotation(
   pdfDoc: PDFDocument,
   signatureInfo: Record<string, string | Date | null>,
   options: PdfSignatureOptions
-): Promise<void> {
+): void {
   const pages = pdfDoc.getPages();
   const lastPage = pages[pages.length - 1];
 

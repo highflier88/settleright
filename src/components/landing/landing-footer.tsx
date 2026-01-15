@@ -1,5 +1,6 @@
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
+
 import {
   Mail,
   Scale,
@@ -10,7 +11,6 @@ import {
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 
 const productLinks = [
   { label: 'How It Works', href: '#how-it-works' },

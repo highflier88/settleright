@@ -1,13 +1,15 @@
-import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
+import { notFound, redirect } from 'next/navigation';
+
 import { ArrowLeft, FileText, CheckCircle, Clock } from 'lucide-react';
 
-import { getAuthUser } from '@/lib/auth';
-import { userHasAccessToCase } from '@/lib/services/case';
-import { getAgreementForCase, getAgreementStatusInfo, generateAgreementContent } from '@/lib/services/agreement';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { getAuthUser } from '@/lib/auth';
+import { getAgreementForCase, getAgreementStatusInfo, generateAgreementContent } from '@/lib/services/agreement';
+import { userHasAccessToCase } from '@/lib/services/case';
+
 import { AgreementSigningForm } from './agreement-signing-form';
 
 import type { Metadata } from 'next';

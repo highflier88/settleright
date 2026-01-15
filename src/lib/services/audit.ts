@@ -1,7 +1,8 @@
 import { createHash } from 'crypto';
 
-import { prisma } from '@/lib/db';
 import { AuditAction } from '@prisma/client';
+
+import { prisma } from '@/lib/db';
 
 export interface AuditLogEntry {
   action: AuditAction;

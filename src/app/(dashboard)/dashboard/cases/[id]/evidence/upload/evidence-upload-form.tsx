@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useCallback, useRef } from 'react';
+
 import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
+
 import {
   Upload,
   X,
@@ -14,6 +15,7 @@ import {
   AlertCircle,
   Loader2,
 } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -39,7 +41,7 @@ interface FileToUpload {
 
 function getFileIcon(file: File) {
   if (file.type.startsWith('image/')) {
-    return <Image className="h-5 w-5" />;
+    return <Image className="h-5 w-5" aria-hidden="true" />;
   }
   if (file.type.includes('spreadsheet') || file.type === 'text/csv' || file.type.includes('excel')) {
     return <Table className="h-5 w-5" />;
@@ -201,7 +203,7 @@ export function EvidenceUploadForm({
         });
 
         if (!response.ok) {
-          const error = await response.json();
+          const error = (await response.json()) as { error?: { message?: string } };
           throw new Error(error.error?.message || 'Upload failed');
         }
 
@@ -264,11 +266,19 @@ export function EvidenceUploadForm({
         </CardHeader>
         <CardContent>
           <div
+            role="button"
+            tabIndex={0}
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                fileInputRef.current?.click();
+              }
+            }}
             className={`
               relative flex flex-col items-center justify-center w-full h-48
               border-2 border-dashed rounded-lg cursor-pointer transition-colors

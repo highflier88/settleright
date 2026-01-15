@@ -1,13 +1,14 @@
 import '@/styles/globals.css';
 
-import { type Metadata, type Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 
-import { cn } from '@/lib/utils';
-import { Toaster } from '@/components/ui/sonner';
-import { ThemeProvider } from '@/components/providers/theme-provider';
-import { QueryProvider } from '@/components/providers/query-provider';
+import { type Metadata, type Viewport } from 'next';
+
 import { ConditionalClerkProvider } from '@/components/providers/conditional-clerk-provider';
+import { QueryProvider } from '@/components/providers/query-provider';
+import { ThemeProvider } from '@/components/providers/theme-provider';
+import { Toaster } from '@/components/ui/sonner';
+import { cn } from '@/lib/utils';
 
 const fontSans = Inter({
   subsets: ['latin'],

@@ -1,8 +1,11 @@
 
-import { withAuth, AuthenticatedRequest } from '@/lib/api/with-auth';
+import { AuditAction, CaseStatus } from '@prisma/client';
+
+import { NotFoundError, ForbiddenError } from '@/lib/api/errors';
 import { successResponse, errorResponse } from '@/lib/api/response';
-import { validateBody } from '@/lib/validations';
-import { updateCaseSchema } from '@/lib/validations/case';
+import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
+import { prisma } from '@/lib/db';
+import { createAuditLog } from '@/lib/services/audit';
 import {
   getCaseWithDetails,
   userHasAccessToCase,
@@ -11,10 +14,9 @@ import {
   CASE_STATUS_LABELS,
   DISPUTE_TYPE_LABELS,
 } from '@/lib/services/case';
-import { createAuditLog } from '@/lib/services/audit';
-import { prisma } from '@/lib/db';
-import { NotFoundError, ForbiddenError } from '@/lib/api/errors';
-import { AuditAction, CaseStatus } from '@prisma/client';
+import { validateBody } from '@/lib/validations';
+import { updateCaseSchema } from '@/lib/validations/case';
+
 
 // GET /api/cases/[id] - Get case details
 export const GET = withAuth(
@@ -93,7 +95,7 @@ export const PATCH = withAuth(
         throw new ForbiddenError('Case can no longer be edited');
       }
 
-      const body = await request.json();
+      const body: unknown = await request.json();
       const data = validateBody(updateCaseSchema, body);
 
       // Update the case

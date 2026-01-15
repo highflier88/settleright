@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+
 import { SectionWrapper } from './section-wrapper';
 
 interface LegalFeature {
@@ -191,7 +192,7 @@ export function TrustSection() {
               Every case is reviewed by a qualified human arbitrator who makes the final decision.
             </p>
             <div className="space-y-3">
-              {arbitratorCredentials.map((credential, index) => (
+              {arbitratorCredentials.map((credential) => (
                 <div
                   key={credential}
                   className="flex items-center gap-3"

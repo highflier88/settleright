@@ -1,20 +1,22 @@
 
-import { withAuth, AuthenticatedRequest } from '@/lib/api/with-auth';
+import { CaseStatus } from '@prisma/client';
+
+import { BadRequestError, ForbiddenError } from '@/lib/api/errors';
 import { successResponse, errorResponse } from '@/lib/api/response';
-import { validateBody } from '@/lib/validations';
-import { createCaseSchema } from '@/lib/validations/case';
+import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
+import { checkKYCStatus } from '@/lib/kyc';
 import { createCase, getUserCases, getUserCaseStats } from '@/lib/services/case';
 import { sendCaseInvitationEmail } from '@/lib/services/email';
 import { sendSms } from '@/lib/services/twilio';
-import { checkKYCStatus } from '@/lib/kyc';
-import { BadRequestError, ForbiddenError } from '@/lib/api/errors';
-import { CaseStatus } from '@prisma/client';
+import { validateBody } from '@/lib/validations';
+import { createCaseSchema } from '@/lib/validations/case';
+
 
 // POST /api/cases - Create a new case
 export const POST = withAuth(
   async (request: AuthenticatedRequest) => {
     try {
-      const body = await request.json();
+      const body: unknown = await request.json();
       const data = validateBody(createCaseSchema, body);
 
       // Check KYC status

@@ -1,8 +1,8 @@
 
-import { withAuth, AuthenticatedRequest } from '@/lib/api/with-auth';
-import { successResponse, errorResponse } from '@/lib/api/response';
-import { markNotificationRead } from '@/lib/services/notification';
 import { NotFoundError } from '@/lib/api/errors';
+import { successResponse, errorResponse } from '@/lib/api/response';
+import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
+import { markNotificationRead } from '@/lib/services/notification';
 
 // PATCH /api/notifications/[id] - Mark notification as read
 export const PATCH = withAuth(

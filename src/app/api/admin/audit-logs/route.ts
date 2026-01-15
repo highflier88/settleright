@@ -1,8 +1,10 @@
 
-import { withAdmin, AuthenticatedRequest } from '@/lib/api/with-auth';
-import { successResponse, errorResponse } from '@/lib/api/response';
-import { getAuditLogs, AuditLogFilters } from '@/lib/services/audit';
 import { AuditAction } from '@prisma/client';
+
+import { successResponse, errorResponse } from '@/lib/api/response';
+import { withAdmin, type AuthenticatedRequest } from '@/lib/api/with-auth';
+import { getAuditLogs, type AuditLogFilters } from '@/lib/services/audit';
+
 
 // GET /api/admin/audit-logs - List audit logs with filters
 export const GET = withAdmin(async (request: AuthenticatedRequest) => {

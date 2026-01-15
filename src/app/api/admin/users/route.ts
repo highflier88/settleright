@@ -1,10 +1,10 @@
+import { UserRole, KYCStatus } from '@prisma/client';
 import { z } from 'zod';
 
-import { prisma } from '@/lib/db';
-import { withAdmin, AuthenticatedRequest } from '@/lib/api/with-auth';
 import { paginatedResponse } from '@/lib/api/response';
+import { withAdmin, type AuthenticatedRequest } from '@/lib/api/with-auth';
+import { prisma } from '@/lib/db';
 import { validateQuery } from '@/lib/validations';
-import { UserRole, KYCStatus } from '@prisma/client';
 
 const listUsersSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),

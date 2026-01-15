@@ -1,7 +1,7 @@
-import { Users, FileText, Shield, TrendingUp } from 'lucide-react';
+import { FileText, Shield, TrendingUp, Users } from 'lucide-react';
 
-import { prisma } from '@/lib/db';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { prisma } from '@/lib/db';
 
 import type { Metadata } from 'next';
 

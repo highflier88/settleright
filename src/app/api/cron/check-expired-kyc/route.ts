@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
+
+import { KYCStatus } from '@prisma/client';
 
 import { prisma } from '@/lib/db';
-import { KYCStatus } from '@prisma/client';
 
 // This cron job runs daily to check for expired KYC verifications
 // Configure in vercel.json: { "path": "/api/cron/check-expired-kyc", "schedule": "0 0 * * *" }

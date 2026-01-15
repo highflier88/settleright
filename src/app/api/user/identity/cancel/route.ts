@@ -1,9 +1,11 @@
+import { KYCStatus } from '@prisma/client';
+
+import { BadRequestError } from '@/lib/api/errors';
+import { successResponse, errorResponse } from '@/lib/api/response';
 import { requireAuth } from '@/lib/auth';
 import { prisma } from '@/lib/db';
-import { successResponse, errorResponse } from '@/lib/api/response';
-import { BadRequestError } from '@/lib/api/errors';
 import { cancelVerificationSession } from '@/lib/services/stripe-identity';
-import { KYCStatus } from '@prisma/client';
+
 
 export async function POST() {
   try {

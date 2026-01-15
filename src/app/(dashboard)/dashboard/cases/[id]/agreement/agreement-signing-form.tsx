@@ -1,14 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+
 import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
+
 import { Pen, CheckCircle, AlertTriangle } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 
 interface AgreementSigningFormProps {
   caseId: string;
@@ -56,11 +58,11 @@ export function AgreementSigningForm({
       });
 
       if (!response.ok) {
-        const error = await response.json();
+        const error = (await response.json()) as { error?: { message?: string } };
         throw new Error(error.error?.message || 'Failed to sign agreement');
       }
 
-      const result = await response.json();
+      const result = (await response.json()) as { data: { agreementComplete: boolean } };
 
       if (result.data.agreementComplete) {
         toast.success('Agreement complete! Both parties have signed.');
@@ -171,13 +173,13 @@ export function AgreementSigningForm({
 
         {/* Consent Text */}
         <div className="rounded-lg bg-muted p-4">
-          <p className="text-sm font-medium mb-2">By clicking "Sign Agreement", you confirm:</p>
+          <p className="text-sm font-medium mb-2">By clicking &quot;Sign Agreement&quot;, you confirm:</p>
           <p className="text-sm text-muted-foreground italic">
-            "I, as the {userRole === 'CLAIMANT' ? 'Claimant' : 'Respondent'} in Case{' '}
+            &quot;I, as the {userRole === 'CLAIMANT' ? 'Claimant' : 'Respondent'} in Case{' '}
             {caseReference}, have read and understand the Submission Agreement for Binding
             Arbitration. I voluntarily agree to be bound by its terms, including the waiver
             of jury trial and class action rights. I understand that the arbitration award
-            will be final and binding."
+            will be final and binding.&quot;
           </p>
         </div>
 
