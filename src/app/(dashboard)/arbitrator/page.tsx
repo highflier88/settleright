@@ -11,6 +11,30 @@ import { prisma } from '@/lib/db';
 
 import type { Metadata } from 'next';
 
+interface AssignmentItem {
+  id: string;
+  priority: string;
+  assignedAt: Date;
+  dueBy: Date | null;
+  case: {
+    id: string;
+    referenceNumber: string;
+    status: string;
+    disputeType: string;
+    jurisdiction: string;
+    amount: unknown;
+    createdAt: Date;
+    claimant: { name: string | null } | null;
+    respondent: { name: string | null } | null;
+    draftAward: {
+      id: string;
+      reviewStatus: string | null;
+      confidence: number | null;
+      generatedAt: Date;
+    } | null;
+  };
+}
+
 export const metadata: Metadata = {
   title: 'Arbitrator Portal',
   description: 'Manage your assigned cases and reviews',
@@ -211,7 +235,7 @@ export default async function ArbitratorPage() {
             </div>
           ) : (
             <div className="space-y-4">
-              {assignments.map((assignment) => (
+              {(assignments as AssignmentItem[]).map((assignment) => (
                 <div
                   key={assignment.id}
                   className="flex items-center justify-between rounded-lg border p-4 transition-colors hover:bg-muted/50"
