@@ -38,6 +38,12 @@ interface AwardWithDetails {
   };
 }
 
+interface PrevailingPartyBreakdown {
+  prevailingParty: PrevailingParty;
+  _count: { id: number };
+  _sum: { awardAmount: unknown };
+}
+
 export const dynamic = 'force-dynamic';
 
 /**
@@ -214,7 +220,7 @@ export async function GET(request: NextRequest) {
           totalAwardAmount: aggregates._sum.awardAmount ? Number(aggregates._sum.awardAmount) : 0,
           averageAwardAmount: aggregates._avg.awardAmount ? Number(aggregates._avg.awardAmount) : 0,
         },
-        byPrevailingParty: byPrevailingParty.map((item) => ({
+        byPrevailingParty: (byPrevailingParty as PrevailingPartyBreakdown[]).map((item) => ({
           prevailingParty: item.prevailingParty,
           count: item._count.id,
           totalAmount: item._sum.awardAmount ? Number(item._sum.awardAmount) : 0,
