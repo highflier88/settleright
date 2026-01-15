@@ -1,7 +1,5 @@
 import { type NextRequest } from 'next/server';
 
-import { AuditAction } from '@prisma/client';
-
 import { successResponse, errorResponse } from '@/lib/api';
 import { requireAuth } from '@/lib/auth';
 import { prisma } from '@/lib/db';
@@ -55,7 +53,7 @@ export async function PATCH(request: NextRequest) {
     // Create audit log
     const hash = Buffer.from(
       JSON.stringify({
-        action: AuditAction.USER_PROFILE_UPDATED,
+        action: 'USER_PROFILE_UPDATED',
         userId: user.id,
         timestamp: Date.now(),
       })
@@ -63,7 +61,7 @@ export async function PATCH(request: NextRequest) {
 
     await prisma.auditLog.create({
       data: {
-        action: AuditAction.USER_PROFILE_UPDATED,
+        action: 'USER_PROFILE_UPDATED',
         userId: user.id,
         metadata: {
           updatedFields: Object.keys(updateData),

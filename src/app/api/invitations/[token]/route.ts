@@ -1,8 +1,6 @@
 import { headers } from 'next/headers';
 import { type NextRequest } from 'next/server';
 
-import { InvitationStatus } from '@prisma/client';
-
 import { NotFoundError, BadRequestError, ForbiddenError } from '@/lib/api/errors';
 import { successResponse, errorResponse } from '@/lib/api/response';
 import { getAuthUser } from '@/lib/auth';
@@ -80,9 +78,9 @@ export async function GET(request: NextRequest, context: RouteContext) {
         userEmail: user?.email,
       },
       canAccept:
-        invitation.status !== InvitationStatus.ACCEPTED &&
-        invitation.status !== InvitationStatus.EXPIRED &&
-        invitation.status !== InvitationStatus.CANCELLED &&
+        invitation.status !== 'ACCEPTED' &&
+        invitation.status !== 'EXPIRED' &&
+        invitation.status !== 'CANCELLED' &&
         !timeRemaining.isExpired,
     });
   } catch (error) {
@@ -118,7 +116,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
     }
 
     // Check if already accepted
-    if (invitation.status === InvitationStatus.ACCEPTED) {
+    if (invitation.status === 'ACCEPTED') {
       throw new BadRequestError('This invitation has already been accepted');
     }
 

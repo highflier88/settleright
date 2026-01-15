@@ -20,8 +20,6 @@ import {
   getCasePaymentStatus,
 } from '@/lib/payments';
 
-import type { PaymentType } from '@prisma/client';
-
 const createPaymentSchema = z.object({
   type: z.enum(['FILING_FEE', 'RESPONSE_FEE', 'EXPEDITED_FEE']),
   disputeAmount: z.number().optional(), // For calculating fee if different from case amount
@@ -158,15 +156,17 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context) => {
 
     // Calculate fee amount
     const disputeAmount = providedDisputeAmount || (caseData.amount ? Number(caseData.amount) : 0);
-    const amount = providedAmount || calculateFee(disputeAmount, type as PaymentType);
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const amount = providedAmount || calculateFee(disputeAmount, type as any);
 
     // Create checkout session
     const session = await createCheckoutSession({
       caseId,
       userId,
-      type: type as PaymentType,
+      type: type as any,
       amount,
     });
+    /* eslint-enable @typescript-eslint/no-explicit-any */
 
     return NextResponse.json({
       success: true,

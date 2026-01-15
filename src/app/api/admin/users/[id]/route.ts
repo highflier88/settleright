@@ -1,4 +1,3 @@
-import { UserRole, AuditAction } from '@prisma/client';
 import { z } from 'zod';
 
 import { NotFoundError, BadRequestError } from '@/lib/api/errors';
@@ -6,9 +5,12 @@ import { successResponse } from '@/lib/api/response';
 import { withAdmin, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { prisma } from '@/lib/db';
 import { validateBody } from '@/lib/validations';
+import type { UserRole } from '@/types/shared';
+
+const USER_ROLES = ['USER', 'ARBITRATOR', 'ADMIN'] as const;
 
 const updateUserSchema = z.object({
-  role: z.nativeEnum(UserRole).optional(),
+  role: z.enum(USER_ROLES).optional(),
   name: z.string().min(2).max(100).optional(),
   phone: z.string().optional().nullable(),
 });
@@ -112,9 +114,9 @@ async function handlePatch(
   }
 
   // Prevent demoting the last admin
-  if (data.role && data.role !== UserRole.ADMIN && existingUser.role === UserRole.ADMIN) {
+  if (data.role && data.role !== 'ADMIN' && existingUser.role === 'ADMIN') {
     const adminCount = await prisma.user.count({
-      where: { role: UserRole.ADMIN },
+      where: { role: 'ADMIN' },
     });
 
     if (adminCount <= 1) {
@@ -123,7 +125,7 @@ async function handlePatch(
   }
 
   // If promoting to arbitrator, create arbitrator profile
-  if (data.role === UserRole.ARBITRATOR && existingUser.role !== UserRole.ARBITRATOR) {
+  if (data.role === 'ARBITRATOR' && existingUser.role !== 'ARBITRATOR') {
     await prisma.arbitratorProfile.upsert({
       where: { userId: id },
       create: { userId: id },
@@ -139,7 +141,7 @@ async function handlePatch(
   // Create audit log
   const hash = Buffer.from(
     JSON.stringify({
-      action: AuditAction.USER_PROFILE_UPDATED,
+      action: 'USER_PROFILE_UPDATED',
       userId: id,
       adminId: request.user.id,
       timestamp: Date.now(),
@@ -148,7 +150,7 @@ async function handlePatch(
 
   await prisma.auditLog.create({
     data: {
-      action: AuditAction.USER_PROFILE_UPDATED,
+      action: 'USER_PROFILE_UPDATED',
       userId: request.user.id,
       metadata: {
         targetUserId: id,

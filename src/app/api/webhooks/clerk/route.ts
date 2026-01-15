@@ -1,7 +1,6 @@
 import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-import { AuditAction } from '@prisma/client';
 import { Webhook } from 'svix';
 
 import { prisma } from '@/lib/db';
@@ -104,7 +103,7 @@ export async function POST(req: Request) {
       });
 
       await createAuditLog({
-        action: AuditAction.USER_REGISTERED,
+        action: 'USER_REGISTERED',
         userId: user.id,
         metadata: {
           email: primaryEmail.email_address,
@@ -151,7 +150,7 @@ export async function POST(req: Request) {
       });
 
       await createAuditLog({
-        action: AuditAction.USER_PROFILE_UPDATED,
+        action: 'USER_PROFILE_UPDATED',
         userId: user.id,
         metadata: {
           clerkId: id,
@@ -187,7 +186,7 @@ export async function POST(req: Request) {
       });
 
       await createAuditLog({
-        action: AuditAction.USER_LOGOUT, // Using USER_LOGOUT for account deletion
+        action: 'USER_LOGOUT', // Using USER_LOGOUT for account deletion
         userId: user.id,
         metadata: {
           reason: 'account_deleted',
@@ -217,7 +216,7 @@ export async function POST(req: Request) {
         });
 
         await createAuditLog({
-          action: AuditAction.USER_LOGIN,
+          action: 'USER_LOGIN',
           userId: user.id,
           metadata: {
             clerkId: id,

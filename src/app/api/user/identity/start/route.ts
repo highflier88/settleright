@@ -1,6 +1,5 @@
 import { type NextRequest } from 'next/server';
 
-import { AuditAction, KYCStatus } from '@prisma/client';
 import { z } from 'zod';
 
 import { BadRequestError } from '@/lib/api/errors';
@@ -30,7 +29,7 @@ export async function POST(request: NextRequest) {
       where: { userId: user.id },
     });
 
-    if (existing?.status === KYCStatus.VERIFIED) {
+    if (existing?.status === 'VERIFIED') {
       // Check if not expired
       if (!existing.expiresAt || existing.expiresAt > new Date()) {
         throw new BadRequestError('Your identity is already verified');
@@ -38,7 +37,7 @@ export async function POST(request: NextRequest) {
       // If expired, allow re-verification
     }
 
-    if (existing?.status === KYCStatus.PENDING) {
+    if (existing?.status === 'PENDING') {
       throw new BadRequestError(
         'You have a pending verification. Please complete or wait for it to finish.'
       );
@@ -58,13 +57,13 @@ export async function POST(request: NextRequest) {
       where: { userId: user.id },
       create: {
         userId: user.id,
-        status: KYCStatus.PENDING,
+        status: 'PENDING',
         provider: 'stripe_identity',
         providerSessionId: result.sessionId,
         initiatedAt: new Date(),
       },
       update: {
-        status: KYCStatus.PENDING,
+        status: 'PENDING',
         provider: 'stripe_identity',
         providerSessionId: result.sessionId,
         initiatedAt: new Date(),
@@ -78,7 +77,7 @@ export async function POST(request: NextRequest) {
     // Create audit log
     const hash = Buffer.from(
       JSON.stringify({
-        action: AuditAction.KYC_INITIATED,
+        action: 'KYC_INITIATED',
         userId: user.id,
         sessionId: result.sessionId,
         timestamp: Date.now(),
@@ -87,7 +86,7 @@ export async function POST(request: NextRequest) {
 
     await prisma.auditLog.create({
       data: {
-        action: AuditAction.KYC_INITIATED,
+        action: 'KYC_INITIATED',
         userId: user.id,
         metadata: {
           sessionId: result.sessionId,

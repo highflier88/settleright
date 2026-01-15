@@ -1,6 +1,17 @@
-import { CaseStatus } from '@prisma/client';
-
 import { BadRequestError, ForbiddenError } from '@/lib/api/errors';
+import type { CaseStatus } from '@/types/shared';
+
+const CASE_STATUSES: CaseStatus[] = [
+  'DRAFT',
+  'PENDING_RESPONDENT',
+  'PENDING_AGREEMENT',
+  'EVIDENCE_SUBMISSION',
+  'ANALYSIS_PENDING',
+  'ANALYSIS_IN_PROGRESS',
+  'ARBITRATOR_REVIEW',
+  'DECIDED',
+  'CLOSED',
+];
 import { successResponse, errorResponse } from '@/lib/api/response';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { checkKYCStatus } from '@/lib/kyc';
@@ -98,7 +109,7 @@ export const GET = withAuth(async (request: AuthenticatedRequest) => {
     const includeStats = searchParams.get('includeStats') === 'true';
 
     let status: CaseStatus | undefined;
-    if (statusParam && Object.values(CaseStatus).includes(statusParam as CaseStatus)) {
+    if (statusParam && CASE_STATUSES.includes(statusParam as CaseStatus)) {
       status = statusParam as CaseStatus;
     }
 

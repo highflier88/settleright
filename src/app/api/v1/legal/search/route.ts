@@ -14,7 +14,8 @@ import { z } from 'zod';
 import { withAuth } from '@/lib/api/with-auth';
 import { searchLegalDocuments } from '@/lib/legal/retrieval';
 
-import type { DisputeType, LegalSourceType } from '@prisma/client';
+type DisputeType = 'CONTRACT' | 'PAYMENT' | 'SERVICE' | 'GOODS' | 'OTHER';
+type LegalSourceType = 'STATUTE' | 'CASE_LAW' | 'REGULATION' | 'COURT_RULE';
 
 // Request validation
 const searchRequestSchema = z.object({

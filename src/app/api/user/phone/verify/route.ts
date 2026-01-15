@@ -1,6 +1,5 @@
 import { type NextRequest } from 'next/server';
 
-import { AuditAction } from '@prisma/client';
 import { z } from 'zod';
 
 import { BadRequestError } from '@/lib/api/errors';
@@ -90,7 +89,7 @@ export async function PUT(request: NextRequest) {
     // Create audit log
     const hash = Buffer.from(
       JSON.stringify({
-        action: AuditAction.USER_PROFILE_UPDATED,
+        action: 'USER_PROFILE_UPDATED',
         userId: user.id,
         timestamp: Date.now(),
       })
@@ -98,7 +97,7 @@ export async function PUT(request: NextRequest) {
 
     await prisma.auditLog.create({
       data: {
-        action: AuditAction.USER_PROFILE_UPDATED,
+        action: 'USER_PROFILE_UPDATED',
         userId: user.id,
         metadata: {
           field: 'phone',

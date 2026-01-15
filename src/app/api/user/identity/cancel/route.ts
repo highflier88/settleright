@@ -1,5 +1,3 @@
-import { KYCStatus } from '@prisma/client';
-
 import { BadRequestError } from '@/lib/api/errors';
 import { successResponse, errorResponse } from '@/lib/api/response';
 import { requireAuth } from '@/lib/auth';
@@ -18,7 +16,7 @@ export async function POST() {
       throw new BadRequestError('No verification found');
     }
 
-    if (verification.status !== KYCStatus.PENDING) {
+    if (verification.status !== 'PENDING') {
       throw new BadRequestError('Can only cancel pending verifications');
     }
 
@@ -31,7 +29,7 @@ export async function POST() {
     await prisma.identityVerification.update({
       where: { userId: user.id },
       data: {
-        status: KYCStatus.NOT_STARTED,
+        status: 'NOT_STARTED',
         providerSessionId: null,
         initiatedAt: null,
       },

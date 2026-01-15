@@ -1,6 +1,8 @@
-import { AuditAction, CaseStatus } from '@prisma/client';
-
 import { NotFoundError, ForbiddenError } from '@/lib/api/errors';
+import type { CaseStatus } from '@/types/shared';
+
+const EDITABLE_STATUSES: CaseStatus[] = ['DRAFT', 'PENDING_RESPONDENT'];
+const DELETABLE_STATUSES: CaseStatus[] = ['DRAFT', 'PENDING_RESPONDENT', 'PENDING_AGREEMENT'];
 import { successResponse, errorResponse } from '@/lib/api/response';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { prisma } from '@/lib/db';
@@ -54,7 +56,7 @@ export const GET = withAuth(
     }
   },
   {
-    auditAction: AuditAction.CASE_UPDATED,
+    auditAction: 'CASE_UPDATED',
     getCaseId: (_, context) => context?.params.id ?? null,
   }
 );
@@ -88,8 +90,7 @@ export const PATCH = withAuth(
         throw new NotFoundError('Case not found');
       }
 
-      const editableStatuses: CaseStatus[] = [CaseStatus.DRAFT, CaseStatus.PENDING_RESPONDENT];
-      if (!editableStatuses.includes(existingCase.status)) {
+      if (!EDITABLE_STATUSES.includes(existingCase.status as CaseStatus)) {
         throw new ForbiddenError('Case can no longer be edited');
       }
 
@@ -107,7 +108,7 @@ export const PATCH = withAuth(
 
       // Log update
       await createAuditLog({
-        action: AuditAction.CASE_UPDATED,
+        action: 'CASE_UPDATED',
         userId: request.user.id,
         caseId,
         metadata: {
@@ -153,12 +154,7 @@ export const DELETE = withAuth(
         throw new NotFoundError('Case not found');
       }
 
-      const deletableStatuses: CaseStatus[] = [
-        CaseStatus.DRAFT,
-        CaseStatus.PENDING_RESPONDENT,
-        CaseStatus.PENDING_AGREEMENT,
-      ];
-      if (!deletableStatuses.includes(existingCase.status)) {
+      if (!DELETABLE_STATUSES.includes(existingCase.status as CaseStatus)) {
         throw new ForbiddenError('Case cannot be withdrawn after agreement has been signed');
       }
 

@@ -11,7 +11,7 @@ import { auth } from '@clerk/nextjs/server';
 import { getEarningsSummary, getCompensationHistory } from '@/lib/arbitrator';
 import { prisma } from '@/lib/db';
 
-import type { CompensationStatus } from '@prisma/client';
+type CompensationStatus = 'PENDING' | 'APPROVED' | 'PAID' | 'DISPUTED' | 'CANCELLED';
 
 export const dynamic = 'force-dynamic';
 
