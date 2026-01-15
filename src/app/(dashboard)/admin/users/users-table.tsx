@@ -99,7 +99,7 @@ export async function UsersTable({ searchParams }: UsersTableProps) {
     };
   }
 
-  const [users, total] = await Promise.all([
+  const [usersResult, total] = await Promise.all([
     prisma.user.findMany({
       where,
       include: {
@@ -116,9 +116,10 @@ export async function UsersTable({ searchParams }: UsersTableProps) {
       orderBy: { createdAt: 'desc' },
       skip: (page - 1) * perPage,
       take: perPage,
-    }) as Promise<UserWithDetails[]>,
+    }),
     prisma.user.count({ where }),
   ]);
+  const users = usersResult as UserWithDetails[];
 
   const totalPages = Math.ceil(total / perPage);
 
