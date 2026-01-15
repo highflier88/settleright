@@ -3,6 +3,21 @@ import { withAdmin, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { prisma } from '@/lib/db';
 import type { UserRole, CaseStatus, KYCStatus } from '@/types/shared';
 
+interface RoleGroupBy {
+  role: UserRole;
+  _count: { role: number };
+}
+
+interface KYCGroupBy {
+  status: KYCStatus;
+  _count: { status: number };
+}
+
+interface CaseStatusGroupBy {
+  status: CaseStatus;
+  _count: { status: number };
+}
+
 const USER_ROLES: UserRole[] = ['USER', 'ARBITRATOR', 'ADMIN'];
 const CASE_STATUSES: CaseStatus[] = [
   'DRAFT',
@@ -71,9 +86,10 @@ async function handleGet(_request: AuthenticatedRequest) {
   ]);
 
   // Format role stats
+  const typedUsersByRole = usersByRole as RoleGroupBy[];
   const roleStats = USER_ROLES.reduce(
     (acc, role) => {
-      const found = usersByRole.find((r) => r.role === role);
+      const found = typedUsersByRole.find((r) => r.role === role);
       acc[role] = found?._count.role ?? 0;
       return acc;
     },
@@ -81,9 +97,10 @@ async function handleGet(_request: AuthenticatedRequest) {
   );
 
   // Format KYC stats
+  const typedUsersByKycStatus = usersByKycStatus as KYCGroupBy[];
   const kycStats = KYC_STATUSES.reduce(
     (acc, status) => {
-      const found = usersByKycStatus.find((k) => k.status === status);
+      const found = typedUsersByKycStatus.find((k) => k.status === status);
       acc[status] = found?._count.status ?? 0;
       return acc;
     },
@@ -95,9 +112,10 @@ async function handleGet(_request: AuthenticatedRequest) {
   kycStats.NOT_STARTED = totalUsers - usersWithKyc + (kycStats.NOT_STARTED ?? 0);
 
   // Format case stats
+  const typedCasesByStatus = casesByStatus as CaseStatusGroupBy[];
   const caseStats = CASE_STATUSES.reduce(
     (acc, status) => {
-      const found = casesByStatus.find((c) => c.status === status);
+      const found = typedCasesByStatus.find((c) => c.status === status);
       acc[status] = found?._count.status ?? 0;
       return acc;
     },
