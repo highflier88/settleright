@@ -1,11 +1,26 @@
 import { NextResponse } from 'next/server';
 
-import { AuditAction } from '@prisma/client';
-
 import { errorResponse } from '@/lib/api/response';
 import { withAdmin, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { exportAuditLogs, type AuditLogFilters } from '@/lib/services/audit';
 import { logAuditEvent } from '@/lib/services/audit';
+import type { AuditAction } from '@/types/shared';
+
+const VALID_AUDIT_ACTIONS: AuditAction[] = [
+  'USER_REGISTERED', 'USER_LOGIN', 'USER_LOGOUT', 'USER_PROFILE_UPDATED',
+  'KYC_INITIATED', 'KYC_COMPLETED', 'KYC_FAILED',
+  'CASE_CREATED', 'CASE_UPDATED', 'CASE_STATUS_CHANGED', 'CASE_CLOSED',
+  'INVITATION_SENT', 'INVITATION_VIEWED', 'INVITATION_ACCEPTED', 'INVITATION_EXPIRED',
+  'AGREEMENT_VIEWED', 'AGREEMENT_SIGNED',
+  'EVIDENCE_UPLOADED', 'EVIDENCE_VIEWED', 'EVIDENCE_DELETED',
+  'STATEMENT_SUBMITTED', 'STATEMENT_UPDATED',
+  'ANALYSIS_INITIATED', 'ANALYSIS_COMPLETED', 'ANALYSIS_FAILED',
+  'CASE_ASSIGNED', 'REVIEW_STARTED', 'REVIEW_COMPLETED',
+  'DRAFT_AWARD_GENERATED', 'DRAFT_AWARD_MODIFIED', 'DRAFT_AWARD_APPROVED',
+  'DRAFT_AWARD_REJECTED', 'DRAFT_AWARD_ESCALATED', 'ESCALATION_RESOLVED',
+  'AWARD_SIGNED', 'AWARD_ISSUED', 'AWARD_DOWNLOADED',
+  'ENFORCEMENT_PACKAGE_DOWNLOADED', 'ARBITRATOR_ONBOARDED', 'ARBITRATOR_CREDENTIALS_SUBMITTED',
+];
 
 // GET /api/admin/audit-logs/export - Export audit logs
 export const GET = withAdmin(async (request: AuthenticatedRequest) => {
@@ -22,7 +37,7 @@ export const GET = withAdmin(async (request: AuthenticatedRequest) => {
     if (caseId) filters.caseId = caseId;
 
     const action = searchParams.get('action');
-    if (action && Object.values(AuditAction).includes(action as AuditAction)) {
+    if (action && VALID_AUDIT_ACTIONS.includes(action as AuditAction)) {
       filters.action = action as AuditAction;
     }
 
@@ -49,7 +64,7 @@ export const GET = withAdmin(async (request: AuthenticatedRequest) => {
 
     // Log the export action
     logAuditEvent({
-      action: AuditAction.EVIDENCE_VIEWED, // Using closest available action
+      action: 'EVIDENCE_VIEWED', // Using closest available action
       userId: request.user.id,
       metadata: {
         type: 'audit_log_export',
