@@ -102,18 +102,14 @@ export default async function CaseReviewPage({ params }: PageProps) {
   const { assignment: _assignment, caseData } = result;
 
   // Separate evidence by party
-  const claimantEvidence = caseData.evidence.filter((e) => e.submittedById === caseData.claimantId);
-  const respondentEvidence = caseData.evidence.filter(
-    (e) => e.submittedById === caseData.respondentId
-  );
+  const evidence = caseData.evidence as EvidenceWithSubmitter[];
+  const claimantEvidence = evidence.filter((e) => e.submittedById === caseData.claimantId);
+  const respondentEvidence = evidence.filter((e) => e.submittedById === caseData.respondentId);
 
   // Separate statements by party
-  const claimantStatement = caseData.statements.find(
-    (s) => s.submittedById === caseData.claimantId
-  );
-  const respondentStatement = caseData.statements.find(
-    (s) => s.submittedById === caseData.respondentId
-  );
+  const statements = caseData.statements as StatementWithSubmitter[];
+  const claimantStatement = statements.find((s) => s.submittedById === caseData.claimantId);
+  const respondentStatement = statements.find((s) => s.submittedById === caseData.respondentId);
 
   return (
     <div className="space-y-4">
