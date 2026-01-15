@@ -17,6 +17,34 @@ import { InvitationActions } from './invitation-actions';
 
 import type { Metadata } from 'next';
 
+// Local type for invitation data
+type InvitationStatus = 'PENDING' | 'VIEWED' | 'ACCEPTED' | 'EXPIRED' | 'CANCELLED';
+type DisputeType = 'CONTRACT' | 'PAYMENT' | 'SERVICE' | 'GOODS' | 'OTHER';
+
+interface InvitationData {
+  id: string;
+  status: InvitationStatus;
+  email: string;
+  name: string | null;
+  expiresAt: Date;
+  viewedAt: Date | null;
+  case: {
+    id: string;
+    referenceNumber: string;
+    disputeType: DisputeType;
+    jurisdiction: string;
+    description: string;
+    amount: unknown;
+    responseDeadline: Date | null;
+    createdAt: Date;
+    claimant: {
+      id: string;
+      name: string | null;
+      email: string;
+    };
+  };
+}
+
 export const metadata: Metadata = {
   title: "You've Been Invited to Respond",
   description: 'Review and respond to an arbitration case',
@@ -27,12 +55,13 @@ interface PageProps {
 }
 
 export default async function InvitationPage({ params }: PageProps) {
-  const invitation = await getInvitationByToken(params.token);
+  const invitationResult = await getInvitationByToken(params.token);
 
-  if (!invitation) {
+  if (!invitationResult) {
     notFound();
   }
 
+  const invitation = invitationResult as unknown as InvitationData;
   const user = await getAuthUser();
   const timeRemaining = getInvitationTimeRemaining(invitation.expiresAt);
 
