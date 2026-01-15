@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
-import { CaseStatus } from '@prisma/client';
 import { ArrowLeft } from 'lucide-react';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -51,7 +50,7 @@ export default async function UploadEvidencePage({ params }: PageProps) {
   }
 
   // Check if uploads are allowed
-  if (caseData.status !== CaseStatus.EVIDENCE_SUBMISSION) {
+  if (caseData.status !== 'EVIDENCE_SUBMISSION') {
     redirect(`/dashboard/cases/${params.id}/evidence`);
   }
 

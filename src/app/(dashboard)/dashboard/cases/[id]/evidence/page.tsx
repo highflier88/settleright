@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
-import { CaseStatus } from '@prisma/client';
 import { ArrowLeft, Upload, FileText, Image as ImageIcon, Table } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -46,7 +45,7 @@ export default async function EvidencePage({ params }: PageProps) {
     notFound();
   }
 
-  const canUpload = caseData.status === CaseStatus.EVIDENCE_SUBMISSION;
+  const canUpload = caseData.status === 'EVIDENCE_SUBMISSION';
 
   return (
     <div className="space-y-6">

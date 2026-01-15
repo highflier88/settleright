@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
-import { CaseStatus, StatementType } from '@prisma/client';
 import { ArrowLeft } from 'lucide-react';
 
 import { getAuthUser } from '@/lib/auth';
@@ -48,7 +47,7 @@ export default async function EditStatementPage({ params }: PageProps) {
   }
 
   // Verify case status allows editing
-  if (caseData.status !== CaseStatus.EVIDENCE_SUBMISSION) {
+  if (caseData.status !== 'EVIDENCE_SUBMISSION') {
     redirect(`/dashboard/cases/${params.id}/statement`);
   }
 
@@ -67,7 +66,7 @@ export default async function EditStatementPage({ params }: PageProps) {
             <ArrowLeft className="h-4 w-4" />
           </Link>
           <h1 className="text-2xl font-bold tracking-tight">
-            Edit {statement.type === StatementType.INITIAL ? 'Initial' : 'Rebuttal'} Statement
+            Edit {statement.type === 'INITIAL' ? 'Initial' : 'Rebuttal'} Statement
           </h1>
         </div>
         <p className="text-muted-foreground">
