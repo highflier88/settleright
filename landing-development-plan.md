@@ -1276,3 +1276,72 @@ Get started today: https://settleright.ai
 - Plan for iterative improvements based on user feedback and analytics
 - Consider internationalization (i18n) for future expansion
 - Mobile-first approach throughout development
+
+
+  Database (Vercel Postgres)
+  ┌───────────────────────┬─────────────────────────────────────────┐
+  │       Variable        │                 Source                  │
+  ├───────────────────────┼─────────────────────────────────────────┤
+  │ DATABASE_URL          │ Auto-populated if using Vercel Postgres │
+  ├───────────────────────┼─────────────────────────────────────────┤
+  │ DATABASE_URL_UNPOOLED │ Auto-populated if using Vercel Postgres │
+  └───────────────────────┴─────────────────────────────────────────┘
+  Authentication (Clerk)
+  ┌───────────────────────────────────┬─────────────────────────────┐
+  │             Variable              │           Source            │
+  ├───────────────────────────────────┼─────────────────────────────┤
+  │ NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY │ https://dashboard.clerk.com │
+  ├───────────────────────────────────┼─────────────────────────────┤
+  │ CLERK_SECRET_KEY                  │ https://dashboard.clerk.com │
+  ├───────────────────────────────────┼─────────────────────────────┤
+  │ CLERK_WEBHOOK_SECRET              │ Clerk webhook settings      │
+  └───────────────────────────────────┴─────────────────────────────┘
+  Payments (Stripe)
+  ┌────────────────────────────────────┬───────────────────────────────────────────┐
+  │              Variable              │                  Source                   │
+  ├────────────────────────────────────┼───────────────────────────────────────────┤
+  │ STRIPE_SECRET_KEY                  │ https://dashboard.stripe.com/test/apikeys │
+  ├────────────────────────────────────┼───────────────────────────────────────────┤
+  │ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY │ https://dashboard.stripe.com/test/apikeys │
+  ├────────────────────────────────────┼───────────────────────────────────────────┤
+  │ STRIPE_WEBHOOK_SECRET              │ Stripe webhook settings                   │
+  └────────────────────────────────────┴───────────────────────────────────────────┘
+  Email (SendGrid)
+  ┌─────────────────────┬────────────────────────────────────────────┐
+  │      Variable       │                   Source                   │
+  ├─────────────────────┼────────────────────────────────────────────┤
+  │ SENDGRID_API_KEY    │ https://app.sendgrid.com/settings/api_keys │
+  ├─────────────────────┼────────────────────────────────────────────┤
+  │ SENDGRID_FROM_EMAIL │ noreply@settleright.ai                     │
+  └─────────────────────┴────────────────────────────────────────────┘
+  AI (Anthropic)
+  ┌───────────────────┬───────────────────────────────┐
+  │     Variable      │            Source             │
+  ├───────────────────┼───────────────────────────────┤
+  │ ANTHROPIC_API_KEY │ https://console.anthropic.com │
+  └───────────────────┴───────────────────────────────┘
+  Security
+  ┌────────────────┬────────────────────────────────────────────────┐
+  │    Variable    │                     Notes                      │
+  ├────────────────┼────────────────────────────────────────────────┤
+  │ ENCRYPTION_KEY │ Generate a 32-character random string          │
+  ├────────────────┼────────────────────────────────────────────────┤
+  │ CSRF_SECRET    │ Generate a random string                       │
+  ├────────────────┼────────────────────────────────────────────────┤
+  │ CRON_SECRET    │ Generate a random string for cron verification │
+  └────────────────┴────────────────────────────────────────────────┘
+  ---
+  Optional (Enable as needed)
+  ┌───────────────────────┬───────────────────────────────────────┐
+  │       Variable        │                Purpose                │
+  ├───────────────────────┼───────────────────────────────────────┤
+  │ KV_*                  │ Vercel KV (for rate limiting/caching) │
+  ├───────────────────────┼───────────────────────────────────────┤
+  │ BLOB_READ_WRITE_TOKEN │ Vercel Blob (for file uploads)        │
+  ├───────────────────────┼───────────────────────────────────────┤
+  │ TWILIO_*              │ SMS notifications                     │
+  ├───────────────────────┼───────────────────────────────────────┤
+  │ PINECONE_*            │ Vector search for legal docs          │
+  ├───────────────────────┼───────────────────────────────────────┤
+  │ SENTRY_*              │ Error tracking                        │
+  └───────────────────────┴───────────────────

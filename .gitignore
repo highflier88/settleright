@@ -53,3 +53,5 @@ prisma/*.db-journal
 *.pid
 *.seed
 *.pid.lock
+.vercel
+.env*.local
