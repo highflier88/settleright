@@ -108,8 +108,8 @@ export default async function CaseDetailPage({ params }: PageProps) {
             <h1 className="text-2xl font-bold tracking-tight">Case {caseData.referenceNumber}</h1>
           </div>
           <div className="flex items-center gap-2">
-            <Badge className={STATUS_COLORS[caseData.status]}>
-              {CASE_STATUS_LABELS[caseData.status]}
+            <Badge className={STATUS_COLORS[caseData.status as CaseStatus]}>
+              {CASE_STATUS_LABELS[caseData.status as CaseStatus]}
             </Badge>
             <Badge variant="outline">{DISPUTE_TYPE_LABELS[caseData.disputeType]}</Badge>
             <Badge variant={isClaimant ? 'default' : 'secondary'}>
