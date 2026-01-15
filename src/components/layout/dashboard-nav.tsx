@@ -3,20 +3,20 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { type UserRole, UserRoles } from '@/types/user';
 import {
-  LayoutDashboard,
+  BarChart,
   FileText,
+  LayoutDashboard,
   PlusCircle,
+  Scale,
+  ScrollText,
   Settings,
   Shield,
   Users,
-  Scale,
-  BarChart,
-  ScrollText,
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import { type UserRole, UserRoles } from '@/types/user';
 
 interface NavItem {
   title: string;
