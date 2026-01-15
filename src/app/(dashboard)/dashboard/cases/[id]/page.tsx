@@ -24,11 +24,12 @@ import {
   DISPUTE_TYPE_LABELS,
 } from '@/lib/services/case';
 import { getInvitationStatusLabel, getInvitationTimeRemaining } from '@/lib/services/invitation';
+import type { CaseStatus } from '@/types/shared';
 
 import { CaseActions } from './case-actions';
 
-import type { CaseStatus } from '@/types/shared';
 import type { Metadata } from 'next';
+
 
 interface EvidenceItem {
   id: string;
