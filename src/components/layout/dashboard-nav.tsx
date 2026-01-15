@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { UserRole } from '@prisma/client';
+import { type UserRole, UserRoles } from '@/types/user';
 import {
   LayoutDashboard,
   FileText,
@@ -53,13 +53,13 @@ const arbitratorNavItems: NavItem[] = [
     title: 'Review Queue',
     href: '/arbitrator',
     icon: Scale,
-    roles: [UserRole.ARBITRATOR, UserRole.ADMIN],
+    roles: [UserRoles.ARBITRATOR, UserRoles.ADMIN],
   },
   {
     title: 'My Reviews',
     href: '/arbitrator/reviews',
     icon: FileText,
-    roles: [UserRole.ARBITRATOR, UserRole.ADMIN],
+    roles: [UserRoles.ARBITRATOR, UserRoles.ADMIN],
   },
 ];
 
@@ -68,25 +68,25 @@ const adminNavItems: NavItem[] = [
     title: 'Admin Dashboard',
     href: '/admin',
     icon: BarChart,
-    roles: [UserRole.ADMIN],
+    roles: [UserRoles.ADMIN],
   },
   {
     title: 'User Management',
     href: '/admin/users',
     icon: Users,
-    roles: [UserRole.ADMIN],
+    roles: [UserRoles.ADMIN],
   },
   {
     title: 'Audit Logs',
     href: '/admin/audit-logs',
     icon: ScrollText,
-    roles: [UserRole.ADMIN],
+    roles: [UserRoles.ADMIN],
   },
   {
     title: 'System Settings',
     href: '/admin/settings',
     icon: Shield,
-    roles: [UserRole.ADMIN],
+    roles: [UserRoles.ADMIN],
   },
 ];
 
