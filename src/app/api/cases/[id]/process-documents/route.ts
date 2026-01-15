@@ -13,6 +13,20 @@ import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { prisma } from '@/lib/db';
 import { queueCaseDocuments, getQueueStats } from '@/lib/documents';
 
+interface EvidenceItem {
+  id: string;
+  fileName: string;
+  fileType: string;
+  processingStatus: string;
+}
+
+interface EvidenceDetailItem extends EvidenceItem {
+  processedAt: Date | null;
+  processingError: string | null;
+  documentType: string | null;
+  summary: string | null;
+}
+
 /**
  * POST - Queue all unprocessed documents in a case for processing
  */
@@ -67,7 +81,8 @@ export const POST = withAuth(
       const jobIds = await queueCaseDocuments(caseId);
 
       // Get processing summary
-      const processingCount = evidence.filter((e) =>
+      const typedEvidence = evidence as EvidenceItem[];
+      const processingCount = typedEvidence.filter((e: EvidenceItem) =>
         [
           'QUEUED',
           'EXTRACTING',
@@ -77,7 +92,9 @@ export const POST = withAuth(
           'SUMMARIZING',
         ].includes(e.processingStatus)
       ).length;
-      const completedCount = evidence.filter((e) => e.processingStatus === 'COMPLETED').length;
+      const completedCount = typedEvidence.filter(
+        (e: EvidenceItem) => e.processingStatus === 'COMPLETED'
+      ).length;
 
       return NextResponse.json({
         success: true,
@@ -161,11 +178,14 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
     const queueStats = await getQueueStats();
 
     // Calculate case-specific stats
+    const typedEvidence = evidence as EvidenceDetailItem[];
     const caseStats = {
-      total: evidence.length,
-      pending: evidence.filter((e) => e.processingStatus === 'PENDING').length,
-      queued: evidence.filter((e) => e.processingStatus === 'QUEUED').length,
-      processing: evidence.filter((e) =>
+      total: typedEvidence.length,
+      pending: typedEvidence.filter((e: EvidenceDetailItem) => e.processingStatus === 'PENDING')
+        .length,
+      queued: typedEvidence.filter((e: EvidenceDetailItem) => e.processingStatus === 'QUEUED')
+        .length,
+      processing: typedEvidence.filter((e: EvidenceDetailItem) =>
         [
           'EXTRACTING',
           'OCR_PROCESSING',
@@ -174,8 +194,10 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
           'SUMMARIZING',
         ].includes(e.processingStatus)
       ).length,
-      completed: evidence.filter((e) => e.processingStatus === 'COMPLETED').length,
-      failed: evidence.filter((e) => e.processingStatus === 'FAILED').length,
+      completed: typedEvidence.filter((e: EvidenceDetailItem) => e.processingStatus === 'COMPLETED')
+        .length,
+      failed: typedEvidence.filter((e: EvidenceDetailItem) => e.processingStatus === 'FAILED')
+        .length,
     };
 
     return NextResponse.json({
@@ -184,7 +206,7 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
         caseId,
         stats: caseStats,
         globalQueueStats: queueStats,
-        documents: evidence.map((e) => ({
+        documents: typedEvidence.map((e: EvidenceDetailItem) => ({
           id: e.id,
           fileName: e.fileName,
           fileType: e.fileType,
