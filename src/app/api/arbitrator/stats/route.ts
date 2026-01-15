@@ -10,6 +10,11 @@ import { errorResponse } from '@/lib/api/response';
 import { withArbitrator, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { prisma } from '@/lib/db';
 
+interface ReviewTimeItem {
+  reviewStartedAt: Date | null;
+  reviewCompletedAt: Date | null;
+}
+
 /**
  * GET - Get arbitrator's performance statistics
  */
@@ -108,14 +113,15 @@ export const GET = withArbitrator(async (request: AuthenticatedRequest) => {
     });
 
     let avgReviewTimeMinutes: number | null = null;
-    if (reviewTimes.length > 0) {
-      const totalMinutes = reviewTimes.reduce((sum, r) => {
+    const typedReviewTimes = reviewTimes as ReviewTimeItem[];
+    if (typedReviewTimes.length > 0) {
+      const totalMinutes = typedReviewTimes.reduce((sum: number, r: ReviewTimeItem) => {
         if (r.reviewStartedAt && r.reviewCompletedAt) {
           return sum + (r.reviewCompletedAt.getTime() - r.reviewStartedAt.getTime()) / 60000;
         }
         return sum;
       }, 0);
-      avgReviewTimeMinutes = Math.round(totalMinutes / reviewTimes.length);
+      avgReviewTimeMinutes = Math.round(totalMinutes / typedReviewTimes.length);
     }
 
     // Get overdue cases
