@@ -18,6 +18,11 @@ import { AgreementSigningForm } from './agreement-signing-form';
 
 import type { Metadata } from 'next';
 
+interface SignatureItem {
+  id: string;
+  userId: string;
+}
+
 export const metadata: Metadata = {
   title: 'Submission Agreement',
   description: 'Review and sign the submission agreement',
@@ -46,7 +51,7 @@ export default async function AgreementPage({ params }: PageProps) {
 
   const statusInfo = getAgreementStatusInfo(agreement);
   const isClaimant = access.role === 'claimant';
-  const userHasSigned = agreement.signatures.some((s) => s.userId === user.id);
+  const userHasSigned = (agreement.signatures as SignatureItem[]).some((s) => s.userId === user.id);
 
   // Generate agreement content
   const agreementContent = generateAgreementContent(
