@@ -1,5 +1,3 @@
-import { StatementType } from '@prisma/client';
-
 import { NotFoundError, ForbiddenError, BadRequestError } from '@/lib/api/errors';
 import { successResponse, errorResponse } from '@/lib/api/response';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
@@ -14,6 +12,22 @@ import {
   MAX_TIMELINE_ENTRIES,
   MAX_CLAIM_ITEMS,
 } from '@/lib/services/statement';
+
+type StatementType = 'INITIAL' | 'REBUTTAL';
+
+type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
+
+interface StatementItem {
+  id: string;
+  caseId: string;
+  type: StatementType;
+  content: string;
+  claimItems: JsonValue;
+  submittedById: string;
+  submittedAt: Date;
+  updatedAt: Date;
+  version: number;
+}
 
 // GET /api/cases/[id]/statements - List statements for a case
 export const GET = withAuth(
@@ -34,12 +48,12 @@ export const GET = withAuth(
 
       // Check submission eligibility
       const [canSubmitInitial, canSubmitRebuttal] = await Promise.all([
-        canSubmitStatement(caseId, request.user.id, StatementType.INITIAL),
-        canSubmitStatement(caseId, request.user.id, StatementType.REBUTTAL),
+        canSubmitStatement(caseId, request.user.id, 'INITIAL'),
+        canSubmitStatement(caseId, request.user.id, 'REBUTTAL'),
       ]);
 
       return successResponse({
-        statements: statements.map((s) => ({
+        statements: (statements as StatementItem[]).map((s) => ({
           ...s,
           parsedContent: parseStatementContent(s),
           isOwn: s.submittedById === request.user.id,

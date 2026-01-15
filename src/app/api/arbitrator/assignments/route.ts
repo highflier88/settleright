@@ -10,6 +10,39 @@ import { errorResponse } from '@/lib/api/response';
 import { withArbitrator, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { prisma } from '@/lib/db';
 
+interface AssignmentWithCase {
+  id: string;
+  caseId: string;
+  assignedAt: Date;
+  reviewStartedAt: Date | null;
+  reviewCompletedAt: Date | null;
+  priority: string;
+  dueBy: Date | null;
+  case: {
+    id: string;
+    referenceNumber: string;
+    status: string;
+    disputeType: string;
+    jurisdiction: string;
+    amount: unknown;
+    description: string;
+    createdAt: Date;
+    claimant: { id: string; name: string | null } | null;
+    respondent: { id: string; name: string | null } | null;
+    draftAward: {
+      id: string;
+      reviewStatus: string | null;
+      confidence: number | null;
+      generatedAt: Date;
+    } | null;
+    award: {
+      id: string;
+      issuedAt: Date;
+      referenceNumber: string;
+    } | null;
+  };
+}
+
 /**
  * GET - Get assigned cases for the current arbitrator
  *
@@ -107,10 +140,13 @@ export const GET = withArbitrator(async (request: AuthenticatedRequest) => {
     });
 
     // Filter by hasAward if specified
-    let filteredAssignments = assignments;
+    const typedAssignments = assignments as AssignmentWithCase[];
+    let filteredAssignments = typedAssignments;
     if (hasAward !== null) {
       const hasDraft = hasAward === 'true';
-      filteredAssignments = assignments.filter((a) => (a.case.draftAward !== null) === hasDraft);
+      filteredAssignments = typedAssignments.filter(
+        (a) => (a.case.draftAward !== null) === hasDraft
+      );
     }
 
     // Transform for response

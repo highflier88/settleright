@@ -11,7 +11,41 @@ import { errorResponse } from '@/lib/api/response';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { prisma } from '@/lib/db';
 
-import type { PaymentStatus, PaymentType, Prisma } from '@prisma/client';
+type PaymentStatus = 'PENDING' | 'PROCESSING' | 'SUCCEEDED' | 'FAILED' | 'REFUNDED' | 'CANCELLED';
+type PaymentType = 'FILING_FEE' | 'ARBITRATION_FEE' | 'ADDITIONAL_FEE' | 'REFUND';
+
+interface PaymentWithCase {
+  id: string;
+  caseId: string;
+  userId: string;
+  type: PaymentType;
+  status: PaymentStatus;
+  amount: unknown;
+  currency: string;
+  stripePaymentIntentId: string | null;
+  stripeSessionId: string | null;
+  createdAt: Date;
+  paidAt: Date | null;
+  failedAt: Date | null;
+  refundedAt: Date | null;
+  failureReason: string | null;
+  case: {
+    referenceNumber: string;
+    description: string;
+  };
+}
+
+interface StatusBreakdown {
+  status: PaymentStatus;
+  _count: { id: number };
+  _sum: { amount: unknown };
+}
+
+interface TypeBreakdown {
+  type: PaymentType;
+  _count: { id: number };
+  _sum: { amount: unknown };
+}
 
 /**
  * GET - List payments with filtering and pagination
@@ -36,7 +70,13 @@ export const GET = withAuth(
       }
 
       // Build where clause
-      const where: Prisma.PaymentWhereInput = {};
+      const where: {
+        status?: PaymentStatus;
+        type?: PaymentType;
+        caseId?: string;
+        userId?: string;
+        createdAt?: { gte?: Date; lte?: Date };
+      } = {};
 
       if (status) {
         where.status = status;
@@ -70,9 +110,11 @@ export const GET = withAuth(
       const orderBy = { [orderByField]: sortOrder };
 
       // Execute query with count
+      /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment */
+      const whereClause = where as any;
       const [payments, total] = await Promise.all([
         prisma.payment.findMany({
-          where,
+          where: whereClause,
           orderBy,
           skip: (page - 1) * limit,
           take: limit,
@@ -85,12 +127,12 @@ export const GET = withAuth(
             },
           },
         }),
-        prisma.payment.count({ where }),
+        prisma.payment.count({ where: whereClause }),
       ]);
 
       // Calculate aggregates for filtered results
       const aggregates = await prisma.payment.aggregate({
-        where,
+        where: whereClause,
         _sum: {
           amount: true,
         },
@@ -102,7 +144,7 @@ export const GET = withAuth(
       // Get status breakdown
       const statusBreakdown = await prisma.payment.groupBy({
         by: ['status'],
-        where,
+        where: whereClause,
         _count: {
           id: true,
         },
@@ -114,7 +156,7 @@ export const GET = withAuth(
       // Get type breakdown
       const typeBreakdown = await prisma.payment.groupBy({
         by: ['type'],
-        where,
+        where: whereClause,
         _count: {
           id: true,
         },
@@ -122,13 +164,14 @@ export const GET = withAuth(
           amount: true,
         },
       });
+      /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment */
 
       const totalPages = Math.ceil(total / limit);
 
       return NextResponse.json({
         success: true,
         data: {
-          payments: payments.map((p) => ({
+          payments: (payments as PaymentWithCase[]).map((p) => ({
             id: p.id,
             caseId: p.caseId,
             caseReference: p.case.referenceNumber,
@@ -154,14 +197,14 @@ export const GET = withAuth(
             hasMore: page < totalPages,
           },
           aggregates: {
-            totalAmount: Number(aggregates._sum.amount || 0),
-            count: aggregates._count.id,
-            byStatus: statusBreakdown.map((s) => ({
+            totalAmount: Number(aggregates._sum?.amount || 0),
+            count: (aggregates._count as { id: number })?.id || 0,
+            byStatus: (statusBreakdown as StatusBreakdown[]).map((s) => ({
               status: s.status,
               count: s._count.id,
               amount: Number(s._sum.amount || 0),
             })),
-            byType: typeBreakdown.map((t) => ({
+            byType: (typeBreakdown as TypeBreakdown[]).map((t) => ({
               type: t.type,
               count: t._count.id,
               amount: Number(t._sum.amount || 0),

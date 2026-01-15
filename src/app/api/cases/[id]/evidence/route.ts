@@ -13,6 +13,17 @@ import {
   ALLOWED_FILE_TYPES,
 } from '@/lib/services/evidence';
 
+interface EvidenceItem {
+  id: string;
+  caseId: string;
+  fileName: string;
+  fileType: string;
+  fileSize: number;
+  description: string | null;
+  submittedById: string;
+  submittedAt: Date;
+}
+
 // GET /api/cases/[id]/evidence - List evidence for a case
 export const GET = withAuth(
   async (request: AuthenticatedRequest, context?: { params: Record<string, string> }) => {
@@ -34,7 +45,7 @@ export const GET = withAuth(
       ]);
 
       return successResponse({
-        evidence: evidence.map((e) => ({
+        evidence: (evidence as EvidenceItem[]).map((e) => ({
           ...e,
           fileSizeFormatted: formatFileSize(e.fileSize),
           isOwn: e.submittedById === request.user.id,

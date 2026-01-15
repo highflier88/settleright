@@ -1,8 +1,12 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
-import { KYCStatus } from '@prisma/client';
-
 import { prisma } from '@/lib/db';
+
+interface VerificationItem {
+  id: string;
+  userId: string;
+  expiresAt: Date | null;
+}
 
 // This cron job runs daily to check for expired KYC verifications
 // Configure in vercel.json: { "path": "/api/cron/check-expired-kyc", "schedule": "0 0 * * *" }
@@ -20,9 +24,9 @@ export async function GET(request: NextRequest) {
     // Find verifications that are VERIFIED but have expired
     const now = new Date();
 
-    const expiredVerifications = await prisma.identityVerification.findMany({
+    const expiredVerifications = (await prisma.identityVerification.findMany({
       where: {
-        status: KYCStatus.VERIFIED,
+        status: 'VERIFIED',
         expiresAt: {
           lt: now,
         },
@@ -32,7 +36,7 @@ export async function GET(request: NextRequest) {
         userId: true,
         expiresAt: true,
       },
-    });
+    })) as VerificationItem[];
 
     if (expiredVerifications.length === 0) {
       return NextResponse.json({
@@ -50,7 +54,7 @@ export async function GET(request: NextRequest) {
         },
       },
       data: {
-        status: KYCStatus.EXPIRED,
+        status: 'EXPIRED',
       },
     });
 

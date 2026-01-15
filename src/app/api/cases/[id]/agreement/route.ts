@@ -1,7 +1,5 @@
 import { headers } from 'next/headers';
 
-import { AuditAction } from '@prisma/client';
-
 import { NotFoundError, ForbiddenError, BadRequestError } from '@/lib/api/errors';
 import { successResponse, errorResponse } from '@/lib/api/response';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
@@ -17,6 +15,12 @@ import {
 } from '@/lib/services/agreement';
 import { createAuditLog } from '@/lib/services/audit';
 import { userHasAccessToCase } from '@/lib/services/case';
+
+interface SignatureItem {
+  role: string;
+  signedAt: Date;
+  userId: string;
+}
 
 // GET /api/cases/[id]/agreement - Get agreement details
 export const GET = withAuth(
@@ -41,7 +45,7 @@ export const GET = withAuth(
 
       // Log view
       await createAuditLog({
-        action: AuditAction.AGREEMENT_VIEWED,
+        action: 'AGREEMENT_VIEWED',
         userId: request.user.id,
         caseId,
         metadata: {
@@ -86,7 +90,7 @@ export const GET = withAuth(
         content: agreementContent,
         consentText,
         statusInfo,
-        signatures: agreement.signatures.map((sig) => ({
+        signatures: (agreement.signatures as SignatureItem[]).map((sig) => ({
           role: sig.role,
           signedAt: sig.signedAt,
           userId: sig.userId,
