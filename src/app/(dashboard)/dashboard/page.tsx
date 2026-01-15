@@ -9,6 +9,17 @@ import { prisma } from '@/lib/db';
 
 import type { Metadata } from 'next';
 
+interface RecentCase {
+  id: string;
+  referenceNumber: string;
+  status: string;
+  disputeType: string;
+  amount: unknown;
+  createdAt: Date;
+  updatedAt: Date;
+  claimantId: string;
+}
+
 export const metadata: Metadata = {
   title: 'Dashboard',
   description: 'Your Settleright.ai dashboard',
@@ -156,7 +167,7 @@ export default async function DashboardPage() {
             </div>
           ) : (
             <div className="space-y-4">
-              {recentCases.map((case_) => (
+              {(recentCases as RecentCase[]).map((case_) => (
                 <Link key={case_.id} href={`/dashboard/cases/${case_.id}`} className="block">
                   <div className="flex items-center justify-between rounded-lg border p-4 transition-colors hover:bg-muted/50">
                     <div className="space-y-1">
