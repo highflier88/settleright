@@ -1,9 +1,9 @@
 import { successResponse, errorResponse } from '@/lib/api/response';
-
-type KYCStatus = 'NOT_STARTED' | 'PENDING' | 'VERIFIED' | 'FAILED' | 'EXPIRED';
 import { requireAuth } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { getVerificationSession, isVerificationValid } from '@/lib/services/stripe-identity';
+
+type KYCStatus = 'NOT_STARTED' | 'PENDING' | 'VERIFIED' | 'FAILED' | 'EXPIRED';
 
 export async function GET() {
   try {

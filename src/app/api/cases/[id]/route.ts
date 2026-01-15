@@ -1,8 +1,4 @@
 import { NotFoundError, ForbiddenError } from '@/lib/api/errors';
-import type { CaseStatus } from '@/types/shared';
-
-const EDITABLE_STATUSES: CaseStatus[] = ['DRAFT', 'PENDING_RESPONDENT'];
-const DELETABLE_STATUSES: CaseStatus[] = ['DRAFT', 'PENDING_RESPONDENT', 'PENDING_AGREEMENT'];
 import { successResponse, errorResponse } from '@/lib/api/response';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { prisma } from '@/lib/db';
@@ -17,6 +13,10 @@ import {
 } from '@/lib/services/case';
 import { validateBody } from '@/lib/validations';
 import { updateCaseSchema } from '@/lib/validations/case';
+import type { CaseStatus } from '@/types/shared';
+
+const EDITABLE_STATUSES: CaseStatus[] = ['DRAFT', 'PENDING_RESPONDENT'];
+const DELETABLE_STATUSES: CaseStatus[] = ['DRAFT', 'PENDING_RESPONDENT', 'PENDING_AGREEMENT'];
 
 // GET /api/cases/[id] - Get case details
 export const GET = withAuth(

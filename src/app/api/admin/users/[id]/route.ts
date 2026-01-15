@@ -5,7 +5,6 @@ import { successResponse } from '@/lib/api/response';
 import { withAdmin, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { prisma } from '@/lib/db';
 import { validateBody } from '@/lib/validations';
-import type { UserRole } from '@/types/shared';
 
 const USER_ROLES = ['USER', 'ARBITRATOR', 'ADMIN'] as const;
 

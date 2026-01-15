@@ -156,7 +156,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context) => {
 
     // Calculate fee amount
     const disputeAmount = providedDisputeAmount || (caseData.amount ? Number(caseData.amount) : 0);
-    /* eslint-disable @typescript-eslint/no-explicit-any */
+    /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-assignment */
     const amount = providedAmount || calculateFee(disputeAmount, type as any);
 
     // Create checkout session
@@ -166,7 +166,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context) => {
       type: type as any,
       amount,
     });
-    /* eslint-enable @typescript-eslint/no-explicit-any */
+    /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-assignment */
 
     return NextResponse.json({
       success: true,

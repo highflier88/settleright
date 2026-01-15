@@ -1,4 +1,12 @@
 import { BadRequestError, ForbiddenError } from '@/lib/api/errors';
+import { successResponse, errorResponse } from '@/lib/api/response';
+import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
+import { checkKYCStatus } from '@/lib/kyc';
+import { createCase, getUserCases, getUserCaseStats } from '@/lib/services/case';
+import { sendCaseInvitationEmail } from '@/lib/services/email';
+import { sendSms } from '@/lib/services/twilio';
+import { validateBody } from '@/lib/validations';
+import { createCaseSchema } from '@/lib/validations/case';
 import type { CaseStatus } from '@/types/shared';
 
 const CASE_STATUSES: CaseStatus[] = [
@@ -12,14 +20,6 @@ const CASE_STATUSES: CaseStatus[] = [
   'DECIDED',
   'CLOSED',
 ];
-import { successResponse, errorResponse } from '@/lib/api/response';
-import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
-import { checkKYCStatus } from '@/lib/kyc';
-import { createCase, getUserCases, getUserCaseStats } from '@/lib/services/case';
-import { sendCaseInvitationEmail } from '@/lib/services/email';
-import { sendSms } from '@/lib/services/twilio';
-import { validateBody } from '@/lib/validations';
-import { createCaseSchema } from '@/lib/validations/case';
 
 // POST /api/cases - Create a new case
 export const POST = withAuth(

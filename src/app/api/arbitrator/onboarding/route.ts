@@ -22,7 +22,6 @@ import {
   type ArbitratorOnboardingInput,
 } from '@/lib/arbitrator';
 import { prisma } from '@/lib/db';
-
 import type { DisputeType } from '@/types/shared';
 
 export async function GET(_request: NextRequest) {
