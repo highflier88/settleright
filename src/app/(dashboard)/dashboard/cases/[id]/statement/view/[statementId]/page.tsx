@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
-import { CaseStatus, StatementType } from '@prisma/client';
 import { ArrowLeft, FileText, Calendar, DollarSign, Edit } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
@@ -45,7 +44,7 @@ export default async function ViewStatementPage({ params }: PageProps) {
 
   const content = parseStatementContent(statement);
   const isOwn = statement.submittedById === user.id;
-  const canEdit = isOwn && caseData.status === CaseStatus.EVIDENCE_SUBMISSION;
+  const canEdit = isOwn && caseData.status === 'EVIDENCE_SUBMISSION';
 
   return (
     <div className="space-y-6">
@@ -60,7 +59,7 @@ export default async function ViewStatementPage({ params }: PageProps) {
               <ArrowLeft className="h-4 w-4" />
             </Link>
             <h1 className="text-2xl font-bold tracking-tight">
-              {statement.type === StatementType.INITIAL ? 'Initial' : 'Rebuttal'} Statement
+              {statement.type === 'INITIAL' ? 'Initial' : 'Rebuttal'} Statement
             </h1>
           </div>
           <p className="text-muted-foreground">Case {caseData.referenceNumber}</p>
