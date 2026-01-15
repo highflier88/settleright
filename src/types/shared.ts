@@ -6,9 +6,11 @@
  */
 
 // =============================================================================
-// JSON VALUE TYPE (mirrors Prisma's JsonValue)
+// JSON VALUE TYPE (compatible with Prisma's JsonValue)
 // =============================================================================
 
+// JSON type compatible with Prisma's JsonValue
+// Using a recursive type that TypeScript can handle in JSX contexts
 export type JsonValue =
   | string
   | number
@@ -55,6 +57,27 @@ export type PrevailingParty = 'CLAIMANT' | 'RESPONDENT' | 'SPLIT';
 export type NotificationType = 'EMAIL' | 'SMS' | 'IN_APP';
 
 export type PaymentStatus = 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED' | 'REFUNDED';
+
+export type ProcessingStatus =
+  | 'PENDING'
+  | 'QUEUED'
+  | 'EXTRACTING'
+  | 'OCR_PROCESSING'
+  | 'CLASSIFYING'
+  | 'EXTRACTING_ENTITIES'
+  | 'SUMMARIZING'
+  | 'COMPLETED'
+  | 'FAILED';
+
+export type DocumentType =
+  | 'CONTRACT'
+  | 'INVOICE'
+  | 'RECEIPT'
+  | 'CORRESPONDENCE'
+  | 'LEGAL_NOTICE'
+  | 'BANK_STATEMENT'
+  | 'PHOTO_EVIDENCE'
+  | 'OTHER';
 
 export type AuditAction =
   | 'USER_REGISTERED'
@@ -114,7 +137,7 @@ export type AuditAction =
   | 'COMPLIANCE_REPORT_GENERATED';
 
 // =============================================================================
-// INTERFACE TYPES (simplified for client use)
+// INTERFACE TYPES (matching Prisma schema)
 // =============================================================================
 
 export interface User {
@@ -139,12 +162,15 @@ export interface IdentityVerification {
   userId: string;
   status: KYCStatus;
   provider: string | null;
-  sessionId: string | null;
-  verifiedAt: Date | null;
-  verifiedName: string | null;
+  providerSessionId: string | null;
   documentType: string | null;
-  failureReason: string | null;
+  verifiedName: string | null;
+  verifiedDob: Date | null;
+  initiatedAt: Date | null;
+  verifiedAt: Date | null;
   expiresAt: Date | null;
+  failedAt: Date | null;
+  failureReason: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -158,27 +184,34 @@ export interface Evidence {
   fileSize: number;
   fileHash: string;
   storageKey: string;
+  storageBucket: string;
   description: string | null;
-  documentType: string | null;
-  summary: string | null;
-  keyPoints: string[] | null;
-  extractedEntities: JsonValue | null;
-  classificationConfidence: number | null;
-  processingStatus: string;
-  processedAt: Date | null;
-  submittedAt: Date;
   viewedByOpposingParty: boolean;
+  viewedAt: Date | null;
+  processingStatus: ProcessingStatus;
+  processedAt: Date | null;
+  processingError: string | null;
+  extractedText: string | null;
+  ocrText: string | null;
+  ocrProcessedAt: Date | null;
+  ocrConfidence: number | null;
+  documentType: DocumentType | null;
+  classificationConfidence: number | null;
+  extractedEntities: JsonValue;
+  summary: string | null;
+  keyPoints: string[];
+  submittedAt: Date;
+  deletedAt: Date | null;
 }
 
 export interface Statement {
   id: string;
   caseId: string;
   submittedById: string;
-  statementType: StatementType;
   type: StatementType;
-  version: number;
   content: string;
-  claimItems: JsonValue | null;
+  claimItems: JsonValue;
+  version: number;
   submittedAt: Date;
   updatedAt: Date;
 }
@@ -186,37 +219,54 @@ export interface Statement {
 export interface DraftAward {
   id: string;
   caseId: string;
-  version: number;
-  content: string;
-  summary: string | null;
-  decision: string | null;
-  reasoning: string | null;
-  findingsOfFact: JsonValue | null;
-  conclusionsOfLaw: JsonValue | null;
-  prevailingParty: PrevailingParty | null;
-  awardedAmount: number | null;
+  findingsOfFact: JsonValue;
+  conclusionsOfLaw: JsonValue;
+  decision: string;
   awardAmount: number | null;
-  confidence: number | null;
+  prevailingParty: PrevailingParty | null;
+  reasoning: string;
+  confidence: number;
+  citationsVerified: boolean;
+  modelUsed: string;
   generatedAt: Date;
   reviewStatus: ReviewDecision | null;
-  reviewedBy: string | null;
   reviewedAt: Date | null;
   reviewNotes: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface AnalysisJob {
   id: string;
   caseId: string;
   status: AnalysisStatus;
-  legalAnalysisStatus: AnalysisStatus | null;
-  legalIssues: JsonValue | null;
-  burdenOfProof: JsonValue | null;
-  damagesCalculation: JsonValue | null;
-  conclusionsOfLaw: JsonValue | null;
+  progress: number;
+  queuedAt: Date | null;
   startedAt: Date | null;
   completedAt: Date | null;
-  errorMessage: string | null;
-  result: Record<string, unknown> | null;
+  failedAt: Date | null;
+  failureReason: string | null;
+  modelUsed: string | null;
+  tokensUsed: number | null;
+  processingTimeMs: number | null;
+  estimatedCost: number | null;
+  extractedFacts: JsonValue;
+  disputedFacts: JsonValue;
+  undisputedFacts: JsonValue;
+  timeline: JsonValue;
+  contradictions: JsonValue;
+  credibilityScores: JsonValue;
+  legalIssues: JsonValue;
+  burdenOfProof: JsonValue;
+  damagesCalculation: JsonValue;
+  conclusionsOfLaw: JsonValue;
+  legalConfidence: number | null;
+  citationsUsed: JsonValue;
+  legalAnalysisStatus: AnalysisStatus | null;
+  legalAnalysisStartedAt: Date | null;
+  legalAnalysisCompletedAt: Date | null;
+  legalAnalysisError: string | null;
+  legalAnalysisTokens: number | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -245,6 +295,4 @@ export interface NotificationPreference {
   evidenceUploads: boolean;
   awardNotifications: boolean;
   marketingEmails: boolean;
-  createdAt: Date;
-  updatedAt: Date;
 }

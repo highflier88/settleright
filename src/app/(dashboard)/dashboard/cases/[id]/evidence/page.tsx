@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getAuthUser } from '@/lib/auth';
 import { userHasAccessToCase, getCaseWithDetails } from '@/lib/services/case';
 import { getCaseEvidence, getEvidenceStats, formatFileSize } from '@/lib/services/evidence';
+import type { Evidence } from '@/types/shared';
 
 import { EvidenceList } from './evidence-list';
 
@@ -141,7 +142,7 @@ export default async function EvidencePage({ params }: PageProps) {
       </div>
 
       {/* Evidence List */}
-      <EvidenceList caseId={params.id} evidence={evidence} userId={user.id} canDelete={canUpload} />
+      <EvidenceList caseId={params.id} evidence={JSON.parse(JSON.stringify(evidence)) as Evidence[]} userId={user.id} canDelete={canUpload} />
 
       {/* Help Card */}
       <Card>

@@ -6,10 +6,19 @@ import { ArrowLeft } from 'lucide-react';
 
 import { getAuthUser } from '@/lib/auth';
 import { prisma } from '@/lib/db';
+import type { AnalysisJob, DraftAward, Evidence, Statement } from '@/types/shared';
 
 import { ReviewTabs } from './review-tabs';
 
 import type { Metadata } from 'next';
+
+type EvidenceWithSubmitter = Evidence & {
+  submittedBy: { id: string; name: string | null };
+};
+
+type StatementWithSubmitter = Statement & {
+  submittedBy: { id: string; name: string | null };
+};
 
 export const metadata: Metadata = {
   title: 'Case Review',
@@ -145,12 +154,18 @@ export default async function CaseReviewPage({ params }: PageProps) {
           claimantId: caseData.claimantId,
           respondentId: caseData.respondentId,
         }}
-        claimantEvidence={claimantEvidence}
-        respondentEvidence={respondentEvidence}
-        claimantStatement={claimantStatement}
-        respondentStatement={respondentStatement}
-        draftAward={caseData.draftAward}
-        analysisJob={caseData.analysisJob}
+        claimantEvidence={JSON.parse(JSON.stringify(claimantEvidence)) as EvidenceWithSubmitter[]}
+        respondentEvidence={JSON.parse(JSON.stringify(respondentEvidence)) as EvidenceWithSubmitter[]}
+        claimantStatement={claimantStatement as StatementWithSubmitter | undefined}
+        respondentStatement={respondentStatement as StatementWithSubmitter | undefined}
+        draftAward={caseData.draftAward ? {
+          ...JSON.parse(JSON.stringify(caseData.draftAward)),
+          awardAmount: caseData.draftAward.awardAmount ? Number(caseData.draftAward.awardAmount) : null,
+        } as DraftAward : null}
+        analysisJob={caseData.analysisJob ? {
+          ...JSON.parse(JSON.stringify(caseData.analysisJob)),
+          estimatedCost: caseData.analysisJob.estimatedCost ? Number(caseData.analysisJob.estimatedCost) : null,
+        } as AnalysisJob : null}
       />
     </div>
   );
