@@ -253,8 +253,10 @@ jobs:
         run: pnpm db:migrate:deploy
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/settleright_test
+          DATABASE_URL_UNPOOLED: postgresql://postgres:postgres@localhost:5432/settleright_test
 
       - name: Verify schema
         run: pnpm db:generate
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/settleright_test
+          DATABASE_URL_UNPOOLED: postgresql://postgres:postgres@localhost:5432/settleright_test
