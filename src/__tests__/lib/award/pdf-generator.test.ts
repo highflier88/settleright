@@ -156,12 +156,21 @@ describe('Award PDF Generator', () => {
     });
 
     it('should generate consistent hash for same input', async () => {
-      const input = createMockInput();
-      const result1 = await generateAwardPdf(input);
-      const result2 = await generateAwardPdf(input);
+      // Mock Date to ensure consistent timestamps between calls
+      const fixedDate = new Date('2024-01-15T12:00:00.000Z');
+      jest.useFakeTimers();
+      jest.setSystemTime(fixedDate);
 
-      // Same input should produce same hash
-      expect(result1.documentHash).toEqual(result2.documentHash);
+      try {
+        const input = createMockInput();
+        const result1 = await generateAwardPdf(input);
+        const result2 = await generateAwardPdf(input);
+
+        // Same input should produce same hash
+        expect(result1.documentHash).toEqual(result2.documentHash);
+      } finally {
+        jest.useRealTimers();
+      }
     });
 
     it('should generate different hash for different inputs', async () => {
