@@ -27,8 +27,22 @@ import { getInvitationStatusLabel, getInvitationTimeRemaining } from '@/lib/serv
 
 import { CaseActions } from './case-actions';
 
-import type { CaseStatus } from '@prisma/client';
+import type { CaseStatus } from '@/types/shared';
 import type { Metadata } from 'next';
+
+interface EvidenceItem {
+  id: string;
+  fileName: string;
+  submittedById: string;
+  submittedAt: Date;
+}
+
+interface StatementItem {
+  id: string;
+  content: string;
+  submittedById: string;
+  submittedAt: Date;
+}
 
 export const metadata: Metadata = {
   title: 'Case Details',
@@ -402,7 +416,7 @@ export default async function CaseDetailPage({ params }: PageProps) {
             </p>
           ) : (
             <div className="divide-y">
-              {caseData.evidence.map((ev) => (
+              {(caseData.evidence as EvidenceItem[]).map((ev) => (
                 <div key={ev.id} className="flex items-center justify-between py-3">
                   <div className="flex items-center gap-3">
                     <FileText className="h-8 w-8 text-muted-foreground" />
@@ -444,7 +458,7 @@ export default async function CaseDetailPage({ params }: PageProps) {
             </p>
           ) : (
             <div className="space-y-4">
-              {caseData.statements.map((stmt) => (
+              {(caseData.statements as StatementItem[]).map((stmt) => (
                 <div key={stmt.id} className="rounded-lg border p-4">
                   <div className="mb-2 flex items-center justify-between">
                     <Badge variant="outline">
