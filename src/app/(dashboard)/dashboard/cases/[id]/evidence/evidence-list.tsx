@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import {
   FileText,
-  Image,
+  Image as ImageIcon,
   Table,
   File,
   Trash2,
@@ -52,7 +52,7 @@ interface EvidenceListProps {
 
 function getFileIcon(fileType: string) {
   if (fileType.startsWith('image/')) {
-    return <Image className="h-5 w-5" aria-hidden="true" />;
+    return <ImageIcon className="h-5 w-5" aria-hidden="true" />;
   }
   if (fileType.includes('spreadsheet') || fileType === 'text/csv' || fileType.includes('excel')) {
     return <Table className="h-5 w-5" />;

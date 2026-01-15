@@ -8,7 +8,7 @@ import {
   Upload,
   X,
   FileText,
-  Image,
+  Image as ImageIcon,
   Table,
   File,
   CheckCircle,
@@ -41,7 +41,7 @@ interface FileToUpload {
 
 function getFileIcon(file: File) {
   if (file.type.startsWith('image/')) {
-    return <Image className="h-5 w-5" aria-hidden="true" />;
+    return <ImageIcon className="h-5 w-5" aria-hidden="true" />;
   }
   if (file.type.includes('spreadsheet') || file.type === 'text/csv' || file.type.includes('excel')) {
     return <Table className="h-5 w-5" />;

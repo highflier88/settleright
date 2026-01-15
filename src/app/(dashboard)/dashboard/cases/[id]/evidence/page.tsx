@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
 import { CaseStatus } from '@prisma/client';
-import { ArrowLeft, Upload, FileText, Image, Table } from 'lucide-react';
+import { ArrowLeft, Upload, FileText, Image as ImageIcon, Table } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -175,7 +175,7 @@ export default async function EvidencePage({ params }: PageProps) {
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <Image className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" aria-hidden="true" />
+            <ImageIcon className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" aria-hidden="true" />
             <div>
               <p className="font-medium">Images</p>
               <p className="text-sm text-muted-foreground">
