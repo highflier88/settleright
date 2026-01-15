@@ -4,27 +4,27 @@ import { useState } from 'react';
 
 import { format } from 'date-fns';
 import {
-  FileText,
-  File,
-  Download,
+  AlertTriangle,
   Calendar,
-  Hash,
-  FileImage,
-  FileVideo,
-  FileArchive,
-  ExternalLink,
-  Lightbulb,
-  User,
+  CheckCircle,
   Clock,
+  Download,
+  ExternalLink,
+  File,
+  FileArchive,
+  FileImage,
+  FileText,
+  FileVideo,
+  Hash,
+  Lightbulb,
+  Link2,
+  Maximize2,
+  RotateCw,
   Tag,
+  Target,
+  User,
   ZoomIn,
   ZoomOut,
-  RotateCw,
-  Maximize2,
-  CheckCircle,
-  AlertTriangle,
-  Target,
-  Link2,
 } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
@@ -39,7 +39,6 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
 import type { Evidence } from '@/types/shared';
 
 type EvidenceWithSubmitter = Evidence & {

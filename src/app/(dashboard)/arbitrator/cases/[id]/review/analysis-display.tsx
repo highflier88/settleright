@@ -3,17 +3,17 @@
 import { useState } from 'react';
 
 import {
-  Scale,
-  CheckCircle,
-  XCircle,
+  AlertCircle,
   AlertTriangle,
+  BookOpen,
+  CheckCircle,
   ChevronDown,
   ChevronUp,
-  Lightbulb,
-  BookOpen,
   Gavel,
+  Lightbulb,
+  Scale,
   TrendingUp,
-  AlertCircle,
+  XCircle,
 } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
@@ -21,9 +21,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Progress } from '@/components/ui/progress';
-
-import type { AnalysisJob } from '@/types/shared';
-import type { JsonValue } from '@prisma/client/runtime/library';
+import type { AnalysisJob, JsonValue } from '@/types/shared';
 
 interface AnalysisDisplayProps {
   caseId: string;

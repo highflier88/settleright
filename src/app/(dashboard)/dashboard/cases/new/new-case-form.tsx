@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowLeft, ArrowRight, Check, FileText, Users, Scale, Send } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, FileText, Scale, Send, Users } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { type User } from '@/types/shared';
+import type { User } from '@/types/shared';
 
 // Jurisdictions supported
 const JURISDICTIONS = [
@@ -67,9 +67,12 @@ const DISPUTE_TYPES = [
   },
 ];
 
+// Dispute type values for zod enum
+const DISPUTE_TYPE_VALUES = ['CONTRACT', 'PAYMENT', 'SERVICE', 'GOODS', 'OTHER'] as const;
+
 // Form schema
 const formSchema = z.object({
-  disputeType: z.nativeEnum(DisputeType),
+  disputeType: z.enum(DISPUTE_TYPE_VALUES),
   jurisdiction: z.string().min(1, 'Please select a jurisdiction'),
   description: z
     .string()
@@ -467,9 +470,9 @@ export function NewCaseForm({ user: _user }: NewCaseFormProps) {
                 <div className="border-b pb-2">
                   <span className="text-muted-foreground">Respondent</span>
                   <p className="mt-1 text-sm">
-                    {formData.respondentName && `${formData.respondentName} - `}
+                    {typeof formData.respondentName === 'string' && formData.respondentName && `${formData.respondentName} - `}
                     {formData.respondentEmail}
-                    {formData.respondentPhone && ` (${formData.respondentPhone})`}
+                    {typeof formData.respondentPhone === 'string' && formData.respondentPhone && ` (${formData.respondentPhone})`}
                   </p>
                 </div>
               </div>

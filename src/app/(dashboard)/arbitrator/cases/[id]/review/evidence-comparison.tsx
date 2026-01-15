@@ -4,26 +4,25 @@ import { useState } from 'react';
 
 import { format } from 'date-fns';
 import {
-  FileText,
-  File,
-  Eye,
-  Download,
   Calendar,
-  Hash,
   ChevronRight,
-  FileImage,
-  FileVideo,
+  Download,
+  Eye,
+  File,
   FileArchive,
+  FileImage,
+  FileText,
+  FileVideo,
+  Hash,
 } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import type { Evidence } from '@/types/shared';
 
 import { EvidenceViewer } from './evidence-viewer';
-
-import type { Evidence } from '@/types/shared';
 
 type EvidenceWithSubmitter = Evidence & {
   submittedBy: { id: string; name: string | null };

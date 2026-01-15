@@ -4,12 +4,12 @@ import { useState } from 'react';
 
 import { format } from 'date-fns';
 import {
-  MessageSquare,
-  DollarSign,
   AlertCircle,
   CheckCircle,
   ChevronDown,
   ChevronUp,
+  DollarSign,
+  MessageSquare,
 } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
@@ -25,9 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-
-import type { Statement } from '@/types/shared';
-import type { JsonValue } from '@prisma/client/runtime/library';
+import type { JsonValue, Statement } from '@/types/shared';
 
 type StatementWithSubmitter = Statement & {
   submittedBy: { id: string; name: string | null };

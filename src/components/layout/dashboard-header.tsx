@@ -7,10 +7,9 @@ import { Menu } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import type { User } from '@/types/shared';
 
 import { DashboardNav } from './dashboard-nav';
-
-import type { User } from '@/types/shared';
 
 interface DashboardHeaderProps {
   user: User;

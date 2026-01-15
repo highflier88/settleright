@@ -5,16 +5,14 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 import { format } from 'date-fns';
-import { Gavel, FileText, Scale, AlertTriangle, ChevronRight, ExternalLink } from 'lucide-react';
+import { AlertTriangle, ChevronRight, ExternalLink, FileText, Gavel, Scale } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
-
-import type { DraftAward } from '@/types/shared';
-import type { JsonValue } from '@prisma/client/runtime/library';
+import type { DraftAward, JsonValue } from '@/types/shared';
 
 interface AwardDisplayProps {
   caseId: string;

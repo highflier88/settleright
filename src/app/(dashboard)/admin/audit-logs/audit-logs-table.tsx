@@ -6,12 +6,12 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { format } from 'date-fns';
 import {
-  Download,
-  CheckCircle,
   AlertTriangle,
-  Filter,
+  CheckCircle,
   ChevronLeft,
   ChevronRight,
+  Download,
+  Filter,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -35,7 +35,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-
 import type { AuditAction, AuditLog } from '@/types/shared';
 
 interface AuditLogsTableProps {

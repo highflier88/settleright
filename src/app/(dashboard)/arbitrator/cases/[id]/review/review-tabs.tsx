@@ -2,17 +2,16 @@
 
 import { useState } from 'react';
 
-import { FileText, MessageSquare, Scale, Gavel, StickyNote } from 'lucide-react';
+import { FileText, Gavel, MessageSquare, Scale, StickyNote } from 'lucide-react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import type { AnalysisJob, DraftAward, Evidence, Statement } from '@/types/shared';
 
 import { AnalysisDisplay } from './analysis-display';
 import { AwardDisplay } from './award-display';
 import { EvidenceComparison } from './evidence-comparison';
 import { NotesPanel } from './notes-panel';
 import { StatementComparison } from './statement-comparison';
-
-import type { Evidence, Statement, DraftAward, AnalysisJob } from '@/types/shared';
 
 interface Party {
   id: string;

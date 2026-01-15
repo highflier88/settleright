@@ -19,7 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
 import type { User } from '@/types/shared';
 
 const US_STATES = [

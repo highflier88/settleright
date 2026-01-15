@@ -6,6 +6,18 @@
  */
 
 // =============================================================================
+// JSON VALUE TYPE (mirrors Prisma's JsonValue)
+// =============================================================================
+
+export type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonValue[]
+  | { [key: string]: JsonValue };
+
+// =============================================================================
 // ENUMS
 // =============================================================================
 
@@ -112,6 +124,11 @@ export interface User {
   name: string | null;
   phone: string | null;
   role: UserRole;
+  addressStreet: string | null;
+  addressCity: string | null;
+  addressState: string | null;
+  addressPostalCode: string | null;
+  addressCountry: string | null;
   createdAt: Date;
   updatedAt: Date;
   lastLoginAt: Date | null;
@@ -125,6 +142,8 @@ export interface IdentityVerification {
   sessionId: string | null;
   verifiedAt: Date | null;
   verifiedName: string | null;
+  documentType: string | null;
+  failureReason: string | null;
   expiresAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
@@ -137,8 +156,16 @@ export interface Evidence {
   fileName: string;
   fileType: string;
   fileSize: number;
+  fileHash: string;
   storageKey: string;
   description: string | null;
+  documentType: string | null;
+  summary: string | null;
+  keyPoints: string[] | null;
+  extractedEntities: JsonValue | null;
+  classificationConfidence: number | null;
+  processingStatus: string;
+  processedAt: Date | null;
   submittedAt: Date;
   viewedByOpposingParty: boolean;
 }
@@ -148,7 +175,10 @@ export interface Statement {
   caseId: string;
   submittedById: string;
   statementType: StatementType;
+  type: StatementType;
+  version: number;
   content: string;
+  claimItems: JsonValue | null;
   submittedAt: Date;
   updatedAt: Date;
 }
@@ -159,9 +189,14 @@ export interface DraftAward {
   version: number;
   content: string;
   summary: string | null;
+  decision: string | null;
   reasoning: string | null;
+  findingsOfFact: JsonValue | null;
+  conclusionsOfLaw: JsonValue | null;
   prevailingParty: PrevailingParty | null;
   awardedAmount: number | null;
+  awardAmount: number | null;
+  confidence: number | null;
   generatedAt: Date;
   reviewStatus: ReviewDecision | null;
   reviewedBy: string | null;
@@ -173,6 +208,11 @@ export interface AnalysisJob {
   id: string;
   caseId: string;
   status: AnalysisStatus;
+  legalAnalysisStatus: AnalysisStatus | null;
+  legalIssues: JsonValue | null;
+  burdenOfProof: JsonValue | null;
+  damagesCalculation: JsonValue | null;
+  conclusionsOfLaw: JsonValue | null;
   startedAt: Date | null;
   completedAt: Date | null;
   errorMessage: string | null;
@@ -202,6 +242,8 @@ export interface NotificationPreference {
   inAppEnabled: boolean;
   caseUpdates: boolean;
   deadlineReminders: boolean;
+  evidenceUploads: boolean;
+  awardNotifications: boolean;
   marketingEmails: boolean;
   createdAt: Date;
   updatedAt: Date;

@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react';
 
 import Link from 'next/link';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { format } from 'date-fns';
-import { FileText, Clock, CheckCircle, AlertTriangle, ChevronRight, Filter } from 'lucide-react';
+import { AlertTriangle, CheckCircle, ChevronRight, Clock, FileText, Filter } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -18,7 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
 import type { CaseStatus, DisputeType, InvitationStatus } from '@/types/shared';
 
 interface CaseListItem {
