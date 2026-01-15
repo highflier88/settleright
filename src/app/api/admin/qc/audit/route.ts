@@ -8,7 +8,13 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
 import { requireRole } from '@/lib/auth';
-import { selectAuditSample, getAuditQueue, getAuditStats, createAuditTask } from '@/lib/qc';
+import {
+  selectAuditSample,
+  getAuditQueue,
+  getAuditStats,
+  createAuditTask,
+  type AuditTask,
+} from '@/lib/qc';
 
 export async function GET(request: NextRequest) {
   try {
@@ -41,8 +47,8 @@ export async function GET(request: NextRequest) {
       success: true,
       data: {
         queue,
-        totalPending: queue.filter((t) => t.status === 'pending').length,
-        totalInProgress: queue.filter((t) => t.status === 'in_progress').length,
+        totalPending: queue.filter((t: AuditTask) => t.status === 'pending').length,
+        totalInProgress: queue.filter((t: AuditTask) => t.status === 'in_progress').length,
       },
     });
   } catch (error) {

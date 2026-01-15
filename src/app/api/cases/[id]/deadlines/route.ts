@@ -45,10 +45,12 @@ export const GET = withAuth(
 
       // Calculate overall status
       const allDeadlines = Object.values(deadlines).filter(Boolean) as DeadlineInfo[];
-      const passedCount = allDeadlines.filter((d) => d.isPassed).length;
-      const urgentCount = allDeadlines.filter((d) => !d.isPassed && d.hoursRemaining <= 24).length;
+      const passedCount = allDeadlines.filter((d: DeadlineInfo) => d.isPassed).length;
+      const urgentCount = allDeadlines.filter(
+        (d: DeadlineInfo) => !d.isPassed && d.hoursRemaining <= 24
+      ).length;
       const warningCount = allDeadlines.filter(
-        (d) => !d.isPassed && d.hoursRemaining > 24 && d.daysRemaining <= 3
+        (d: DeadlineInfo) => !d.isPassed && d.hoursRemaining > 24 && d.daysRemaining <= 3
       ).length;
 
       return successResponse({

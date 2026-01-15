@@ -145,12 +145,12 @@ export const GET = withArbitrator(async (request: AuthenticatedRequest) => {
     if (hasAward !== null) {
       const hasDraft = hasAward === 'true';
       filteredAssignments = typedAssignments.filter(
-        (a) => (a.case.draftAward !== null) === hasDraft
+        (a: AssignmentWithCase) => (a.case.draftAward !== null) === hasDraft
       );
     }
 
     // Transform for response
-    const data = filteredAssignments.map((assignment) => ({
+    const data = filteredAssignments.map((assignment: AssignmentWithCase) => ({
       id: assignment.id,
       caseId: assignment.caseId,
       assignedAt: assignment.assignedAt,
