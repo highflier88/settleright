@@ -1,0 +1,1372 @@
+openapi: 3.1.0
+info:
+  title: Settleright.ai API
+  description: |
+    API for the Settleright.ai online dispute resolution platform.
+
+    ## Authentication
+    All endpoints (except `/auth/*`) require a valid session token.
+    Include the token in the `Authorization` header:
+    ```
+    Authorization: Bearer <session_token>
+    ```
+
+    ## Rate Limiting
+    - Standard endpoints: 100 requests/minute
+    - Auth endpoints: 10 requests/minute
+    - File uploads: 20 requests/minute
+
+    ## Errors
+    All errors follow the format:
+    ```json
+    {
+      "error": {
+        "code": "ERROR_CODE",
+        "message": "Human readable message"
+      }
+    }
+    ```
+  version: 1.0.0
+  contact:
+    name: Settleright.ai Support
+    email: support@settleright.ai
+
+servers:
+  - url: https://api.settleright.ai/v1
+    description: Production
+  - url: https://api.staging.settleright.ai/v1
+    description: Staging
+  - url: http://localhost:3001/v1
+    description: Local Development
+
+tags:
+  - name: Users
+    description: User management and profiles
+  - name: Cases
+    description: Case lifecycle management
+  - name: Evidence
+    description: Evidence upload and management
+  - name: Statements
+    description: Party statements
+  - name: Agreements
+    description: Submission agreements
+  - name: Arbitration
+    description: Arbitration workflow
+  - name: Awards
+    description: Award management
+  - name: Payments
+    description: Payment processing
+
+paths:
+  # ============================================================
+  # USERS
+  # ============================================================
+  /users/me:
+    get:
+      tags: [Users]
+      summary: Get current user profile
+      operationId: getCurrentUser
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    patch:
+      tags: [Users]
+      summary: Update current user profile
+      operationId: updateCurrentUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserInput'
+      responses:
+        '200':
+          description: Updated user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /users/me/kyc:
+    post:
+      tags: [Users]
+      summary: Initiate identity verification (KYC)
+      operationId: initiateKYC
+      responses:
+        '200':
+          description: Verification session created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessionUrl:
+                    type: string
+                    format: uri
+                    description: URL to redirect user for verification
+                  sessionId:
+                    type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    get:
+      tags: [Users]
+      summary: Get KYC verification status
+      operationId: getKYCStatus
+      responses:
+        '200':
+          description: Verification status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KYCStatus'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  # ============================================================
+  # CASES
+  # ============================================================
+  /cases:
+    get:
+      tags: [Cases]
+      summary: List user's cases
+      operationId: listCases
+      parameters:
+        - name: status
+          in: query
+          schema:
+            $ref: '#/components/schemas/CaseStatus'
+        - name: role
+          in: query
+          schema:
+            type: string
+            enum: [claimant, respondent]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+      responses:
+        '200':
+          description: List of cases
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cases:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CaseSummary'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags: [Cases]
+      summary: Create a new case
+      operationId: createCase
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCaseInput'
+      responses:
+        '201':
+          description: Case created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Case'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+
+  /cases/{caseId}:
+    parameters:
+      - $ref: '#/components/parameters/caseId'
+
+    get:
+      tags: [Cases]
+      summary: Get case details
+      operationId: getCase
+      responses:
+        '200':
+          description: Case details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Case'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /cases/{caseId}/invite:
+    parameters:
+      - $ref: '#/components/parameters/caseId'
+
+    post:
+      tags: [Cases]
+      summary: Invite respondent to case
+      operationId: inviteRespondent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  format: email
+                name:
+                  type: string
+                phone:
+                  type: string
+      responses:
+        '200':
+          description: Invitation sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  invitationId:
+                    type: string
+                  expiresAt:
+                    type: string
+                    format: date-time
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /cases/invitations/{token}:
+    parameters:
+      - name: token
+        in: path
+        required: true
+        schema:
+          type: string
+
+    get:
+      tags: [Cases]
+      summary: Get invitation details
+      operationId: getInvitation
+      security: []
+      responses:
+        '200':
+          description: Invitation details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invitation'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '410':
+          description: Invitation expired
+
+    post:
+      tags: [Cases]
+      summary: Accept invitation and join case
+      operationId: acceptInvitation
+      responses:
+        '200':
+          description: Joined case
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Case'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '410':
+          description: Invitation expired
+
+  /cases/{caseId}/timeline:
+    parameters:
+      - $ref: '#/components/parameters/caseId'
+
+    get:
+      tags: [Cases]
+      summary: Get case timeline/activity
+      operationId: getCaseTimeline
+      responses:
+        '200':
+          description: Case timeline
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TimelineEvent'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  # ============================================================
+  # EVIDENCE
+  # ============================================================
+  /cases/{caseId}/evidence:
+    parameters:
+      - $ref: '#/components/parameters/caseId'
+
+    get:
+      tags: [Evidence]
+      summary: List evidence for a case
+      operationId: listEvidence
+      responses:
+        '200':
+          description: List of evidence
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  evidence:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Evidence'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+    post:
+      tags: [Evidence]
+      summary: Upload evidence
+      operationId: uploadEvidence
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+                description:
+                  type: string
+                  maxLength: 500
+      responses:
+        '201':
+          description: Evidence uploaded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Evidence'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '413':
+          description: File too large
+
+  /cases/{caseId}/evidence/{evidenceId}:
+    parameters:
+      - $ref: '#/components/parameters/caseId'
+      - name: evidenceId
+        in: path
+        required: true
+        schema:
+          type: string
+
+    get:
+      tags: [Evidence]
+      summary: Get evidence details and download URL
+      operationId: getEvidence
+      responses:
+        '200':
+          description: Evidence details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Evidence'
+                  - type: object
+                    properties:
+                      downloadUrl:
+                        type: string
+                        format: uri
+                        description: Pre-signed URL (expires in 15 minutes)
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags: [Evidence]
+      summary: Delete evidence
+      operationId: deleteEvidence
+      responses:
+        '204':
+          description: Evidence deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ============================================================
+  # STATEMENTS
+  # ============================================================
+  /cases/{caseId}/statements:
+    parameters:
+      - $ref: '#/components/parameters/caseId'
+
+    get:
+      tags: [Statements]
+      summary: List statements for a case
+      operationId: listStatements
+      responses:
+        '200':
+          description: List of statements
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statements:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Statement'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+    post:
+      tags: [Statements]
+      summary: Submit a statement
+      operationId: submitStatement
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStatementInput'
+      responses:
+        '201':
+          description: Statement submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Statement'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  # ============================================================
+  # AGREEMENTS
+  # ============================================================
+  /cases/{caseId}/agreement:
+    parameters:
+      - $ref: '#/components/parameters/caseId'
+
+    get:
+      tags: [Agreements]
+      summary: Get submission agreement for case
+      operationId: getAgreement
+      responses:
+        '200':
+          description: Agreement details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agreement'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /cases/{caseId}/agreement/sign:
+    parameters:
+      - $ref: '#/components/parameters/caseId'
+
+    post:
+      tags: [Agreements]
+      summary: Sign submission agreement
+      operationId: signAgreement
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [consent]
+              properties:
+                consent:
+                  type: boolean
+                  description: Must be true to sign
+      responses:
+        '200':
+          description: Agreement signed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agreement'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  # ============================================================
+  # ARBITRATION
+  # ============================================================
+  /cases/{caseId}/analysis:
+    parameters:
+      - $ref: '#/components/parameters/caseId'
+
+    post:
+      tags: [Arbitration]
+      summary: Initiate AI analysis (internal/admin)
+      operationId: initiateAnalysis
+      responses:
+        '202':
+          description: Analysis started
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId:
+                    type: string
+                  status:
+                    type: string
+                    enum: [queued, processing]
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+    get:
+      tags: [Arbitration]
+      summary: Get analysis status
+      operationId: getAnalysisStatus
+      responses:
+        '200':
+          description: Analysis status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [pending, queued, processing, completed, failed]
+                  progress:
+                    type: integer
+                    minimum: 0
+                    maximum: 100
+                  completedAt:
+                    type: string
+                    format: date-time
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /arbitrator/queue:
+    get:
+      tags: [Arbitration]
+      summary: Get arbitrator review queue
+      operationId: getArbitratorQueue
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, in_review]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: Queue of cases pending review
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cases:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ArbitratorQueueItem'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /arbitrator/cases/{caseId}/review:
+    parameters:
+      - $ref: '#/components/parameters/caseId'
+
+    get:
+      tags: [Arbitration]
+      summary: Get case review details for arbitrator
+      operationId: getArbitratorReview
+      responses:
+        '200':
+          description: Full case details for review
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArbitratorReview'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    post:
+      tags: [Arbitration]
+      summary: Submit arbitrator review decision
+      operationId: submitReview
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewDecision'
+      responses:
+        '200':
+          description: Review submitted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [approved, modified, rejected, escalated]
+                  awardId:
+                    type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  # ============================================================
+  # AWARDS
+  # ============================================================
+  /cases/{caseId}/award:
+    parameters:
+      - $ref: '#/components/parameters/caseId'
+
+    get:
+      tags: [Awards]
+      summary: Get award for case
+      operationId: getAward
+      responses:
+        '200':
+          description: Award details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Award'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /cases/{caseId}/award/download:
+    parameters:
+      - $ref: '#/components/parameters/caseId'
+
+    get:
+      tags: [Awards]
+      summary: Download award PDF
+      operationId: downloadAward
+      responses:
+        '200':
+          description: Redirect to download URL
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  downloadUrl:
+                    type: string
+                    format: uri
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /cases/{caseId}/enforcement-package:
+    parameters:
+      - $ref: '#/components/parameters/caseId'
+
+    get:
+      tags: [Awards]
+      summary: Download enforcement package
+      operationId: getEnforcementPackage
+      responses:
+        '200':
+          description: Enforcement package download URL
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  downloadUrl:
+                    type: string
+                    format: uri
+                  contents:
+                    type: array
+                    items:
+                      type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ============================================================
+  # PAYMENTS
+  # ============================================================
+  /payments/filing-fee:
+    post:
+      tags: [Payments]
+      summary: Create filing fee payment session
+      operationId: createFilingFeeSession
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [caseId]
+              properties:
+                caseId:
+                  type: string
+      responses:
+        '200':
+          description: Payment session created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessionId:
+                    type: string
+                  sessionUrl:
+                    type: string
+                    format: uri
+                  amount:
+                    type: integer
+                    description: Amount in cents
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /payments/webhook:
+    post:
+      tags: [Payments]
+      summary: Stripe webhook endpoint
+      operationId: stripeWebhook
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Webhook processed
+
+  # ============================================================
+  # HEALTH
+  # ============================================================
+  /health:
+    get:
+      summary: Health check
+      operationId: healthCheck
+      security: []
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [ok]
+                  timestamp:
+                    type: string
+                    format: date-time
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    caseId:
+      name: caseId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Case ID
+
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    PaymentRequired:
+      description: Payment required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+        totalPages:
+          type: integer
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        phone:
+          type: string
+        role:
+          type: string
+          enum: [user, arbitrator, admin]
+        kycStatus:
+          $ref: '#/components/schemas/KYCStatus'
+        createdAt:
+          type: string
+          format: date-time
+
+    UpdateUserInput:
+      type: object
+      properties:
+        name:
+          type: string
+        phone:
+          type: string
+        address:
+          type: object
+          properties:
+            street:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            postalCode:
+              type: string
+            country:
+              type: string
+
+    KYCStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [not_started, pending, verified, failed, expired]
+        verifiedAt:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+
+    CaseStatus:
+      type: string
+      enum:
+        - draft
+        - pending_respondent
+        - pending_agreement
+        - evidence_submission
+        - analysis_pending
+        - analysis_in_progress
+        - arbitrator_review
+        - decided
+        - closed
+
+    CaseSummary:
+      type: object
+      properties:
+        id:
+          type: string
+        referenceNumber:
+          type: string
+        status:
+          $ref: '#/components/schemas/CaseStatus'
+        role:
+          type: string
+          enum: [claimant, respondent]
+        opposingParty:
+          type: string
+        amount:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Case:
+      type: object
+      properties:
+        id:
+          type: string
+        referenceNumber:
+          type: string
+        status:
+          $ref: '#/components/schemas/CaseStatus'
+        jurisdiction:
+          type: string
+        disputeType:
+          type: string
+        description:
+          type: string
+        amount:
+          type: number
+        claimant:
+          $ref: '#/components/schemas/PartyInfo'
+        respondent:
+          $ref: '#/components/schemas/PartyInfo'
+        agreement:
+          $ref: '#/components/schemas/Agreement'
+        deadlines:
+          type: object
+          properties:
+            responseDeadline:
+              type: string
+              format: date-time
+            evidenceDeadline:
+              type: string
+              format: date-time
+            rebuttalDeadline:
+              type: string
+              format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CreateCaseInput:
+      type: object
+      required: [description, amount, jurisdiction, disputeType]
+      properties:
+        description:
+          type: string
+          maxLength: 5000
+        amount:
+          type: number
+          minimum: 0
+        jurisdiction:
+          type: string
+          description: "e.g., 'US-CA' for California"
+        disputeType:
+          type: string
+          enum: [contract, payment, service, goods, other]
+        respondentEmail:
+          type: string
+          format: email
+        respondentName:
+          type: string
+
+    PartyInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        kycVerified:
+          type: boolean
+
+    Invitation:
+      type: object
+      properties:
+        id:
+          type: string
+        caseReferenceNumber:
+          type: string
+        claimantName:
+          type: string
+        disputeDescription:
+          type: string
+        amount:
+          type: number
+        expiresAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [pending, accepted, expired]
+
+    TimelineEvent:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        actor:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    Evidence:
+      type: object
+      properties:
+        id:
+          type: string
+        caseId:
+          type: string
+        submittedBy:
+          type: string
+        fileName:
+          type: string
+        fileType:
+          type: string
+        fileSize:
+          type: integer
+        description:
+          type: string
+        submittedAt:
+          type: string
+          format: date-time
+        viewedByOpposingParty:
+          type: boolean
+        viewedAt:
+          type: string
+          format: date-time
+
+    Statement:
+      type: object
+      properties:
+        id:
+          type: string
+        caseId:
+          type: string
+        submittedBy:
+          type: string
+        type:
+          type: string
+          enum: [initial, rebuttal]
+        content:
+          type: string
+        submittedAt:
+          type: string
+          format: date-time
+
+    CreateStatementInput:
+      type: object
+      required: [content]
+      properties:
+        type:
+          type: string
+          enum: [initial, rebuttal]
+          default: initial
+        content:
+          type: string
+          maxLength: 25000
+        claimItems:
+          type: array
+          items:
+            type: object
+            properties:
+              description:
+                type: string
+              amount:
+                type: number
+
+    Agreement:
+      type: object
+      properties:
+        id:
+          type: string
+        caseId:
+          type: string
+        version:
+          type: string
+        claimantSignature:
+          $ref: '#/components/schemas/Signature'
+        respondentSignature:
+          $ref: '#/components/schemas/Signature'
+        documentHash:
+          type: string
+        signedDocumentUrl:
+          type: string
+          format: uri
+        status:
+          type: string
+          enum: [pending_claimant, pending_respondent, complete]
+
+    Signature:
+      type: object
+      properties:
+        signedAt:
+          type: string
+          format: date-time
+        ipAddress:
+          type: string
+        userAgent:
+          type: string
+
+    ArbitratorQueueItem:
+      type: object
+      properties:
+        caseId:
+          type: string
+        referenceNumber:
+          type: string
+        jurisdiction:
+          type: string
+        amount:
+          type: number
+        disputeType:
+          type: string
+        analysisCompletedAt:
+          type: string
+          format: date-time
+        priority:
+          type: string
+          enum: [normal, high, urgent]
+        assignedTo:
+          type: string
+
+    ArbitratorReview:
+      type: object
+      properties:
+        case:
+          $ref: '#/components/schemas/Case'
+        claimantEvidence:
+          type: array
+          items:
+            $ref: '#/components/schemas/Evidence'
+        respondentEvidence:
+          type: array
+          items:
+            $ref: '#/components/schemas/Evidence'
+        claimantStatement:
+          $ref: '#/components/schemas/Statement'
+        respondentStatement:
+          $ref: '#/components/schemas/Statement'
+        draftAward:
+          $ref: '#/components/schemas/DraftAward'
+
+    DraftAward:
+      type: object
+      properties:
+        id:
+          type: string
+        caseId:
+          type: string
+        findingsOfFact:
+          type: array
+          items:
+            type: object
+            properties:
+              number:
+                type: integer
+              finding:
+                type: string
+        conclusionsOfLaw:
+          type: array
+          items:
+            type: object
+            properties:
+              number:
+                type: integer
+              conclusion:
+                type: string
+              citations:
+                type: array
+                items:
+                  type: string
+        decision:
+          type: string
+        awardAmount:
+          type: number
+        reasoning:
+          type: string
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+        generatedAt:
+          type: string
+          format: date-time
+
+    ReviewDecision:
+      type: object
+      required: [decision]
+      properties:
+        decision:
+          type: string
+          enum: [approve, modify, reject, escalate]
+        modifiedAward:
+          $ref: '#/components/schemas/DraftAward'
+        rejectionReason:
+          type: string
+        escalationReason:
+          type: string
+
+    Award:
+      type: object
+      properties:
+        id:
+          type: string
+        caseId:
+          type: string
+        referenceNumber:
+          type: string
+        findingsOfFact:
+          type: array
+          items:
+            type: object
+        conclusionsOfLaw:
+          type: array
+          items:
+            type: object
+        decision:
+          type: string
+        awardAmount:
+          type: number
+        prevailingParty:
+          type: string
+          enum: [claimant, respondent, split]
+        arbitratorId:
+          type: string
+        arbitratorName:
+          type: string
+        signedAt:
+          type: string
+          format: date-time
+        documentUrl:
+          type: string
+          format: uri
+        documentHash:
+          type: string
+
+security:
+  - bearerAuth: []

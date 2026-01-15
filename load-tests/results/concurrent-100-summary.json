@@ -1,0 +1,33 @@
+{
+  "testName": "100 Concurrent Cases Load Test",
+  "timestamp": "2026-01-14T14:00:43.696Z",
+  "duration": "74.974816758s",
+  "metrics": {
+    "totalRequests": 84,
+    "failedRequests": 0,
+    "requestDuration": {
+      "avg": "418.07",
+      "p95": "4640.46",
+      "max": "5057.95"
+    },
+    "errorRate": "0.00%",
+    "cases": {
+      "created": 10,
+      "completed": 10
+    },
+    "evidence": {
+      "uploaded": 33
+    },
+    "statements": {
+      "submitted": 0
+    },
+    "agreements": {
+      "signed": 0
+    },
+    "fullCycleTime": {
+      "avg": "22944.40",
+      "p95": "28099.00"
+    }
+  },
+  "thresholds": {}
+}

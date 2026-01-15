@@ -1,0 +1,768 @@
+// Settleright.ai Database Schema
+// This is the Prisma schema file for PostgreSQL
+// https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =============================================================================
+// ENUMS
+// =============================================================================
+
+enum UserRole {
+  USER
+  ARBITRATOR
+  ADMIN
+}
+
+enum KYCStatus {
+  NOT_STARTED
+  PENDING
+  VERIFIED
+  FAILED
+  EXPIRED
+}
+
+enum CaseStatus {
+  DRAFT
+  PENDING_RESPONDENT
+  PENDING_AGREEMENT
+  EVIDENCE_SUBMISSION
+  ANALYSIS_PENDING
+  ANALYSIS_IN_PROGRESS
+  ARBITRATOR_REVIEW
+  DECIDED
+  CLOSED
+}
+
+enum CaseRole {
+  CLAIMANT
+  RESPONDENT
+}
+
+enum DisputeType {
+  CONTRACT
+  PAYMENT
+  SERVICE
+  GOODS
+  OTHER
+}
+
+enum InvitationStatus {
+  PENDING
+  VIEWED
+  ACCEPTED
+  EXPIRED
+  CANCELLED
+}
+
+enum AgreementStatus {
+  PENDING_CLAIMANT
+  PENDING_RESPONDENT
+  COMPLETE
+}
+
+enum StatementType {
+  INITIAL
+  REBUTTAL
+}
+
+enum AnalysisStatus {
+  PENDING
+  QUEUED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum ReviewDecision {
+  APPROVE
+  MODIFY
+  REJECT
+  ESCALATE
+}
+
+enum PrevailingParty {
+  CLAIMANT
+  RESPONDENT
+  SPLIT
+}
+
+enum AuditAction {
+  // User actions
+  USER_REGISTERED
+  USER_LOGIN
+  USER_LOGOUT
+  USER_PROFILE_UPDATED
+  KYC_INITIATED
+  KYC_COMPLETED
+  KYC_FAILED
+
+  // Case actions
+  CASE_CREATED
+  CASE_UPDATED
+  CASE_STATUS_CHANGED
+  INVITATION_SENT
+  INVITATION_VIEWED
+  INVITATION_ACCEPTED
+  INVITATION_EXPIRED
+
+  // Agreement actions
+  AGREEMENT_VIEWED
+  AGREEMENT_SIGNED
+
+  // Evidence actions
+  EVIDENCE_UPLOADED
+  EVIDENCE_VIEWED
+  EVIDENCE_DELETED
+
+  // Statement actions
+  STATEMENT_SUBMITTED
+  STATEMENT_UPDATED
+
+  // Analysis actions
+  ANALYSIS_INITIATED
+  ANALYSIS_COMPLETED
+  ANALYSIS_FAILED
+
+  // Arbitrator actions
+  CASE_ASSIGNED
+  REVIEW_STARTED
+  REVIEW_COMPLETED
+  AWARD_SIGNED
+
+  // Award actions
+  AWARD_ISSUED
+  AWARD_DOWNLOADED
+  ENFORCEMENT_PACKAGE_DOWNLOADED
+
+  // Payment actions
+  PAYMENT_INITIATED
+  PAYMENT_COMPLETED
+  PAYMENT_FAILED
+  REFUND_ISSUED
+}
+
+enum NotificationType {
+  EMAIL
+  SMS
+  IN_APP
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentType {
+  FILING_FEE
+  RESPONSE_FEE
+  EXPEDITED_FEE
+}
+
+// =============================================================================
+// USER MODELS
+// =============================================================================
+
+model User {
+  id                   String              @id @default(cuid())
+  clerkId              String              @unique // External auth provider ID
+  email                String              @unique
+  name                 String?
+  phone                String?
+  role                 UserRole            @default(USER)
+
+  // Address
+  addressStreet        String?
+  addressCity          String?
+  addressState         String?
+  addressPostalCode    String?
+  addressCountry       String?
+
+  // Timestamps
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  lastLoginAt          DateTime?
+
+  // Relations
+  identityVerification IdentityVerification?
+  casesAsClaimant      Case[]              @relation("ClaimantCases")
+  casesAsRespondent    Case[]              @relation("RespondentCases")
+  evidence             Evidence[]
+  statements           Statement[]
+  signatures           Signature[]
+  notificationPrefs    NotificationPreference?
+
+  // Arbitrator-specific
+  arbitratorProfile    ArbitratorProfile?
+  assignedCases        ArbitratorAssignment[]
+  signedAwards         Award[]
+
+  @@index([email])
+  @@index([clerkId])
+  @@map("users")
+}
+
+model IdentityVerification {
+  id                String    @id @default(cuid())
+  userId            String    @unique
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  status            KYCStatus @default(NOT_STARTED)
+  provider          String?   // e.g., "stripe_identity"
+  providerSessionId String?
+
+  // Verification details (encrypted)
+  documentType      String?   // e.g., "passport", "drivers_license"
+  verifiedName      String?
+  verifiedDob       DateTime?
+
+  // Timestamps
+  initiatedAt       DateTime?
+  verifiedAt        DateTime?
+  expiresAt         DateTime?
+  failedAt          DateTime?
+  failureReason     String?
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@map("identity_verifications")
+}
+
+model ArbitratorProfile {
+  id                String    @id @default(cuid())
+  userId            String    @unique
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Credentials
+  barNumber         String?
+  barState          String?
+  isRetiredJudge    Boolean   @default(false)
+  yearsExperience   Int?
+
+  // Jurisdictions they can handle
+  jurisdictions     String[]  // e.g., ["US-CA", "US-NY"]
+  specialties       DisputeType[]
+
+  // Availability
+  isActive          Boolean   @default(true)
+  maxCasesPerWeek   Int       @default(10)
+
+  // Performance
+  casesCompleted    Int       @default(0)
+  avgReviewTime     Int?      // in minutes
+
+  // Payment
+  stripeConnectId   String?
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@map("arbitrator_profiles")
+}
+
+// =============================================================================
+// CASE MODELS
+// =============================================================================
+
+model Case {
+  id                 String      @id @default(cuid())
+  referenceNumber    String      @unique // e.g., "SR-2024-001234"
+
+  status             CaseStatus  @default(DRAFT)
+  jurisdiction       String      // e.g., "US-CA"
+  disputeType        DisputeType
+
+  // Dispute details
+  description        String
+  amount             Decimal     @db.Decimal(12, 2)
+
+  // Parties
+  claimantId         String
+  claimant           User        @relation("ClaimantCases", fields: [claimantId], references: [id])
+  respondentId       String?
+  respondent         User?       @relation("RespondentCases", fields: [respondentId], references: [id])
+
+  // Deadlines
+  responseDeadline   DateTime?
+  evidenceDeadline   DateTime?
+  rebuttalDeadline   DateTime?
+
+  // Timestamps
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  closedAt           DateTime?
+
+  // Relations
+  invitation         Invitation?
+  agreement          Agreement?
+  evidence           Evidence[]
+  statements         Statement[]
+  analysisJob        AnalysisJob?
+  draftAward         DraftAward?
+  award              Award?
+  arbitratorAssignment ArbitratorAssignment?
+  payments           Payment[]
+  auditLogs          AuditLog[]
+
+  @@index([claimantId])
+  @@index([respondentId])
+  @@index([status])
+  @@index([referenceNumber])
+  @@map("cases")
+}
+
+model Invitation {
+  id              String            @id @default(cuid())
+  caseId          String            @unique
+  case            Case              @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  token           String            @unique
+
+  // Recipient info
+  email           String
+  name            String?
+  phone           String?
+
+  status          InvitationStatus  @default(PENDING)
+
+  // Timestamps
+  sentAt          DateTime          @default(now())
+  viewedAt        DateTime?
+  acceptedAt      DateTime?
+  expiresAt       DateTime
+
+  // Delivery tracking
+  emailSentAt     DateTime?
+  smsSentAt       DateTime?
+  remindersSent   Int               @default(0)
+  lastReminderAt  DateTime?
+
+  @@index([token])
+  @@index([email])
+  @@map("invitations")
+}
+
+// =============================================================================
+// AGREEMENT MODELS
+// =============================================================================
+
+model Agreement {
+  id                  String          @id @default(cuid())
+  caseId              String          @unique
+  case                Case            @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  templateVersion     String          @default("1.0")
+  rulesVersion        String          @default("1.0")
+
+  status              AgreementStatus @default(PENDING_CLAIMANT)
+
+  // Document storage
+  documentUrl         String?         // S3 URL to signed PDF
+  documentHash        String?         // SHA-256 hash for integrity
+
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+
+  // Relations
+  signatures          Signature[]
+
+  @@map("agreements")
+}
+
+model Signature {
+  id              String    @id @default(cuid())
+  agreementId     String
+  agreement       Agreement @relation(fields: [agreementId], references: [id], onDelete: Cascade)
+
+  userId          String
+  user            User      @relation(fields: [userId], references: [id])
+
+  role            CaseRole
+
+  // Signature metadata
+  signedAt        DateTime  @default(now())
+  ipAddress       String
+  userAgent       String
+  deviceFingerprint String?
+
+  // Consent confirmation
+  consentText     String    // The exact text they agreed to
+  consentChecksum String    // Hash of consent text for verification
+
+  @@unique([agreementId, role])
+  @@index([userId])
+  @@map("signatures")
+}
+
+// =============================================================================
+// EVIDENCE MODELS
+// =============================================================================
+
+model Evidence {
+  id                    String    @id @default(cuid())
+  caseId                String
+  case                  Case      @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  submittedById         String
+  submittedBy           User      @relation(fields: [submittedById], references: [id])
+
+  // File info
+  fileName              String
+  fileType              String    // MIME type
+  fileSize              Int       // bytes
+  fileHash              String    // SHA-256 for integrity
+
+  // Storage
+  storageKey            String    // S3 key
+  storageBucket         String
+
+  // Metadata
+  description           String?
+
+  // Viewing tracking
+  viewedByOpposingParty Boolean   @default(false)
+  viewedAt              DateTime?
+
+  // Processing
+  ocrText               String?   // Extracted text for AI analysis
+  ocrProcessedAt        DateTime?
+
+  // Timestamps
+  submittedAt           DateTime  @default(now())
+  deletedAt             DateTime? // Soft delete
+
+  @@index([caseId])
+  @@index([submittedById])
+  @@map("evidence")
+}
+
+// =============================================================================
+// STATEMENT MODELS
+// =============================================================================
+
+model Statement {
+  id              String        @id @default(cuid())
+  caseId          String
+  case            Case          @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  submittedById   String
+  submittedBy     User          @relation(fields: [submittedById], references: [id])
+
+  type            StatementType @default(INITIAL)
+
+  // Content
+  content         String        // Main narrative (max 25000 chars)
+
+  // Structured claim items (JSON)
+  claimItems      Json?         // [{description, amount}]
+
+  // Version tracking
+  version         Int           @default(1)
+
+  submittedAt     DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([caseId])
+  @@index([submittedById])
+  @@map("statements")
+}
+
+// =============================================================================
+// AI ANALYSIS MODELS
+// =============================================================================
+
+model AnalysisJob {
+  id                String         @id @default(cuid())
+  caseId            String         @unique
+  case              Case           @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  status            AnalysisStatus @default(PENDING)
+  progress          Int            @default(0) // 0-100
+
+  // Processing details
+  queuedAt          DateTime?
+  startedAt         DateTime?
+  completedAt       DateTime?
+  failedAt          DateTime?
+  failureReason     String?
+
+  // AI details
+  modelUsed         String?        // e.g., "claude-3-opus-20240229"
+  tokensUsed        Int?
+  processingTimeMs  Int?
+
+  // Cost tracking
+  estimatedCost     Decimal?       @db.Decimal(10, 4)
+
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  @@map("analysis_jobs")
+}
+
+model DraftAward {
+  id                String    @id @default(cuid())
+  caseId            String    @unique
+  case              Case      @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  // Structured content (JSON)
+  findingsOfFact    Json      // [{number, finding}]
+  conclusionsOfLaw  Json      // [{number, conclusion, citations}]
+
+  // Decision
+  decision          String
+  awardAmount       Decimal?  @db.Decimal(12, 2)
+  prevailingParty   PrevailingParty?
+
+  // Reasoning
+  reasoning         String    // Detailed explanation
+
+  // AI confidence
+  confidence        Float     // 0.0 - 1.0
+  citationsVerified Boolean   @default(false)
+
+  // Generation details
+  modelUsed         String
+  generatedAt       DateTime  @default(now())
+
+  // Review
+  reviewStatus      ReviewDecision?
+  reviewedAt        DateTime?
+  reviewNotes       String?
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@map("draft_awards")
+}
+
+// =============================================================================
+// ARBITRATOR ASSIGNMENT MODELS
+// =============================================================================
+
+model ArbitratorAssignment {
+  id              String    @id @default(cuid())
+  caseId          String    @unique
+  case            Case      @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  arbitratorId    String
+  arbitrator      User      @relation(fields: [arbitratorId], references: [id])
+
+  assignedAt      DateTime  @default(now())
+  reviewStartedAt DateTime?
+  reviewCompletedAt DateTime?
+
+  // Priority
+  priority        String    @default("normal") // normal, high, urgent
+  dueBy           DateTime?
+
+  @@index([arbitratorId])
+  @@map("arbitrator_assignments")
+}
+
+// =============================================================================
+// AWARD MODELS
+// =============================================================================
+
+model Award {
+  id                String          @id @default(cuid())
+  caseId            String          @unique
+  case              Case            @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  referenceNumber   String          @unique // e.g., "AWD-2024-001234"
+
+  // Content
+  findingsOfFact    Json
+  conclusionsOfLaw  Json
+  decision          String
+  awardAmount       Decimal?        @db.Decimal(12, 2)
+  prevailingParty   PrevailingParty
+
+  // Fee allocation
+  feeAllocation     Json?           // How fees are split
+
+  // Arbitrator signature
+  arbitratorId      String
+  arbitrator        User            @relation(fields: [arbitratorId], references: [id])
+  signedAt          DateTime
+  signatureData     String          // Encrypted signature data
+
+  // Document
+  documentUrl       String          // S3 URL to signed PDF
+  documentHash      String          // SHA-256 hash
+
+  // Timestamps
+  issuedAt          DateTime        @default(now())
+
+  // Delivery tracking
+  claimantNotifiedAt   DateTime?
+  respondentNotifiedAt DateTime?
+
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  @@index([arbitratorId])
+  @@index([referenceNumber])
+  @@map("awards")
+}
+
+// =============================================================================
+// PAYMENT MODELS
+// =============================================================================
+
+model Payment {
+  id                String        @id @default(cuid())
+  caseId            String
+  case              Case          @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  userId            String
+
+  type              PaymentType
+  status            PaymentStatus @default(PENDING)
+
+  // Amount
+  amount            Decimal       @db.Decimal(10, 2)
+  currency          String        @default("USD")
+
+  // Stripe
+  stripePaymentIntentId String?   @unique
+  stripeSessionId       String?
+
+  // Timestamps
+  createdAt         DateTime      @default(now())
+  paidAt            DateTime?
+  failedAt          DateTime?
+  refundedAt        DateTime?
+
+  // Failure details
+  failureReason     String?
+
+  @@index([caseId])
+  @@index([userId])
+  @@index([stripePaymentIntentId])
+  @@map("payments")
+}
+
+// =============================================================================
+// NOTIFICATION MODELS
+// =============================================================================
+
+model NotificationPreference {
+  id              String  @id @default(cuid())
+  userId          String  @unique
+  user            User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  emailEnabled    Boolean @default(true)
+  smsEnabled      Boolean @default(true)
+  inAppEnabled    Boolean @default(true)
+
+  // Specific notifications
+  caseUpdates     Boolean @default(true)
+  deadlineReminders Boolean @default(true)
+  evidenceUploads Boolean @default(true)
+  awardNotifications Boolean @default(true)
+  marketingEmails Boolean @default(false)
+
+  @@map("notification_preferences")
+}
+
+model Notification {
+  id              String           @id @default(cuid())
+  userId          String
+
+  type            NotificationType
+  templateId      String
+
+  // Content
+  subject         String?
+  body            String
+
+  // Delivery
+  sentAt          DateTime         @default(now())
+  deliveredAt     DateTime?
+  readAt          DateTime?
+  failedAt        DateTime?
+  failureReason   String?
+
+  // Tracking
+  externalId      String?          // e.g., SendGrid message ID
+
+  @@index([userId])
+  @@map("notifications")
+}
+
+// =============================================================================
+// AUDIT LOG MODELS
+// =============================================================================
+
+model AuditLog {
+  id              String      @id @default(cuid())
+
+  // Actor
+  userId          String?     // null for system actions
+
+  // Target
+  caseId          String?
+  case            Case?       @relation(fields: [caseId], references: [id], onDelete: SetNull)
+
+  // Action
+  action          AuditAction
+
+  // Request details
+  ipAddress       String?
+  userAgent       String?
+
+  // Additional data
+  metadata        Json?       // Action-specific details
+
+  // Timestamp
+  timestamp       DateTime    @default(now())
+
+  // Integrity chain (blockchain-style)
+  previousHash    String?     // Hash of previous log entry
+  hash            String      // Hash of this entry
+
+  @@index([userId])
+  @@index([caseId])
+  @@index([action])
+  @@index([timestamp])
+  @@map("audit_logs")
+}
+
+// =============================================================================
+// LEGAL KNOWLEDGE BASE (for reference, stored in Pinecone)
+// =============================================================================
+
+// This model tracks what's been indexed in the vector DB
+model LegalDocumentIndex {
+  id              String    @id @default(cuid())
+
+  // Document info
+  sourceType      String    // "case_law", "statute", "regulation"
+  jurisdiction    String
+  citation        String
+  title           String
+
+  // Indexing
+  pineconeId      String    @unique
+  indexedAt       DateTime  @default(now())
+
+  // Metadata
+  publishedDate   DateTime?
+  lastUpdated     DateTime?
+
+  @@index([jurisdiction])
+  @@index([sourceType])
+  @@map("legal_document_index")
+}
