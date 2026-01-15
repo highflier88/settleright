@@ -14,6 +14,7 @@ import {
   parseStatementContent,
   getStatementStatusInfo,
 } from '@/lib/services/statement';
+import type { JsonValue, StatementType } from '@/types/shared';
 
 import { StatementSubmissionForm } from './statement-form';
 
@@ -21,8 +22,10 @@ import type { Metadata } from 'next';
 
 interface StatementItem {
   id: string;
-  type: string;
+  caseId: string;
+  type: StatementType;
   content: string;
+  claimItems: JsonValue;
   submittedById: string;
   submittedAt: Date;
   updatedAt: Date;
