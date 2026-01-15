@@ -12,6 +12,32 @@ import { prisma } from '@/lib/db';
 
 type PrevailingParty = 'CLAIMANT' | 'RESPONDENT' | 'SPLIT';
 
+interface AwardWithDetails {
+  id: string;
+  referenceNumber: string;
+  caseId: string;
+  awardAmount: unknown;
+  prevailingParty: PrevailingParty;
+  issuedAt: Date;
+  signedAt: Date | null;
+  documentHash: string | null;
+  timestampGranted: boolean;
+  claimantNotifiedAt: Date | null;
+  respondentNotifiedAt: Date | null;
+  case: {
+    referenceNumber: string;
+    jurisdiction: string;
+    disputeType: string;
+    claimant: { name: string | null; email: string } | null;
+    respondent: { name: string | null; email: string } | null;
+  };
+  arbitrator: {
+    id: string;
+    name: string | null;
+    email: string;
+  };
+}
+
 export const dynamic = 'force-dynamic';
 
 /**
@@ -140,7 +166,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Format response
-    const formattedAwards = awards.map((award) => ({
+    const formattedAwards = (awards as AwardWithDetails[]).map((award) => ({
       id: award.id,
       referenceNumber: award.referenceNumber,
       caseId: award.caseId,
