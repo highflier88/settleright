@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Running pre-push checks..."
+
+# Run type check
+echo "→ Type checking..."
+pnpm type-check || exit 1
+
+# Run build to catch Next.js-specific type errors
+echo "→ Building..."
+pnpm build || exit 1
+
+echo "✓ Pre-push checks passed!"
