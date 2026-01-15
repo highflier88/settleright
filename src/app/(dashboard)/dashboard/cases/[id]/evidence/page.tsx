@@ -142,7 +142,12 @@ export default async function EvidencePage({ params }: PageProps) {
       </div>
 
       {/* Evidence List */}
-      <EvidenceList caseId={params.id} evidence={JSON.parse(JSON.stringify(evidence)) as Evidence[]} userId={user.id} canDelete={canUpload} />
+      <EvidenceList
+        caseId={params.id}
+        evidence={JSON.parse(JSON.stringify(evidence)) as Evidence[]}
+        userId={user.id}
+        canDelete={canUpload}
+      />
 
       {/* Help Card */}
       <Card>

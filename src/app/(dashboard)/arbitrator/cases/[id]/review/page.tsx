@@ -150,17 +150,31 @@ export default async function CaseReviewPage({ params }: PageProps) {
           respondentId: caseData.respondentId,
         }}
         claimantEvidence={JSON.parse(JSON.stringify(claimantEvidence)) as EvidenceWithSubmitter[]}
-        respondentEvidence={JSON.parse(JSON.stringify(respondentEvidence)) as EvidenceWithSubmitter[]}
+        respondentEvidence={
+          JSON.parse(JSON.stringify(respondentEvidence)) as EvidenceWithSubmitter[]
+        }
         claimantStatement={claimantStatement}
         respondentStatement={respondentStatement}
-        draftAward={caseData.draftAward ? {
-          ...JSON.parse(JSON.stringify(caseData.draftAward)),
-          awardAmount: caseData.draftAward.awardAmount ? Number(caseData.draftAward.awardAmount) : null,
-        } as DraftAward : null}
-        analysisJob={caseData.analysisJob ? {
-          ...JSON.parse(JSON.stringify(caseData.analysisJob)),
-          estimatedCost: caseData.analysisJob.estimatedCost ? Number(caseData.analysisJob.estimatedCost) : null,
-        } as AnalysisJob : null}
+        draftAward={
+          caseData.draftAward
+            ? ({
+                ...JSON.parse(JSON.stringify(caseData.draftAward)),
+                awardAmount: caseData.draftAward.awardAmount
+                  ? Number(caseData.draftAward.awardAmount)
+                  : null,
+              } as DraftAward)
+            : null
+        }
+        analysisJob={
+          caseData.analysisJob
+            ? ({
+                ...JSON.parse(JSON.stringify(caseData.analysisJob)),
+                estimatedCost: caseData.analysisJob.estimatedCost
+                  ? Number(caseData.analysisJob.estimatedCost)
+                  : null,
+              } as AnalysisJob)
+            : null
+        }
       />
     </div>
   );

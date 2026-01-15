@@ -30,7 +30,6 @@ import { CaseActions } from './case-actions';
 
 import type { Metadata } from 'next';
 
-
 interface EvidenceItem {
   id: string;
   fileName: string;

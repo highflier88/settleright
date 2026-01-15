@@ -470,9 +470,13 @@ export function NewCaseForm({ user: _user }: NewCaseFormProps) {
                 <div className="border-b pb-2">
                   <span className="text-muted-foreground">Respondent</span>
                   <p className="mt-1 text-sm">
-                    {typeof formData.respondentName === 'string' && formData.respondentName && `${formData.respondentName} - `}
+                    {typeof formData.respondentName === 'string' &&
+                      formData.respondentName &&
+                      `${formData.respondentName} - `}
                     {formData.respondentEmail}
-                    {typeof formData.respondentPhone === 'string' && formData.respondentPhone && ` (${formData.respondentPhone})`}
+                    {typeof formData.respondentPhone === 'string' &&
+                      formData.respondentPhone &&
+                      ` (${formData.respondentPhone})`}
                   </p>
                 </div>
               </div>
