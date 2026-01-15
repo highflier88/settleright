@@ -195,13 +195,13 @@ export async function UsersTable({ searchParams }: UsersTableProps) {
                     <Badge
                       variant={
                         KYC_STATUS_VARIANTS[
-                          user.identityVerification?.status ?? KYCStatus.NOT_STARTED
+                          user.identityVerification?.status ?? 'NOT_STARTED'
                         ]
                       }
                     >
                       {
                         KYC_STATUS_LABELS[
-                          user.identityVerification?.status ?? KYCStatus.NOT_STARTED
+                          user.identityVerification?.status ?? 'NOT_STARTED'
                         ]
                       }
                     </Badge>
