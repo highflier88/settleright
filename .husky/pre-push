@@ -4,7 +4,7 @@ echo "Running pre-push checks..."
 echo "→ Type checking..."
 pnpm type-check || exit 1
 
-# Run build to catch Next.js-specific type errors
+# Run Next.js build
 echo "→ Building..."
 pnpm build || exit 1
 
