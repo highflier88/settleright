@@ -15,7 +15,7 @@ import {
 } from '@/lib/arbitrator';
 import { requireRole } from '@/lib/auth';
 
-import type { CredentialVerificationStatus } from '@prisma/client';
+type CredentialVerificationStatus = 'PENDING' | 'IN_REVIEW' | 'VERIFIED' | 'REJECTED' | 'EXPIRED';
 
 export async function GET(request: NextRequest) {
   try {
