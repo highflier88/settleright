@@ -1,6 +1,5 @@
 import Link from 'next/link';
 
-import { KYCStatus, type Prisma, UserRole } from '@prisma/client';
 import { Search } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
@@ -24,6 +23,7 @@ import {
 import { prisma } from '@/lib/db';
 import { ROLE_DISPLAY_NAMES } from '@/lib/rbac';
 import { formatDate } from '@/lib/utils';
+import type { KYCStatus, UserRole } from '@/types/shared';
 
 interface UsersTableProps {
   searchParams: {
@@ -33,6 +33,9 @@ interface UsersTableProps {
     kycStatus?: string;
   };
 }
+
+const USER_ROLES: UserRole[] = ['USER', 'ARBITRATOR', 'ADMIN'];
+const KYC_STATUSES: KYCStatus[] = ['NOT_STARTED', 'PENDING', 'VERIFIED', 'FAILED', 'EXPIRED'];
 
 const KYC_STATUS_LABELS: Record<KYCStatus, string> = {
   NOT_STARTED: 'Not Started',
@@ -56,15 +59,15 @@ export async function UsersTable({ searchParams }: UsersTableProps) {
   const perPage = 20;
   const search = searchParams.search;
   const roleFilter =
-    searchParams.role && Object.values(UserRole).includes(searchParams.role as UserRole)
+    searchParams.role && USER_ROLES.includes(searchParams.role as UserRole)
       ? (searchParams.role as UserRole)
       : undefined;
   const kycFilter =
-    searchParams.kycStatus && Object.values(KYCStatus).includes(searchParams.kycStatus as KYCStatus)
+    searchParams.kycStatus && KYC_STATUSES.includes(searchParams.kycStatus as KYCStatus)
       ? (searchParams.kycStatus as KYCStatus)
       : undefined;
 
-  const where: Prisma.UserWhereInput = {};
+  const where: { OR?: object[]; role?: UserRole; identityVerification?: object } = {};
 
   if (search) {
     where.OR = [
@@ -132,7 +135,7 @@ export async function UsersTable({ searchParams }: UsersTableProps) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Roles</SelectItem>
-              {Object.values(UserRole).map((role) => (
+              {USER_ROLES.map((role) => (
                 <SelectItem key={role} value={role}>
                   {ROLE_DISPLAY_NAMES[role]}
                 </SelectItem>
@@ -146,7 +149,7 @@ export async function UsersTable({ searchParams }: UsersTableProps) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Status</SelectItem>
-              {Object.values(KYCStatus).map((status) => (
+              {KYC_STATUSES.map((status) => (
                 <SelectItem key={status} value={status}>
                   {KYC_STATUS_LABELS[status]}
                 </SelectItem>
