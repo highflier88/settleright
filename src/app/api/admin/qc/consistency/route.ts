@@ -10,6 +10,8 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { requireRole } from '@/lib/auth';
 import { analyzeConsistency, getConsistencyReport, findSimilarAwards } from '@/lib/qc';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     // Verify admin/arbitrator role

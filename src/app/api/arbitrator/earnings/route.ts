@@ -13,6 +13,8 @@ import { prisma } from '@/lib/db';
 
 import type { CompensationStatus } from '@prisma/client';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const { userId: clerkId } = auth();

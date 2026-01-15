@@ -12,6 +12,8 @@ import { prisma } from '@/lib/db';
 
 import type { PrevailingParty } from '@prisma/client';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET - List and search issued awards
  */

@@ -8,6 +8,8 @@ import {
 } from '@/lib/services/deadline';
 import { notifyDeadlineApproaching } from '@/lib/services/notification-dispatcher';
 
+export const dynamic = 'force-dynamic';
+
 // Verify cron secret
 const CRON_SECRET = process.env.CRON_SECRET;
 

@@ -5,6 +5,8 @@ import { prisma } from '@/lib/db';
 
 import type { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Admin Dashboard',
   description: 'Platform administration overview',
