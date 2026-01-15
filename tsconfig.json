@@ -40,5 +40,5 @@
     "src/**/*.ts",
     "src/**/*.tsx"
   ],
-  "exclude": ["node_modules", ".next", "out", "coverage", "playwright-report", "src/__tests__"]
+  "exclude": ["node_modules", ".next", "out", "coverage", "playwright-report", "src/__tests__", "prisma"]
 }
