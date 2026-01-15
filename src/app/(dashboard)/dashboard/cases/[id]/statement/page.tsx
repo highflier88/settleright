@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
-import { CaseStatus, StatementType } from '@prisma/client';
 import { ArrowLeft, FileText, Edit, Clock, CheckCircle } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
@@ -19,6 +18,16 @@ import {
 import { StatementSubmissionForm } from './statement-form';
 
 import type { Metadata } from 'next';
+
+interface StatementItem {
+  id: string;
+  type: string;
+  content: string;
+  submittedById: string;
+  submittedAt: Date;
+  updatedAt: Date;
+  version: number;
+}
 
 export const metadata: Metadata = {
   title: 'Statement',
@@ -53,19 +62,20 @@ export default async function StatementPage({ params }: PageProps) {
   const userRole = access.role as 'claimant' | 'respondent';
 
   // Get user's statements
-  const userStatements = statements.filter((s) => s.submittedById === user.id);
-  const initialStatement = userStatements.find((s) => s.type === StatementType.INITIAL);
-  const rebuttalStatement = userStatements.find((s) => s.type === StatementType.REBUTTAL);
+  const typedStatements = statements as StatementItem[];
+  const userStatements = typedStatements.filter((s) => s.submittedById === user.id);
+  const initialStatement = userStatements.find((s) => s.type === 'INITIAL');
+  const rebuttalStatement = userStatements.find((s) => s.type === 'REBUTTAL');
 
   // Other party's statements
-  const otherStatements = statements.filter((s) => s.submittedById !== user.id);
-  const otherInitial = otherStatements.find((s) => s.type === StatementType.INITIAL);
-  const otherRebuttal = otherStatements.find((s) => s.type === StatementType.REBUTTAL);
+  const otherStatements = typedStatements.filter((s) => s.submittedById !== user.id);
+  const otherInitial = otherStatements.find((s) => s.type === 'INITIAL');
+  const otherRebuttal = otherStatements.find((s) => s.type === 'REBUTTAL');
 
   // Check submission eligibility
   const [canSubmitInitial, canSubmitRebuttal] = await Promise.all([
-    canSubmitStatement(params.id, user.id, StatementType.INITIAL),
-    canSubmitStatement(params.id, user.id, StatementType.REBUTTAL),
+    canSubmitStatement(params.id, user.id, 'INITIAL'),
+    canSubmitStatement(params.id, user.id, 'REBUTTAL'),
   ]);
 
   const _statusInfo = getStatementStatusInfo(statements, user.id, userRole);
@@ -221,7 +231,7 @@ export default async function StatementPage({ params }: PageProps) {
                 </CardDescription>
               </div>
               {canSubmitInitial.canSubmit === false &&
-                caseData.status === CaseStatus.EVIDENCE_SUBMISSION && (
+                caseData.status === 'EVIDENCE_SUBMISSION' && (
                   <Button variant="outline" size="sm" asChild>
                     <Link
                       href={`/dashboard/cases/${params.id}/statement/edit/${initialStatement.id}`}
@@ -261,7 +271,7 @@ export default async function StatementPage({ params }: PageProps) {
                   {new Date(rebuttalStatement.updatedAt).toLocaleDateString()}
                 </CardDescription>
               </div>
-              {caseData.status === CaseStatus.EVIDENCE_SUBMISSION && (
+              {caseData.status === 'EVIDENCE_SUBMISSION' && (
                 <Button variant="outline" size="sm" asChild>
                   <Link
                     href={`/dashboard/cases/${params.id}/statement/edit/${rebuttalStatement.id}`}

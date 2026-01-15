@@ -151,8 +151,8 @@ export default async function CaseReviewPage({ params }: PageProps) {
         }}
         claimantEvidence={JSON.parse(JSON.stringify(claimantEvidence)) as EvidenceWithSubmitter[]}
         respondentEvidence={JSON.parse(JSON.stringify(respondentEvidence)) as EvidenceWithSubmitter[]}
-        claimantStatement={claimantStatement as StatementWithSubmitter | undefined}
-        respondentStatement={respondentStatement as StatementWithSubmitter | undefined}
+        claimantStatement={claimantStatement}
+        respondentStatement={respondentStatement}
         draftAward={caseData.draftAward ? {
           ...JSON.parse(JSON.stringify(caseData.draftAward)),
           awardAmount: caseData.draftAward.awardAmount ? Number(caseData.draftAward.awardAmount) : null,
