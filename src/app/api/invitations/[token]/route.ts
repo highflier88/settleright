@@ -17,6 +17,45 @@ interface RouteContext {
   params: { token: string };
 }
 
+// Local type for invitation data from getInvitationByToken
+type InvitationStatus = 'PENDING' | 'VIEWED' | 'ACCEPTED' | 'EXPIRED' | 'CANCELLED';
+type CaseStatus =
+  | 'DRAFT'
+  | 'PENDING_RESPONDENT'
+  | 'PENDING_AGREEMENT'
+  | 'EVIDENCE_SUBMISSION'
+  | 'ANALYSIS_PENDING'
+  | 'ANALYSIS_IN_PROGRESS'
+  | 'ARBITRATOR_REVIEW'
+  | 'DECIDED'
+  | 'CLOSED';
+type DisputeType = 'CONTRACT' | 'PAYMENT' | 'SERVICE' | 'GOODS' | 'OTHER';
+
+interface InvitationData {
+  id: string;
+  status: InvitationStatus;
+  email: string;
+  name: string | null;
+  expiresAt: Date;
+  viewedAt: Date | null;
+  case: {
+    id: string;
+    referenceNumber: string;
+    status: CaseStatus;
+    disputeType: DisputeType;
+    jurisdiction: string;
+    description: string;
+    amount: unknown;
+    responseDeadline: Date | null;
+    createdAt: Date;
+    claimant: {
+      id: string;
+      name: string | null;
+      email: string;
+    };
+  };
+}
+
 // GET /api/invitations/[token] - Get invitation details (public)
 export async function GET(request: NextRequest, context: RouteContext) {
   try {
@@ -29,10 +68,11 @@ export async function GET(request: NextRequest, context: RouteContext) {
     const ip = headersList.get('x-forwarded-for')?.split(',')[0] ?? undefined;
 
     // Get invitation
-    const invitation = await getInvitationByToken(token);
-    if (!invitation) {
+    const invitationResult = await getInvitationByToken(token);
+    if (!invitationResult) {
       throw new NotFoundError('Invitation not found or has expired');
     }
+    const invitation = invitationResult as unknown as InvitationData;
 
     // Mark as viewed
     await markInvitationViewed(token, ip);
@@ -103,10 +143,11 @@ export async function POST(request: NextRequest, context: RouteContext) {
     }
 
     // Get invitation
-    const invitation = await getInvitationByToken(token);
-    if (!invitation) {
+    const invitationResult = await getInvitationByToken(token);
+    if (!invitationResult) {
       throw new NotFoundError('Invitation not found or has expired');
     }
+    const invitation = invitationResult as unknown as InvitationData;
 
     // Verify email matches
     if (user.email !== invitation.email) {
