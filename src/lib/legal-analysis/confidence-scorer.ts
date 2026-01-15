@@ -62,13 +62,9 @@ export async function scoreConfidence(params: {
   } = params;
 
   // Calculate metrics for prompt
-  const elementsTotal = issues.reduce(
-    (sum, issue) => sum + issue.elements.length,
-    0
-  );
+  const elementsTotal = issues.reduce((sum, issue) => sum + issue.elements.length, 0);
   const elementsSatisfied = issues.reduce(
-    (sum, issue) =>
-      sum + issue.elements.filter((e) => e.isSatisfied === true).length,
+    (sum, issue) => sum + issue.elements.filter((e) => e.isSatisfied === true).length,
     0
   );
 
@@ -99,11 +95,9 @@ export async function scoreConfidence(params: {
       ],
     });
 
-    const responseText =
-      response.content[0]?.type === 'text' ? response.content[0].text : '';
+    const responseText = response.content[0]?.type === 'text' ? response.content[0].text : '';
 
-    const tokensUsed =
-      (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
+    const tokensUsed = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
 
     const result = parseConfidenceResponse(responseText);
 
@@ -221,10 +215,7 @@ function calculateHeuristicFactors(params: {
       ? burdenOfProof.analyses.reduce((sum, a) => sum + a.probability, 0) /
         burdenOfProof.analyses.length
       : 0.5;
-  const factualCertainty = Math.max(
-    0.2,
-    avgBurdenProbability - contradictionPenalty + burdenBonus
-  );
+  const factualCertainty = Math.max(0.2, avgBurdenProbability - contradictionPenalty + burdenBonus);
 
   // Jurisdictional clarity: California is well-defined
   const jurisdictionalClarity = 0.85;
@@ -249,7 +240,7 @@ function calculateOverallConfidence(factors: ConfidenceFactors): number {
   const weights = {
     evidenceQuality: 0.25,
     legalPrecedentStrength: 0.15,
-    factualCertainty: 0.30,
+    factualCertainty: 0.3,
     jurisdictionalClarity: 0.15,
     issueComplexity: 0.15,
   };
@@ -284,13 +275,13 @@ export function getConfidenceLevel(confidence: number): {
       description: 'Analysis is highly reliable with strong evidence and clear legal basis',
     };
   }
-  if (confidence >= 0.70) {
+  if (confidence >= 0.7) {
     return {
       level: 'high',
       description: 'Analysis is reliable with good evidence support',
     };
   }
-  if (confidence >= 0.50) {
+  if (confidence >= 0.5) {
     return {
       level: 'moderate',
       description: 'Analysis has reasonable support but some uncertainty exists',
@@ -305,9 +296,7 @@ export function getConfidenceLevel(confidence: number): {
 /**
  * Get factor-specific recommendations
  */
-export function getConfidenceRecommendations(
-  factors: ConfidenceFactors
-): string[] {
+export function getConfidenceRecommendations(factors: ConfidenceFactors): string[] {
   const recommendations: string[] = [];
 
   if (factors.evidenceQuality < 0.5) {
@@ -338,10 +327,7 @@ export function trackCitation(
   usedFor: string
 ): CitationUsage {
   // Normalize citation
-  const normalized = citation
-    .replace(/\s+/g, ' ')
-    .replace(/§\s+/, '§ ')
-    .trim();
+  const normalized = citation.replace(/\s+/g, ' ').replace(/§\s+/, '§ ').trim();
 
   return {
     citation,

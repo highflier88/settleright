@@ -61,7 +61,10 @@ function getDefaultElements(category: LegalIssueCategory): LegalElement[] {
     case 'warranty':
       baseElements = [
         { name: 'Warranty Existed', description: 'Express or implied warranty was made' },
-        { name: 'Breach of Warranty', description: 'The product/service failed to meet the warranty' },
+        {
+          name: 'Breach of Warranty',
+          description: 'The product/service failed to meet the warranty',
+        },
         { name: 'Notice', description: 'Claimant provided timely notice of breach' },
         { name: 'Damages', description: 'Claimant suffered damages from the breach' },
       ];
@@ -70,7 +73,7 @@ function getDefaultElements(category: LegalIssueCategory): LegalElement[] {
       baseElements = [
         { name: 'Duty of Care', description: 'Respondent owed a duty of care to claimant' },
         { name: 'Breach of Duty', description: 'Respondent breached that duty' },
-        { name: 'Causation', description: 'Breach caused claimant\'s harm' },
+        { name: 'Causation', description: "Breach caused claimant's harm" },
         { name: 'Damages', description: 'Claimant suffered damages' },
       ];
       break;
@@ -154,17 +157,11 @@ export async function classifyLegalIssues(params: {
       ],
     });
 
-    const responseText =
-      response.content[0]?.type === 'text' ? response.content[0].text : '';
+    const responseText = response.content[0]?.type === 'text' ? response.content[0].text : '';
 
-    const tokensUsed =
-      (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
+    const tokensUsed = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
 
-    const issues = parseIssueClassificationResponse(
-      responseText,
-      disputeType,
-      jurisdiction
-    );
+    const issues = parseIssueClassificationResponse(responseText, disputeType, jurisdiction);
 
     return { issues, tokensUsed };
   } catch (error) {
@@ -240,11 +237,7 @@ function parseIssueClassificationResponse(
 
       // Supplement with jurisdiction-specific statutes
       const statutes = issue.applicableStatutes || [];
-      const jurisdictionStatutes = getApplicableStatutes(
-        jurisdiction,
-        disputeType,
-        [category]
-      );
+      const jurisdictionStatutes = getApplicableStatutes(jurisdiction, disputeType, [category]);
       const allStatutes = [...new Set([...statutes, ...jurisdictionStatutes])];
 
       return {
@@ -292,10 +285,7 @@ function validateCategory(category?: string): LegalIssueCategory {
 /**
  * Get default issues based on dispute type
  */
-function getDefaultIssues(
-  disputeType: string,
-  jurisdiction: string
-): LegalIssue[] {
+function getDefaultIssues(disputeType: string, jurisdiction: string): LegalIssue[] {
   const issues: LegalIssue[] = [];
   const type = disputeType.toUpperCase();
 

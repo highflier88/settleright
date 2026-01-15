@@ -376,9 +376,10 @@ export async function notifyDeadlineApproaching(
   if (!user) return result;
 
   const prefs = await getUserNotificationPreferences(userId);
-  const templateId = data.hoursRemaining <= 24
-    ? NotificationTemplates.DEADLINE_24H_WARNING
-    : NotificationTemplates.EVIDENCE_DEADLINE_REMINDER;
+  const templateId =
+    data.hoursRemaining <= 24
+      ? NotificationTemplates.DEADLINE_24H_WARNING
+      : NotificationTemplates.EVIDENCE_DEADLINE_REMINDER;
 
   const isUrgent = data.hoursRemaining <= 24;
 
@@ -400,7 +401,8 @@ export async function notifyDeadlineApproaching(
       recipientName: user.name || 'there',
       caseReference: data.caseReference,
       deadlineType: data.deadlineType,
-      deadlineDate: data.deadlineDate.toLocaleDateString() + ' at ' + data.deadlineDate.toLocaleTimeString(),
+      deadlineDate:
+        data.deadlineDate.toLocaleDateString() + ' at ' + data.deadlineDate.toLocaleTimeString(),
       caseUrl: `${APP_URL}/dashboard/cases/${data.caseId}`,
     });
     result.email = { success: emailResult.success, error: emailResult.error };
@@ -485,17 +487,16 @@ export async function notifyAwardIssued(
 // KYC NOTIFICATIONS
 // =============================================================================
 
-export async function notifyKycResult(
-  userId: string,
-  success: boolean
-): Promise<DispatchResult> {
+export async function notifyKycResult(userId: string, success: boolean): Promise<DispatchResult> {
   const result: DispatchResult = {};
 
   const user = await getUserWithContact(userId);
   if (!user) return result;
 
   const prefs = await getUserNotificationPreferences(userId);
-  const templateId = success ? NotificationTemplates.KYC_APPROVED : NotificationTemplates.KYC_FAILED;
+  const templateId = success
+    ? NotificationTemplates.KYC_APPROVED
+    : NotificationTemplates.KYC_FAILED;
 
   // In-app notification
   if (prefs.inAppEnabled) {

@@ -18,12 +18,12 @@ This checklist identifies all user-facing copy that requires legal counsel revie
 
 ## 1. Legal Documents (Requiring Full Attorney Review)
 
-| Document | Location | Version | Status |
-|----------|----------|---------|--------|
-| Terms of Service | `/legal/terms-of-service.md` | 1.0 | TEMPLATE - Needs Review |
-| Privacy Policy | `/legal/privacy-policy.md` | 1.0 | TEMPLATE - Needs Review |
-| Procedural Rules | `/legal/procedural-rules.md` | 1.0 | TEMPLATE - Needs Review |
-| Submission Agreement | `/legal/submission-agreement.md` | 1.0 | TEMPLATE - Needs Review |
+| Document             | Location                         | Version | Status                  |
+| -------------------- | -------------------------------- | ------- | ----------------------- |
+| Terms of Service     | `/legal/terms-of-service.md`     | 1.0     | TEMPLATE - Needs Review |
+| Privacy Policy       | `/legal/privacy-policy.md`       | 1.0     | TEMPLATE - Needs Review |
+| Procedural Rules     | `/legal/procedural-rules.md`     | 1.0     | TEMPLATE - Needs Review |
+| Submission Agreement | `/legal/submission-agreement.md` | 1.0     | TEMPLATE - Needs Review |
 
 **Note:** All documents contain a disclaimer stating they are templates for development purposes and require attorney review before use.
 
@@ -37,6 +37,7 @@ This checklist identifies all user-facing copy that requires legal counsel revie
 **Function:** `generateAgreementContent()`
 
 Contains critical legal language:
+
 - **Section 1: MUTUAL CONSENT TO ARBITRATE** - Binding arbitration agreement
 - **Section 2: WAIVER OF JURY TRIAL** - Explicit jury trial waiver
 - **Section 3: WAIVER OF CLASS ACTION** - Class action prohibition
@@ -54,6 +55,7 @@ Contains critical legal language:
 **Function:** `generateConsentText()`
 
 Explicit consent language users agree to when signing:
+
 - Role-specific language (Claimant/Respondent)
 - Case reference inclusion
 - Waiver acknowledgments
@@ -69,6 +71,7 @@ Explicit consent language users agree to when signing:
 **Function:** `sendAwardIssuedEmail()`
 
 Contains:
+
 - "This award is final and legally binding" statement
 - Award summary presentation
 - Enforcement information
@@ -79,6 +82,7 @@ Contains:
 **Function:** `sendCaseInvitationEmail()`
 
 Contains:
+
 - "binding arbitration to resolve this dispute" language
 - Platform commitment statements
 
@@ -116,14 +120,17 @@ Templates requiring review:
 **File:** `/src/app/(dashboard)/dashboard/cases/[id]/agreement/agreement-signing-form.tsx`
 
 **Mandatory checkboxes (legally binding acknowledgments):**
+
 1. "I have read and understand the Submission Agreement for Binding Arbitration. I agree to be bound by its terms, including the Settleright.ai Procedural Rules."
 2. "I understand and voluntarily waive my right to a jury trial and my right to participate in any class action related to this dispute."
 3. "I acknowledge that AI will assist in analyzing this case, with final decisions reviewed and approved by a human arbitrator."
 
 **Warning banner:**
+
 - "This is a legally binding agreement. Once signed, this agreement cannot be revoked. The arbitration award will be final and binding."
 
 **Signature disclaimer:**
+
 - "Your signature will be recorded with timestamp, IP address, and device information for legal purposes."
 
 ---
@@ -135,6 +142,7 @@ Templates requiring review:
 **File:** `/src/app/(dashboard)/dashboard/cases/new/new-case-form.tsx`
 
 Contains:
+
 - Terms of Service agreement checkbox
 - Procedural Rules agreement checkbox
 - Dispute type descriptions
@@ -144,6 +152,7 @@ Contains:
 **File:** `/src/app/(auth)/onboarding/onboarding-form.tsx`
 
 Contains:
+
 - Terms of Service acceptance
 - Privacy Policy acceptance
 
@@ -156,6 +165,7 @@ Contains:
 **File:** `/src/app/invitation/[token]/page.tsx`
 
 Contains:
+
 - "You've Been Invited to Respond" messaging
 - Process explanation (5 steps)
 - Binding arbitration description
@@ -166,6 +176,7 @@ Contains:
 **File:** `/src/app/invitation/[token]/invitation-actions.tsx`
 
 Contains:
+
 - Terms of Service agreement on account creation
 - Privacy Policy agreement link
 
@@ -176,11 +187,13 @@ Contains:
 **File:** `/src/lib/enforcement/documents.ts`
 
 Contains:
+
 - Proof of Service certificate language
 - Filing instructions (jurisdiction-specific)
 - Arbitrator credentials document
 
 **Disclaimer:**
+
 > "DISCLAIMER: This document provides general guidance only and does not constitute legal advice. Filing requirements may vary and are subject to change. Consult with a licensed attorney in your jurisdiction for specific legal advice regarding your situation."
 
 ---
@@ -188,6 +201,7 @@ Contains:
 ## 9. Priority Order for Attorney Review
 
 ### High Priority (Blocking Launch)
+
 1. `/legal/terms-of-service.md` - Terms of Service
 2. `/legal/privacy-policy.md` - Privacy Policy
 3. `/legal/submission-agreement.md` - Submission Agreement
@@ -195,11 +209,13 @@ Contains:
 5. `/src/lib/services/agreement.ts` - Generated agreement content
 
 ### Medium Priority
+
 6. `/src/lib/services/email.ts` - Email templates (especially award issuance)
 7. `/src/lib/services/sms.ts` - SMS notification templates
 8. Agreement signing form checkboxes and warnings
 
 ### Lower Priority
+
 9. Form validation messages
 10. Dashboard text and instructions
 11. Error messages

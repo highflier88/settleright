@@ -9,7 +9,11 @@ import http from 'k6/http';
 import { check, sleep, group, fail } from 'k6';
 import { Rate, Counter, Trend, Gauge } from 'k6/metrics';
 import { SharedArray } from 'k6/data';
-import { randomString, randomIntBetween, randomItem } from 'https://jslib.k6.io/k6-utils/1.2.0/index.js';
+import {
+  randomString,
+  randomIntBetween,
+  randomItem,
+} from 'https://jslib.k6.io/k6-utils/1.2.0/index.js';
 
 // Custom metrics
 const errorRate = new Rate('errors');
@@ -56,14 +60,14 @@ export const options = {
   thresholds: {
     // Performance requirements
     http_req_duration: ['p(95)<3000', 'p(99)<8000'], // 95% < 3s, 99% < 8s
-    http_req_failed: ['rate<0.15'],                  // Less than 15% failures (relaxed for load test)
-    errors: ['rate<0.20'],                           // Error rate under 20%
-    case_creation_time: ['p(95)<5000'],              // Case creation < 5s
-    full_cycle_time: ['avg<90000'],                  // Avg full cycle < 90s
+    http_req_failed: ['rate<0.15'], // Less than 15% failures (relaxed for load test)
+    errors: ['rate<0.20'], // Error rate under 20%
+    case_creation_time: ['p(95)<5000'], // Case creation < 5s
+    full_cycle_time: ['avg<90000'], // Avg full cycle < 90s
 
     // Custom metric thresholds (relaxed for testing)
-    cases_created: ['count>50'],                     // At least 50 cases created
-    evidence_uploaded: ['count>50'],                 // At least 50 evidence checks
+    cases_created: ['count>50'], // At least 50 cases created
+    evidence_uploaded: ['count>50'], // At least 50 evidence checks
   },
 };
 
@@ -73,7 +77,7 @@ const AUTH_TOKEN = __ENV.AUTH_TOKEN || 'test_token';
 
 const headers = {
   'Content-Type': 'application/json',
-  'Authorization': `Bearer ${AUTH_TOKEN}`,
+  Authorization: `Bearer ${AUTH_TOKEN}`,
 };
 
 // Test data - must match Prisma schema enums
@@ -131,7 +135,7 @@ function generateStatementContent() {
     'The claimant requests the arbitrator award the full amount claimed plus costs.',
   ];
 
-  return paragraphs.map(p => `${p} ${randomString(50)}`).join('\n\n');
+  return paragraphs.map((p) => `${p} ${randomString(50)}`).join('\n\n');
 }
 
 /**
@@ -141,11 +145,10 @@ function createCase() {
   const payload = generateCasePayload();
   const start = Date.now();
 
-  const res = http.post(
-    `${BASE_URL}/api/cases`,
-    JSON.stringify(payload),
-    { headers, tags: { name: 'CreateCase' } }
-  );
+  const res = http.post(`${BASE_URL}/api/cases`, JSON.stringify(payload), {
+    headers,
+    tags: { name: 'CreateCase' },
+  });
 
   const duration = Date.now() - start;
   caseCreationTime.add(duration);
@@ -183,10 +186,10 @@ function createCase() {
  * Simulate evidence list check (actual upload requires multipart form)
  */
 function checkEvidence(caseId) {
-  const res = http.get(
-    `${BASE_URL}/api/cases/${caseId}/evidence`,
-    { headers, tags: { name: 'GetEvidence' } }
-  );
+  const res = http.get(`${BASE_URL}/api/cases/${caseId}/evidence`, {
+    headers,
+    tags: { name: 'GetEvidence' },
+  });
 
   const success = check(res, {
     'evidence list retrieved': (r) => r.status === 200,
@@ -206,7 +209,7 @@ function checkEvidence(caseId) {
  */
 function submitStatement(caseId, type = 'INITIAL') {
   const payload = {
-    type: type,  // 'INITIAL' or 'REBUTTAL'
+    type: type, // 'INITIAL' or 'REBUTTAL'
     content: {
       narrative: generateStatementContent(),
       claimItems: [
@@ -220,11 +223,10 @@ function submitStatement(caseId, type = 'INITIAL') {
     },
   };
 
-  const res = http.post(
-    `${BASE_URL}/api/cases/${caseId}/statements`,
-    JSON.stringify(payload),
-    { headers, tags: { name: 'SubmitStatement' } }
-  );
+  const res = http.post(`${BASE_URL}/api/cases/${caseId}/statements`, JSON.stringify(payload), {
+    headers,
+    tags: { name: 'SubmitStatement' },
+  });
 
   const success = check(res, {
     'statement submitted or not ready': (r) => {
@@ -255,11 +257,10 @@ function signAgreement(caseId, role = 'CLAIMANT') {
     acknowledged: true,
   };
 
-  const res = http.post(
-    `${BASE_URL}/api/cases/${caseId}/agreement/sign`,
-    JSON.stringify(payload),
-    { headers, tags: { name: 'SignAgreement' } }
-  );
+  const res = http.post(`${BASE_URL}/api/cases/${caseId}/agreement/sign`, JSON.stringify(payload), {
+    headers,
+    tags: { name: 'SignAgreement' },
+  });
 
   const success = check(res, {
     'agreement signed or not ready': (r) => {
@@ -280,10 +281,10 @@ function signAgreement(caseId, role = 'CLAIMANT') {
  * Get case status
  */
 function getCaseStatus(caseId) {
-  const res = http.get(
-    `${BASE_URL}/api/cases/${caseId}`,
-    { headers, tags: { name: 'GetCaseStatus' } }
-  );
+  const res = http.get(`${BASE_URL}/api/cases/${caseId}`, {
+    headers,
+    tags: { name: 'GetCaseStatus' },
+  });
 
   check(res, {
     'case status retrieved': (r) => r.status === 200,
@@ -300,10 +301,10 @@ function getCaseStatus(caseId) {
  * List user cases
  */
 function listCases() {
-  const res = http.get(
-    `${BASE_URL}/api/cases?page=1&limit=10`,
-    { headers, tags: { name: 'ListCases' } }
-  );
+  const res = http.get(`${BASE_URL}/api/cases?page=1&limit=10`, {
+    headers,
+    tags: { name: 'ListCases' },
+  });
 
   check(res, {
     'cases listed': (r) => r.status === 200,
@@ -322,10 +323,7 @@ function listCases() {
  * Health check endpoint
  */
 export function healthCheck() {
-  const res = http.get(
-    `${BASE_URL}/api/health`,
-    { headers, tags: { name: 'HealthCheck' } }
-  );
+  const res = http.get(`${BASE_URL}/api/health`, { headers, tags: { name: 'HealthCheck' } });
 
   check(res, {
     'health check passed': (r) => r.status === 200,
@@ -521,7 +519,9 @@ function generateTextReport(summary) {
 
 ✅ THRESHOLD RESULTS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${Object.entries(summary.thresholds).map(([k, v]) => `  ${k}: ${v}`).join('\n')}
+${Object.entries(summary.thresholds)
+  .map(([k, v]) => `  ${k}: ${v}`)
+  .join('\n')}
 
 ═══════════════════════════════════════════════════════════════════════
 `;

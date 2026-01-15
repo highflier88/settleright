@@ -1,10 +1,8 @@
-
 import { AuditAction } from '@prisma/client';
 
 import { successResponse, errorResponse } from '@/lib/api/response';
 import { withAdmin, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { getAuditLogs, type AuditLogFilters } from '@/lib/services/audit';
-
 
 // GET /api/admin/audit-logs - List audit logs with filters
 export const GET = withAdmin(async (request: AuthenticatedRequest) => {
@@ -27,9 +25,9 @@ export const GET = withAdmin(async (request: AuthenticatedRequest) => {
 
     const actions = searchParams.get('actions');
     if (actions) {
-      const actionList = actions.split(',').filter((a) =>
-        Object.values(AuditAction).includes(a as AuditAction)
-      ) as AuditAction[];
+      const actionList = actions
+        .split(',')
+        .filter((a) => Object.values(AuditAction).includes(a as AuditAction)) as AuditAction[];
       if (actionList.length > 0) {
         filters.actions = actionList;
       }

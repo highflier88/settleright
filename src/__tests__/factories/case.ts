@@ -5,12 +5,7 @@
  */
 
 import { createClaimant, createRespondent } from './user';
-import {
-  generateId,
-  generateReferenceNumber,
-  randomIp,
-  randomUserAgent,
-} from './utils';
+import { generateId, generateReferenceNumber, randomIp, randomUserAgent } from './utils';
 
 export interface CaseFactoryOptions {
   id?: string;
@@ -52,22 +47,41 @@ export function createCase(options: CaseFactoryOptions = {}) {
 }
 
 export const createDraftCase = (options = {}) => createCase({ ...options, status: 'DRAFT' });
-export const createPendingRespondentCase = (options = {}) => createCase({ ...options, status: 'PENDING_RESPONDENT' });
+export const createPendingRespondentCase = (options = {}) =>
+  createCase({ ...options, status: 'PENDING_RESPONDENT' });
 export const createEvidenceGatheringCase = (options: CaseFactoryOptions = {}) =>
-  createCase({ ...options, status: 'EVIDENCE_GATHERING', respondentId: options.respondentId ?? generateId() });
+  createCase({
+    ...options,
+    status: 'EVIDENCE_GATHERING',
+    respondentId: options.respondentId ?? generateId(),
+  });
 export const createAnalysisCase = (options: CaseFactoryOptions = {}) =>
-  createCase({ ...options, status: 'ANALYSIS', respondentId: options.respondentId ?? generateId() });
+  createCase({
+    ...options,
+    status: 'ANALYSIS',
+    respondentId: options.respondentId ?? generateId(),
+  });
 export const createArbitratorReviewCase = (options: CaseFactoryOptions = {}) =>
-  createCase({ ...options, status: 'ARBITRATOR_REVIEW', respondentId: options.respondentId ?? generateId() });
+  createCase({
+    ...options,
+    status: 'ARBITRATOR_REVIEW',
+    respondentId: options.respondentId ?? generateId(),
+  });
 export const createDecidedCase = (options: CaseFactoryOptions = {}) => ({
-  ...createCase({ ...options, status: 'DECIDED', respondentId: options.respondentId ?? generateId() }),
+  ...createCase({
+    ...options,
+    status: 'DECIDED',
+    respondentId: options.respondentId ?? generateId(),
+  }),
   closedAt: new Date(),
 });
 
 /**
  * Create a mock Invitation
  */
-export function createInvitation(options: { caseId?: string; status?: string; email?: string; expiresAt?: Date } = {}) {
+export function createInvitation(
+  options: { caseId?: string; status?: string; email?: string; expiresAt?: Date } = {}
+) {
   const caseId = options.caseId ?? generateId();
   const createdAt = new Date();
 
@@ -89,7 +103,9 @@ export function createInvitation(options: { caseId?: string; status?: string; em
 /**
  * Create a mock Agreement
  */
-export function createAgreement(options: { caseId?: string; version?: string; content?: string } = {}) {
+export function createAgreement(
+  options: { caseId?: string; version?: string; content?: string } = {}
+) {
   const caseId = options.caseId ?? generateId();
   const createdAt = new Date();
 
@@ -107,7 +123,9 @@ export function createAgreement(options: { caseId?: string; version?: string; co
 /**
  * Create a mock Signature
  */
-export function createSignature(options: { agreementId?: string; userId?: string; signedAt?: Date } = {}) {
+export function createSignature(
+  options: { agreementId?: string; userId?: string; signedAt?: Date } = {}
+) {
   const signedAt = options.signedAt ?? new Date();
 
   return {
@@ -134,7 +152,11 @@ export function createCompleteCase(options: CaseFactoryOptions = {}) {
     respondentId: respondent.id,
     status: options.status ?? 'EVIDENCE_GATHERING',
   });
-  const invitation = createInvitation({ caseId: caseData.id, email: respondent.email, status: 'ACCEPTED' });
+  const invitation = createInvitation({
+    caseId: caseData.id,
+    email: respondent.email,
+    status: 'ACCEPTED',
+  });
   const agreement = createAgreement({ caseId: caseData.id });
   const signatures = [
     createSignature({ agreementId: agreement.id, userId: claimant.id }),

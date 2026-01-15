@@ -63,8 +63,8 @@ export function InvitationActions({
             Ready to Respond
           </CardTitle>
           <CardDescription>
-            You&apos;re logged in as {userEmail}. Click below to accept the invitation and join
-            the case.
+            You&apos;re logged in as {userEmail}. Click below to accept the invitation and join the
+            case.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -91,23 +91,21 @@ export function InvitationActions({
             Wrong Account
           </CardTitle>
           <CardDescription>
-            You&apos;re currently logged in as <strong>{userEmail}</strong>, but this invitation
-            was sent to <strong>{invitationEmail}</strong>.
+            You&apos;re currently logged in as <strong>{userEmail}</strong>, but this invitation was
+            sent to <strong>{invitationEmail}</strong>.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            Please log out and log in with the correct email address, or create a new
-            account with that email.
+            Please log out and log in with the correct email address, or create a new account with
+            that email.
           </p>
           <div className="flex gap-3">
             <Button variant="outline" className="flex-1" asChild>
               <Link href="/sign-out">Log Out</Link>
             </Button>
             <Button className="flex-1" asChild>
-              <Link href={`/sign-in?redirect_url=/invitation/${token}`}>
-                Switch Account
-              </Link>
+              <Link href={`/sign-in?redirect_url=/invitation/${token}`}>Switch Account</Link>
             </Button>
           </div>
         </CardContent>
@@ -121,14 +119,16 @@ export function InvitationActions({
       <CardHeader>
         <CardTitle>Accept This Invitation</CardTitle>
         <CardDescription>
-          To respond to this case, you&apos;ll need to create an account or log in with the
-          email address: <strong>{invitationEmail}</strong>
+          To respond to this case, you&apos;ll need to create an account or log in with the email
+          address: <strong>{invitationEmail}</strong>
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid gap-3 md:grid-cols-2">
           <Button asChild size="lg" className="w-full">
-            <Link href={`/sign-up?email=${encodeURIComponent(invitationEmail)}&redirect_url=/invitation/${token}`}>
+            <Link
+              href={`/sign-up?email=${encodeURIComponent(invitationEmail)}&redirect_url=/invitation/${token}`}
+            >
               <UserPlus className="mr-2 h-4 w-4" />
               Create Account
             </Link>
@@ -140,7 +140,7 @@ export function InvitationActions({
             </Link>
           </Button>
         </div>
-        <p className="text-xs text-muted-foreground text-center">
+        <p className="text-center text-xs text-muted-foreground">
           By creating an account, you agree to our{' '}
           <a href="/legal/terms-of-service" className="text-primary hover:underline">
             Terms of Service

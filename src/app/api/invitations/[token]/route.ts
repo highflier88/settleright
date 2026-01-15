@@ -15,16 +15,12 @@ import {
   getInvitationStatusLabel,
 } from '@/lib/services/invitation';
 
-
 interface RouteContext {
   params: { token: string };
 }
 
 // GET /api/invitations/[token] - Get invitation details (public)
-export async function GET(
-  request: NextRequest,
-  context: RouteContext
-) {
+export async function GET(request: NextRequest, context: RouteContext) {
   try {
     const token = context.params.token;
     if (!token) {
@@ -95,10 +91,7 @@ export async function GET(
 }
 
 // POST /api/invitations/[token] - Accept invitation
-export async function POST(
-  request: NextRequest,
-  context: RouteContext
-) {
+export async function POST(request: NextRequest, context: RouteContext) {
   try {
     const token = context.params.token;
     if (!token) {

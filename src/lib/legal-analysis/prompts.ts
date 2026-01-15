@@ -41,13 +41,22 @@ export function buildIssueClassificationPrompt(params: {
   }>;
   legalContext?: string;
 }): string {
-  const { caseDescription, disputeType, claimedAmount, disputedFacts, undisputedFacts, legalContext } = params;
+  const {
+    caseDescription,
+    disputeType,
+    claimedAmount,
+    disputedFacts,
+    undisputedFacts,
+    legalContext,
+  } = params;
 
   const disputedFactsList = disputedFacts
-    .map((f, i) => `${i + 1}. Topic: ${f.topic}
+    .map(
+      (f, i) => `${i + 1}. Topic: ${f.topic}
    - Claimant says: ${f.claimantPosition}
    - Respondent says: ${f.respondentPosition}
-   - Materiality: ${(f.materialityScore * 100).toFixed(0)}%`)
+   - Materiality: ${(f.materialityScore * 100).toFixed(0)}%`
+    )
     .join('\n');
 
   const undisputedFactsList = undisputedFacts
@@ -137,9 +146,7 @@ export function buildBurdenAnalysisPrompt(params: {
 
   const issuesList = issues
     .map((issue) => {
-      const elements = issue.elements
-        .map((e) => `    - ${e.name}: ${e.description}`)
-        .join('\n');
+      const elements = issue.elements.map((e) => `    - ${e.name}: ${e.description}`).join('\n');
       return `- ${issue.description} (${issue.category})
   Elements to prove:
 ${elements}`;
@@ -257,7 +264,10 @@ export function buildDamagesPrompt(params: {
   } = params;
 
   const claimedDamagesList = damagesClaimed
-    .map((d) => `- ${d.description}: $${d.amount.toLocaleString()}${d.category ? ` (${d.category})` : ''}`)
+    .map(
+      (d) =>
+        `- ${d.description}: $${d.amount.toLocaleString()}${d.category ? ` (${d.category})` : ''}`
+    )
     .join('\n');
 
   const claimantEvidence = evidenceSummaries
@@ -383,7 +393,10 @@ export function buildConclusionsPrompt(params: {
   const issueAnalyses = issues
     .map((issue) => {
       const elementResults = issue.elements
-        .map((e) => `    - ${e.name}: ${e.isSatisfied === null ? 'Unknown' : e.isSatisfied ? 'Satisfied' : 'Not Satisfied'}`)
+        .map(
+          (e) =>
+            `    - ${e.name}: ${e.isSatisfied === null ? 'Unknown' : e.isSatisfied ? 'Satisfied' : 'Not Satisfied'}`
+        )
         .join('\n');
       return `- ${issue.description} (${issue.category})
   Elements:
@@ -569,7 +582,8 @@ export const FRAUD_ELEMENTS = [
 export const CLRA_ELEMENTS = [
   {
     name: 'Consumer Transaction',
-    description: 'Transaction involved goods or services for personal, family, or household purposes',
+    description:
+      'Transaction involved goods or services for personal, family, or household purposes',
   },
   {
     name: 'Prohibited Practice',
@@ -577,7 +591,7 @@ export const CLRA_ELEMENTS = [
   },
   {
     name: 'Causation',
-    description: 'The prohibited practice caused claimant\'s harm',
+    description: "The prohibited practice caused claimant's harm",
   },
   {
     name: 'Damages',

@@ -163,7 +163,18 @@ const CALIFORNIA_LAW_MAPPINGS: LawMapping[] = [
     applicableCodes: [
       {
         codeSection: 'CCP',
-        sections: ['1281', '1281.2', '1282', '1283', '1284', '1285', '1286', '1286.2', '1287', '1288'],
+        sections: [
+          '1281',
+          '1281.2',
+          '1282',
+          '1283',
+          '1284',
+          '1285',
+          '1286',
+          '1286.2',
+          '1287',
+          '1288',
+        ],
         description: 'California Arbitration Act',
       },
     ],

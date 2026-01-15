@@ -66,19 +66,14 @@ export function getSupportedJurisdictions(): string[] {
 /**
  * Calculate interest for a jurisdiction
  */
-export function calculateInterest(
-  jurisdiction: string,
-  params: InterestParams
-): InterestResult {
+export function calculateInterest(jurisdiction: string, params: InterestParams): InterestResult {
   switch (jurisdiction) {
     case 'US-CA':
       return calculateCaliforniaInterest(params);
     default:
       // Default to 7% simple interest
       const msPerDay = 1000 * 60 * 60 * 24;
-      const days = Math.floor(
-        (params.endDate.getTime() - params.startDate.getTime()) / msPerDay
-      );
+      const days = Math.floor((params.endDate.getTime() - params.startDate.getTime()) / msPerDay);
       const years = days / 365;
       const amount = Math.round(params.principal * 0.07 * years * 100) / 100;
       return {
@@ -109,10 +104,7 @@ export function getApplicableStatutes(
 /**
  * Get burden of proof standard for an issue
  */
-export function getBurdenStandard(
-  jurisdiction: string,
-  issueType: string
-): BurdenOfProofStandard {
+export function getBurdenStandard(jurisdiction: string, issueType: string): BurdenOfProofStandard {
   const rules = getRules(jurisdiction);
   if (!rules) {
     return 'preponderance';
@@ -154,10 +146,7 @@ export function checkStatuteOfLimitations(
 /**
  * Get damages caps for a jurisdiction
  */
-export function getDamagesCaps(
-  jurisdiction: string,
-  disputeType: string
-): DamagesCap[] {
+export function getDamagesCaps(jurisdiction: string, disputeType: string): DamagesCap[] {
   switch (jurisdiction) {
     case 'US-CA':
       return getCaliforniaDamagesCaps(disputeType);
@@ -169,10 +158,7 @@ export function getDamagesCaps(
 /**
  * Get special rules for a jurisdiction and category
  */
-export function getSpecialRules(
-  jurisdiction: string,
-  category: string
-): SpecialRule[] {
+export function getSpecialRules(jurisdiction: string, category: string): SpecialRule[] {
   switch (jurisdiction) {
     case 'US-CA':
       return getCaliforniaSpecialRules(category);
@@ -184,11 +170,7 @@ export function getSpecialRules(
 /**
  * Format a citation for a jurisdiction
  */
-export function formatCitation(
-  jurisdiction: string,
-  code: string,
-  section: string
-): string {
+export function formatCitation(jurisdiction: string, code: string, section: string): string {
   switch (jurisdiction) {
     case 'US-CA':
       return formatCaliforniaCitation(code, section);
@@ -200,27 +182,19 @@ export function formatCitation(
 /**
  * Get prejudgment interest rate
  */
-export function getPrejudgmentInterestRate(
-  jurisdiction: string,
-  isContractClaim: boolean
-): number {
+export function getPrejudgmentInterestRate(jurisdiction: string, isContractClaim: boolean): number {
   const rules = getRules(jurisdiction);
   if (!rules) {
     return 0.07; // Default 7%
   }
 
-  return isContractClaim
-    ? rules.prejudgmentInterestRate
-    : rules.defaultInterestRate;
+  return isContractClaim ? rules.prejudgmentInterestRate : rules.defaultInterestRate;
 }
 
 /**
  * Get small claims limit
  */
-export function getSmallClaimsLimit(
-  jurisdiction: string,
-  isBusiness: boolean = false
-): number {
+export function getSmallClaimsLimit(jurisdiction: string, isBusiness: boolean = false): number {
   const rules = getRules(jurisdiction);
   if (!rules) {
     return 10000; // Default

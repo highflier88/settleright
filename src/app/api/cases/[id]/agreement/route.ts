@@ -18,7 +18,6 @@ import {
 import { createAuditLog } from '@/lib/services/audit';
 import { userHasAccessToCase } from '@/lib/services/case';
 
-
 // GET /api/cases/[id]/agreement - Get agreement details
 export const GET = withAuth(
   async (request: AuthenticatedRequest, context?: { params: Record<string, string> }) => {

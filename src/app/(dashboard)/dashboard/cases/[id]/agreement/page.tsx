@@ -7,7 +7,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getAuthUser } from '@/lib/auth';
-import { getAgreementForCase, getAgreementStatusInfo, generateAgreementContent } from '@/lib/services/agreement';
+import {
+  getAgreementForCase,
+  getAgreementStatusInfo,
+  generateAgreementContent,
+} from '@/lib/services/agreement';
 import { userHasAccessToCase } from '@/lib/services/case';
 
 import { AgreementSigningForm } from './agreement-signing-form';
@@ -42,9 +46,7 @@ export default async function AgreementPage({ params }: PageProps) {
 
   const statusInfo = getAgreementStatusInfo(agreement);
   const isClaimant = access.role === 'claimant';
-  const userHasSigned = agreement.signatures.some(
-    (s) => s.userId === user.id
-  );
+  const userHasSigned = agreement.signatures.some((s) => s.userId === user.id);
 
   // Generate agreement content
   const agreementContent = generateAgreementContent(
@@ -73,14 +75,9 @@ export default async function AgreementPage({ params }: PageProps) {
             </Link>
             <h1 className="text-2xl font-bold tracking-tight">Submission Agreement</h1>
           </div>
-          <p className="text-muted-foreground">
-            Case {agreement.case.referenceNumber}
-          </p>
+          <p className="text-muted-foreground">Case {agreement.case.referenceNumber}</p>
         </div>
-        <Badge
-          variant={statusInfo.isComplete ? 'default' : 'secondary'}
-          className="text-sm"
-        >
+        <Badge variant={statusInfo.isComplete ? 'default' : 'secondary'} className="text-sm">
           {statusInfo.label}
         </Badge>
       </div>
@@ -106,7 +103,9 @@ export default async function AgreementPage({ params }: PageProps) {
               ) : (
                 <Clock className="h-4 w-4 text-muted-foreground" />
               )}
-              <span className={statusInfo.claimantSigned ? 'text-green-600' : 'text-muted-foreground'}>
+              <span
+                className={statusInfo.claimantSigned ? 'text-green-600' : 'text-muted-foreground'}
+              >
                 Claimant {statusInfo.claimantSigned ? 'Signed' : 'Pending'}
               </span>
             </div>
@@ -116,7 +115,9 @@ export default async function AgreementPage({ params }: PageProps) {
               ) : (
                 <Clock className="h-4 w-4 text-muted-foreground" />
               )}
-              <span className={statusInfo.respondentSigned ? 'text-green-600' : 'text-muted-foreground'}>
+              <span
+                className={statusInfo.respondentSigned ? 'text-green-600' : 'text-muted-foreground'}
+              >
                 Respondent {statusInfo.respondentSigned ? 'Signed' : 'Pending'}
               </span>
             </div>
@@ -136,7 +137,7 @@ export default async function AgreementPage({ params }: PageProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="bg-muted/50 rounded-lg p-6 font-mono text-sm whitespace-pre-wrap max-h-[500px] overflow-y-auto">
+          <div className="max-h-[500px] overflow-y-auto whitespace-pre-wrap rounded-lg bg-muted/50 p-6 font-mono text-sm">
             {agreementContent}
           </div>
         </CardContent>
@@ -169,9 +170,7 @@ export default async function AgreementPage({ params }: PageProps) {
                 </div>
               </div>
               <Button asChild>
-                <Link href={`/dashboard/cases/${params.id}/evidence/upload`}>
-                  Submit Evidence
-                </Link>
+                <Link href={`/dashboard/cases/${params.id}/evidence/upload`}>Submit Evidence</Link>
               </Button>
             </div>
           </CardContent>
@@ -183,8 +182,9 @@ export default async function AgreementPage({ params }: PageProps) {
         <CardContent className="py-4">
           <p className="text-xs text-muted-foreground">
             By signing this agreement, you acknowledge that you have read, understand, and agree to
-            be bound by its terms. This agreement constitutes a legally binding contract for arbitration.
-            If you have questions, please consult with a legal professional before signing.
+            be bound by its terms. This agreement constitutes a legally binding contract for
+            arbitration. If you have questions, please consult with a legal professional before
+            signing.
           </p>
         </CardContent>
       </Card>

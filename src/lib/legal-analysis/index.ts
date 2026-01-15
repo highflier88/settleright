@@ -6,11 +6,7 @@
  */
 
 // Main orchestrator
-export {
-  getLegalAnalysisStatus,
-  loadLegalAnalysisInput,
-  runLegalAnalysis,
-} from './orchestrator';
+export { getLegalAnalysisStatus, loadLegalAnalysisInput, runLegalAnalysis } from './orchestrator';
 
 // Issue classification
 export { classifyLegalIssues } from './issue-classifier';
@@ -24,11 +20,7 @@ export {
 } from './burden-analyzer';
 
 // Damages calculation
-export {
-  applyClraMinimum,
-  applyDamagesCaps,
-  calculateDamages,
-} from './damages-calculator';
+export { applyClraMinimum, applyDamagesCaps, calculateDamages } from './damages-calculator';
 
 // Confidence scoring
 export {

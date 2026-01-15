@@ -212,7 +212,11 @@ export function AuditLogsTable({ searchParams }: AuditLogsTableProps) {
       const response = await fetch('/api/admin/audit-logs/verify');
       if (response.ok) {
         const result = (await response.json()) as {
-          data: { isValid: boolean; totalLogs: number; invalidLogs: { id: string; reason: string }[] };
+          data: {
+            isValid: boolean;
+            totalLogs: number;
+            invalidLogs: { id: string; reason: string }[];
+          };
         };
         setIntegrityResult(result.data);
 
@@ -278,8 +282,10 @@ export function AuditLogsTable({ searchParams }: AuditLogsTableProps) {
       <Card>
         <CardContent className="pt-6">
           <div className="flex flex-wrap items-end gap-4">
-            <div className="flex-1 min-w-[200px]">
-              <Label htmlFor="userIdFilter" className="mb-1 block">User ID</Label>
+            <div className="min-w-[200px] flex-1">
+              <Label htmlFor="userIdFilter" className="mb-1 block">
+                User ID
+              </Label>
               <Input
                 id="userIdFilter"
                 placeholder="Filter by user ID..."
@@ -288,8 +294,10 @@ export function AuditLogsTable({ searchParams }: AuditLogsTableProps) {
               />
             </div>
 
-            <div className="flex-1 min-w-[200px]">
-              <Label htmlFor="caseIdFilter" className="mb-1 block">Case ID</Label>
+            <div className="min-w-[200px] flex-1">
+              <Label htmlFor="caseIdFilter" className="mb-1 block">
+                Case ID
+              </Label>
               <Input
                 id="caseIdFilter"
                 placeholder="Filter by case ID..."
@@ -299,7 +307,9 @@ export function AuditLogsTable({ searchParams }: AuditLogsTableProps) {
             </div>
 
             <div className="w-[200px]">
-              <Label htmlFor="actionFilter" className="mb-1 block">Action</Label>
+              <Label htmlFor="actionFilter" className="mb-1 block">
+                Action
+              </Label>
               <Select value={actionFilter} onValueChange={setActionFilter}>
                 <SelectTrigger>
                   <SelectValue placeholder="All actions" />
@@ -323,24 +333,20 @@ export function AuditLogsTable({ searchParams }: AuditLogsTableProps) {
             </div>
 
             <Button onClick={updateFilters}>
-              <Filter className="h-4 w-4 mr-2" />
+              <Filter className="mr-2 h-4 w-4" />
               Apply Filters
             </Button>
 
-            <div className="flex gap-2 ml-auto">
+            <div className="ml-auto flex gap-2">
               <Button variant="outline" onClick={() => handleExport('csv')}>
-                <Download className="h-4 w-4 mr-2" />
+                <Download className="mr-2 h-4 w-4" />
                 CSV
               </Button>
               <Button variant="outline" onClick={() => handleExport('json')}>
-                <Download className="h-4 w-4 mr-2" />
+                <Download className="mr-2 h-4 w-4" />
                 JSON
               </Button>
-              <Button
-                variant="outline"
-                onClick={handleVerifyIntegrity}
-                disabled={isVerifying}
-              >
+              <Button variant="outline" onClick={handleVerifyIntegrity} disabled={isVerifying}>
                 {isVerifying ? 'Verifying...' : 'Verify Integrity'}
               </Button>
             </div>
@@ -365,7 +371,7 @@ export function AuditLogsTable({ searchParams }: AuditLogsTableProps) {
             <TableBody>
               {data?.logs.map((log) => (
                 <TableRow key={log.id}>
-                  <TableCell className="font-mono text-xs whitespace-nowrap">
+                  <TableCell className="whitespace-nowrap font-mono text-xs">
                     {format(new Date(log.timestamp), 'yyyy-MM-dd HH:mm:ss')}
                   </TableCell>
                   <TableCell>
@@ -388,7 +394,7 @@ export function AuditLogsTable({ searchParams }: AuditLogsTableProps) {
 
               {data?.logs.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={6} className="py-8 text-center text-muted-foreground">
                     No audit logs found
                   </TableCell>
                 </TableRow>
@@ -455,7 +461,7 @@ function AuditLogsTableSkeleton() {
               <TableRow key={i}>
                 {Array.from({ length: 6 }, (_, j) => (
                   <TableCell key={j}>
-                    <div className="h-4 w-full animate-pulse bg-muted rounded" />
+                    <div className="h-4 w-full animate-pulse rounded bg-muted" />
                   </TableCell>
                 ))}
               </TableRow>

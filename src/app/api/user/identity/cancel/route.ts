@@ -6,7 +6,6 @@ import { requireAuth } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { cancelVerificationSession } from '@/lib/services/stripe-identity';
 
-
 export async function POST() {
   try {
     const user = await requireAuth();

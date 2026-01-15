@@ -158,9 +158,7 @@ export async function generatePlatformActivityReport(
   generatedBy: string
 ): Promise<PlatformActivityReport> {
   const { startDate, endDate } = options;
-  const durationDays = Math.ceil(
-    (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
-  );
+  const durationDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
 
   // User metrics
   const [totalUsers, newUsers, verifiedUsers] = await Promise.all([
@@ -234,9 +232,7 @@ export async function generatePlatformActivityReport(
   const avgResolutionDays =
     resolvedCasesData.length > 0
       ? resolvedCasesData.reduce((sum, c) => {
-          const days =
-            (c.updatedAt.getTime() - c.createdAt.getTime()) /
-            (1000 * 60 * 60 * 24);
+          const days = (c.updatedAt.getTime() - c.createdAt.getTime()) / (1000 * 60 * 60 * 24);
           return sum + days;
         }, 0) / resolvedCasesData.length
       : 0;
@@ -387,9 +383,7 @@ export async function generateCaseResolutionReport(
 
   // Calculate resolution times
   const resolutionTimes = resolvedCases.map((c) =>
-    Math.ceil(
-      (c.updatedAt.getTime() - c.createdAt.getTime()) / (1000 * 60 * 60 * 24)
-    )
+    Math.ceil((c.updatedAt.getTime() - c.createdAt.getTime()) / (1000 * 60 * 60 * 24))
   );
 
   const avgResolutionDays =
@@ -399,9 +393,7 @@ export async function generateCaseResolutionReport(
 
   const sortedTimes = [...resolutionTimes].sort((a, b) => a - b);
   const medianResolutionDays =
-    sortedTimes.length > 0
-      ? sortedTimes[Math.floor(sortedTimes.length / 2)] || 0
-      : 0;
+    sortedTimes.length > 0 ? sortedTimes[Math.floor(sortedTimes.length / 2)] || 0 : 0;
 
   // Group by dispute type
   const byDisputeType = await prisma.case.groupBy({
@@ -428,19 +420,15 @@ export async function generateCaseResolutionReport(
         cases.length > 0
           ? cases.reduce(
               (sum, c) =>
-                sum +
-                (c.updatedAt.getTime() - c.createdAt.getTime()) /
-                  (1000 * 60 * 60 * 24),
+                sum + (c.updatedAt.getTime() - c.createdAt.getTime()) / (1000 * 60 * 60 * 24),
               0
             ) / cases.length
           : 0;
 
       const avgAward =
         cases.filter((c) => c.award).length > 0
-          ? cases.reduce(
-              (sum, c) => sum + (c.award?.awardAmount?.toNumber() || 0),
-              0
-            ) / cases.filter((c) => c.award).length
+          ? cases.reduce((sum, c) => sum + (c.award?.awardAmount?.toNumber() || 0), 0) /
+            cases.filter((c) => c.award).length
           : 0;
 
       return {
@@ -476,9 +464,7 @@ export async function generateCaseResolutionReport(
         cases.length > 0
           ? cases.reduce(
               (sum, c) =>
-                sum +
-                (c.updatedAt.getTime() - c.createdAt.getTime()) /
-                  (1000 * 60 * 60 * 24),
+                sum + (c.updatedAt.getTime() - c.createdAt.getTime()) / (1000 * 60 * 60 * 24),
               0
             ) / cases.length
           : 0;
@@ -511,9 +497,7 @@ export async function generateCaseResolutionReport(
       monthCases.length > 0
         ? monthCases.reduce(
             (sum, c) =>
-              sum +
-              (c.updatedAt.getTime() - c.createdAt.getTime()) /
-                (1000 * 60 * 60 * 24),
+              sum + (c.updatedAt.getTime() - c.createdAt.getTime()) / (1000 * 60 * 60 * 24),
             0
           ) / monthCases.length
         : 0;
@@ -575,9 +559,7 @@ export async function generateDataIntegrityReport(
   });
 
   const caseIdsWithLogs = new Set(casesWithAuditLogs.map((l) => l.caseId));
-  const casesWithoutAuditTrail = allCaseIds.filter(
-    (c) => !caseIdsWithLogs.has(c.id)
-  ).length;
+  const casesWithoutAuditTrail = allCaseIds.filter((c) => !caseIdsWithLogs.has(c.id)).length;
 
   // Check for orphaned audit logs (logs referencing non-existent cases)
   const auditLogsWithCaseIds = await prisma.auditLog.findMany({
@@ -631,9 +613,7 @@ export async function generateDataIntegrityReport(
   let chainStatus: 'intact' | 'broken' | 'partial' = 'intact';
   if (integrityResult.invalidLogs.length > 0) {
     chainStatus =
-      integrityResult.invalidLogs.length > integrityResult.totalLogs * 0.1
-        ? 'broken'
-        : 'partial';
+      integrityResult.invalidLogs.length > integrityResult.totalLogs * 0.1 ? 'broken' : 'partial';
   }
 
   return {
@@ -690,71 +670,56 @@ export async function generateArbitratorPerformanceReport(
   });
 
   // Calculate per-arbitrator stats
-  const arbitratorStats =
-    arbitrators.map((arb) => {
-      const arbAssignments = assignments.filter(
-        (a) => a.arbitratorId === arb.userId
-      );
+  const arbitratorStats = arbitrators.map((arb) => {
+    const arbAssignments = assignments.filter((a) => a.arbitratorId === arb.userId);
 
-      const completedAssignments = arbAssignments.filter(
-        (a) => a.reviewCompletedAt
-      );
+    const completedAssignments = arbAssignments.filter((a) => a.reviewCompletedAt);
 
-      // Calculate review times
-      const reviewTimes = completedAssignments.map((a) =>
-        a.reviewCompletedAt
-          ? (a.reviewCompletedAt.getTime() - a.assignedAt.getTime()) /
-            (1000 * 60 * 60 * 24)
-          : 0
-      );
+    // Calculate review times
+    const reviewTimes = completedAssignments.map((a) =>
+      a.reviewCompletedAt
+        ? (a.reviewCompletedAt.getTime() - a.assignedAt.getTime()) / (1000 * 60 * 60 * 24)
+        : 0
+    );
 
-      const avgReviewDays =
-        reviewTimes.length > 0
-          ? reviewTimes.reduce((a, b) => a + b, 0) / reviewTimes.length
-          : 0;
+    const avgReviewDays =
+      reviewTimes.length > 0 ? reviewTimes.reduce((a, b) => a + b, 0) / reviewTimes.length : 0;
 
-      // Calculate prevailing party rates
-      const casesWithAwards = completedAssignments.filter(
-        (a) => a.case.award
-      );
-      const claimantWins = casesWithAwards.filter(
-        (a) => a.case.award?.prevailingParty === 'CLAIMANT'
-      ).length;
-      const respondentWins = casesWithAwards.filter(
-        (a) => a.case.award?.prevailingParty === 'RESPONDENT'
-      ).length;
-      const splits = casesWithAwards.filter(
-        (a) => a.case.award?.prevailingParty === 'SPLIT'
-      ).length;
+    // Calculate prevailing party rates
+    const casesWithAwards = completedAssignments.filter((a) => a.case.award);
+    const claimantWins = casesWithAwards.filter(
+      (a) => a.case.award?.prevailingParty === 'CLAIMANT'
+    ).length;
+    const respondentWins = casesWithAwards.filter(
+      (a) => a.case.award?.prevailingParty === 'RESPONDENT'
+    ).length;
+    const splits = casesWithAwards.filter((a) => a.case.award?.prevailingParty === 'SPLIT').length;
 
-      const total = casesWithAwards.length || 1; // Avoid division by zero
+    const total = casesWithAwards.length || 1; // Avoid division by zero
 
-      // Calculate average award amount
-      const totalAwardAmount = casesWithAwards.reduce(
-        (sum, a) => sum + (a.case.award?.awardAmount?.toNumber() || 0),
-        0
-      );
+    // Calculate average award amount
+    const totalAwardAmount = casesWithAwards.reduce(
+      (sum, a) => sum + (a.case.award?.awardAmount?.toNumber() || 0),
+      0
+    );
 
-      return {
-        id: arb.userId,
-        name: arb.user.name || 'Unknown',
-        casesCompleted: completedAssignments.length,
-        averageReviewDays: Math.round(avgReviewDays * 10) / 10,
-        claimantFavorRate: Math.round((claimantWins / total) * 100) / 100,
-        respondentFavorRate: Math.round((respondentWins / total) * 100) / 100,
-        splitRate: Math.round((splits / total) * 100) / 100,
-        averageAwardAmount:
-          casesWithAwards.length > 0
-            ? Math.round((totalAwardAmount / casesWithAwards.length) * 100) / 100
-            : 0,
-      };
-    });
+    return {
+      id: arb.userId,
+      name: arb.user.name || 'Unknown',
+      casesCompleted: completedAssignments.length,
+      averageReviewDays: Math.round(avgReviewDays * 10) / 10,
+      claimantFavorRate: Math.round((claimantWins / total) * 100) / 100,
+      respondentFavorRate: Math.round((respondentWins / total) * 100) / 100,
+      splitRate: Math.round((splits / total) * 100) / 100,
+      averageAwardAmount:
+        casesWithAwards.length > 0
+          ? Math.round((totalAwardAmount / casesWithAwards.length) * 100) / 100
+          : 0,
+    };
+  });
 
   // Calculate summary stats
-  const totalCasesReviewed = arbitratorStats.reduce(
-    (sum, a) => sum + a.casesCompleted,
-    0
-  );
+  const totalCasesReviewed = arbitratorStats.reduce((sum, a) => sum + a.casesCompleted, 0);
   const avgCasesPerArbitrator =
     arbitrators.length > 0 ? totalCasesReviewed / arbitrators.length : 0;
   const avgReviewTime =
@@ -774,9 +739,7 @@ export async function generateArbitratorPerformanceReport(
       averageCasesPerArbitrator: Math.round(avgCasesPerArbitrator * 10) / 10,
       averageReviewTime: Math.round(avgReviewTime * 10) / 10,
     },
-    arbitrators: arbitratorStats.sort(
-      (a, b) => b.casesCompleted - a.casesCompleted
-    ),
+    arbitrators: arbitratorStats.sort((a, b) => b.casesCompleted - a.casesCompleted),
     generatedAt: new Date(),
   };
 }

@@ -372,11 +372,10 @@ export async function getCaseAuditTrail(caseId: string): Promise<CaseAuditTrail>
     }));
 
   // Calculate duration
-  const durationDays = timeline.length > 0
-    ? Math.ceil(
-        (Date.now() - timeline[0]!.timestamp.getTime()) / (1000 * 60 * 60 * 24)
-      )
-    : 0;
+  const durationDays =
+    timeline.length > 0
+      ? Math.ceil((Date.now() - timeline[0]!.timestamp.getTime()) / (1000 * 60 * 60 * 24))
+      : 0;
 
   // Verify integrity of case-specific logs
   const integrityStatus = verifyCaseAuditIntegrity(auditLogs);
@@ -495,9 +494,7 @@ export async function exportCaseAuditTrail(
 /**
  * Get audit trail summary for multiple cases
  */
-export async function getCasesAuditSummary(
-  caseIds: string[]
-): Promise<
+export async function getCasesAuditSummary(caseIds: string[]): Promise<
   Array<{
     caseId: string;
     caseReference: string;

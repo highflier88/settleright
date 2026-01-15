@@ -5,24 +5,11 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 import { format } from 'date-fns';
-import {
-  Gavel,
-  FileText,
-  Scale,
-  AlertTriangle,
-  ChevronRight,
-  ExternalLink,
-} from 'lucide-react';
+import { Gavel, FileText, Scale, AlertTriangle, ChevronRight, ExternalLink } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -79,13 +66,25 @@ function parseConclusions(data: JsonValue): ConclusionOfLaw[] {
 function getReviewStatusBadge(status: string | null) {
   switch (status) {
     case 'APPROVE':
-      return <Badge variant="default" className="bg-green-600">Approved</Badge>;
+      return (
+        <Badge variant="default" className="bg-green-600">
+          Approved
+        </Badge>
+      );
     case 'MODIFY':
-      return <Badge variant="default" className="bg-blue-600">Modified</Badge>;
+      return (
+        <Badge variant="default" className="bg-blue-600">
+          Modified
+        </Badge>
+      );
     case 'REJECT':
       return <Badge variant="destructive">Rejected</Badge>;
     case 'ESCALATE':
-      return <Badge variant="default" className="bg-purple-600">Escalated</Badge>;
+      return (
+        <Badge variant="default" className="bg-purple-600">
+          Escalated
+        </Badge>
+      );
     default:
       return <Badge variant="outline">Pending Review</Badge>;
   }
@@ -113,10 +112,10 @@ export function AwardDisplay({
   if (!draftAward) {
     return (
       <Card>
-        <CardContent className="flex flex-col items-center justify-center h-64">
-          <Gavel className="h-12 w-12 text-muted-foreground mb-4" />
+        <CardContent className="flex h-64 flex-col items-center justify-center">
+          <Gavel className="mb-4 h-12 w-12 text-muted-foreground" />
           <p className="text-muted-foreground">No draft award has been generated yet</p>
-          <p className="text-sm text-muted-foreground mt-2">
+          <p className="mt-2 text-sm text-muted-foreground">
             The award will be generated once the AI analysis is complete
           </p>
         </CardContent>
@@ -145,7 +144,7 @@ export function AwardDisplay({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-4 mb-4">
+          <div className="mb-4 grid gap-4 md:grid-cols-4">
             <div className="rounded-lg border p-4 text-center">
               <p className="text-sm text-muted-foreground">Award Amount</p>
               <p className="text-2xl font-bold text-primary">
@@ -161,15 +160,17 @@ export function AwardDisplay({
             <div className="rounded-lg border p-4 text-center">
               <p className="text-sm text-muted-foreground">Prevailing Party</p>
               <p className="text-xl font-semibold capitalize">
-                {draftAward.prevailingParty === 'CLAIMANT' ? claimantName :
-                 draftAward.prevailingParty === 'RESPONDENT' ? respondentName :
-                 draftAward.prevailingParty?.toLowerCase() || 'N/A'}
+                {draftAward.prevailingParty === 'CLAIMANT'
+                  ? claimantName
+                  : draftAward.prevailingParty === 'RESPONDENT'
+                    ? respondentName
+                    : draftAward.prevailingParty?.toLowerCase() || 'N/A'}
               </p>
             </div>
             <div className="rounded-lg border p-4 text-center">
               <p className="text-sm text-muted-foreground">AI Confidence</p>
-              <div className="flex items-center justify-center gap-2 mt-1">
-                <Progress value={confidencePercent} className="w-16 h-2" />
+              <div className="mt-1 flex items-center justify-center gap-2">
+                <Progress value={confidencePercent} className="h-2 w-16" />
                 <span className="font-semibold">{confidencePercent}%</span>
               </div>
             </div>
@@ -180,7 +181,7 @@ export function AwardDisplay({
             <Link href={`/arbitrator/cases/${caseId}/award`}>
               <Button>
                 Review & Finalize Award
-                <ExternalLink className="h-4 w-4 ml-2" />
+                <ExternalLink className="ml-2 h-4 w-4" />
               </Button>
             </Link>
           </div>
@@ -191,9 +192,7 @@ export function AwardDisplay({
       <Card>
         <CardHeader className="pb-3">
           <CardTitle>Decision Narrative</CardTitle>
-          <CardDescription>
-            Summary of the award decision
-          </CardDescription>
+          <CardDescription>Summary of the award decision</CardDescription>
         </CardHeader>
         <CardContent>
           <ScrollArea className="h-[200px] rounded-md border p-4">
@@ -211,15 +210,13 @@ export function AwardDisplay({
               <FileText className="h-5 w-5" />
               Findings of Fact ({findings.length})
             </CardTitle>
-            <CardDescription>
-              Factual determinations based on evidence
-            </CardDescription>
+            <CardDescription>Factual determinations based on evidence</CardDescription>
           </CardHeader>
           <CardContent>
             <ScrollArea className="h-[400px] pr-4">
               {findings.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-32 text-muted-foreground">
-                  <FileText className="h-8 w-8 mb-2 opacity-50" />
+                <div className="flex h-32 flex-col items-center justify-center text-muted-foreground">
+                  <FileText className="mb-2 h-8 w-8 opacity-50" />
                   <p className="text-sm">No findings available</p>
                 </div>
               ) : (
@@ -228,22 +225,22 @@ export function AwardDisplay({
                     <button
                       type="button"
                       key={finding.id}
-                      className={`w-full text-left rounded-lg border p-3 cursor-pointer transition-all hover:shadow-md ${
+                      className={`w-full cursor-pointer rounded-lg border p-3 text-left transition-all hover:shadow-md ${
                         selectedFinding?.id === finding.id
                           ? 'border-primary bg-primary/5 ring-1 ring-primary'
                           : 'hover:border-muted-foreground/30'
                       }`}
-                      onClick={() => setSelectedFinding(
-                        selectedFinding?.id === finding.id ? null : finding
-                      )}
+                      onClick={() =>
+                        setSelectedFinding(selectedFinding?.id === finding.id ? null : finding)
+                      }
                     >
                       <div className="flex items-start gap-2">
-                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-medium text-primary flex-shrink-0">
+                        <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-medium text-primary">
                           {finding.number}
                         </span>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm line-clamp-2">{finding.finding}</p>
-                          <div className="flex items-center gap-2 mt-1">
+                        <div className="min-w-0 flex-1">
+                          <p className="line-clamp-2 text-sm">{finding.finding}</p>
+                          <div className="mt-1 flex items-center gap-2">
                             <Badge variant="outline" className="text-xs">
                               {getBasisLabel(finding.basis)}
                             </Badge>
@@ -254,7 +251,7 @@ export function AwardDisplay({
                             )}
                           </div>
                         </div>
-                        <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                        <ChevronRight className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
                       </div>
                     </button>
                   ))}
@@ -271,15 +268,13 @@ export function AwardDisplay({
               <Scale className="h-5 w-5" />
               Conclusions of Law ({conclusions.length})
             </CardTitle>
-            <CardDescription>
-              Legal conclusions based on applicable law
-            </CardDescription>
+            <CardDescription>Legal conclusions based on applicable law</CardDescription>
           </CardHeader>
           <CardContent>
             <ScrollArea className="h-[400px] pr-4">
               {conclusions.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-32 text-muted-foreground">
-                  <Scale className="h-8 w-8 mb-2 opacity-50" />
+                <div className="flex h-32 flex-col items-center justify-center text-muted-foreground">
+                  <Scale className="mb-2 h-8 w-8 opacity-50" />
                   <p className="text-sm">No conclusions available</p>
                 </div>
               ) : (
@@ -288,26 +283,28 @@ export function AwardDisplay({
                     <button
                       type="button"
                       key={conclusion.id}
-                      className={`w-full text-left rounded-lg border p-3 cursor-pointer transition-all hover:shadow-md ${
+                      className={`w-full cursor-pointer rounded-lg border p-3 text-left transition-all hover:shadow-md ${
                         selectedConclusion?.id === conclusion.id
                           ? 'border-primary bg-primary/5 ring-1 ring-primary'
                           : 'hover:border-muted-foreground/30'
                       }`}
-                      onClick={() => setSelectedConclusion(
-                        selectedConclusion?.id === conclusion.id ? null : conclusion
-                      )}
+                      onClick={() =>
+                        setSelectedConclusion(
+                          selectedConclusion?.id === conclusion.id ? null : conclusion
+                        )
+                      }
                     >
                       <div className="flex items-start gap-2">
-                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-medium text-primary flex-shrink-0">
+                        <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-medium text-primary">
                           {conclusion.number}
                         </span>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-medium text-muted-foreground mb-1">
+                        <div className="min-w-0 flex-1">
+                          <p className="mb-1 text-xs font-medium text-muted-foreground">
                             {conclusion.issue}
                           </p>
-                          <p className="text-sm line-clamp-2">{conclusion.conclusion}</p>
+                          <p className="line-clamp-2 text-sm">{conclusion.conclusion}</p>
                           {conclusion.legalBasis && conclusion.legalBasis.length > 0 && (
-                            <div className="flex flex-wrap gap-1 mt-1">
+                            <div className="mt-1 flex flex-wrap gap-1">
                               {conclusion.legalBasis.slice(0, 2).map((basis, i) => (
                                 <Badge key={i} variant="secondary" className="text-xs">
                                   {basis}
@@ -321,7 +318,7 @@ export function AwardDisplay({
                             </div>
                           )}
                         </div>
-                        <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                        <ChevronRight className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
                       </div>
                     </button>
                   ))}
@@ -337,37 +334,41 @@ export function AwardDisplay({
         <Card>
           <CardHeader className="pb-3">
             <CardTitle>
-              {selectedFinding ? `Finding #${selectedFinding.number} Details` : `Conclusion #${selectedConclusion?.number} Details`}
+              {selectedFinding
+                ? `Finding #${selectedFinding.number} Details`
+                : `Conclusion #${selectedConclusion?.number} Details`}
             </CardTitle>
           </CardHeader>
           <CardContent>
             {selectedFinding && (
               <div className="space-y-4">
                 <div>
-                  <h4 className="text-sm font-medium mb-1">Finding</h4>
+                  <h4 className="mb-1 text-sm font-medium">Finding</h4>
                   <p className="text-sm">{selectedFinding.finding}</p>
                 </div>
                 <div className="grid gap-4 md:grid-cols-3">
                   <div>
-                    <h4 className="text-sm font-medium mb-1">Basis</h4>
+                    <h4 className="mb-1 text-sm font-medium">Basis</h4>
                     <Badge variant="outline">{getBasisLabel(selectedFinding.basis)}</Badge>
                   </div>
                   {selectedFinding.date && (
                     <div>
-                      <h4 className="text-sm font-medium mb-1">Date</h4>
+                      <h4 className="mb-1 text-sm font-medium">Date</h4>
                       <p className="text-sm">{selectedFinding.date}</p>
                     </div>
                   )}
                   {selectedFinding.amount && (
                     <div>
-                      <h4 className="text-sm font-medium mb-1">Amount</h4>
-                      <p className="text-sm font-semibold">{formatCurrency(selectedFinding.amount)}</p>
+                      <h4 className="mb-1 text-sm font-medium">Amount</h4>
+                      <p className="text-sm font-semibold">
+                        {formatCurrency(selectedFinding.amount)}
+                      </p>
                     </div>
                   )}
                 </div>
                 {selectedFinding.credibilityNote && (
-                  <div className="rounded-lg border bg-amber-50 dark:bg-amber-950/30 p-3">
-                    <h4 className="text-sm font-medium mb-1 flex items-center gap-2">
+                  <div className="rounded-lg border bg-amber-50 p-3 dark:bg-amber-950/30">
+                    <h4 className="mb-1 flex items-center gap-2 text-sm font-medium">
                       <AlertTriangle className="h-4 w-4 text-amber-600" />
                       Credibility Note
                     </h4>
@@ -376,34 +377,35 @@ export function AwardDisplay({
                     </p>
                   </div>
                 )}
-                {selectedFinding.supportingEvidence && selectedFinding.supportingEvidence.length > 0 && (
-                  <div>
-                    <h4 className="text-sm font-medium mb-1">Supporting Evidence</h4>
-                    <div className="flex flex-wrap gap-1">
-                      {selectedFinding.supportingEvidence.map((evidenceId, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs">
-                          Evidence #{i + 1}
-                        </Badge>
-                      ))}
+                {selectedFinding.supportingEvidence &&
+                  selectedFinding.supportingEvidence.length > 0 && (
+                    <div>
+                      <h4 className="mb-1 text-sm font-medium">Supporting Evidence</h4>
+                      <div className="flex flex-wrap gap-1">
+                        {selectedFinding.supportingEvidence.map((evidenceId, i) => (
+                          <Badge key={i} variant="secondary" className="text-xs">
+                            Evidence #{i + 1}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
               </div>
             )}
 
             {selectedConclusion && (
               <div className="space-y-4">
                 <div>
-                  <h4 className="text-sm font-medium mb-1">Legal Issue</h4>
+                  <h4 className="mb-1 text-sm font-medium">Legal Issue</h4>
                   <Badge variant="outline">{selectedConclusion.issue}</Badge>
                 </div>
                 <div>
-                  <h4 className="text-sm font-medium mb-1">Conclusion</h4>
+                  <h4 className="mb-1 text-sm font-medium">Conclusion</h4>
                   <p className="text-sm">{selectedConclusion.conclusion}</p>
                 </div>
                 {selectedConclusion.legalBasis && selectedConclusion.legalBasis.length > 0 && (
                   <div>
-                    <h4 className="text-sm font-medium mb-1">Legal Citations</h4>
+                    <h4 className="mb-1 text-sm font-medium">Legal Citations</h4>
                     <div className="flex flex-wrap gap-1">
                       {selectedConclusion.legalBasis.map((basis, i) => (
                         <Badge key={i} variant="secondary">
@@ -413,18 +415,19 @@ export function AwardDisplay({
                     </div>
                   </div>
                 )}
-                {selectedConclusion.supportingFindings && selectedConclusion.supportingFindings.length > 0 && (
-                  <div>
-                    <h4 className="text-sm font-medium mb-1">Based on Findings</h4>
-                    <div className="flex flex-wrap gap-1">
-                      {selectedConclusion.supportingFindings.map((findingNum, i) => (
-                        <Badge key={i} variant="outline" className="text-xs">
-                          Finding #{findingNum}
-                        </Badge>
-                      ))}
+                {selectedConclusion.supportingFindings &&
+                  selectedConclusion.supportingFindings.length > 0 && (
+                    <div>
+                      <h4 className="mb-1 text-sm font-medium">Based on Findings</h4>
+                      <div className="flex flex-wrap gap-1">
+                        {selectedConclusion.supportingFindings.map((findingNum, i) => (
+                          <Badge key={i} variant="outline" className="text-xs">
+                            Finding #{findingNum}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
               </div>
             )}
           </CardContent>
@@ -435,9 +438,7 @@ export function AwardDisplay({
       <Card>
         <CardHeader className="pb-3">
           <CardTitle>Full Reasoning</CardTitle>
-          <CardDescription>
-            Complete reasoning behind the award recommendation
-          </CardDescription>
+          <CardDescription>Complete reasoning behind the award recommendation</CardDescription>
         </CardHeader>
         <CardContent>
           <ScrollArea className="h-[300px] rounded-md border p-4">

@@ -251,7 +251,8 @@ export function NewCaseForm({ user: _user }: NewCaseFormProps) {
             <CardHeader>
               <CardTitle>What type of dispute do you have?</CardTitle>
               <CardDescription>
-                Select the category that best describes your dispute and the applicable jurisdiction.
+                Select the category that best describes your dispute and the applicable
+                jurisdiction.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -275,9 +276,7 @@ export function NewCaseForm({ user: _user }: NewCaseFormProps) {
                       />
                       <div>
                         <div className="font-medium">{type.label}</div>
-                        <div className="text-sm text-muted-foreground">
-                          {type.description}
-                        </div>
+                        <div className="text-sm text-muted-foreground">{type.description}</div>
                       </div>
                     </label>
                   ))}
@@ -387,8 +386,8 @@ export function NewCaseForm({ user: _user }: NewCaseFormProps) {
             <CardHeader>
               <CardTitle>Who are you filing against?</CardTitle>
               <CardDescription>
-                Enter the contact information for the other party. They will receive an invitation to
-                participate in the arbitration.
+                Enter the contact information for the other party. They will receive an invitation
+                to participate in the arbitration.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -407,11 +406,7 @@ export function NewCaseForm({ user: _user }: NewCaseFormProps) {
 
               <div className="space-y-2">
                 <Label htmlFor="respondentName">Full Name (Optional)</Label>
-                <Input
-                  id="respondentName"
-                  {...register('respondentName')}
-                  placeholder="John Doe"
-                />
+                <Input id="respondentName" {...register('respondentName')} placeholder="John Doe" />
                 {errors.respondentName && (
                   <p className="text-sm text-destructive">{errors.respondentName.message}</p>
                 )}
@@ -463,9 +458,7 @@ export function NewCaseForm({ user: _user }: NewCaseFormProps) {
 
                 <div className="flex justify-between border-b pb-2">
                   <span className="text-muted-foreground">Claim Amount</span>
-                  <span className="font-medium">
-                    ${formData.amount?.toLocaleString() ?? 0}
-                  </span>
+                  <span className="font-medium">${formData.amount?.toLocaleString() ?? 0}</span>
                 </div>
 
                 <div className="border-b pb-2">
@@ -506,12 +499,7 @@ export function NewCaseForm({ user: _user }: NewCaseFormProps) {
 
         {/* Navigation Buttons */}
         <div className="flex justify-between pt-6">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={prevStep}
-            disabled={currentStep === 0}
-          >
+          <Button type="button" variant="outline" onClick={prevStep} disabled={currentStep === 0}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back
           </Button>

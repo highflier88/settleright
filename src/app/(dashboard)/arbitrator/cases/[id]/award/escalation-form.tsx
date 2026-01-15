@@ -99,12 +99,7 @@ const URGENCY_OPTIONS = [
   { value: 'URGENT', label: 'Urgent', color: 'bg-red-500' },
 ];
 
-export function EscalationForm({
-  isOpen,
-  onClose,
-  onSubmit,
-  isLoading,
-}: EscalationFormProps) {
+export function EscalationForm({ isOpen, onClose, onSubmit, isLoading }: EscalationFormProps) {
   const [reason, setReason] = useState<EscalationReason | ''>('');
   const [reasonDetails, setReasonDetails] = useState('');
   const [urgency, setUrgency] = useState<EscalationUrgency>('NORMAL');
@@ -132,8 +127,8 @@ export function EscalationForm({
             Escalate to Senior Arbitrator
           </DialogTitle>
           <DialogDescription>
-            Escalate this case for review by a more experienced arbitrator.
-            A senior arbitrator will be notified and assigned to review the award.
+            Escalate this case for review by a more experienced arbitrator. A senior arbitrator will
+            be notified and assigned to review the award.
           </DialogDescription>
         </DialogHeader>
 
@@ -141,10 +136,7 @@ export function EscalationForm({
           {/* Reason */}
           <div className="space-y-2">
             <Label>Reason for Escalation *</Label>
-            <Select
-              value={reason}
-              onValueChange={(v) => setReason(v as EscalationReason)}
-            >
+            <Select value={reason} onValueChange={(v) => setReason(v as EscalationReason)}>
               <SelectTrigger>
                 <SelectValue placeholder="Select reason..." />
               </SelectTrigger>
@@ -198,10 +190,10 @@ export function EscalationForm({
 
           {/* Info Box */}
           <div className="rounded-lg border border-purple-200 bg-purple-50 p-4 dark:border-purple-900 dark:bg-purple-950">
-            <h4 className="font-medium text-purple-800 dark:text-purple-200 mb-2">
+            <h4 className="mb-2 font-medium text-purple-800 dark:text-purple-200">
               What happens next?
             </h4>
-            <ul className="text-sm text-purple-700 dark:text-purple-300 space-y-1">
+            <ul className="space-y-1 text-sm text-purple-700 dark:text-purple-300">
               <li>- A senior arbitrator will be assigned to review this case</li>
               <li>- They will receive a notification with your escalation details</li>
               <li>- You will be notified when the escalation is resolved</li>
@@ -221,12 +213,12 @@ export function EscalationForm({
           >
             {isLoading ? (
               <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Escalating...
               </>
             ) : (
               <>
-                <AlertTriangle className="h-4 w-4 mr-2" />
+                <AlertTriangle className="mr-2 h-4 w-4" />
                 Escalate Case
               </>
             )}

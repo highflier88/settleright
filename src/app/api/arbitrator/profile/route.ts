@@ -34,9 +34,7 @@ export const GET = withArbitrator(async (request: AuthenticatedRequest) => {
     });
 
     if (!profile) {
-      return errorResponse(
-        new NotFoundError('Arbitrator profile not found')
-      );
+      return errorResponse(new NotFoundError('Arbitrator profile not found'));
     }
 
     // Get assignment stats
@@ -107,7 +105,7 @@ export const GET = withArbitrator(async (request: AuthenticatedRequest) => {
 export const PATCH = withArbitrator(async (request: AuthenticatedRequest) => {
   try {
     const userId = request.user.id;
-    const body = await request.json() as Record<string, unknown>;
+    const body = (await request.json()) as Record<string, unknown>;
 
     // Validate input
     const allowedFields = [
@@ -128,18 +126,14 @@ export const PATCH = withArbitrator(async (request: AuthenticatedRequest) => {
     }
 
     if (Object.keys(updates).length === 0) {
-      return errorResponse(
-        new BadRequestError('No valid fields to update')
-      );
+      return errorResponse(new BadRequestError('No valid fields to update'));
     }
 
     // Validate maxCasesPerWeek
     if (updates.maxCasesPerWeek !== undefined) {
       const max = updates.maxCasesPerWeek as number;
       if (max < 1 || max > 50) {
-        return errorResponse(
-          new BadRequestError('maxCasesPerWeek must be between 1 and 50')
-        );
+        return errorResponse(new BadRequestError('maxCasesPerWeek must be between 1 and 50'));
       }
     }
 
@@ -147,9 +141,7 @@ export const PATCH = withArbitrator(async (request: AuthenticatedRequest) => {
     if (updates.yearsExperience !== undefined) {
       const years = updates.yearsExperience as number;
       if (years < 0 || years > 70) {
-        return errorResponse(
-          new BadRequestError('yearsExperience must be between 0 and 70')
-        );
+        return errorResponse(new BadRequestError('yearsExperience must be between 0 and 70'));
       }
     }
 
@@ -159,9 +151,7 @@ export const PATCH = withArbitrator(async (request: AuthenticatedRequest) => {
     });
 
     if (!existing) {
-      return errorResponse(
-        new NotFoundError('Arbitrator profile not found')
-      );
+      return errorResponse(new NotFoundError('Arbitrator profile not found'));
     }
 
     // Update profile

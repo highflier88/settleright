@@ -42,19 +42,15 @@ describe('API Response Utilities', () => {
       const data = { id: 1, name: 'Test' };
       successResponse(data);
 
-      expect(NextResponse.json).toHaveBeenCalledWith(
-        { success: true, data },
-        { status: 200 }
-      );
+      expect(NextResponse.json).toHaveBeenCalledWith({ success: true, data }, { status: 200 });
     });
 
     it('should allow custom status code', () => {
       successResponse({ created: true }, 201);
 
-      expect(NextResponse.json).toHaveBeenCalledWith(
-        expect.objectContaining({ success: true }),
-        { status: 201 }
-      );
+      expect(NextResponse.json).toHaveBeenCalledWith(expect.objectContaining({ success: true }), {
+        status: 201,
+      });
     });
 
     it('should include meta when provided', () => {
@@ -81,10 +77,7 @@ describe('API Response Utilities', () => {
     it('should handle empty array data', () => {
       successResponse([]);
 
-      expect(NextResponse.json).toHaveBeenCalledWith(
-        { success: true, data: [] },
-        { status: 200 }
-      );
+      expect(NextResponse.json).toHaveBeenCalledWith({ success: true, data: [] }, { status: 200 });
     });
   });
 

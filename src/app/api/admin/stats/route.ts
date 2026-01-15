@@ -4,7 +4,6 @@ import { successResponse } from '@/lib/api/response';
 import { withAdmin, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { prisma } from '@/lib/db';
 
-
 async function handleGet(_request: AuthenticatedRequest) {
   const [
     totalUsers,

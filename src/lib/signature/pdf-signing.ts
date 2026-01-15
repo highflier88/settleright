@@ -11,7 +11,15 @@
 import { createHash } from 'crypto';
 
 import forge from 'node-forge';
-import { PDFDocument, PDFName, PDFString, PDFHexString, type PDFDict, type PDFRef, rgb } from 'pdf-lib';
+import {
+  PDFDocument,
+  PDFName,
+  PDFString,
+  PDFHexString,
+  type PDFDict,
+  type PDFRef,
+  rgb,
+} from 'pdf-lib';
 
 import { signDocument, type SignatureResult } from './signature-service';
 import { requestTimestamp, type TimestampResponse } from './timestamping';
@@ -77,12 +85,7 @@ export async function signPdfDocument(
   }
 
   // Add signature metadata to PDF
-  const signatureInfo = createSignatureMetadata(
-    signature,
-    timestamp,
-    options,
-    certificatePem
-  );
+  const signatureInfo = createSignatureMetadata(signature, timestamp, options, certificatePem);
 
   // Add custom metadata to the PDF with signature information
   pdfDoc.setTitle(pdfDoc.getTitle() || 'Arbitration Award');
@@ -270,10 +273,10 @@ function embedSignatureDictionary(
     Type: PDFName.of('Sig'),
     Filter: PDFName.of('Adobe.PPKLite'),
     SubFilter: PDFName.of('adbe.pkcs7.detached'),
-    Name: PDFString.of(signatureInfo.signerName as string || 'Unknown'),
-    M: PDFString.of(formatPdfDate(signatureInfo.signedAt as Date || new Date())),
-    Reason: PDFString.of(signatureInfo.reason as string || ''),
-    Location: PDFString.of(signatureInfo.location as string || ''),
+    Name: PDFString.of((signatureInfo.signerName as string) || 'Unknown'),
+    M: PDFString.of(formatPdfDate((signatureInfo.signedAt as Date) || new Date())),
+    Reason: PDFString.of((signatureInfo.reason as string) || ''),
+    Location: PDFString.of((signatureInfo.location as string) || ''),
     ContactInfo: signatureInfo.contactInfo
       ? PDFString.of(signatureInfo.contactInfo as string)
       : undefined,
@@ -284,9 +287,9 @@ function embedSignatureDictionary(
   const infoDict = context.obj({
     SignatureProvider: PDFString.of('HighTide Digital Signature Service'),
     SignatureAlgorithm: PDFString.of('RSA-SHA256'),
-    CertificateFingerprint: PDFHexString.of(signatureInfo.certificateFingerprint as string || ''),
-    DocumentHash: PDFHexString.of(signatureInfo.documentHash as string || ''),
-    TimestampGranted: PDFString.of(signatureInfo.timestampGranted as string || 'false'),
+    CertificateFingerprint: PDFHexString.of((signatureInfo.certificateFingerprint as string) || ''),
+    DocumentHash: PDFHexString.of((signatureInfo.documentHash as string) || ''),
+    TimestampGranted: PDFString.of((signatureInfo.timestampGranted as string) || 'false'),
   });
 
   // Add to catalog as custom entry (non-standard but preserves metadata)
@@ -317,9 +320,7 @@ function formatPdfDate(date: Date): string {
 /**
  * Verify signatures in a PDF document
  */
-export async function verifyPdfSignature(
-  pdfBuffer: Buffer
-): Promise<PdfSignatureInfo> {
+export async function verifyPdfSignature(pdfBuffer: Buffer): Promise<PdfSignatureInfo> {
   try {
     const pdfDoc = await PDFDocument.load(pdfBuffer);
     const catalog = pdfDoc.catalog;

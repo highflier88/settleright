@@ -34,10 +34,7 @@ export async function GET(request: NextRequest) {
     console.error('[QC API] GET error:', error);
     const message = error instanceof Error ? error.message : 'Failed to fetch QC data';
     const status = message.includes('required') || message.includes('Insufficient') ? 401 : 500;
-    return NextResponse.json(
-      { success: false, error: message },
-      { status }
-    );
+    return NextResponse.json({ success: false, error: message }, { status });
   }
 }
 
@@ -46,14 +43,11 @@ export async function POST(request: NextRequest) {
     // Verify admin/arbitrator role
     await requireRole(['ADMIN', 'ARBITRATOR']);
 
-    const body = await request.json() as { awardId?: string; checkType?: QCCheckType };
+    const body = (await request.json()) as { awardId?: string; checkType?: QCCheckType };
     const { awardId, checkType = 'full' } = body;
 
     if (!awardId) {
-      return NextResponse.json(
-        { success: false, error: 'Award ID is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: 'Award ID is required' }, { status: 400 });
     }
 
     // Run quality check
@@ -67,9 +61,6 @@ export async function POST(request: NextRequest) {
     console.error('[QC API] POST error:', error);
     const message = error instanceof Error ? error.message : 'Failed to run QC check';
     const status = message.includes('required') || message.includes('Insufficient') ? 401 : 500;
-    return NextResponse.json(
-      { success: false, error: message },
-      { status }
-    );
+    return NextResponse.json({ success: false, error: message }, { status });
   }
 }

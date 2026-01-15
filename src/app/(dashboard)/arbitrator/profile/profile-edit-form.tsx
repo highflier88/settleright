@@ -8,13 +8,7 @@ import { Settings, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -41,11 +35,57 @@ interface ProfileEditFormProps {
 }
 
 const US_STATES = [
-  'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
-  'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
-  'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
-  'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
-  'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'DC',
+  'AL',
+  'AK',
+  'AZ',
+  'AR',
+  'CA',
+  'CO',
+  'CT',
+  'DE',
+  'FL',
+  'GA',
+  'HI',
+  'ID',
+  'IL',
+  'IN',
+  'IA',
+  'KS',
+  'KY',
+  'LA',
+  'ME',
+  'MD',
+  'MA',
+  'MI',
+  'MN',
+  'MS',
+  'MO',
+  'MT',
+  'NE',
+  'NV',
+  'NH',
+  'NJ',
+  'NM',
+  'NY',
+  'NC',
+  'ND',
+  'OH',
+  'OK',
+  'OR',
+  'PA',
+  'RI',
+  'SC',
+  'SD',
+  'TN',
+  'TX',
+  'UT',
+  'VT',
+  'VA',
+  'WA',
+  'WV',
+  'WI',
+  'WY',
+  'DC',
 ];
 
 export function ProfileEditForm({ currentData }: ProfileEditFormProps) {
@@ -118,20 +158,18 @@ export function ProfileEditForm({ currentData }: ProfileEditFormProps) {
                 <Settings className="h-5 w-5" />
                 Profile Settings
               </CardTitle>
-              <CardDescription>
-                Manage your availability and preferences
-              </CardDescription>
+              <CardDescription>Manage your availability and preferences</CardDescription>
             </div>
-            <Button onClick={() => setIsEditing(true)}>
-              Edit Profile
-            </Button>
+            <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
           </div>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2">
             <div>
               <span className="text-sm text-muted-foreground">Status</span>
-              <p className="font-medium">{currentData.isActive ? 'Active - Accepting Cases' : 'Inactive'}</p>
+              <p className="font-medium">
+                {currentData.isActive ? 'Active - Accepting Cases' : 'Inactive'}
+              </p>
             </div>
             <div>
               <span className="text-sm text-muted-foreground">Max Cases Per Week</span>
@@ -150,9 +188,7 @@ export function ProfileEditForm({ currentData }: ProfileEditFormProps) {
           <Settings className="h-5 w-5" />
           Edit Profile
         </CardTitle>
-        <CardDescription>
-          Update your profile settings and preferences
-        </CardDescription>
+        <CardDescription>Update your profile settings and preferences</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -167,9 +203,7 @@ export function ProfileEditForm({ currentData }: ProfileEditFormProps) {
             <Switch
               id="isActive"
               checked={formData.isActive}
-              onCheckedChange={(checked) =>
-                setFormData((prev) => ({ ...prev, isActive: checked }))
-              }
+              onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, isActive: checked }))}
             />
           </div>
 
@@ -202,9 +236,7 @@ export function ProfileEditForm({ currentData }: ProfileEditFormProps) {
               <Input
                 id="barNumber"
                 value={formData.barNumber || ''}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, barNumber: e.target.value }))
-                }
+                onChange={(e) => setFormData((prev) => ({ ...prev, barNumber: e.target.value }))}
                 placeholder="Enter bar number"
               />
             </div>
@@ -212,9 +244,7 @@ export function ProfileEditForm({ currentData }: ProfileEditFormProps) {
               <Label htmlFor="barState">Bar State</Label>
               <Select
                 value={formData.barState || ''}
-                onValueChange={(value) =>
-                  setFormData((prev) => ({ ...prev, barState: value }))
-                }
+                onValueChange={(value) => setFormData((prev) => ({ ...prev, barState: value }))}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select state" />
@@ -252,7 +282,7 @@ export function ProfileEditForm({ currentData }: ProfileEditFormProps) {
           {/* Jurisdictions */}
           <div className="space-y-2">
             <Label>Jurisdictions</Label>
-            <p className="text-sm text-muted-foreground mb-2">
+            <p className="mb-2 text-sm text-muted-foreground">
               Select the states where you are authorized to arbitrate
             </p>
             <div className="grid grid-cols-6 gap-2 md:grid-cols-10">
@@ -289,7 +319,7 @@ export function ProfileEditForm({ currentData }: ProfileEditFormProps) {
             <Button type="submit" disabled={isLoading}>
               {isLoading ? (
                 <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Saving...
                 </>
               ) : (

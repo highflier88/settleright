@@ -18,16 +18,13 @@ export async function PATCH(
     const user = await requireRole('ADMIN');
 
     const { taskId } = await params;
-    const body = await request.json() as { findings?: AuditFindings };
+    const body = (await request.json()) as { findings?: AuditFindings };
 
     // Validate findings
     const { findings } = body;
 
     if (!findings) {
-      return NextResponse.json(
-        { success: false, error: 'Findings are required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: 'Findings are required' }, { status: 400 });
     }
 
     if (!findings.overallRating || findings.overallRating < 1 || findings.overallRating > 5) {
@@ -38,11 +35,7 @@ export async function PATCH(
     }
 
     // Complete the audit task
-    const completedTask = await completeAuditTask(
-      taskId,
-      user.id,
-      findings
-    );
+    const completedTask = await completeAuditTask(taskId, user.id, findings);
 
     return NextResponse.json({
       success: true,
@@ -52,9 +45,6 @@ export async function PATCH(
     console.error('[Audit Task API] PATCH error:', error);
     const message = error instanceof Error ? error.message : 'Failed to complete audit task';
     const status = message.includes('required') || message.includes('Insufficient') ? 401 : 500;
-    return NextResponse.json(
-      { success: false, error: message },
-      { status }
-    );
+    return NextResponse.json({ success: false, error: message }, { status });
   }
 }

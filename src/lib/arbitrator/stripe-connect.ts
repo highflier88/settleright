@@ -134,9 +134,7 @@ export async function generateOnboardingLink(
 /**
  * Generate dashboard login link for connected account
  */
-export async function generateDashboardLink(
-  accountId: string
-): Promise<string> {
+export async function generateDashboardLink(accountId: string): Promise<string> {
   const loginLink = await stripe.accounts.createLoginLink(accountId);
   return loginLink.url;
 }
@@ -144,9 +142,7 @@ export async function generateDashboardLink(
 /**
  * Get current account status
  */
-export async function getAccountStatus(
-  arbitratorProfileId: string
-): Promise<ConnectAccountResult> {
+export async function getAccountStatus(arbitratorProfileId: string): Promise<ConnectAccountResult> {
   const profile = await prisma.arbitratorProfile.findUnique({
     where: { id: arbitratorProfileId },
   });
@@ -433,13 +429,15 @@ async function handleAccountUpdated(
     where: { id: profile.id },
     data: {
       stripeConnectStatus: newStatus,
-      ...(newStatus === 'ACTIVE' && !profile.stripeConnectOnboardedAt && {
-        stripeConnectOnboardedAt: new Date(),
-      }),
+      ...(newStatus === 'ACTIVE' &&
+        !profile.stripeConnectOnboardedAt && {
+          stripeConnectOnboardedAt: new Date(),
+        }),
       // Activate if credentials are also verified
-      ...(newStatus === 'ACTIVE' && profile.credentialStatus === 'VERIFIED' && {
-        isActive: true,
-      }),
+      ...(newStatus === 'ACTIVE' &&
+        profile.credentialStatus === 'VERIFIED' && {
+          isActive: true,
+        }),
     },
   });
 
@@ -483,8 +481,5 @@ async function handleTransferEvent(
  * Check if Stripe Connect is properly configured
  */
 export function isStripeConnectConfigured(): boolean {
-  return !!(
-    process.env.STRIPE_SECRET_KEY &&
-    process.env.STRIPE_CONNECT_CLIENT_ID
-  );
+  return !!(process.env.STRIPE_SECRET_KEY && process.env.STRIPE_CONNECT_CLIENT_ID);
 }

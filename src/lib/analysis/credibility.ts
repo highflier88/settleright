@@ -90,11 +90,9 @@ export async function assessCredibility(
       ],
     });
 
-    const responseText =
-      response.content[0]?.type === 'text' ? response.content[0].text : '';
+    const responseText = response.content[0]?.type === 'text' ? response.content[0].text : '';
 
-    const tokensUsed =
-      (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
+    const tokensUsed = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
 
     const result = parseCredibilityResponse(responseText);
 
@@ -203,13 +201,14 @@ function calculateSpecificityScore(facts: ExtractedFact[]): number {
 /**
  * Parse credibility response from Claude
  */
-function parseCredibilityResponse(
-  responseText: string
-): Omit<CredibilityResult, 'tokensUsed'> {
+function parseCredibilityResponse(responseText: string): Omit<CredibilityResult, 'tokensUsed'> {
   try {
     let jsonStr = responseText.trim();
     if (jsonStr.startsWith('```')) {
-      jsonStr = jsonStr.replace(/```json?\n?/, '').replace(/```$/, '').trim();
+      jsonStr = jsonStr
+        .replace(/```json?\n?/, '')
+        .replace(/```$/, '')
+        .trim();
     }
 
     const parsed = JSON.parse(jsonStr) as {
@@ -230,9 +229,7 @@ function parseCredibilityResponse(
       comparison?: string;
     };
 
-    const parsePartyScore = (
-      party: typeof parsed.claimant
-    ): PartyCredibilityScore => {
+    const parsePartyScore = (party: typeof parsed.claimant): PartyCredibilityScore => {
       const factors: CredibilityFactors = {
         evidenceSupport: normalizeScore(party?.factors?.evidenceSupport),
         internalConsistency: normalizeScore(party?.factors?.internalConsistency),
@@ -294,18 +291,13 @@ export function calculateCredibilityAdjustments(
   const evidenceBonus = Math.min(0.1, evidence.length * 0.02);
 
   // Contradiction penalty: being on the wrong side of contradictions
-  const majorContradictions = contradictions.filter(
-    (c) => c.severity === 'major'
-  ).length;
+  const majorContradictions = contradictions.filter((c) => c.severity === 'major').length;
   const contradictionPenalty = Math.min(0.2, majorContradictions * 0.1);
 
   // Specifics bonus: more specific details = higher credibility
   const factsWithDates = facts.filter((f) => f.date).length;
   const factsWithAmounts = facts.filter((f) => f.amount).length;
-  const specificsBonus = Math.min(
-    0.1,
-    (factsWithDates + factsWithAmounts) * 0.02
-  );
+  const specificsBonus = Math.min(0.1, (factsWithDates + factsWithAmounts) * 0.02);
 
   return {
     evidenceBonus,
@@ -358,9 +350,7 @@ function formatFactorName(key: string): string {
 /**
  * Determine which party has stronger credibility
  */
-export function compareCredibility(
-  result: CredibilityResult
-): 'claimant' | 'respondent' | 'equal' {
+export function compareCredibility(result: CredibilityResult): 'claimant' | 'respondent' | 'equal' {
   const diff = result.claimant.overall - result.respondent.overall;
 
   if (Math.abs(diff) < 0.1) return 'equal';
@@ -371,10 +361,7 @@ export function compareCredibility(
  * Estimate cost for credibility assessment
  * Claude Sonnet: $3 per million input tokens, $15 per million output tokens
  */
-export function estimateCredibilityCost(
-  statementLengths: number,
-  factsCount: number
-): number {
+export function estimateCredibilityCost(statementLengths: number, factsCount: number): number {
   const inputTokens = statementLengths / 4 + factsCount * 100 + 2000;
   const outputTokens = 1024;
 

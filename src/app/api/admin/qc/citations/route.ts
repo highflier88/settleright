@@ -55,10 +55,7 @@ export async function GET(request: NextRequest) {
     console.error('[Citations API] GET error:', error);
     const message = error instanceof Error ? error.message : 'Failed to fetch citation report';
     const status = message.includes('required') || message.includes('Insufficient') ? 401 : 500;
-    return NextResponse.json(
-      { success: false, error: message },
-      { status }
-    );
+    return NextResponse.json({ success: false, error: message }, { status });
   }
 }
 
@@ -67,7 +64,7 @@ export async function POST(request: NextRequest) {
     // Verify admin/arbitrator role
     await requireRole(['ADMIN', 'ARBITRATOR']);
 
-    const body = await request.json() as { citation?: string };
+    const body = (await request.json()) as { citation?: string };
     const { citation } = body;
 
     if (!citation || typeof citation !== 'string') {
@@ -88,9 +85,6 @@ export async function POST(request: NextRequest) {
     console.error('[Citations API] POST error:', error);
     const message = error instanceof Error ? error.message : 'Failed to verify citation';
     const status = message.includes('required') || message.includes('Insufficient') ? 401 : 500;
-    return NextResponse.json(
-      { success: false, error: message },
-      { status }
-    );
+    return NextResponse.json({ success: false, error: message }, { status });
   }
 }

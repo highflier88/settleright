@@ -37,7 +37,10 @@ test.describe('Arbitrator Dashboard', () => {
 test.describe('Case Review', () => {
   test('should navigate to case review page', async ({ page }) => {
     await page.goto('/arbitrator/dashboard');
-    await page.getByRole('link', { name: /review/i }).first().click();
+    await page
+      .getByRole('link', { name: /review/i })
+      .first()
+      .click();
     await expect(page).toHaveURL(/\/arbitrator\/cases\/[a-z0-9]+/);
   });
 

@@ -45,14 +45,11 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
 
     // Verify user has access to this case
     const userId = request.user.id;
-    const isParty =
-      caseData.claimantId === userId || caseData.respondentId === userId;
+    const isParty = caseData.claimantId === userId || caseData.respondentId === userId;
     const isArbitrator = caseData.arbitratorAssignment?.arbitratorId === userId;
 
     if (!isParty && !isArbitrator) {
-      return errorResponse(
-        new ForbiddenError('You do not have access to this case')
-      );
+      return errorResponse(new ForbiddenError('You do not have access to this case'));
     }
 
     // Get award
@@ -84,8 +81,10 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
         documentType: 'award',
         referenceNumber: award.referenceNumber,
       },
-      ipAddress: request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-        request.headers.get('x-real-ip') || 'unknown',
+      ipAddress:
+        request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+        request.headers.get('x-real-ip') ||
+        'unknown',
       userAgent: request.headers.get('user-agent') || 'unknown',
     });
 

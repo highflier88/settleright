@@ -20,23 +20,23 @@
 
 **CLAIMANT:**
 
-| Field | Information |
-|-------|-------------|
-| Full Legal Name | [CLAIMANT NAME] |
-| Email Address | [CLAIMANT EMAIL] |
-| Mailing Address | [CLAIMANT ADDRESS] |
-| Phone Number | [CLAIMANT PHONE] |
-| Identity Verified | [YES/NO - DATE] |
+| Field             | Information        |
+| ----------------- | ------------------ |
+| Full Legal Name   | [CLAIMANT NAME]    |
+| Email Address     | [CLAIMANT EMAIL]   |
+| Mailing Address   | [CLAIMANT ADDRESS] |
+| Phone Number      | [CLAIMANT PHONE]   |
+| Identity Verified | [YES/NO - DATE]    |
 
 **RESPONDENT:**
 
-| Field | Information |
-|-------|-------------|
-| Full Legal Name | [RESPONDENT NAME] |
-| Email Address | [RESPONDENT EMAIL] |
-| Mailing Address | [RESPONDENT ADDRESS] |
-| Phone Number | [RESPONDENT PHONE] |
-| Identity Verified | [YES/NO - DATE] |
+| Field             | Information          |
+| ----------------- | -------------------- |
+| Full Legal Name   | [RESPONDENT NAME]    |
+| Email Address     | [RESPONDENT EMAIL]   |
+| Mailing Address   | [RESPONDENT ADDRESS] |
+| Phone Number      | [RESPONDENT PHONE]   |
+| Identity Verified | [YES/NO - DATE]      |
 
 ---
 
@@ -64,13 +64,13 @@ NOW, THEREFORE, in consideration of the mutual promises and covenants contained 
 
 The Claimant seeks the following relief:
 
-| Type of Relief | Amount/Description |
-|----------------|-------------------|
-| Principal Amount | $[AMOUNT] |
-| Interest (if claimed) | $[AMOUNT] |
-| Other Damages | $[AMOUNT] |
-| Other Relief Sought | [DESCRIPTION] |
-| **Total Claimed** | **$[TOTAL]** |
+| Type of Relief        | Amount/Description |
+| --------------------- | ------------------ |
+| Principal Amount      | $[AMOUNT]          |
+| Interest (if claimed) | $[AMOUNT]          |
+| Other Damages         | $[AMOUNT]          |
+| Other Relief Sought   | [DESCRIPTION]      |
+| **Total Claimed**     | **$[TOTAL]**       |
 
 **1.3 Respondent's Position**
 
@@ -102,9 +102,9 @@ The substantive law governing the Dispute shall be:
 
 **[ ] Laws of the State of [STATE], United States**
 **[ ] Laws of [COUNTRY/PROVINCE]**
-**[ ] Other: ________________________**
+**[ ] Other: **\*\*\*\*\***\*\_\_\_\_\*\***\*\*\*\*\*\*\*\*
 
-*(Select one)*
+_(Select one)_
 
 **3.2 Arbitration Law**
 
@@ -173,6 +173,7 @@ The Parties agree that the arbitration shall be conducted entirely online throug
 **THE PARTIES EXPRESSLY WAIVE ANY RIGHT TO APPEAL THE AWARD OR TO SEEK REVIEW OF THE AWARD IN ANY COURT, except on the limited grounds set forth in the Federal Arbitration Act, 9 U.S.C. § 10, or the applicable arbitration statute.**
 
 Such limited grounds may include:
+
 - The Award was procured by corruption, fraud, or undue means;
 - There was evident partiality or corruption on the part of the Arbitrator;
 - The Arbitrator was guilty of misconduct in refusing to hear evidence pertinent and material to the controversy, or other misbehavior prejudicing the rights of any Party;
@@ -205,6 +206,7 @@ The Parties acknowledge that the Award is intended to be enforceable under the F
 **7.4 Acknowledgment of Waiver**
 
 Each Party acknowledges that:
+
 - They have read and understand the waivers set forth in this Article 7;
 - They have had the opportunity to consult with legal counsel regarding these waivers;
 - They are voluntarily and knowingly waiving these rights.
@@ -303,14 +305,14 @@ This Agreement may be executed electronically and in counterparts, each of which
 
 **I, the undersigned Claimant, agree to be bound by the terms of this Submission to Binding Arbitration Agreement.**
 
-| Field | Value |
-|-------|-------|
-| Signature | ☑ I AGREE - [ELECTRONIC SIGNATURE] |
-| Printed Name | [CLAIMANT NAME] |
-| Date | [DATE - AUTO] |
-| Time (UTC) | [TIME - AUTO] |
-| IP Address | [IP - AUTO] |
-| Device | [USER AGENT - AUTO] |
+| Field        | Value                              |
+| ------------ | ---------------------------------- |
+| Signature    | ☑ I AGREE - [ELECTRONIC SIGNATURE] |
+| Printed Name | [CLAIMANT NAME]                    |
+| Date         | [DATE - AUTO]                      |
+| Time (UTC)   | [TIME - AUTO]                      |
+| IP Address   | [IP - AUTO]                        |
+| Device       | [USER AGENT - AUTO]                |
 
 ---
 
@@ -318,25 +320,25 @@ This Agreement may be executed electronically and in counterparts, each of which
 
 **I, the undersigned Respondent, agree to be bound by the terms of this Submission to Binding Arbitration Agreement.**
 
-| Field | Value |
-|-------|-------|
-| Signature | ☑ I AGREE - [ELECTRONIC SIGNATURE] |
-| Printed Name | [RESPONDENT NAME] |
-| Date | [DATE - AUTO] |
-| Time (UTC) | [TIME - AUTO] |
-| IP Address | [IP - AUTO] |
-| Device | [USER AGENT - AUTO] |
+| Field        | Value                              |
+| ------------ | ---------------------------------- |
+| Signature    | ☑ I AGREE - [ELECTRONIC SIGNATURE] |
+| Printed Name | [RESPONDENT NAME]                  |
+| Date         | [DATE - AUTO]                      |
+| Time (UTC)   | [TIME - AUTO]                      |
+| IP Address   | [IP - AUTO]                        |
+| Device       | [USER AGENT - AUTO]                |
 
 ---
 
 ## AGREEMENT VERIFICATION
 
-| Field | Value |
-|-------|-------|
-| Document Hash (SHA-256) | [HASH - AUTO] |
-| Agreement Version | 1.0 |
-| Rules Version | 1.0 |
-| Platform Version | [VERSION - AUTO] |
+| Field                   | Value            |
+| ----------------------- | ---------------- |
+| Document Hash (SHA-256) | [HASH - AUTO]    |
+| Agreement Version       | 1.0              |
+| Rules Version           | 1.0              |
+| Platform Version        | [VERSION - AUTO] |
 
 ---
 
@@ -344,4 +346,4 @@ This Agreement may be executed electronically and in counterparts, each of which
 
 ---
 
-*This agreement was executed through the Settleright.ai platform. For verification, contact: [INSERT CONTACT EMAIL]*
+_This agreement was executed through the Settleright.ai platform. For verification, contact: [INSERT CONTACT EMAIL]_

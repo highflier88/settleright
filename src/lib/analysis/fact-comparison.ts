@@ -53,11 +53,7 @@ export async function compareFacts(
   const claimantFactsStr = formatFactsForPrompt(claimantFacts);
   const respondentFactsStr = formatFactsForPrompt(respondentFacts);
 
-  const prompt = buildFactComparisonPrompt(
-    claimantFactsStr,
-    respondentFactsStr,
-    caseContext
-  );
+  const prompt = buildFactComparisonPrompt(claimantFactsStr, respondentFactsStr, caseContext);
 
   try {
     const response = await client.messages.create({
@@ -72,11 +68,9 @@ export async function compareFacts(
       ],
     });
 
-    const responseText =
-      response.content[0]?.type === 'text' ? response.content[0].text : '';
+    const responseText = response.content[0]?.type === 'text' ? response.content[0].text : '';
 
-    const tokensUsed =
-      (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
+    const tokensUsed = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
 
     const result = parseComparisonResponse(responseText);
 
@@ -117,7 +111,10 @@ function parseComparisonResponse(responseText: string): FactComparisonResult {
   try {
     let jsonStr = responseText.trim();
     if (jsonStr.startsWith('```')) {
-      jsonStr = jsonStr.replace(/```json?\n?/, '').replace(/```$/, '').trim();
+      jsonStr = jsonStr
+        .replace(/```json?\n?/, '')
+        .replace(/```$/, '')
+        .trim();
     }
 
     const parsed = JSON.parse(jsonStr) as {
@@ -146,17 +143,13 @@ function parseComparisonResponse(responseText: string): FactComparisonResult {
         topic: item.topic || '',
         claimantPosition: item.claimantPosition || '',
         respondentPosition: item.respondentPosition || '',
-        relevantEvidence: Array.isArray(item.relevantEvidence)
-          ? item.relevantEvidence
-          : [],
+        relevantEvidence: Array.isArray(item.relevantEvidence) ? item.relevantEvidence : [],
         materialityScore: Math.min(1, Math.max(0, item.materialityScore || 0.5)),
         analysis: item.analysis,
       }))
       .filter(
         (d) =>
-          d.topic.length > 0 &&
-          d.claimantPosition.length > 0 &&
-          d.respondentPosition.length > 0
+          d.topic.length > 0 && d.claimantPosition.length > 0 && d.respondentPosition.length > 0
       );
 
     // Parse undisputed facts
@@ -166,10 +159,8 @@ function parseComparisonResponse(responseText: string): FactComparisonResult {
         id: item.id || `agreed_${index + 1}`,
         fact: item.fact || '',
         agreedBy: Array.isArray(item.agreedBy)
-          ? (item.agreedBy.filter((p) =>
-              validParties.includes(p as PartySource)
-            ) as PartySource[])
-          : ['claimant'] as PartySource[],
+          ? (item.agreedBy.filter((p) => validParties.includes(p as PartySource)) as PartySource[])
+          : (['claimant'] as PartySource[]),
         supportingEvidence: Array.isArray(item.supportingEvidence)
           ? item.supportingEvidence
           : undefined,
@@ -246,14 +237,8 @@ export function calculateDisputeScore(
   if (totalFacts === 0) return 0;
 
   // Weight by materiality
-  const disputedWeight = disputed.reduce(
-    (sum, d) => sum + d.materialityScore,
-    0
-  );
-  const undisputedWeight = undisputed.reduce(
-    (sum, u) => sum + u.materialityScore,
-    0
-  );
+  const disputedWeight = disputed.reduce((sum, d) => sum + d.materialityScore, 0);
+  const undisputedWeight = undisputed.reduce((sum, u) => sum + u.materialityScore, 0);
 
   const totalWeight = disputedWeight + undisputedWeight;
   if (totalWeight === 0) return 0;

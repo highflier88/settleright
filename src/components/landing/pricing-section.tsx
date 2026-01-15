@@ -4,15 +4,7 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
-import {
-  Check,
-  Shield,
-  Calculator,
-  Scale,
-  Gavel,
-  Clock,
-  ArrowRight,
-} from 'lucide-react';
+import { Check, Shield, Calculator, Scale, Gavel, Clock, ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -77,9 +69,7 @@ const courtComparison = [
 
 function calculateFee(amount: number): number | null {
   if (amount < 500 || amount > 25000) return null;
-  const tier = pricingTiers.find(
-    (t) => amount >= t.minAmount && amount <= t.maxAmount
-  );
+  const tier = pricingTiers.find((t) => amount >= t.minAmount && amount <= t.maxAmount);
   return tier?.fee ?? null;
 }
 
@@ -104,7 +94,7 @@ export function PricingSection() {
     <SectionWrapper id="pricing" background="muted">
       <div className="mx-auto max-w-6xl">
         {/* Section Header */}
-        <div className="mb-16 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="mb-16 text-center duration-500 animate-in fade-in slide-in-from-bottom-4">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
             Simple, Transparent Pricing
           </h2>
@@ -122,9 +112,9 @@ export function PricingSection() {
                 'group relative rounded-xl border bg-background p-6 text-center transition-all duration-300',
                 'hover:shadow-lg',
                 tier.popular
-                  ? 'border-2 border-primary shadow-lg shadow-primary/10 scale-105 z-10'
+                  ? 'z-10 scale-105 border-2 border-primary shadow-lg shadow-primary/10'
                   : 'hover:border-primary/50',
-                'animate-in fade-in slide-in-from-bottom-4',
+                'animate-in fade-in slide-in-from-bottom-4'
               )}
               style={{ animationDelay: `${(index + 1) * 100}ms` }}
             >
@@ -138,12 +128,10 @@ export function PricingSection() {
               )}
 
               {/* Claim Range */}
-              <p className="text-sm font-medium text-muted-foreground">
-                {tier.claimRange}
-              </p>
+              <p className="text-sm font-medium text-muted-foreground">{tier.claimRange}</p>
 
               {/* Price */}
-              <div className="mt-4 mb-2">
+              <div className="mb-2 mt-4">
                 <span className="text-5xl font-bold tracking-tight">${tier.fee}</span>
               </div>
               <p className="text-xs text-muted-foreground">one-time filing fee</p>
@@ -151,7 +139,11 @@ export function PricingSection() {
               {/* Hover CTA */}
               <div className="mt-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <Link href="/sign-up">
-                  <Button size="sm" variant={tier.popular ? 'default' : 'outline'} className="w-full">
+                  <Button
+                    size="sm"
+                    variant={tier.popular ? 'default' : 'outline'}
+                    className="w-full"
+                  >
                     Get Started
                   </Button>
                 </Link>
@@ -161,7 +153,7 @@ export function PricingSection() {
         </div>
 
         {/* Fee Calculator */}
-        <div className="mt-12 rounded-xl border-2 border-dashed border-primary/30 bg-background p-6 md:p-8 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300">
+        <div className="mt-12 rounded-xl border-2 border-dashed border-primary/30 bg-background p-6 delay-300 duration-500 animate-in fade-in slide-in-from-bottom-4 md:p-8">
           <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between">
             <div className="flex items-center gap-3 text-center md:text-left">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
@@ -175,7 +167,9 @@ export function PricingSection() {
 
             <div className="flex flex-col items-center gap-4 sm:flex-row">
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                  $
+                </span>
                 <Input
                   type="text"
                   inputMode="decimal"
@@ -205,9 +199,7 @@ export function PricingSection() {
 
               {calculatedFee !== null && (
                 <Link href="/sign-up">
-                  <Button>
-                    Start for ${calculatedFee}
-                  </Button>
+                  <Button>Start for ${calculatedFee}</Button>
                 </Link>
               )}
             </div>
@@ -215,7 +207,7 @@ export function PricingSection() {
         </div>
 
         {/* What's Included */}
-        <div className="mt-12 rounded-xl border bg-background p-6 md:p-8 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-500">
+        <div className="mt-12 rounded-xl border bg-background p-6 delay-500 duration-500 animate-in fade-in slide-in-from-bottom-4 md:p-8">
           <div className="flex items-center justify-center gap-2 text-center">
             <Shield className="h-5 w-5 text-primary" />
             <h3 className="text-lg font-semibold">Everything included with every filing</h3>
@@ -236,7 +228,7 @@ export function PricingSection() {
         </div>
 
         {/* Court Comparison */}
-        <div className="mt-12 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-700">
+        <div className="mt-12 delay-700 duration-500 animate-in fade-in slide-in-from-bottom-4">
           <h3 className="mb-6 text-center text-lg font-semibold">
             Compare to Traditional Small Claims Court
           </h3>
@@ -269,8 +261,8 @@ export function PricingSection() {
         </div>
 
         {/* Bottom CTA */}
-        <div className="mt-12 text-center animate-in fade-in duration-500 delay-1000">
-          <div className="inline-flex items-center gap-2 rounded-full border bg-background px-4 py-2 text-sm text-muted-foreground mb-6">
+        <div className="mt-12 text-center delay-1000 duration-500 animate-in fade-in">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border bg-background px-4 py-2 text-sm text-muted-foreground">
             <Clock className="h-4 w-4 text-primary" />
             <span>Most cases resolve in 2-4 weeks</span>
           </div>

@@ -148,9 +148,7 @@ export async function getAgreementForCase(caseId: string): Promise<
 }
 
 // Sign the agreement
-export async function signAgreement(
-  input: SignAgreementInput
-): Promise<SignAgreementResult> {
+export async function signAgreement(input: SignAgreementInput): Promise<SignAgreementResult> {
   try {
     // Get the agreement with case details
     const agreement = await getAgreementForCase(input.caseId);

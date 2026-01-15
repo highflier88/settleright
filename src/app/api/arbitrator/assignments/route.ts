@@ -101,11 +101,7 @@ export const GET = withArbitrator(async (request: AuthenticatedRequest) => {
           },
         },
       },
-      orderBy: [
-        { priority: 'desc' },
-        { dueBy: 'asc' },
-        { assignedAt: 'asc' },
-      ],
+      orderBy: [{ priority: 'desc' }, { dueBy: 'asc' }, { assignedAt: 'asc' }],
       take: limit,
       skip: offset,
     });
@@ -114,9 +110,7 @@ export const GET = withArbitrator(async (request: AuthenticatedRequest) => {
     let filteredAssignments = assignments;
     if (hasAward !== null) {
       const hasDraft = hasAward === 'true';
-      filteredAssignments = assignments.filter(
-        (a) => (a.case.draftAward !== null) === hasDraft
-      );
+      filteredAssignments = assignments.filter((a) => (a.case.draftAward !== null) === hasDraft);
     }
 
     // Transform for response

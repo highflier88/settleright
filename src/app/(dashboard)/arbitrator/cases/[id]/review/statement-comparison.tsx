@@ -14,18 +14,8 @@ import {
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Table,
@@ -106,11 +96,9 @@ function StatementPanel({ statement, partyName, partyType, isClaimant }: Stateme
 
   if (!statement) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 text-muted-foreground">
-        <MessageSquare className="h-12 w-12 mb-4 opacity-50" />
-        <p className="text-center">
-          No statement submitted by {partyName}
-        </p>
+      <div className="flex h-64 flex-col items-center justify-center text-muted-foreground">
+        <MessageSquare className="mb-4 h-12 w-12 opacity-50" />
+        <p className="text-center">No statement submitted by {partyName}</p>
       </div>
     );
   }
@@ -127,11 +115,9 @@ function StatementPanel({ statement, partyName, partyType, isClaimant }: Stateme
             <Badge variant={partyType === 'claimant' ? 'default' : 'secondary'}>
               {statement.type}
             </Badge>
-            <span className="text-sm text-muted-foreground">
-              Version {statement.version}
-            </span>
+            <span className="text-sm text-muted-foreground">Version {statement.version}</span>
           </div>
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="mt-1 text-xs text-muted-foreground">
             Submitted {format(new Date(statement.submittedAt), 'MMMM d, yyyy h:mm a')}
           </p>
         </div>
@@ -140,7 +126,7 @@ function StatementPanel({ statement, partyName, partyType, isClaimant }: Stateme
       {/* Narrative */}
       <Collapsible open={narrativeExpanded} onOpenChange={setNarrativeExpanded}>
         <CollapsibleTrigger asChild>
-          <Button variant="ghost" className="w-full justify-between p-2 h-auto">
+          <Button variant="ghost" className="h-auto w-full justify-between p-2">
             <span className="font-medium">Narrative Statement</span>
             {narrativeExpanded ? (
               <ChevronUp className="h-4 w-4" />
@@ -162,7 +148,7 @@ function StatementPanel({ statement, partyName, partyType, isClaimant }: Stateme
       {isClaimant && claimItems.length > 0 && (
         <Collapsible open={claimsExpanded} onOpenChange={setClaimsExpanded}>
           <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="w-full justify-between p-2 h-auto">
+            <Button variant="ghost" className="h-auto w-full justify-between p-2">
               <div className="flex items-center gap-2">
                 <span className="font-medium">Claimed Damages</span>
                 <Badge variant="outline">{formatCurrency(totalClaimed)}</Badge>
@@ -195,8 +181,12 @@ function StatementPanel({ statement, partyName, partyType, isClaimant }: Stateme
                     </TableRow>
                   ))}
                   <TableRow className="bg-muted/50">
-                    <TableCell colSpan={2} className="font-bold">Total Claimed</TableCell>
-                    <TableCell className="text-right font-bold">{formatCurrency(totalClaimed)}</TableCell>
+                    <TableCell colSpan={2} className="font-bold">
+                      Total Claimed
+                    </TableCell>
+                    <TableCell className="text-right font-bold">
+                      {formatCurrency(totalClaimed)}
+                    </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -275,13 +265,11 @@ export function StatementComparison({
         {/* Claimant Statement */}
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-lg">
               <Badge variant="default">{claimantName}</Badge>
               Statement
             </CardTitle>
-            <CardDescription>
-              Initial claim and narrative from the claimant
-            </CardDescription>
+            <CardDescription>Initial claim and narrative from the claimant</CardDescription>
           </CardHeader>
           <CardContent>
             <StatementPanel
@@ -296,13 +284,11 @@ export function StatementComparison({
         {/* Respondent Statement */}
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-lg">
               <Badge variant="secondary">{respondentName}</Badge>
               Statement
             </CardTitle>
-            <CardDescription>
-              Response and defense from the respondent
-            </CardDescription>
+            <CardDescription>Response and defense from the respondent</CardDescription>
           </CardHeader>
           <CardContent>
             <StatementPanel
@@ -320,9 +306,7 @@ export function StatementComparison({
         <Card>
           <CardHeader>
             <CardTitle>Claims Summary</CardTitle>
-            <CardDescription>
-              Breakdown of claimed damages and amounts
-            </CardDescription>
+            <CardDescription>Breakdown of claimed damages and amounts</CardDescription>
           </CardHeader>
           <CardContent>
             <Table>

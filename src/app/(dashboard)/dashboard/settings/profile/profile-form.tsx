@@ -149,19 +149,12 @@ export function ProfileForm({ user }: ProfileFormProps) {
       <Card>
         <CardHeader>
           <CardTitle>Personal Information</CardTitle>
-          <CardDescription>
-            Update your name and contact information
-          </CardDescription>
+          <CardDescription>Update your name and contact information</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              value={user.email}
-              disabled
-              className="bg-muted"
-            />
+            <Input id="email" value={user.email} disabled className="bg-muted" />
             <p className="text-xs text-muted-foreground">
               Email is managed through your authentication provider
             </p>
@@ -169,15 +162,8 @@ export function ProfileForm({ user }: ProfileFormProps) {
 
           <div className="space-y-2">
             <Label htmlFor="name">Full Name</Label>
-            <Input
-              id="name"
-              placeholder="John Doe"
-              {...register('name')}
-              disabled={isLoading}
-            />
-            {errors.name && (
-              <p className="text-sm text-destructive">{errors.name.message}</p>
-            )}
+            <Input id="name" placeholder="John Doe" {...register('name')} disabled={isLoading} />
+            {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
           </div>
 
           <div className="space-y-2">
@@ -189,9 +175,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
               {...register('phone')}
               disabled={isLoading}
             />
-            {errors.phone && (
-              <p className="text-sm text-destructive">{errors.phone.message}</p>
-            )}
+            {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
           </div>
         </CardContent>
       </Card>

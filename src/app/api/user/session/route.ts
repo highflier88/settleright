@@ -19,9 +19,10 @@ export async function GET() {
 
     const headersList = headers();
     const userAgent = headersList.get('user-agent');
-    const ip = headersList.get('x-forwarded-for')?.split(',')[0] ||
-               headersList.get('x-real-ip') ||
-               'unknown';
+    const ip =
+      headersList.get('x-forwarded-for')?.split(',')[0] ||
+      headersList.get('x-real-ip') ||
+      'unknown';
 
     // Try to get extended session metadata from KV
     const sessionMetadata = await getSessionMetadata(session.sessionId);

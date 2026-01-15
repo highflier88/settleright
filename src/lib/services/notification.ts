@@ -43,7 +43,8 @@ export const NotificationTemplates = {
   KYC_FAILED: 'kyc_failed',
 } as const;
 
-export type NotificationTemplateId = typeof NotificationTemplates[keyof typeof NotificationTemplates];
+export type NotificationTemplateId =
+  (typeof NotificationTemplates)[keyof typeof NotificationTemplates];
 
 // Template data interfaces
 export interface BaseTemplateData {
@@ -145,9 +146,7 @@ export async function updateNotificationPreferences(
 }
 
 // Create an in-app notification
-export async function createInAppNotification(
-  input: CreateNotificationInput
-): Promise<string> {
+export async function createInAppNotification(input: CreateNotificationInput): Promise<string> {
   const notification = await prisma.notification.create({
     data: {
       userId: input.userId,
@@ -277,9 +276,12 @@ export async function getNotificationStats(userId: string) {
     total,
     unread,
     read: total - unread,
-    byTemplate: byTemplate.reduce((acc, item) => {
-      acc[item.templateId] = item._count;
-      return acc;
-    }, {} as Record<string, number>),
+    byTemplate: byTemplate.reduce(
+      (acc, item) => {
+        acc[item.templateId] = item._count;
+        return acc;
+      },
+      {} as Record<string, number>
+    ),
   };
 }

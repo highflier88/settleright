@@ -110,10 +110,7 @@ export const CALIFORNIA_RULES: JurisdictionRules = {
       id: 'prejudgment_interest_contracts',
       category: 'damages',
       rule: '10% prejudgment interest on contract damages from date certain',
-      conditions: [
-        'Contract claim',
-        'Damages certain or capable of being made certain',
-      ],
+      conditions: ['Contract claim', 'Damages certain or capable of being made certain'],
       effect: 'Award 10% annual interest from date of breach/demand',
       statutoryBasis: 'Cal. Civ. Code § 3289(b)',
     },
@@ -137,10 +134,7 @@ export const CALIFORNIA_RULES: JurisdictionRules = {
       id: 'consequential_damages_foreseeability',
       category: 'damages',
       rule: 'Consequential damages must be foreseeable at time of contracting',
-      conditions: [
-        'Contract claim',
-        'Consequential damages sought',
-      ],
+      conditions: ['Contract claim', 'Consequential damages sought'],
       effect: 'Award only damages that were reasonably foreseeable',
       statutoryBasis: 'Cal. Civ. Code § 3300',
     },
@@ -195,10 +189,7 @@ export function calculateCaliforniaInterest(params: InterestParams): InterestRes
 /**
  * Get applicable California statutes for a dispute type
  */
-export function getCaliforniaStatutes(
-  disputeType: string,
-  issues: string[] = []
-): string[] {
+export function getCaliforniaStatutes(disputeType: string, issues: string[] = []): string[] {
   const statutes: string[] = [];
 
   // Always include basic contract formation
@@ -325,18 +316,13 @@ export function checkCaliforniaSOL(
  * Get California special rules for a category
  */
 export function getCaliforniaSpecialRules(category: string) {
-  return CALIFORNIA_RULES.specialRules.filter(
-    (rule) => rule.category === category
-  );
+  return CALIFORNIA_RULES.specialRules.filter((rule) => rule.category === category);
 }
 
 /**
  * Format California citation for display
  */
-export function formatCaliforniaCitation(
-  code: string,
-  section: string
-): string {
+export function formatCaliforniaCitation(code: string, section: string): string {
   const codeAbbreviations: Record<string, string> = {
     civil: 'Cal. Civ. Code',
     'civil code': 'Cal. Civ. Code',

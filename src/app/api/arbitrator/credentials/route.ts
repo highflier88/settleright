@@ -22,10 +22,7 @@ export async function GET(_request: NextRequest) {
     const { userId: clerkId } = auth();
 
     if (!clerkId) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
     }
 
     // Get user and profile
@@ -35,10 +32,7 @@ export async function GET(_request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'User not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: 'User not found' }, { status: 404 });
     }
 
     if (!user.arbitratorProfile) {
@@ -71,10 +65,7 @@ export async function GET(_request: NextRequest) {
   } catch (error) {
     console.error('[Arbitrator Credentials API] GET error:', error);
     const message = error instanceof Error ? error.message : 'Failed to get credential status';
-    return NextResponse.json(
-      { success: false, error: message },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }
 
@@ -83,10 +74,7 @@ export async function POST(request: NextRequest) {
     const { userId: clerkId } = auth();
 
     if (!clerkId) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
     }
 
     // Get user and profile
@@ -96,10 +84,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'User not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: 'User not found' }, { status: 404 });
     }
 
     if (!user.arbitratorProfile) {
@@ -109,7 +94,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json() as {
+    const body = (await request.json()) as {
       barNumber: string;
       barState: string;
       isRetiredJudge?: boolean;
@@ -137,9 +122,6 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('[Arbitrator Credentials API] POST error:', error);
     const message = error instanceof Error ? error.message : 'Failed to submit credentials';
-    return NextResponse.json(
-      { success: false, error: message },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }

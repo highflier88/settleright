@@ -18,13 +18,7 @@ import {
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 import { EvidenceViewer } from './evidence-viewer';
@@ -60,7 +54,11 @@ function formatFileSize(bytes: number): string {
 function getProcessingStatusBadge(status: string) {
   switch (status) {
     case 'COMPLETED':
-      return <Badge variant="default" className="bg-green-600">Processed</Badge>;
+      return (
+        <Badge variant="default" className="bg-green-600">
+          Processed
+        </Badge>
+      );
     case 'FAILED':
       return <Badge variant="destructive">Failed</Badge>;
     case 'PENDING':
@@ -83,8 +81,10 @@ function EvidenceCard({ evidence, onSelect, isSelected }: EvidenceCardProps) {
   return (
     <button
       type="button"
-      className={`w-full text-left rounded-lg border p-3 cursor-pointer transition-all hover:shadow-md ${
-        isSelected ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'hover:border-muted-foreground/30'
+      className={`w-full cursor-pointer rounded-lg border p-3 text-left transition-all hover:shadow-md ${
+        isSelected
+          ? 'border-primary bg-primary/5 ring-1 ring-primary'
+          : 'hover:border-muted-foreground/30'
       }`}
       onClick={() => onSelect(evidence)}
     >
@@ -92,15 +92,15 @@ function EvidenceCard({ evidence, onSelect, isSelected }: EvidenceCardProps) {
         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
           <Icon className="h-5 w-5 text-muted-foreground" />
         </div>
-        <div className="flex-1 min-w-0">
-          <p className="font-medium text-sm truncate">{evidence.fileName}</p>
-          <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-medium">{evidence.fileName}</p>
+          <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
             <span>{formatFileSize(evidence.fileSize)}</span>
             <span>|</span>
             <span>{format(new Date(evidence.submittedAt), 'MMM d, yyyy')}</span>
           </div>
           {evidence.description && (
-            <p className="text-xs text-muted-foreground mt-1 line-clamp-1">
+            <p className="mt-1 line-clamp-1 text-xs text-muted-foreground">
               {evidence.description}
             </p>
           )}
@@ -120,8 +120,8 @@ interface EvidenceDetailProps {
 function EvidenceDetail({ evidence, partyName, onOpenViewer }: EvidenceDetailProps) {
   if (!evidence) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 text-muted-foreground">
-        <FileText className="h-12 w-12 mb-4 opacity-50" />
+      <div className="flex h-64 flex-col items-center justify-center text-muted-foreground">
+        <FileText className="mb-4 h-12 w-12 opacity-50" />
         <p>Select an evidence item to view details</p>
       </div>
     );
@@ -138,14 +138,10 @@ function EvidenceDetail({ evidence, partyName, onOpenViewer }: EvidenceDetailPro
         </div>
         <div className="flex-1">
           <h3 className="font-semibold">{evidence.fileName}</h3>
-          <p className="text-sm text-muted-foreground">
-            Submitted by {partyName}
-          </p>
-          <div className="flex items-center gap-2 mt-2">
+          <p className="text-sm text-muted-foreground">Submitted by {partyName}</p>
+          <div className="mt-2 flex items-center gap-2">
             {getProcessingStatusBadge(evidence.processingStatus)}
-            {evidence.documentType && (
-              <Badge variant="outline">{evidence.documentType}</Badge>
-            )}
+            {evidence.documentType && <Badge variant="outline">{evidence.documentType}</Badge>}
           </div>
         </div>
       </div>
@@ -172,7 +168,7 @@ function EvidenceDetail({ evidence, partyName, onOpenViewer }: EvidenceDetailPro
       {/* Description */}
       {evidence.description && (
         <div>
-          <h4 className="text-sm font-medium mb-1">Description</h4>
+          <h4 className="mb-1 text-sm font-medium">Description</h4>
           <p className="text-sm text-muted-foreground">{evidence.description}</p>
         </div>
       )}
@@ -180,7 +176,7 @@ function EvidenceDetail({ evidence, partyName, onOpenViewer }: EvidenceDetailPro
       {/* AI Summary */}
       {evidence.summary && (
         <div className="rounded-lg border bg-muted/30 p-3">
-          <h4 className="text-sm font-medium mb-1 flex items-center gap-2">
+          <h4 className="mb-1 flex items-center gap-2 text-sm font-medium">
             AI Summary
             {evidence.classificationConfidence && (
               <Badge variant="outline" className="text-xs">
@@ -195,11 +191,11 @@ function EvidenceDetail({ evidence, partyName, onOpenViewer }: EvidenceDetailPro
       {/* Key Points */}
       {evidence.keyPoints && evidence.keyPoints.length > 0 && (
         <div>
-          <h4 className="text-sm font-medium mb-2">Key Points</h4>
+          <h4 className="mb-2 text-sm font-medium">Key Points</h4>
           <ul className="space-y-1">
             {evidence.keyPoints.map((point, index) => (
               <li key={index} className="flex items-start gap-2 text-sm">
-                <ChevronRight className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                <ChevronRight className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
                 <span>{point}</span>
               </li>
             ))}
@@ -210,35 +206,39 @@ function EvidenceDetail({ evidence, partyName, onOpenViewer }: EvidenceDetailPro
       {/* Extracted Entities */}
       {evidence.extractedEntities && typeof evidence.extractedEntities === 'object' && (
         <div>
-          <h4 className="text-sm font-medium mb-2">Extracted Entities</h4>
+          <h4 className="mb-2 text-sm font-medium">Extracted Entities</h4>
           <div className="flex flex-wrap gap-2">
-            {Object.entries(evidence.extractedEntities as Record<string, unknown[]>).map(([type, values]) => (
-              values && Array.isArray(values) && values.length > 0 && (
-                <div key={type} className="flex flex-wrap gap-1">
-                  {values.slice(0, 5).map((value, index) => (
-                    <Badge key={index} variant="secondary" className="text-xs">
-                      {type}: {String(typeof value === 'object' && value !== null && 'value' in value ? value.value : value)}
-                    </Badge>
-                  ))}
-                </div>
-              )
-            ))}
+            {Object.entries(evidence.extractedEntities as Record<string, unknown[]>).map(
+              ([type, values]) =>
+                values &&
+                Array.isArray(values) &&
+                values.length > 0 && (
+                  <div key={type} className="flex flex-wrap gap-1">
+                    {values.slice(0, 5).map((value, index) => (
+                      <Badge key={index} variant="secondary" className="text-xs">
+                        {type}:{' '}
+                        {String(
+                          typeof value === 'object' && value !== null && 'value' in value
+                            ? value.value
+                            : value
+                        )}
+                      </Badge>
+                    ))}
+                  </div>
+                )
+            )}
           </div>
         </div>
       )}
 
       {/* Actions */}
       <div className="flex gap-2 pt-2">
-        <Button
-          size="sm"
-          variant="default"
-          onClick={() => onOpenViewer?.(evidence, partyName)}
-        >
-          <Eye className="h-4 w-4 mr-2" />
+        <Button size="sm" variant="default" onClick={() => onOpenViewer?.(evidence, partyName)}>
+          <Eye className="mr-2 h-4 w-4" />
           Deep Dive
         </Button>
         <Button size="sm" variant="outline">
-          <Download className="h-4 w-4 mr-2" />
+          <Download className="mr-2 h-4 w-4" />
           Download
         </Button>
       </div>
@@ -255,9 +255,15 @@ export function EvidenceComparison({
 }: EvidenceComparisonProps) {
   const [selectedClaimant, setSelectedClaimant] = useState<EvidenceWithSubmitter | null>(null);
   const [selectedRespondent, setSelectedRespondent] = useState<EvidenceWithSubmitter | null>(null);
-  const [detailEvidence, setDetailEvidence] = useState<{ evidence: EvidenceWithSubmitter; party: string } | null>(null);
+  const [detailEvidence, setDetailEvidence] = useState<{
+    evidence: EvidenceWithSubmitter;
+    party: string;
+  } | null>(null);
   const [viewerOpen, setViewerOpen] = useState(false);
-  const [viewerEvidence, setViewerEvidence] = useState<{ evidence: EvidenceWithSubmitter; party: string } | null>(null);
+  const [viewerEvidence, setViewerEvidence] = useState<{
+    evidence: EvidenceWithSubmitter;
+    party: string;
+  } | null>(null);
 
   const totalEvidence = claimantEvidence.length + respondentEvidence.length;
 
@@ -296,19 +302,17 @@ export function EvidenceComparison({
           {/* Claimant Evidence */}
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-lg">
                 <Badge variant="default">{claimantName}</Badge>
                 Evidence ({claimantEvidence.length})
               </CardTitle>
-              <CardDescription>
-                Evidence submitted by the claimant
-              </CardDescription>
+              <CardDescription>Evidence submitted by the claimant</CardDescription>
             </CardHeader>
             <CardContent>
               <ScrollArea className="h-[400px] pr-4">
                 {claimantEvidence.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-32 text-muted-foreground">
-                    <FileText className="h-8 w-8 mb-2 opacity-50" />
+                  <div className="flex h-32 flex-col items-center justify-center text-muted-foreground">
+                    <FileText className="mb-2 h-8 w-8 opacity-50" />
                     <p className="text-sm">No evidence submitted</p>
                   </div>
                 ) : (
@@ -333,19 +337,17 @@ export function EvidenceComparison({
           {/* Respondent Evidence */}
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-lg">
                 <Badge variant="secondary">{respondentName}</Badge>
                 Evidence ({respondentEvidence.length})
               </CardTitle>
-              <CardDescription>
-                Evidence submitted by the respondent
-              </CardDescription>
+              <CardDescription>Evidence submitted by the respondent</CardDescription>
             </CardHeader>
             <CardContent>
               <ScrollArea className="h-[400px] pr-4">
                 {respondentEvidence.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-32 text-muted-foreground">
-                    <FileText className="h-8 w-8 mb-2 opacity-50" />
+                  <div className="flex h-32 flex-col items-center justify-center text-muted-foreground">
+                    <FileText className="mb-2 h-8 w-8 opacity-50" />
                     <p className="text-sm">No evidence submitted</p>
                   </div>
                 ) : (

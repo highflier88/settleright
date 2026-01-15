@@ -71,9 +71,6 @@ export async function GET(request: NextRequest) {
     console.error('[Consistency API] GET error:', error);
     const message = error instanceof Error ? error.message : 'Failed to fetch consistency analysis';
     const status = message.includes('required') || message.includes('Insufficient') ? 401 : 500;
-    return NextResponse.json(
-      { success: false, error: message },
-      { status }
-    );
+    return NextResponse.json({ success: false, error: message }, { status });
   }
 }

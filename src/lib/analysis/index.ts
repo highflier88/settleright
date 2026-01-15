@@ -28,11 +28,7 @@ export {
 } from './fact-extraction';
 
 // Claim parsing
-export {
-  parseClaims,
-  calculateTotalClaimedAmount,
-  formatClaimsForPrompt,
-} from './claim-parser';
+export { parseClaims, calculateTotalClaimedAmount, formatClaimsForPrompt } from './claim-parser';
 
 // Fact comparison
 export {

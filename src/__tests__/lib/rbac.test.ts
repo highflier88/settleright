@@ -97,9 +97,7 @@ describe('RBAC Service', () => {
     });
 
     it('should return false when user lacks any permission', () => {
-      expect(
-        hasAllPermissions(UserRole.USER, ['user:read', 'admin:users'])
-      ).toBe(false);
+      expect(hasAllPermissions(UserRole.USER, ['user:read', 'admin:users'])).toBe(false);
     });
 
     it('should return true for empty permissions array', () => {
@@ -108,11 +106,7 @@ describe('RBAC Service', () => {
 
     it('should work for admin with all permissions', () => {
       expect(
-        hasAllPermissions(UserRole.ADMIN, [
-          'user:read',
-          'admin:users',
-          'arbitrator:review',
-        ])
+        hasAllPermissions(UserRole.ADMIN, ['user:read', 'admin:users', 'arbitrator:review'])
       ).toBe(true);
     });
   });
@@ -123,15 +117,11 @@ describe('RBAC Service', () => {
 
   describe('hasAnyPermission', () => {
     it('should return true when user has any of the permissions', () => {
-      expect(
-        hasAnyPermission(UserRole.USER, ['user:read', 'admin:users'])
-      ).toBe(true);
+      expect(hasAnyPermission(UserRole.USER, ['user:read', 'admin:users'])).toBe(true);
     });
 
     it('should return false when user has none of the permissions', () => {
-      expect(
-        hasAnyPermission(UserRole.USER, ['admin:users', 'admin:settings'])
-      ).toBe(false);
+      expect(hasAnyPermission(UserRole.USER, ['admin:users', 'admin:settings'])).toBe(false);
     });
 
     it('should return false for empty permissions array', () => {
@@ -139,9 +129,9 @@ describe('RBAC Service', () => {
     });
 
     it('should work for arbitrator', () => {
-      expect(
-        hasAnyPermission(UserRole.ARBITRATOR, ['arbitrator:review', 'admin:users'])
-      ).toBe(true);
+      expect(hasAnyPermission(UserRole.ARBITRATOR, ['arbitrator:review', 'admin:users'])).toBe(
+        true
+      );
     });
   });
 
@@ -155,15 +145,11 @@ describe('RBAC Service', () => {
     });
 
     it('should throw ForbiddenError when permission is denied', () => {
-      expect(() => requirePermission(UserRole.USER, 'admin:users')).toThrow(
-        ForbiddenError
-      );
+      expect(() => requirePermission(UserRole.USER, 'admin:users')).toThrow(ForbiddenError);
     });
 
     it('should include permission name in error message', () => {
-      expect(() => requirePermission(UserRole.USER, 'admin:users')).toThrow(
-        /admin:users/
-      );
+      expect(() => requirePermission(UserRole.USER, 'admin:users')).toThrow(/admin:users/);
     });
 
     it('should work for admin permissions', () => {

@@ -12,17 +12,26 @@ test.describe('Filing Fee Payment', () => {
   });
 
   test('should display payment required message', async ({ page }) => {
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
     await expect(page.getByText(/payment required|pay filing fee/i)).toBeVisible();
   });
 
   test('should show fee amount based on claim', async ({ page }) => {
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
     await expect(page.getByTestId('filing-fee-amount')).toBeVisible();
   });
 
   test('should navigate to payment page', async ({ page }) => {
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
     await page.getByRole('button', { name: /pay|checkout/i }).click();
 
     // Should redirect to Stripe Checkout or show embedded payment
@@ -45,13 +54,19 @@ test.describe('Response Fee Payment', () => {
   test('should show response fee for respondent', async ({ page }) => {
     // Assumes user is logged in as respondent
     await page.goto('/dashboard/cases');
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
     await expect(page.getByText(/response fee/i)).toBeVisible();
   });
 
   test('should display correct fee amount', async ({ page }) => {
     await page.goto('/dashboard/cases');
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
     await expect(page.getByTestId('response-fee-amount')).toBeVisible();
   });
 });
@@ -59,7 +74,10 @@ test.describe('Response Fee Payment', () => {
 test.describe('Payment History', () => {
   test('should display payment history', async ({ page }) => {
     await page.goto('/dashboard/cases');
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
     await page.getByRole('tab', { name: /payments/i }).click();
 
     await expect(page.getByTestId('payment-history')).toBeVisible();
@@ -67,7 +85,10 @@ test.describe('Payment History', () => {
 
   test('should show payment status', async ({ page }) => {
     await page.goto('/dashboard/cases');
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
     await page.getByRole('tab', { name: /payments/i }).click();
 
     await expect(page.getByTestId('payment-status')).toBeVisible();
@@ -75,7 +96,10 @@ test.describe('Payment History', () => {
 
   test('should provide receipt download link', async ({ page }) => {
     await page.goto('/dashboard/cases');
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
     await page.getByRole('tab', { name: /payments/i }).click();
 
     await expect(page.getByRole('link', { name: /receipt|download/i })).toBeVisible();

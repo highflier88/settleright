@@ -9,8 +9,18 @@
 
 import { prisma } from '@/lib/db';
 
-import { selectAuditSample, getAuditStats, type AuditSample, type AuditStats } from './audit-sampling';
-import { detectBias, generateBiasReport, type BiasDetectionResult, type BiasReport } from './bias-detection';
+import {
+  selectAuditSample,
+  getAuditStats,
+  type AuditSample,
+  type AuditStats,
+} from './audit-sampling';
+import {
+  detectBias,
+  generateBiasReport,
+  type BiasDetectionResult,
+  type BiasReport,
+} from './bias-detection';
 import { verifyCitations, type CitationReport } from './citation-verification';
 import { analyzeConsistency, type ConsistencyAnalysisResult } from './consistency-analysis';
 
@@ -147,8 +157,8 @@ export async function runQualityCheck(
           severity: citationAnalysis.invalidCitations > 3 ? 'high' : 'medium',
           description: `${citationAnalysis.invalidCitations} invalid citation(s) found`,
           details: citationAnalysis.citations
-            .filter(c => !c.isValid)
-            .map(c => c.citation)
+            .filter((c) => !c.isValid)
+            .map((c) => c.citation)
             .join(', '),
         });
         recommendations.push('Review and correct invalid citations before finalizing');
@@ -178,8 +188,9 @@ export async function runQualityCheck(
         category: 'consistency',
         severity: Math.abs(consistencyAnalysis.damageAnalysis.zScore) > 3 ? 'high' : 'medium',
         description: 'Award amount is a statistical outlier',
-        details: `Z-score: ${consistencyAnalysis.damageAnalysis.zScore.toFixed(2)}, ` +
-                 `Category average: $${consistencyAnalysis.damageAnalysis.categoryAverage.toFixed(0)}`,
+        details:
+          `Z-score: ${consistencyAnalysis.damageAnalysis.zScore.toFixed(2)}, ` +
+          `Category average: $${consistencyAnalysis.damageAnalysis.categoryAverage.toFixed(0)}`,
       });
       recommendations.push('Consider reviewing award amount against similar cases');
     }
@@ -209,13 +220,16 @@ export async function runQualityCheck(
           category: 'bias',
           severity: flag.severity,
           description: flag.description,
-          details: `Statistic: ${(flag.statistic * 100).toFixed(1)}%, ` +
-                   `Threshold: ${(flag.threshold * 100).toFixed(1)}%`,
+          details:
+            `Statistic: ${(flag.statistic * 100).toFixed(1)}%, ` +
+            `Threshold: ${(flag.threshold * 100).toFixed(1)}%`,
         });
       }
 
       if (biasAnalysis.biasScore > 0.5) {
-        recommendations.push('Arbitrator shows potential bias patterns - consider additional review');
+        recommendations.push(
+          'Arbitrator shows potential bias patterns - consider additional review'
+        );
       }
     } catch (error) {
       console.error('[QC] Bias analysis error:', error);
@@ -291,8 +305,8 @@ function calculateOverallScore(
   const weights = {
     citation: 0.25,
     consistency: 0.35,
-    bias: 0.20,
-    issues: 0.20,
+    bias: 0.2,
+    issues: 0.2,
   };
 
   // Citation score
@@ -458,9 +472,7 @@ export async function getQCDashboardData(
 /**
  * Aggregate citation statistics
  */
-async function aggregateCitationStats(
-  awards: Array<{ id: string }>
-): Promise<CitationStats> {
+async function aggregateCitationStats(awards: Array<{ id: string }>): Promise<CitationStats> {
   let totalCitations = 0;
   let validCitations = 0;
   let invalidCitations = 0;
@@ -494,16 +506,12 @@ async function aggregateCitationStats(
 /**
  * Calculate consistency statistics from checks
  */
-function calculateConsistencyStats(
-  checks: QualityCheckSummary[]
-): ConsistencyStats {
-  const scores = checks.map(c => c.score);
-  const averageScore = scores.length > 0
-    ? scores.reduce((a, b) => a + b, 0) / scores.length
-    : 0;
+function calculateConsistencyStats(checks: QualityCheckSummary[]): ConsistencyStats {
+  const scores = checks.map((c) => c.score);
+  const averageScore = scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
 
   // Count outliers (checks with issues)
-  const outlierCount = checks.filter(c => c.issueCount > 0).length;
+  const outlierCount = checks.filter((c) => c.issueCount > 0).length;
 
   // Aggregate common issues
   const mostCommonIssues = ['Statistical outlier', 'Insufficient findings', 'Citation issues'];
@@ -518,10 +526,7 @@ function calculateConsistencyStats(
 /**
  * Calculate quality control trends
  */
-function calculateTrends(
-  checks: QualityCheckSummary[],
-  periodDays: number
-): QCTrends {
+function calculateTrends(checks: QualityCheckSummary[], periodDays: number): QCTrends {
   // Group checks by week
   const weeklyScores = new Map<string, number[]>();
 

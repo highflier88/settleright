@@ -264,7 +264,10 @@ function parsePartiesResponse(responseText: string): ExtractedParty[] {
   try {
     let jsonStr = responseText.trim();
     if (jsonStr.startsWith('```')) {
-      jsonStr = jsonStr.replace(/```json?\n?/, '').replace(/```$/, '').trim();
+      jsonStr = jsonStr
+        .replace(/```json?\n?/, '')
+        .replace(/```$/, '')
+        .trim();
     }
 
     const parsed = JSON.parse(jsonStr) as Array<{
@@ -293,7 +296,9 @@ function parsePartiesResponse(responseText: string): ExtractedParty[] {
 /**
  * Quick entity extraction (regex only, no AI)
  */
-export function extractEntitiesQuick(text: string): Omit<ExtractedEntities, 'parties'> & { parties: ExtractedParty[] } {
+export function extractEntitiesQuick(
+  text: string
+): Omit<ExtractedEntities, 'parties'> & { parties: ExtractedParty[] } {
   return {
     dates: extractDates(text),
     amounts: extractAmounts(text),

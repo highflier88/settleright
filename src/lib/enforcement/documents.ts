@@ -86,7 +86,10 @@ export async function generateProofOfService(
   y -= 8;
   drawText(`Award Reference: ${data.awardReference}`, 11);
   drawText(`Case Reference: ${data.caseReference}`, 11);
-  drawText(`Award Issued: ${data.awardIssuedAt.toLocaleDateString('en-US', { dateStyle: 'full' })}`, 11);
+  drawText(
+    `Award Issued: ${data.awardIssuedAt.toLocaleDateString('en-US', { dateStyle: 'full' })}`,
+    11
+  );
   drawText(`Platform: ${data.platformName}`, 11);
   y -= 8;
   drawLine();
@@ -97,7 +100,10 @@ export async function generateProofOfService(
   drawText(`Name: ${data.claimant.name}`, 11);
   drawText(`Email: ${data.claimant.email}`, 11);
   if (data.claimant.notifiedAt) {
-    drawText(`Served On: ${data.claimant.notifiedAt.toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'long' })}`, 11);
+    drawText(
+      `Served On: ${data.claimant.notifiedAt.toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'long' })}`,
+      11
+    );
     drawText('Service Status: COMPLETED', 11, helveticaBold);
   } else {
     drawText('Service Status: PENDING', 11);
@@ -111,7 +117,10 @@ export async function generateProofOfService(
   drawText(`Name: ${data.respondent.name}`, 11);
   drawText(`Email: ${data.respondent.email}`, 11);
   if (data.respondent.notifiedAt) {
-    drawText(`Served On: ${data.respondent.notifiedAt.toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'long' })}`, 11);
+    drawText(
+      `Served On: ${data.respondent.notifiedAt.toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'long' })}`,
+      11
+    );
     drawText('Service Status: COMPLETED', 11, helveticaBold);
   } else {
     drawText('Service Status: PENDING', 11);
@@ -122,11 +131,12 @@ export async function generateProofOfService(
   // Delivery Method
   drawText('METHOD OF SERVICE', 12, helveticaBold);
   y -= 8;
-  const methodText = data.deliveryMethod === 'EMAIL'
-    ? 'Electronic mail to the email address on file'
-    : data.deliveryMethod === 'IN_APP'
-      ? 'In-app notification through the arbitration platform'
-      : 'Electronic mail and in-app notification';
+  const methodText =
+    data.deliveryMethod === 'EMAIL'
+      ? 'Electronic mail to the email address on file'
+      : data.deliveryMethod === 'IN_APP'
+        ? 'In-app notification through the arbitration platform'
+        : 'Electronic mail and in-app notification';
   drawText(methodText, 11);
   y -= 16;
 
@@ -189,7 +199,13 @@ export async function generateArbitratorCredentials(
 
   const drawCentered = (text: string, fontSize: number, font = helvetica) => {
     const width = font.widthOfTextAtSize(text, fontSize);
-    page.drawText(text, { x: (PAGE_WIDTH - width) / 2, y, size: fontSize, font, color: rgb(0, 0, 0) });
+    page.drawText(text, {
+      x: (PAGE_WIDTH - width) / 2,
+      y,
+      size: fontSize,
+      font,
+      color: rgb(0, 0, 0),
+    });
     y -= fontSize + 8;
   };
 
@@ -199,14 +215,25 @@ export async function generateArbitratorCredentials(
   };
 
   const drawLabelValue = (label: string, value: string) => {
-    page.drawText(label, { x: MARGIN, y, size: 10, font: helveticaBold, color: rgb(0.3, 0.3, 0.3) });
+    page.drawText(label, {
+      x: MARGIN,
+      y,
+      size: 10,
+      font: helveticaBold,
+      color: rgb(0.3, 0.3, 0.3),
+    });
     page.drawText(value, { x: MARGIN + 160, y, size: 10, font: helvetica, color: rgb(0, 0, 0) });
     y -= 16;
   };
 
   const drawLine = () => {
     y -= 8;
-    page.drawLine({ start: { x: MARGIN, y }, end: { x: PAGE_WIDTH - MARGIN, y }, thickness: 0.5, color: rgb(0.7, 0.7, 0.7) });
+    page.drawLine({
+      start: { x: MARGIN, y },
+      end: { x: PAGE_WIDTH - MARGIN, y },
+      thickness: 0.5,
+      color: rgb(0.7, 0.7, 0.7),
+    });
     y -= 16;
   };
 
@@ -262,13 +289,19 @@ export async function generateArbitratorCredentials(
 
   if (data.arbitrator.credentialVerifiedAt) {
     drawLabelValue('Credentials Verified:', 'YES');
-    drawLabelValue('Verified On:', data.arbitrator.credentialVerifiedAt.toLocaleDateString('en-US', { dateStyle: 'full' }));
+    drawLabelValue(
+      'Verified On:',
+      data.arbitrator.credentialVerifiedAt.toLocaleDateString('en-US', { dateStyle: 'full' })
+    );
   } else {
     drawLabelValue('Credentials Verified:', 'PENDING');
   }
 
   if (data.arbitrator.onboardedAt) {
-    drawLabelValue('Platform Onboarded:', data.arbitrator.onboardedAt.toLocaleDateString('en-US', { dateStyle: 'full' }));
+    drawLabelValue(
+      'Platform Onboarded:',
+      data.arbitrator.onboardedAt.toLocaleDateString('en-US', { dateStyle: 'full' })
+    );
   }
 
   drawLine();
@@ -276,9 +309,15 @@ export async function generateArbitratorCredentials(
   // Assignment Details
   drawText('CASE ASSIGNMENT', 12, helveticaBold);
   y -= 8;
-  drawLabelValue('Assigned On:', data.assignedAt.toLocaleDateString('en-US', { dateStyle: 'full' }));
+  drawLabelValue(
+    'Assigned On:',
+    data.assignedAt.toLocaleDateString('en-US', { dateStyle: 'full' })
+  );
   if (data.reviewCompletedAt) {
-    drawLabelValue('Review Completed:', data.reviewCompletedAt.toLocaleDateString('en-US', { dateStyle: 'full' }));
+    drawLabelValue(
+      'Review Completed:',
+      data.reviewCompletedAt.toLocaleDateString('en-US', { dateStyle: 'full' })
+    );
   }
   drawLabelValue('Award Signed:', data.signedAt.toLocaleDateString('en-US', { dateStyle: 'full' }));
 
@@ -309,7 +348,13 @@ export async function generateArbitratorCredentials(
   }
 
   y -= 24;
-  page.drawText(`Generated: ${new Date().toISOString()}`, { x: MARGIN, y, size: 8, font: helvetica, color: rgb(0.5, 0.5, 0.5) });
+  page.drawText(`Generated: ${new Date().toISOString()}`, {
+    x: MARGIN,
+    y,
+    size: 8,
+    font: helvetica,
+    color: rgb(0.5, 0.5, 0.5),
+  });
 
   const pdfBytes = await pdfDoc.save();
   const buffer = Buffer.from(pdfBytes);
@@ -340,7 +385,13 @@ export async function generateProceduralCompliance(
 
   const drawCentered = (text: string, fontSize: number, font = helvetica) => {
     const width = font.widthOfTextAtSize(text, fontSize);
-    page.drawText(text, { x: (PAGE_WIDTH - width) / 2, y, size: fontSize, font, color: rgb(0, 0, 0) });
+    page.drawText(text, {
+      x: (PAGE_WIDTH - width) / 2,
+      y,
+      size: fontSize,
+      font,
+      color: rgb(0, 0, 0),
+    });
     y -= fontSize + 8;
   };
 
@@ -359,7 +410,12 @@ export async function generateProceduralCompliance(
 
   const drawLine = () => {
     y -= 8;
-    page.drawLine({ start: { x: MARGIN, y }, end: { x: PAGE_WIDTH - MARGIN, y }, thickness: 0.5, color: rgb(0.7, 0.7, 0.7) });
+    page.drawLine({
+      start: { x: MARGIN, y },
+      end: { x: PAGE_WIDTH - MARGIN, y },
+      thickness: 0.5,
+      color: rgb(0.7, 0.7, 0.7),
+    });
     y -= 16;
   };
 
@@ -382,14 +438,26 @@ export async function generateProceduralCompliance(
   // Timeline
   drawText('PROCEDURAL TIMELINE', 12, helveticaBold);
   y -= 8;
-  drawText(`Case Initiated: ${data.caseCreatedAt.toLocaleDateString('en-US', { dateStyle: 'full' })}`, 10);
+  drawText(
+    `Case Initiated: ${data.caseCreatedAt.toLocaleDateString('en-US', { dateStyle: 'full' })}`,
+    10
+  );
   if (data.agreementSignedAt) {
-    drawText(`Agreement Signed: ${data.agreementSignedAt.toLocaleDateString('en-US', { dateStyle: 'full' })}`, 10);
+    drawText(
+      `Agreement Signed: ${data.agreementSignedAt.toLocaleDateString('en-US', { dateStyle: 'full' })}`,
+      10
+    );
   }
   if (data.analysisCompletedAt) {
-    drawText(`Analysis Completed: ${data.analysisCompletedAt.toLocaleDateString('en-US', { dateStyle: 'full' })}`, 10);
+    drawText(
+      `Analysis Completed: ${data.analysisCompletedAt.toLocaleDateString('en-US', { dateStyle: 'full' })}`,
+      10
+    );
   }
-  drawText(`Award Issued: ${data.awardIssuedAt.toLocaleDateString('en-US', { dateStyle: 'full' })}`, 10);
+  drawText(
+    `Award Issued: ${data.awardIssuedAt.toLocaleDateString('en-US', { dateStyle: 'full' })}`,
+    10
+  );
   drawLine();
 
   // Compliance Checklist
@@ -397,8 +465,14 @@ export async function generateProceduralCompliance(
   y -= 12;
 
   drawCheckItem('Both parties agreed to binding arbitration', data.bothPartiesAgreedToArbitrate);
-  drawCheckItem('Both parties had opportunity to submit evidence', data.bothPartiesHadOpportunityToSubmitEvidence);
-  drawCheckItem('Both parties had opportunity to submit statements', data.bothPartiesHadOpportunityToSubmitStatements);
+  drawCheckItem(
+    'Both parties had opportunity to submit evidence',
+    data.bothPartiesHadOpportunityToSubmitEvidence
+  );
+  drawCheckItem(
+    'Both parties had opportunity to submit statements',
+    data.bothPartiesHadOpportunityToSubmitStatements
+  );
   drawCheckItem('Neutral arbitrator was assigned', data.neutralArbitratorAssigned);
   drawCheckItem('Award based on evidence in the record', data.awardBasedOnRecordEvidence);
   drawCheckItem('Award issued within required timeframe', data.awardIssuedWithinTimeframe);
@@ -437,7 +511,13 @@ export async function generateProceduralCompliance(
   }
 
   y -= 24;
-  page.drawText(`Generated: ${new Date().toISOString()}`, { x: MARGIN, y, size: 8, font: helvetica, color: rgb(0.5, 0.5, 0.5) });
+  page.drawText(`Generated: ${new Date().toISOString()}`, {
+    x: MARGIN,
+    y,
+    size: 8,
+    font: helvetica,
+    color: rgb(0.5, 0.5, 0.5),
+  });
 
   const pdfBytes = await pdfDoc.save();
   const buffer = Buffer.from(pdfBytes);
@@ -476,7 +556,13 @@ export async function generateFilingInstructions(
   const drawCentered = (text: string, fontSize: number, font = helvetica) => {
     ensureSpace(fontSize + 10);
     const width = font.widthOfTextAtSize(text, fontSize);
-    page.drawText(text, { x: (PAGE_WIDTH - width) / 2, y, size: fontSize, font, color: rgb(0, 0, 0) });
+    page.drawText(text, {
+      x: (PAGE_WIDTH - width) / 2,
+      y,
+      size: fontSize,
+      font,
+      color: rgb(0, 0, 0),
+    });
     y -= fontSize + 8;
   };
 
@@ -512,7 +598,12 @@ export async function generateFilingInstructions(
   const drawLine = () => {
     ensureSpace(24);
     y -= 8;
-    page.drawLine({ start: { x: MARGIN, y }, end: { x: PAGE_WIDTH - MARGIN, y }, thickness: 0.5, color: rgb(0.7, 0.7, 0.7) });
+    page.drawLine({
+      start: { x: MARGIN, y },
+      end: { x: PAGE_WIDTH - MARGIN, y },
+      thickness: 0.5,
+      color: rgb(0.7, 0.7, 0.7),
+    });
     y -= 16;
   };
 
@@ -531,13 +622,17 @@ export async function generateFilingInstructions(
   drawText(`Claimant: ${data.claimantName}`, 10);
   drawText(`Respondent: ${data.respondentName}`, 10);
   if (data.awardAmount) {
-    drawText(`Award Amount: $${data.awardAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`, 10);
+    drawText(
+      `Award Amount: $${data.awardAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+      10
+    );
   }
-  const prevailingText = data.prevailingParty === 'CLAIMANT'
-    ? data.claimantName
-    : data.prevailingParty === 'RESPONDENT'
-      ? data.respondentName
-      : 'Split Decision';
+  const prevailingText =
+    data.prevailingParty === 'CLAIMANT'
+      ? data.claimantName
+      : data.prevailingParty === 'RESPONDENT'
+        ? data.respondentName
+        : 'Split Decision';
   drawText(`Prevailing Party: ${prevailingText}`, 10);
   drawLine();
 
@@ -582,11 +677,18 @@ export async function generateFilingInstructions(
 
   // Disclaimer
   y -= 8;
-  const disclaimer = 'DISCLAIMER: This document provides general guidance only and does not constitute legal advice. Filing requirements may vary and are subject to change. Consult with a licensed attorney in your jurisdiction for specific legal advice regarding your situation.';
+  const disclaimer =
+    'DISCLAIMER: This document provides general guidance only and does not constitute legal advice. Filing requirements may vary and are subject to change. Consult with a licensed attorney in your jurisdiction for specific legal advice regarding your situation.';
   drawWrappedText(disclaimer, 8, helvetica);
 
   y -= 16;
-  page.drawText(`Generated: ${new Date().toISOString()}`, { x: MARGIN, y, size: 8, font: helvetica, color: rgb(0.5, 0.5, 0.5) });
+  page.drawText(`Generated: ${new Date().toISOString()}`, {
+    x: MARGIN,
+    y,
+    size: 8,
+    font: helvetica,
+    color: rgb(0.5, 0.5, 0.5),
+  });
 
   const pdfBytes = await pdfDoc.save();
   const buffer = Buffer.from(pdfBytes);

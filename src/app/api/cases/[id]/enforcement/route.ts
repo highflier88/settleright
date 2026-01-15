@@ -54,9 +54,7 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
     const isAdmin = request.user.role === 'ADMIN';
 
     if (!isParty && !isArbitrator && !isAdmin) {
-      return errorResponse(
-        new ForbiddenError('You do not have access to this case')
-      );
+      return errorResponse(new ForbiddenError('You do not have access to this case'));
     }
 
     const status = await getEnforcementStatus(caseId);
@@ -155,8 +153,10 @@ export const POST = withAuth(
           documentCount: kit.totalDocuments,
           jurisdiction: kit.jurisdiction,
         },
-        ipAddress: request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-          request.headers.get('x-real-ip') || 'unknown',
+        ipAddress:
+          request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+          request.headers.get('x-real-ip') ||
+          'unknown',
         userAgent: request.headers.get('user-agent') || 'unknown',
       });
 

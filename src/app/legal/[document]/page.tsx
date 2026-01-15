@@ -10,7 +10,6 @@ import { type Metadata } from 'next';
 import { MarkdownRenderer } from '@/components/legal/markdown-renderer';
 import { PrintButton } from '@/components/legal/print-button';
 
-
 // Document configuration mapping
 const LEGAL_DOCUMENTS = {
   'terms-of-service': {
@@ -77,7 +76,10 @@ async function getDocumentContent(slug: string) {
     const fileContent = await readFile(filePath, 'utf-8');
 
     // Parse frontmatter if present
-    const { content, data } = matter(fileContent) as { content: string; data: Record<string, unknown> };
+    const { content, data } = matter(fileContent) as {
+      content: string;
+      data: Record<string, unknown>;
+    };
 
     // Extract version from content if not in frontmatter
     let version: string = (data.version as string | undefined) || '1.0';
@@ -87,10 +89,11 @@ async function getDocumentContent(slug: string) {
     }
 
     // Extract last updated from content if not in frontmatter
-    let lastUpdated: string | null = (data.lastUpdated as string | undefined) || (data['last-updated'] as string | undefined) || null;
-    const lastUpdatedMatch = content.match(
-      /\*\*Last Updated:\*\*\s*([^\n*]+)/
-    );
+    let lastUpdated: string | null =
+      (data.lastUpdated as string | undefined) ||
+      (data['last-updated'] as string | undefined) ||
+      null;
+    const lastUpdatedMatch = content.match(/\*\*Last Updated:\*\*\s*([^\n*]+)/);
     if (lastUpdatedMatch && lastUpdatedMatch[1] && lastUpdatedMatch[1].trim() !== '[INSERT DATE]') {
       lastUpdated = lastUpdatedMatch[1].trim();
     }

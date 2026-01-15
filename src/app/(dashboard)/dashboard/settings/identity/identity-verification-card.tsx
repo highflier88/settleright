@@ -130,9 +130,7 @@ export function IdentityVerificationCard({
 
   const canStartVerification =
     status?.canStartVerification ??
-    (currentStatus === 'NOT_STARTED' ||
-      currentStatus === 'FAILED' ||
-      currentStatus === 'EXPIRED');
+    (currentStatus === 'NOT_STARTED' || currentStatus === 'FAILED' || currentStatus === 'EXPIRED');
 
   const handleStartVerification = async () => {
     setIsLoading(true);
@@ -201,12 +199,7 @@ export function IdentityVerificationCard({
             </div>
             <div className="flex items-center gap-2">
               {currentStatus === 'PENDING' && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleRefresh}
-                  disabled={isLoading}
-                >
+                <Button variant="ghost" size="icon" onClick={handleRefresh} disabled={isLoading}>
                   <RefreshCw className={`h-4 w-4 ${isPolling ? 'animate-spin' : ''}`} />
                 </Button>
               )}
@@ -240,7 +233,10 @@ export function IdentityVerificationCard({
                 {(status?.documentType || initialVerification?.documentType) && (
                   <p>
                     <span className="text-muted-foreground">Document type:</span>{' '}
-                    {(status?.documentType ?? initialVerification?.documentType)?.replace(/_/g, ' ')}
+                    {(status?.documentType ?? initialVerification?.documentType)?.replace(
+                      /_/g,
+                      ' '
+                    )}
                   </p>
                 )}
                 {(status?.failureReason || initialVerification?.failureReason) && (
@@ -250,7 +246,7 @@ export function IdentityVerificationCard({
                   </p>
                 )}
                 {currentStatus === 'PENDING' && (
-                  <p className="text-muted-foreground italic">
+                  <p className="italic text-muted-foreground">
                     {isPolling
                       ? 'Checking for updates...'
                       : 'Please complete the verification process in the popup window.'}
@@ -286,8 +282,8 @@ export function IdentityVerificationCard({
           </p>
           <ul className="list-inside list-disc space-y-2 text-muted-foreground">
             <li>
-              <strong>Legal enforceability</strong> - Arbitration awards are only enforceable
-              when parties are properly identified
+              <strong>Legal enforceability</strong> - Arbitration awards are only enforceable when
+              parties are properly identified
             </li>
             <li>
               <strong>Fraud prevention</strong> - Prevents fraudulent claims and protects all
@@ -316,8 +312,8 @@ export function IdentityVerificationCard({
             <li>Good lighting for clear images</li>
           </ul>
           <p className="text-sm text-muted-foreground">
-            The verification process typically takes 2-5 minutes and results are usually
-            available within a few minutes.
+            The verification process typically takes 2-5 minutes and results are usually available
+            within a few minutes.
           </p>
         </CardContent>
       </Card>
@@ -330,9 +326,8 @@ export function IdentityVerificationCard({
         <CardContent>
           <p className="text-sm text-muted-foreground">
             Your identity documents are processed securely by Stripe Identity, our trusted
-            verification partner. We only store your verification status and verified name -
-            your actual identity documents are not stored on our servers. For more information,
-            see our{' '}
+            verification partner. We only store your verification status and verified name - your
+            actual identity documents are not stored on our servers. For more information, see our{' '}
             <a href="/privacy" className="text-primary hover:underline">
               Privacy Policy
             </a>

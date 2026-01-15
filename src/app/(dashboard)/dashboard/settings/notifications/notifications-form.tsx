@@ -64,17 +64,13 @@ export function NotificationsForm({ preferences }: NotificationsFormProps) {
       <Card>
         <CardHeader>
           <CardTitle>Notification Channels</CardTitle>
-          <CardDescription>
-            Choose how you want to receive notifications
-          </CardDescription>
+          <CardDescription>Choose how you want to receive notifications</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label htmlFor="email">Email Notifications</Label>
-              <p className="text-sm text-muted-foreground">
-                Receive updates via email
-              </p>
+              <p className="text-sm text-muted-foreground">Receive updates via email</p>
             </div>
             <Switch
               id="email"
@@ -87,9 +83,7 @@ export function NotificationsForm({ preferences }: NotificationsFormProps) {
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label htmlFor="sms">SMS Notifications</Label>
-              <p className="text-sm text-muted-foreground">
-                Receive updates via text message
-              </p>
+              <p className="text-sm text-muted-foreground">Receive updates via text message</p>
             </div>
             <Switch
               id="sms"
@@ -102,9 +96,7 @@ export function NotificationsForm({ preferences }: NotificationsFormProps) {
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label htmlFor="inApp">In-App Notifications</Label>
-              <p className="text-sm text-muted-foreground">
-                See notifications in the dashboard
-              </p>
+              <p className="text-sm text-muted-foreground">See notifications in the dashboard</p>
             </div>
             <Switch
               id="inApp"
@@ -119,9 +111,7 @@ export function NotificationsForm({ preferences }: NotificationsFormProps) {
       <Card>
         <CardHeader>
           <CardTitle>Notification Types</CardTitle>
-          <CardDescription>
-            Choose what you want to be notified about
-          </CardDescription>
+          <CardDescription>Choose what you want to be notified about</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
@@ -172,9 +162,7 @@ export function NotificationsForm({ preferences }: NotificationsFormProps) {
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label htmlFor="awardNotifications">Award Notifications</Label>
-              <p className="text-sm text-muted-foreground">
-                When an arbitration award is issued
-              </p>
+              <p className="text-sm text-muted-foreground">When an arbitration award is issued</p>
             </div>
             <Switch
               id="awardNotifications"
@@ -189,9 +177,7 @@ export function NotificationsForm({ preferences }: NotificationsFormProps) {
       <Card>
         <CardHeader>
           <CardTitle>Marketing</CardTitle>
-          <CardDescription>
-            Promotional communications and updates
-          </CardDescription>
+          <CardDescription>Promotional communications and updates</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between">

@@ -108,9 +108,7 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalCases}</div>
-            <p className="text-xs text-muted-foreground">
-              Cases you&apos;re involved in
-            </p>
+            <p className="text-xs text-muted-foreground">Cases you&apos;re involved in</p>
           </CardContent>
         </Card>
         <Card>
@@ -130,9 +128,7 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.resolvedCases}</div>
-            <p className="text-xs text-muted-foreground">
-              Successfully resolved
-            </p>
+            <p className="text-xs text-muted-foreground">Successfully resolved</p>
           </CardContent>
         </Card>
       </div>
@@ -161,11 +157,7 @@ export default async function DashboardPage() {
           ) : (
             <div className="space-y-4">
               {recentCases.map((case_) => (
-                <Link
-                  key={case_.id}
-                  href={`/dashboard/cases/${case_.id}`}
-                  className="block"
-                >
+                <Link key={case_.id} href={`/dashboard/cases/${case_.id}`} className="block">
                   <div className="flex items-center justify-between rounded-lg border p-4 transition-colors hover:bg-muted/50">
                     <div className="space-y-1">
                       <p className="font-medium">{case_.referenceNumber}</p>
@@ -175,9 +167,7 @@ export default async function DashboardPage() {
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium">
-                        ${Number(case_.amount).toLocaleString()}
-                      </p>
+                      <p className="font-medium">${Number(case_.amount).toLocaleString()}</p>
                       <p className="text-sm text-muted-foreground">
                         {case_.status.toLowerCase().replace(/_/g, ' ')}
                       </p>
@@ -196,8 +186,8 @@ export default async function DashboardPage() {
           <CardHeader>
             <CardTitle className="text-warning">Identity Verification Required</CardTitle>
             <CardDescription>
-              To participate in binding arbitration, you need to verify your identity.
-              This helps ensure the integrity of the arbitration process.
+              To participate in binding arbitration, you need to verify your identity. This helps
+              ensure the integrity of the arbitration process.
             </CardDescription>
           </CardHeader>
           <CardContent>

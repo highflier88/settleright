@@ -226,9 +226,9 @@ describe('Arbitrator Onboarding', () => {
       const jurisdictions = getAvailableJurisdictions();
 
       expect(jurisdictions.length).toBe(51); // 50 states + DC
-      expect(jurisdictions.find(j => j.code === 'CA')?.name).toBe('California');
-      expect(jurisdictions.find(j => j.code === 'NY')?.name).toBe('New York');
-      expect(jurisdictions.find(j => j.code === 'DC')?.name).toBe('District of Columbia');
+      expect(jurisdictions.find((j) => j.code === 'CA')?.name).toBe('California');
+      expect(jurisdictions.find((j) => j.code === 'NY')?.name).toBe('New York');
+      expect(jurisdictions.find((j) => j.code === 'DC')?.name).toBe('District of Columbia');
     });
   });
 
@@ -237,11 +237,11 @@ describe('Arbitrator Onboarding', () => {
       const specialties = getAvailableSpecialties();
 
       expect(specialties.length).toBe(5);
-      expect(specialties.map(s => s.value)).toContain('CONTRACT');
-      expect(specialties.map(s => s.value)).toContain('PAYMENT');
-      expect(specialties.map(s => s.value)).toContain('SERVICE');
-      expect(specialties.map(s => s.value)).toContain('GOODS');
-      expect(specialties.map(s => s.value)).toContain('OTHER');
+      expect(specialties.map((s) => s.value)).toContain('CONTRACT');
+      expect(specialties.map((s) => s.value)).toContain('PAYMENT');
+      expect(specialties.map((s) => s.value)).toContain('SERVICE');
+      expect(specialties.map((s) => s.value)).toContain('GOODS');
+      expect(specialties.map((s) => s.value)).toContain('OTHER');
     });
   });
 });
@@ -505,7 +505,7 @@ describe('Compensation Calculation', () => {
       (mockPrisma.arbitratorProfile.findUnique as jest.Mock).mockResolvedValue({
         compensationType: 'PERCENTAGE',
         baseFeePerCase: new Decimal(300),
-        percentageRate: new Decimal(0.10),
+        percentageRate: new Decimal(0.1),
         hourlyRate: new Decimal(150),
       });
       (mockPrisma.case.findUnique as jest.Mock).mockResolvedValue({
@@ -534,9 +534,7 @@ describe('Compensation Calculation', () => {
       });
       (mockPrisma.case.findUnique as jest.Mock).mockResolvedValue(null);
 
-      await expect(calculateCompensation('profile-1', 'invalid')).rejects.toThrow(
-        'Case not found'
-      );
+      await expect(calculateCompensation('profile-1', 'invalid')).rejects.toThrow('Case not found');
     });
   });
 

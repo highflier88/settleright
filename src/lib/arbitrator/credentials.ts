@@ -12,7 +12,6 @@ import { prisma } from '@/lib/db';
 
 import type { CredentialVerificationStatus } from '@prisma/client';
 
-
 // ============================================================================
 // TYPES
 // ============================================================================
@@ -107,9 +106,10 @@ export async function verifyCredentials(
   const verifiedAt = input.status === 'VERIFIED' ? now : null;
 
   // Default expiration to 1 year from now if verified and not specified
-  const expiresAt = input.status === 'VERIFIED'
-    ? (input.expiresAt || new Date(now.getFullYear() + 1, now.getMonth(), now.getDate()))
-    : null;
+  const expiresAt =
+    input.status === 'VERIFIED'
+      ? input.expiresAt || new Date(now.getFullYear() + 1, now.getMonth(), now.getDate())
+      : null;
 
   const updatedProfile = await prisma.arbitratorProfile.update({
     where: { id: input.arbitratorProfileId },
@@ -204,17 +204,19 @@ export async function areCredentialsValid(
  */
 export async function getPendingVerifications(
   options: { limit?: number; offset?: number } = {}
-): Promise<Array<{
-  id: string;
-  userId: string;
-  userName: string | null;
-  userEmail: string;
-  barNumber: string | null;
-  barState: string | null;
-  isRetiredJudge: boolean;
-  yearsExperience: number | null;
-  submittedAt: Date;
-}>> {
+): Promise<
+  Array<{
+    id: string;
+    userId: string;
+    userName: string | null;
+    userEmail: string;
+    barNumber: string | null;
+    barState: string | null;
+    isRetiredJudge: boolean;
+    yearsExperience: number | null;
+    submittedAt: Date;
+  }>
+> {
   const { limit = 50, offset = 0 } = options;
 
   const profiles = await prisma.arbitratorProfile.findMany({
@@ -235,7 +237,7 @@ export async function getPendingVerifications(
     skip: offset,
   });
 
-  return profiles.map(p => ({
+  return profiles.map((p) => ({
     id: p.id,
     userId: p.userId,
     userName: p.user.name,
@@ -251,15 +253,15 @@ export async function getPendingVerifications(
 /**
  * Get expired credentials that need renewal
  */
-export async function getExpiringCredentials(
-  daysUntilExpiry: number = 30
-): Promise<Array<{
-  id: string;
-  userId: string;
-  userName: string | null;
-  userEmail: string;
-  expiresAt: Date;
-}>> {
+export async function getExpiringCredentials(daysUntilExpiry: number = 30): Promise<
+  Array<{
+    id: string;
+    userId: string;
+    userName: string | null;
+    userEmail: string;
+    expiresAt: Date;
+  }>
+> {
   const expiryThreshold = new Date();
   expiryThreshold.setDate(expiryThreshold.getDate() + daysUntilExpiry);
 
@@ -282,7 +284,7 @@ export async function getExpiringCredentials(
     orderBy: { credentialExpiresAt: 'asc' },
   });
 
-  return profiles.map(p => ({
+  return profiles.map((p) => ({
     id: p.id,
     userId: p.userId,
     userName: p.user.name,

@@ -28,7 +28,7 @@ describe('Award PDF Generator', () => {
       expect(generateReferenceNumber(12345)).toMatch(/-12345$/);
     });
 
-    it('should include today\'s date in YYYYMMDD format', () => {
+    it("should include today's date in YYYYMMDD format", () => {
       const today = new Date();
       const expectedDate = today.toISOString().slice(0, 10).replace(/-/g, '');
       const refNum = generateReferenceNumber(1);
@@ -86,10 +86,12 @@ describe('Award PDF Generator', () => {
       {
         id: 'finding-3',
         number: 3,
-        finding: 'The claimant\'s testimony regarding damages was more credible than the respondent\'s.',
+        finding:
+          "The claimant's testimony regarding damages was more credible than the respondent's.",
         basis: 'credibility',
         supportingEvidence: ['evidence-4'],
-        credibilityNote: 'Claimant provided consistent documentation; respondent testimony was inconsistent.',
+        credibilityNote:
+          'Claimant provided consistent documentation; respondent testimony was inconsistent.',
       },
     ];
 
@@ -122,7 +124,8 @@ describe('Award PDF Generator', () => {
       decision: 'Respondent shall pay Claimant $5,000.00 in damages plus interest.',
       awardAmount: 5000,
       prevailingParty: 'claimant',
-      reasoning: 'Based on the evidence presented, the claimant has proven their case by a preponderance of the evidence.',
+      reasoning:
+        'Based on the evidence presented, the claimant has proven their case by a preponderance of the evidence.',
       arbitratorName: 'Hon. Sarah Johnson',
       signedAt: new Date('2026-01-13T12:00:00Z'),
       jurisdiction: 'US-CA',

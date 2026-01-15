@@ -158,9 +158,7 @@ describe('KYC Service', () => {
       mockIsVerificationValid.mockResolvedValue(false);
 
       await expect(requireKYC('user-123')).rejects.toThrow(ForbiddenError);
-      await expect(requireKYC('user-123')).rejects.toThrow(
-        /Identity verification required/
-      );
+      await expect(requireKYC('user-123')).rejects.toThrow(/Identity verification required/);
     });
   });
 

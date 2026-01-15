@@ -106,10 +106,7 @@ export async function deleteFile(pathname: string): Promise<void> {
   await del(pathname);
 }
 
-export async function deleteFilesForCase(
-  folder: FolderType,
-  caseId: string
-): Promise<number> {
+export async function deleteFilesForCase(folder: FolderType, caseId: string): Promise<number> {
   const prefix = `${FOLDERS[folder]}/${caseId}/`;
   const { blobs } = await list({ prefix });
 

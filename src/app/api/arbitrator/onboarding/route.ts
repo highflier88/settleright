@@ -10,7 +10,6 @@ import { type NextRequest, NextResponse } from 'next/server';
 
 import { auth } from '@clerk/nextjs/server';
 
-
 import {
   initializeOnboarding,
   completeOnboarding,
@@ -31,10 +30,7 @@ export async function GET(_request: NextRequest) {
     const { userId: clerkId } = auth();
 
     if (!clerkId) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
     }
 
     // Get user
@@ -43,10 +39,7 @@ export async function GET(_request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'User not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: 'User not found' }, { status: 404 });
     }
 
     // Check eligibility
@@ -76,10 +69,7 @@ export async function GET(_request: NextRequest) {
   } catch (error) {
     console.error('[Arbitrator Onboarding API] GET error:', error);
     const message = error instanceof Error ? error.message : 'Failed to get onboarding status';
-    return NextResponse.json(
-      { success: false, error: message },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }
 
@@ -88,10 +78,7 @@ export async function POST(request: NextRequest) {
     const { userId: clerkId } = auth();
 
     if (!clerkId) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
     }
 
     // Get user
@@ -100,10 +87,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'User not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: 'User not found' }, { status: 404 });
     }
 
     // Check eligibility
@@ -115,7 +99,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json() as {
+    const body = (await request.json()) as {
       barNumber: string;
       barState: string;
       isRetiredJudge: boolean;
@@ -189,10 +173,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('[Arbitrator Onboarding API] POST error:', error);
     const message = error instanceof Error ? error.message : 'Failed to complete onboarding';
-    return NextResponse.json(
-      { success: false, error: message },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }
 
@@ -201,10 +182,7 @@ export async function PATCH(request: NextRequest) {
     const { userId: clerkId } = auth();
 
     if (!clerkId) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
     }
 
     // Get user
@@ -213,16 +191,13 @@ export async function PATCH(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'User not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: 'User not found' }, { status: 404 });
     }
 
     // Initialize onboarding if needed
     await initializeOnboarding(user.id);
 
-    const body = await request.json() as Partial<ArbitratorOnboardingInput>;
+    const body = (await request.json()) as Partial<ArbitratorOnboardingInput>;
 
     // Save progress
     await saveOnboardingProgress(user.id, body);
@@ -237,9 +212,6 @@ export async function PATCH(request: NextRequest) {
   } catch (error) {
     console.error('[Arbitrator Onboarding API] PATCH error:', error);
     const message = error instanceof Error ? error.message : 'Failed to save progress';
-    return NextResponse.json(
-      { success: false, error: message },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }

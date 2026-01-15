@@ -6,14 +6,7 @@ import Link from 'next/link';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 import { format } from 'date-fns';
-import {
-  FileText,
-  Clock,
-  CheckCircle,
-  AlertTriangle,
-  ChevronRight,
-  Filter,
-} from 'lucide-react';
+import { FileText, Clock, CheckCircle, AlertTriangle, ChevronRight, Filter } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -80,7 +73,11 @@ interface CasesResponse {
 
 const STATUS_CONFIG: Record<
   CaseStatus,
-  { label: string; icon: typeof Clock; variant: 'default' | 'secondary' | 'outline' | 'destructive' }
+  {
+    label: string;
+    icon: typeof Clock;
+    variant: 'default' | 'secondary' | 'outline' | 'destructive';
+  }
 > = {
   DRAFT: { label: 'Draft', icon: FileText, variant: 'outline' },
   PENDING_RESPONDENT: { label: 'Awaiting Respondent', icon: Clock, variant: 'secondary' },
@@ -201,9 +198,7 @@ export function CasesList({ userId, searchParams }: CasesListProps) {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Decided
-              </CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Decided</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-600">{data.stats.decidedCases}</div>
@@ -230,7 +225,9 @@ export function CasesList({ userId, searchParams }: CasesListProps) {
         <CardContent className="pt-6">
           <div className="flex flex-wrap items-end gap-4">
             <div className="w-[180px]">
-              <label htmlFor="status-filter" className="text-sm font-medium mb-1 block">Status</label>
+              <label htmlFor="status-filter" className="mb-1 block text-sm font-medium">
+                Status
+              </label>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger id="status-filter">
                   <SelectValue placeholder="All statuses" />
@@ -247,7 +244,9 @@ export function CasesList({ userId, searchParams }: CasesListProps) {
             </div>
 
             <div className="w-[180px]">
-              <label htmlFor="role-filter" className="text-sm font-medium mb-1 block">My Role</label>
+              <label htmlFor="role-filter" className="mb-1 block text-sm font-medium">
+                My Role
+              </label>
               <Select value={roleFilter} onValueChange={setRoleFilter}>
                 <SelectTrigger id="role-filter">
                   <SelectValue placeholder="All roles" />
@@ -261,7 +260,7 @@ export function CasesList({ userId, searchParams }: CasesListProps) {
             </div>
 
             <Button onClick={applyFilters} variant="secondary">
-              <Filter className="h-4 w-4 mr-2" />
+              <Filter className="mr-2 h-4 w-4" />
               Apply Filters
             </Button>
           </div>
@@ -273,7 +272,7 @@ export function CasesList({ userId, searchParams }: CasesListProps) {
         {data?.cases.length === 0 ? (
           <Card>
             <CardContent className="py-12 text-center">
-              <FileText className="h-12 w-12 mx-auto text-muted-foreground/50" />
+              <FileText className="mx-auto h-12 w-12 text-muted-foreground/50" />
               <h3 className="mt-4 text-lg font-medium">No cases found</h3>
               <p className="mt-2 text-sm text-muted-foreground">
                 You don&apos;t have any cases yet. Start a new case to begin.
@@ -312,7 +311,7 @@ export function CasesList({ userId, searchParams }: CasesListProps) {
                           </Badge>
                         </div>
 
-                        <p className="text-sm text-muted-foreground line-clamp-2">
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
                           {caseItem.description}
                         </p>
 
@@ -343,14 +342,13 @@ export function CasesList({ userId, searchParams }: CasesListProps) {
                           </span>
                         </div>
 
-                        {caseItem.responseDeadline &&
-                          caseItem.status === 'PENDING_RESPONDENT' && (
-                            <div className="flex items-center gap-2 text-sm text-amber-600">
-                              <AlertTriangle className="h-4 w-4" />
-                              Response deadline:{' '}
-                              {format(new Date(caseItem.responseDeadline), 'MMM d, yyyy')}
-                            </div>
-                          )}
+                        {caseItem.responseDeadline && caseItem.status === 'PENDING_RESPONDENT' && (
+                          <div className="flex items-center gap-2 text-sm text-amber-600">
+                            <AlertTriangle className="h-4 w-4" />
+                            Response deadline:{' '}
+                            {format(new Date(caseItem.responseDeadline), 'MMM d, yyyy')}
+                          </div>
+                        )}
                       </div>
 
                       <ChevronRight className="h-5 w-5 text-muted-foreground" />
@@ -405,10 +403,10 @@ export function CasesListSkeleton() {
         {Array.from({ length: 4 }, (_, i) => (
           <Card key={i}>
             <CardHeader className="pb-2">
-              <div className="h-4 w-20 animate-pulse bg-muted rounded" />
+              <div className="h-4 w-20 animate-pulse rounded bg-muted" />
             </CardHeader>
             <CardContent>
-              <div className="h-8 w-16 animate-pulse bg-muted rounded" />
+              <div className="h-8 w-16 animate-pulse rounded bg-muted" />
             </CardContent>
           </Card>
         ))}
@@ -420,11 +418,11 @@ export function CasesListSkeleton() {
             <CardContent className="p-6">
               <div className="space-y-3">
                 <div className="flex gap-2">
-                  <div className="h-5 w-24 animate-pulse bg-muted rounded" />
-                  <div className="h-5 w-20 animate-pulse bg-muted rounded" />
+                  <div className="h-5 w-24 animate-pulse rounded bg-muted" />
+                  <div className="h-5 w-20 animate-pulse rounded bg-muted" />
                 </div>
-                <div className="h-4 w-full animate-pulse bg-muted rounded" />
-                <div className="h-4 w-2/3 animate-pulse bg-muted rounded" />
+                <div className="h-4 w-full animate-pulse rounded bg-muted" />
+                <div className="h-4 w-2/3 animate-pulse rounded bg-muted" />
               </div>
             </CardContent>
           </Card>

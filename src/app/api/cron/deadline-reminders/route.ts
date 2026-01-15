@@ -46,7 +46,8 @@ export async function GET(request: NextRequest) {
             await notifyDeadlineApproaching(caseData.claimantId, {
               caseReference: caseData.caseReference,
               caseId: caseData.caseId,
-              deadlineType: caseData.deadlineType === 'evidence' ? 'Evidence Submission' : 'Rebuttal Statement',
+              deadlineType:
+                caseData.deadlineType === 'evidence' ? 'Evidence Submission' : 'Rebuttal Statement',
               deadlineDate: caseData.deadline,
               hoursRemaining: caseData.hoursRemaining,
             });
@@ -58,14 +59,17 @@ export async function GET(request: NextRequest) {
             await notifyDeadlineApproaching(caseData.respondentId, {
               caseReference: caseData.caseReference,
               caseId: caseData.caseId,
-              deadlineType: caseData.deadlineType === 'evidence' ? 'Evidence Submission' : 'Rebuttal Statement',
+              deadlineType:
+                caseData.deadlineType === 'evidence' ? 'Evidence Submission' : 'Rebuttal Statement',
               deadlineDate: caseData.deadline,
               hoursRemaining: caseData.hoursRemaining,
             });
             results.remindersSent++;
           }
         } catch (error) {
-          results.errors.push(`Failed to send reminder for case ${caseData.caseId}: ${error instanceof Error ? error.message : String(error)}`);
+          results.errors.push(
+            `Failed to send reminder for case ${caseData.caseId}: ${error instanceof Error ? error.message : String(error)}`
+          );
         }
       }
     }
@@ -82,7 +86,9 @@ export async function GET(request: NextRequest) {
           results.casesTransitioned++;
         }
       } catch (error) {
-        results.errors.push(`Failed to transition case ${caseData.caseId}: ${error instanceof Error ? error.message : String(error)}`);
+        results.errors.push(
+          `Failed to transition case ${caseData.caseId}: ${error instanceof Error ? error.message : String(error)}`
+        );
       }
     }
 
@@ -94,9 +100,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('[Cron] Deadline reminders failed:', error);
-    return NextResponse.json(
-      { error: 'Failed to process deadline reminders' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to process deadline reminders' }, { status: 500 });
   }
 }

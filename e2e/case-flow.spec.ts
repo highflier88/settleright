@@ -62,7 +62,10 @@ test.describe('Respondent Invitation', () => {
   test('should show invitation form on case detail', async ({ page }) => {
     // Navigate to a case in DRAFT status
     await page.goto('/dashboard/cases');
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
 
     // Check for invitation section
     await expect(page.getByText(/invite respondent/i)).toBeVisible();
@@ -70,7 +73,10 @@ test.describe('Respondent Invitation', () => {
 
   test('should send invitation email', async ({ page }) => {
     await page.goto('/dashboard/cases');
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
 
     // Fill invitation form
     await page.getByLabel(/email/i).fill('respondent@test.example.com');
@@ -84,7 +90,10 @@ test.describe('Respondent Invitation', () => {
 test.describe('Evidence Submission', () => {
   test('should display evidence upload area', async ({ page }) => {
     await page.goto('/dashboard/cases');
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
     await page.getByRole('tab', { name: /evidence/i }).click();
 
     await expect(page.getByText(/upload|drop files/i)).toBeVisible();
@@ -92,7 +101,10 @@ test.describe('Evidence Submission', () => {
 
   test('should upload evidence file', async ({ page }) => {
     await page.goto('/dashboard/cases');
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
     await page.getByRole('tab', { name: /evidence/i }).click();
 
     // Create a test file
@@ -109,7 +121,10 @@ test.describe('Evidence Submission', () => {
 
   test('should display uploaded evidence', async ({ page }) => {
     await page.goto('/dashboard/cases');
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
     await page.getByRole('tab', { name: /evidence/i }).click();
 
     // Check for evidence list
@@ -120,7 +135,10 @@ test.describe('Evidence Submission', () => {
 test.describe('Statement Submission', () => {
   test('should display statement form', async ({ page }) => {
     await page.goto('/dashboard/cases');
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
     await page.getByRole('tab', { name: /statement/i }).click();
 
     await expect(page.getByLabel(/statement/i)).toBeVisible();
@@ -128,7 +146,10 @@ test.describe('Statement Submission', () => {
 
   test('should submit statement', async ({ page }) => {
     await page.goto('/dashboard/cases');
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
     await page.getByRole('tab', { name: /statement/i }).click();
 
     await page.getByLabel(/statement/i).fill('This is my statement of claim...');
@@ -141,14 +162,20 @@ test.describe('Statement Submission', () => {
 test.describe('Case Status', () => {
   test('should display case status badge', async ({ page }) => {
     await page.goto('/dashboard/cases');
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
 
     await expect(page.getByTestId('case-status')).toBeVisible();
   });
 
   test('should show case timeline', async ({ page }) => {
     await page.goto('/dashboard/cases');
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
 
     await expect(page.getByTestId('case-timeline')).toBeVisible();
   });

@@ -5,15 +5,16 @@
  */
 
 import { prisma } from '@/lib/db';
-import { createCase, getUserCases, getCaseWithDetails, userHasAccessToCase } from '@/lib/services/case';
+import {
+  createCase,
+  getUserCases,
+  getCaseWithDetails,
+  userHasAccessToCase,
+} from '@/lib/services/case';
 import { checkKYCStatus } from '@/lib/kyc';
 import { sendCaseInvitationEmail } from '@/lib/services/email';
 import { sendSms } from '@/lib/services/twilio';
-import {
-  createMockUser,
-  createMockCase,
-  generateTestId,
-} from '../utils/test-helpers';
+import { createMockUser, createMockCase, generateTestId } from '../utils/test-helpers';
 
 // Mock all external dependencies
 jest.mock('@/lib/db', () => ({
@@ -160,7 +161,9 @@ describe('Case Creation Flow', () => {
           if (typeof callback === 'function') {
             return callback({
               case: { create: jest.fn().mockResolvedValue(mockCreatedCase1) },
-              invitation: { create: jest.fn().mockResolvedValue({ ...mockInvitation, token: 'token1' }) },
+              invitation: {
+                create: jest.fn().mockResolvedValue({ ...mockInvitation, token: 'token1' }),
+              },
             });
           }
           return { success: true, case: mockCreatedCase1, invitationToken: 'token1' };
@@ -169,7 +172,9 @@ describe('Case Creation Flow', () => {
           if (typeof callback === 'function') {
             return callback({
               case: { create: jest.fn().mockResolvedValue(mockCreatedCase2) },
-              invitation: { create: jest.fn().mockResolvedValue({ ...mockInvitation, token: 'token2' }) },
+              invitation: {
+                create: jest.fn().mockResolvedValue({ ...mockInvitation, token: 'token2' }),
+              },
             });
           }
           return { success: true, case: mockCreatedCase2, invitationToken: 'token2' };
@@ -387,12 +392,8 @@ describe('Case Creation Flow', () => {
         ...createMockCase(),
         claimant: mockUser,
         respondent: mockRespondent,
-        statements: [
-          { id: 'stmt-1', content: 'Claimant statement' },
-        ],
-        evidence: [
-          { id: 'ev-1', fileName: 'contract.pdf' },
-        ],
+        statements: [{ id: 'stmt-1', content: 'Claimant statement' }],
+        evidence: [{ id: 'ev-1', fileName: 'contract.pdf' }],
       };
 
       (mockPrisma.case.findFirst as jest.Mock).mockResolvedValue(mockCaseWithRelations);

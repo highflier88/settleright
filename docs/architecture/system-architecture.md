@@ -149,11 +149,13 @@ This document describes the high-level system architecture for Settleright.ai, a
 ### User Service
 
 **Responsibilities:**
+
 - User registration and profile management
 - Identity verification orchestration
 - Role and permission management
 
 **Key Operations:**
+
 ```typescript
 interface UserService {
   register(data: RegisterInput): Promise<User>;
@@ -167,11 +169,13 @@ interface UserService {
 ### Case Service
 
 **Responsibilities:**
+
 - Case lifecycle management
 - Invitation and response handling
 - Status transitions and deadlines
 
 **Key Operations:**
+
 ```typescript
 interface CaseService {
   create(claimantId: string, data: CreateCaseInput): Promise<Case>;
@@ -186,11 +190,13 @@ interface CaseService {
 ### Evidence Service
 
 **Responsibilities:**
+
 - Evidence upload and storage
 - File validation and processing
 - Access control and viewing tracking
 
 **Key Operations:**
+
 ```typescript
 interface EvidenceService {
   upload(caseId: string, userId: string, file: File): Promise<Evidence>;
@@ -204,11 +210,13 @@ interface EvidenceService {
 ### Arbitration Service
 
 **Responsibilities:**
+
 - AI analysis pipeline orchestration
 - Human arbitrator assignment
 - Award generation and signing
 
 **Key Operations:**
+
 ```typescript
 interface ArbitrationService {
   initiateAnalysis(caseId: string): Promise<AnalysisJob>;
@@ -223,11 +231,13 @@ interface ArbitrationService {
 ### Notification Service
 
 **Responsibilities:**
+
 - Email and SMS delivery
 - Notification preferences
 - Delivery tracking
 
 **Key Operations:**
+
 ```typescript
 interface NotificationService {
   sendEmail(to: string, template: EmailTemplate, data: object): Promise<void>;
@@ -240,11 +250,13 @@ interface NotificationService {
 ### Audit Service
 
 **Responsibilities:**
+
 - Immutable audit trail
 - Action logging
 - Compliance reporting
 
 **Key Operations:**
+
 ```typescript
 interface AuditService {
   log(event: AuditEvent): Promise<void>;
@@ -567,23 +579,23 @@ interface AuditService {
 
 ### Horizontal Scaling
 
-| Component | Scaling Trigger | Min | Max |
-|-----------|-----------------|-----|-----|
-| Web (ECS) | CPU > 70% | 2 | 10 |
-| API (ECS) | CPU > 70% or Request count | 3 | 20 |
-| Worker (ECS) | Queue depth | 2 | 10 |
-| RDS | Manual (read replicas) | 1 | 5 |
-| Redis | Memory > 75% | 1 | 3 |
+| Component    | Scaling Trigger            | Min | Max |
+| ------------ | -------------------------- | --- | --- |
+| Web (ECS)    | CPU > 70%                  | 2   | 10  |
+| API (ECS)    | CPU > 70% or Request count | 3   | 20  |
+| Worker (ECS) | Queue depth                | 2   | 10  |
+| RDS          | Manual (read replicas)     | 1   | 5   |
+| Redis        | Memory > 75%               | 1   | 3   |
 
 ### Performance Targets
 
-| Metric | Target |
-|--------|--------|
+| Metric                  | Target  |
+| ----------------------- | ------- |
 | API Response Time (p50) | < 100ms |
 | API Response Time (p99) | < 500ms |
-| Page Load Time | < 2s |
-| Uptime | 99.9% |
-| AI Analysis Time | < 5 min |
+| Page Load Time          | < 2s    |
+| Uptime                  | 99.9%   |
+| AI Analysis Time        | < 5 min |
 
 ---
 
@@ -591,19 +603,19 @@ interface AuditService {
 
 ### Backup Strategy
 
-| Data | Method | Frequency | Retention |
-|------|--------|-----------|-----------|
-| PostgreSQL | Automated snapshots | Daily | 30 days |
-| PostgreSQL | Point-in-time recovery | Continuous | 7 days |
-| S3 (Evidence) | Cross-region replication | Real-time | Permanent |
-| Redis | Snapshots | Hourly | 24 hours |
+| Data          | Method                   | Frequency  | Retention |
+| ------------- | ------------------------ | ---------- | --------- |
+| PostgreSQL    | Automated snapshots      | Daily      | 30 days   |
+| PostgreSQL    | Point-in-time recovery   | Continuous | 7 days    |
+| S3 (Evidence) | Cross-region replication | Real-time  | Permanent |
+| Redis         | Snapshots                | Hourly     | 24 hours  |
 
 ### Recovery Objectives
 
-| Metric | Target |
-|--------|--------|
-| RPO (Recovery Point Objective) | 1 hour |
-| RTO (Recovery Time Objective) | 4 hours |
+| Metric                         | Target  |
+| ------------------------------ | ------- |
+| RPO (Recovery Point Objective) | 1 hour  |
+| RTO (Recovery Time Objective)  | 4 hours |
 
 ---
 
@@ -628,11 +640,11 @@ interface AuditService {
 
 ### Alert Thresholds
 
-| Alert | Condition | Severity |
-|-------|-----------|----------|
-| API Error Rate | > 1% for 5 min | Critical |
-| API Latency | p99 > 1s for 5 min | Warning |
-| Database Connections | > 80% | Warning |
-| Queue Depth | > 100 for 10 min | Warning |
-| Failed Payments | > 5 in 1 hour | Critical |
-| Security Event | Any WAF block | Info |
+| Alert                | Condition          | Severity |
+| -------------------- | ------------------ | -------- |
+| API Error Rate       | > 1% for 5 min     | Critical |
+| API Latency          | p99 > 1s for 5 min | Warning  |
+| Database Connections | > 80%              | Warning  |
+| Queue Depth          | > 100 for 10 min   | Warning  |
+| Failed Payments      | > 5 in 1 hour      | Critical |
+| Security Event       | Any WAF block      | Info     |

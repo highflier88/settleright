@@ -100,10 +100,7 @@ export const FEE_STRUCTURE = {
 /**
  * Calculate fee based on claim amount and payment type
  */
-export function calculateFee(
-  claimAmount: number,
-  type: PaymentType
-): number {
+export function calculateFee(claimAmount: number, type: PaymentType): number {
   if (type === 'EXPEDITED_FEE') {
     return FEE_STRUCTURE.EXPEDITED_FEE.flat;
   }
@@ -228,9 +225,7 @@ export async function createCheckoutSession(
 /**
  * Get Checkout session status
  */
-export async function getCheckoutSessionStatus(
-  sessionId: string
-): Promise<{
+export async function getCheckoutSessionStatus(sessionId: string): Promise<{
   status: 'open' | 'complete' | 'expired';
   paymentStatus: string | null;
 }> {
@@ -451,10 +446,9 @@ export async function getReceiptUrl(paymentId: string): Promise<string | null> {
   }
 
   // Get the charge from the payment intent
-  const paymentIntent = await stripe.paymentIntents.retrieve(
-    payment.stripePaymentIntentId,
-    { expand: ['latest_charge'] }
-  );
+  const paymentIntent = await stripe.paymentIntents.retrieve(payment.stripePaymentIntentId, {
+    expand: ['latest_charge'],
+  });
 
   const charge = paymentIntent.latest_charge as Stripe.Charge | null;
   return charge?.receipt_url || null;
@@ -545,9 +539,7 @@ export async function getPayment(paymentId: string): Promise<PaymentDetails | nu
     return null;
   }
 
-  const receiptUrl = payment.status === 'COMPLETED'
-    ? await getReceiptUrl(paymentId)
-    : null;
+  const receiptUrl = payment.status === 'COMPLETED' ? await getReceiptUrl(paymentId) : null;
 
   return {
     id: payment.id,
@@ -615,15 +607,9 @@ export async function getCasePaymentStatus(caseId: string): Promise<{
   const filingFeePaid = completedPayments.some((p) => p.type === 'FILING_FEE');
   const responseFeePaid = completedPayments.some((p) => p.type === 'RESPONSE_FEE');
 
-  const totalPaid = completedPayments.reduce(
-    (sum, p) => sum + Number(p.amount),
-    0
-  );
+  const totalPaid = completedPayments.reduce((sum, p) => sum + Number(p.amount), 0);
 
-  const pendingAmount = pendingPayments.reduce(
-    (sum, p) => sum + Number(p.amount),
-    0
-  );
+  const pendingAmount = pendingPayments.reduce((sum, p) => sum + Number(p.amount), 0);
 
   return {
     filingFeePaid,
@@ -648,7 +634,5 @@ export async function hasRequiredPayments(
     },
   });
 
-  return requiredTypes.every((type) =>
-    completedPayments.some((p) => p.type === type)
-  );
+  return requiredTypes.every((type) => completedPayments.some((p) => p.type === type));
 }

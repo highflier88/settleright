@@ -43,8 +43,7 @@ export const POST = withAuth(
 
       // Verify user has access to this case
       const userId = request.user.id;
-      const isParty =
-        caseData.claimantId === userId || caseData.respondentId === userId;
+      const isParty = caseData.claimantId === userId || caseData.respondentId === userId;
 
       if (!isParty) {
         return errorResponse(new ForbiddenError('You do not have access to this case'));
@@ -69,13 +68,16 @@ export const POST = withAuth(
 
       // Get processing summary
       const processingCount = evidence.filter((e) =>
-        ['QUEUED', 'EXTRACTING', 'OCR_PROCESSING', 'CLASSIFYING', 'EXTRACTING_ENTITIES', 'SUMMARIZING'].includes(
-          e.processingStatus
-        )
+        [
+          'QUEUED',
+          'EXTRACTING',
+          'OCR_PROCESSING',
+          'CLASSIFYING',
+          'EXTRACTING_ENTITIES',
+          'SUMMARIZING',
+        ].includes(e.processingStatus)
       ).length;
-      const completedCount = evidence.filter(
-        (e) => e.processingStatus === 'COMPLETED'
-      ).length;
+      const completedCount = evidence.filter((e) => e.processingStatus === 'COMPLETED').length;
 
       return NextResponse.json({
         success: true,
@@ -105,96 +107,97 @@ export const POST = withAuth(
 /**
  * GET - Get processing status for all documents in a case
  */
-export const GET = withAuth(
-  async (request: AuthenticatedRequest, context) => {
-    const params = context?.params;
-    const caseId = params?.id;
+export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
+  const params = context?.params;
+  const caseId = params?.id;
 
-    if (!caseId) {
-      return errorResponse(new BadRequestError('Case ID is required'));
-    }
-
-    try {
-      // Get case and verify access
-      const caseData = await prisma.case.findUnique({
-        where: { id: caseId },
-        select: {
-          id: true,
-          claimantId: true,
-          respondentId: true,
-        },
-      });
-
-      if (!caseData) {
-        return errorResponse(new NotFoundError('Case not found'));
-      }
-
-      // Verify user has access to this case
-      const userId = request.user.id;
-      const isParty =
-        caseData.claimantId === userId || caseData.respondentId === userId;
-
-      if (!isParty) {
-        return errorResponse(new ForbiddenError('You do not have access to this case'));
-      }
-
-      // Get all evidence with processing status
-      const evidence = await prisma.evidence.findMany({
-        where: {
-          caseId,
-          deletedAt: null,
-        },
-        select: {
-          id: true,
-          fileName: true,
-          fileType: true,
-          processingStatus: true,
-          processedAt: true,
-          processingError: true,
-          documentType: true,
-          summary: true,
-        },
-        orderBy: { submittedAt: 'desc' },
-      });
-
-      // Get global queue stats
-      const queueStats = await getQueueStats();
-
-      // Calculate case-specific stats
-      const caseStats = {
-        total: evidence.length,
-        pending: evidence.filter((e) => e.processingStatus === 'PENDING').length,
-        queued: evidence.filter((e) => e.processingStatus === 'QUEUED').length,
-        processing: evidence.filter((e) =>
-          ['EXTRACTING', 'OCR_PROCESSING', 'CLASSIFYING', 'EXTRACTING_ENTITIES', 'SUMMARIZING'].includes(
-            e.processingStatus
-          )
-        ).length,
-        completed: evidence.filter((e) => e.processingStatus === 'COMPLETED').length,
-        failed: evidence.filter((e) => e.processingStatus === 'FAILED').length,
-      };
-
-      return NextResponse.json({
-        success: true,
-        data: {
-          caseId,
-          stats: caseStats,
-          globalQueueStats: queueStats,
-          documents: evidence.map((e) => ({
-            id: e.id,
-            fileName: e.fileName,
-            fileType: e.fileType,
-            processingStatus: e.processingStatus,
-            processedAt: e.processedAt,
-            error: e.processingError,
-            documentType: e.documentType,
-            summary: e.summary?.slice(0, 200), // Truncate for response
-          })),
-        },
-      });
-    } catch (error) {
-      console.error('Error getting case processing status:', error);
-      return errorResponse(error as Error);
-    }
+  if (!caseId) {
+    return errorResponse(new BadRequestError('Case ID is required'));
   }
-);
+
+  try {
+    // Get case and verify access
+    const caseData = await prisma.case.findUnique({
+      where: { id: caseId },
+      select: {
+        id: true,
+        claimantId: true,
+        respondentId: true,
+      },
+    });
+
+    if (!caseData) {
+      return errorResponse(new NotFoundError('Case not found'));
+    }
+
+    // Verify user has access to this case
+    const userId = request.user.id;
+    const isParty = caseData.claimantId === userId || caseData.respondentId === userId;
+
+    if (!isParty) {
+      return errorResponse(new ForbiddenError('You do not have access to this case'));
+    }
+
+    // Get all evidence with processing status
+    const evidence = await prisma.evidence.findMany({
+      where: {
+        caseId,
+        deletedAt: null,
+      },
+      select: {
+        id: true,
+        fileName: true,
+        fileType: true,
+        processingStatus: true,
+        processedAt: true,
+        processingError: true,
+        documentType: true,
+        summary: true,
+      },
+      orderBy: { submittedAt: 'desc' },
+    });
+
+    // Get global queue stats
+    const queueStats = await getQueueStats();
+
+    // Calculate case-specific stats
+    const caseStats = {
+      total: evidence.length,
+      pending: evidence.filter((e) => e.processingStatus === 'PENDING').length,
+      queued: evidence.filter((e) => e.processingStatus === 'QUEUED').length,
+      processing: evidence.filter((e) =>
+        [
+          'EXTRACTING',
+          'OCR_PROCESSING',
+          'CLASSIFYING',
+          'EXTRACTING_ENTITIES',
+          'SUMMARIZING',
+        ].includes(e.processingStatus)
+      ).length,
+      completed: evidence.filter((e) => e.processingStatus === 'COMPLETED').length,
+      failed: evidence.filter((e) => e.processingStatus === 'FAILED').length,
+    };
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        caseId,
+        stats: caseStats,
+        globalQueueStats: queueStats,
+        documents: evidence.map((e) => ({
+          id: e.id,
+          fileName: e.fileName,
+          fileType: e.fileType,
+          processingStatus: e.processingStatus,
+          processedAt: e.processedAt,
+          error: e.processingError,
+          documentType: e.documentType,
+          summary: e.summary?.slice(0, 200), // Truncate for response
+        })),
+      },
+    });
+  } catch (error) {
+    console.error('Error getting case processing status:', error);
+    return errorResponse(error as Error);
+  }
+});

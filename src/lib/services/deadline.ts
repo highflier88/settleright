@@ -171,9 +171,7 @@ export async function setInitialDeadlines(caseId: string): Promise<boolean> {
 }
 
 // Get cases with approaching deadlines
-export async function getCasesWithApproachingDeadlines(
-  hoursThreshold: number
-): Promise<
+export async function getCasesWithApproachingDeadlines(hoursThreshold: number): Promise<
   Array<{
     caseId: string;
     caseReference: string;

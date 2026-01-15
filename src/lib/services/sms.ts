@@ -41,7 +41,10 @@ export async function sendSms(
 ): Promise<SendSmsResult> {
   // Validate configuration
   if (!TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN || !TWILIO_FROM_NUMBER) {
-    console.log('[SMS] Twilio not configured, skipping:', { to, message: message.substring(0, 50) });
+    console.log('[SMS] Twilio not configured, skipping:', {
+      to,
+      message: message.substring(0, 50),
+    });
     return { success: true, messageId: 'dev-mode' };
   }
 
@@ -54,7 +57,7 @@ export async function sendSms(
       {
         method: 'POST',
         headers: {
-          'Authorization': `Basic ${Buffer.from(`${TWILIO_ACCOUNT_SID}:${TWILIO_AUTH_TOKEN}`).toString('base64')}`,
+          Authorization: `Basic ${Buffer.from(`${TWILIO_ACCOUNT_SID}:${TWILIO_AUTH_TOKEN}`).toString('base64')}`,
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: new URLSearchParams({
@@ -65,7 +68,7 @@ export async function sendSms(
       }
     );
 
-    const data = await response.json() as { sid?: string; message?: string };
+    const data = (await response.json()) as { sid?: string; message?: string };
 
     // Log notification
     if (userId) {

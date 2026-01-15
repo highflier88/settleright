@@ -8,8 +8,7 @@ export function HeroSection() {
       <div className="container flex flex-col items-center justify-center gap-6 pb-8 pt-24 md:pt-32">
         <div className="flex max-w-3xl flex-col items-center gap-4 text-center">
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-            Resolve Disputes{' '}
-            <span className="gradient-text">Quickly & Affordably</span>
+            Resolve Disputes <span className="gradient-text">Quickly & Affordably</span>
           </h1>
           <p className="max-w-2xl text-lg text-muted-foreground sm:text-xl">
             AI-powered binding arbitration that delivers legally enforceable decisions. Skip the

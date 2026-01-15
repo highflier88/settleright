@@ -12,12 +12,8 @@ import { randomUUID } from 'crypto';
 
 import { NotificationType } from '@prisma/client';
 
-
 import { prisma } from '@/lib/db';
-import {
-  createInAppNotification,
-  NotificationTemplates,
-} from '@/lib/services/notification';
+import { createInAppNotification, NotificationTemplates } from '@/lib/services/notification';
 
 import type { AwardConclusionOfLaw, FindingOfFact } from './types';
 import type {
@@ -89,10 +85,7 @@ export interface RevisionInfo {
 /**
  * Create the initial revision when a draft award is generated
  */
-export async function createInitialRevision(
-  draftAwardId: string,
-  userId: string
-): Promise<void> {
+export async function createInitialRevision(draftAwardId: string, userId: string): Promise<void> {
   const draftAward = await prisma.draftAward.findUnique({
     where: { id: draftAwardId },
   });
@@ -148,9 +141,7 @@ async function getCurrentVersion(draftAwardId: string): Promise<number> {
 /**
  * Get revision history for a draft award
  */
-export async function getRevisionHistory(
-  draftAwardId: string
-): Promise<RevisionInfo[]> {
+export async function getRevisionHistory(draftAwardId: string): Promise<RevisionInfo[]> {
   const revisions = await prisma.draftAwardRevision.findMany({
     where: { draftAwardId },
     orderBy: { version: 'desc' },
@@ -252,11 +243,12 @@ export async function modifyDraftAward(
 
   if (modifications.prevailingParty !== undefined) {
     changedFields.push('prevailingParty');
-    updateData.prevailingParty = modifications.prevailingParty === 'claimant'
-      ? 'CLAIMANT'
-      : modifications.prevailingParty === 'respondent'
-        ? 'RESPONDENT'
-        : 'SPLIT';
+    updateData.prevailingParty =
+      modifications.prevailingParty === 'claimant'
+        ? 'CLAIMANT'
+        : modifications.prevailingParty === 'respondent'
+          ? 'RESPONDENT'
+          : 'SPLIT';
   }
 
   if (modifications.reasoning !== undefined) {
@@ -628,9 +620,7 @@ export async function resolveEscalation(
 /**
  * Get escalation details
  */
-export async function getEscalation(
-  draftAwardId: string
-): Promise<{
+export async function getEscalation(draftAwardId: string): Promise<{
   id: string;
   reason: EscalationReason;
   reasonDetails: string | null;

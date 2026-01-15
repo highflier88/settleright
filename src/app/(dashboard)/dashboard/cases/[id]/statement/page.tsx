@@ -9,12 +9,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getAuthUser } from '@/lib/auth';
 import { userHasAccessToCase, getCaseWithDetails } from '@/lib/services/case';
-import { getCaseStatements, canSubmitStatement, parseStatementContent, getStatementStatusInfo } from '@/lib/services/statement';
+import {
+  getCaseStatements,
+  canSubmitStatement,
+  parseStatementContent,
+  getStatementStatusInfo,
+} from '@/lib/services/statement';
 
 import { StatementSubmissionForm } from './statement-form';
 
 import type { Metadata } from 'next';
-
 
 export const metadata: Metadata = {
   title: 'Statement',
@@ -85,9 +89,7 @@ export default async function StatementPage({ params }: PageProps) {
             </Link>
             <h1 className="text-2xl font-bold tracking-tight">Statement</h1>
           </div>
-          <p className="text-muted-foreground">
-            Case {caseData.referenceNumber}
-          </p>
+          <p className="text-muted-foreground">Case {caseData.referenceNumber}</p>
         </div>
       </div>
 
@@ -162,7 +164,7 @@ export default async function StatementPage({ params }: PageProps) {
       {(caseData.evidenceDeadline || caseData.rebuttalDeadline) && (
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-sm font-medium">
               <Clock className="h-4 w-4" />
               Deadlines
             </CardTitle>
@@ -220,21 +222,23 @@ export default async function StatementPage({ params }: PageProps) {
               </div>
               {canSubmitInitial.canSubmit === false &&
                 caseData.status === CaseStatus.EVIDENCE_SUBMISSION && (
-                <Button variant="outline" size="sm" asChild>
-                  <Link href={`/dashboard/cases/${params.id}/statement/edit/${initialStatement.id}`}>
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit
-                  </Link>
-                </Button>
-              )}
+                  <Button variant="outline" size="sm" asChild>
+                    <Link
+                      href={`/dashboard/cases/${params.id}/statement/edit/${initialStatement.id}`}
+                    >
+                      <Edit className="mr-2 h-4 w-4" />
+                      Edit
+                    </Link>
+                  </Button>
+                )}
             </div>
           </CardHeader>
           <CardContent>
-            <div className="prose prose-sm max-w-none dark:prose-invert">
+            <div className="prose prose-sm dark:prose-invert max-w-none">
               {parseStatementContent(initialStatement).narrative.substring(0, 500)}
               {parseStatementContent(initialStatement).narrative.length > 500 && '...'}
             </div>
-            <Button variant="link" className="px-0 mt-2" asChild>
+            <Button variant="link" className="mt-2 px-0" asChild>
               <Link href={`/dashboard/cases/${params.id}/statement/view/${initialStatement.id}`}>
                 View Full Statement
               </Link>
@@ -259,7 +263,9 @@ export default async function StatementPage({ params }: PageProps) {
               </div>
               {caseData.status === CaseStatus.EVIDENCE_SUBMISSION && (
                 <Button variant="outline" size="sm" asChild>
-                  <Link href={`/dashboard/cases/${params.id}/statement/edit/${rebuttalStatement.id}`}>
+                  <Link
+                    href={`/dashboard/cases/${params.id}/statement/edit/${rebuttalStatement.id}`}
+                  >
                     <Edit className="mr-2 h-4 w-4" />
                     Edit
                   </Link>
@@ -268,11 +274,11 @@ export default async function StatementPage({ params }: PageProps) {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="prose prose-sm max-w-none dark:prose-invert">
+            <div className="prose prose-sm dark:prose-invert max-w-none">
               {parseStatementContent(rebuttalStatement).narrative.substring(0, 500)}
               {parseStatementContent(rebuttalStatement).narrative.length > 500 && '...'}
             </div>
-            <Button variant="link" className="px-0 mt-2" asChild>
+            <Button variant="link" className="mt-2 px-0" asChild>
               <Link href={`/dashboard/cases/${params.id}/statement/view/${rebuttalStatement.id}`}>
                 View Full Statement
               </Link>
@@ -288,19 +294,19 @@ export default async function StatementPage({ params }: PageProps) {
         </CardHeader>
         <CardContent className="space-y-4 text-sm text-muted-foreground">
           <p>
-            <strong>Initial Statement:</strong> Present your position on the dispute,
-            including the facts as you understand them, relevant timeline of events,
-            and the specific claims or defenses you&apos;re making.
+            <strong>Initial Statement:</strong> Present your position on the dispute, including the
+            facts as you understand them, relevant timeline of events, and the specific claims or
+            defenses you&apos;re making.
           </p>
           <p>
-            <strong>Rebuttal Statement:</strong> After reviewing the other party&apos;s
-            initial statement, you may submit a rebuttal to address their claims,
-            clarify any misunderstandings, and provide additional context.
+            <strong>Rebuttal Statement:</strong> After reviewing the other party&apos;s initial
+            statement, you may submit a rebuttal to address their claims, clarify any
+            misunderstandings, and provide additional context.
           </p>
           <p>
             <strong>Tips:</strong>
           </p>
-          <ul className="list-disc pl-5 space-y-1">
+          <ul className="list-disc space-y-1 pl-5">
             <li>Be clear and concise in your narrative</li>
             <li>Reference specific evidence you&apos;ve uploaded</li>
             <li>Include a timeline of key events with dates</li>

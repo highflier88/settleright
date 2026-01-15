@@ -4,23 +4,10 @@ import { useState, useEffect, useCallback } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import {
-  Bell,
-  CheckCheck,
-  FileText,
-  Users,
-  Gavel,
-  Clock,
-  Shield,
-  Mail,
-} from 'lucide-react';
+import { Bell, CheckCheck, FileText, Users, Gavel, Clock, Shield, Mail } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
@@ -76,27 +63,30 @@ export function NotificationCenter({ initialUnreadCount = 0 }: NotificationCente
   const [hasMore, setHasMore] = useState(false);
 
   // Fetch notifications
-  const fetchNotifications = useCallback(async (reset = false) => {
-    setIsLoading(true);
-    try {
-      const offset = reset ? 0 : notifications.length;
-      const response = await fetch(`/api/notifications?limit=20&offset=${offset}`);
-      if (response.ok) {
-        const data = (await response.json()) as {
-          data: { notifications: Notification[]; unreadCount: number; hasMore: boolean };
-        };
-        setNotifications((prev) =>
-          reset ? data.data.notifications : [...prev, ...data.data.notifications]
-        );
-        setUnreadCount(data.data.unreadCount);
-        setHasMore(data.data.hasMore);
+  const fetchNotifications = useCallback(
+    async (reset = false) => {
+      setIsLoading(true);
+      try {
+        const offset = reset ? 0 : notifications.length;
+        const response = await fetch(`/api/notifications?limit=20&offset=${offset}`);
+        if (response.ok) {
+          const data = (await response.json()) as {
+            data: { notifications: Notification[]; unreadCount: number; hasMore: boolean };
+          };
+          setNotifications((prev) =>
+            reset ? data.data.notifications : [...prev, ...data.data.notifications]
+          );
+          setUnreadCount(data.data.unreadCount);
+          setHasMore(data.data.hasMore);
+        }
+      } catch (error) {
+        console.error('Failed to fetch notifications:', error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('Failed to fetch notifications:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [notifications.length]);
+    },
+    [notifications.length]
+  );
 
   // Load notifications when popover opens
   useEffect(() => {
@@ -149,7 +139,7 @@ export function NotificationCenter({ initialUnreadCount = 0 }: NotificationCente
         <Button variant="ghost" size="sm" className="relative">
           <Bell className="h-5 w-5" />
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-destructive-foreground text-xs font-medium">
+            <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-medium text-destructive-foreground">
               {unreadCount > 99 ? '99+' : unreadCount}
             </span>
           )}
@@ -158,16 +148,11 @@ export function NotificationCenter({ initialUnreadCount = 0 }: NotificationCente
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0" align="end">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b">
+        <div className="flex items-center justify-between border-b p-4">
           <h3 className="font-semibold">Notifications</h3>
           {unreadCount > 0 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={markAllAsRead}
-              className="text-xs h-7"
-            >
-              <CheckCheck className="h-3 w-3 mr-1" />
+            <Button variant="ghost" size="sm" onClick={markAllAsRead} className="h-7 text-xs">
+              <CheckCheck className="mr-1 h-3 w-3" />
               Mark all read
             </Button>
           )}
@@ -176,12 +161,12 @@ export function NotificationCenter({ initialUnreadCount = 0 }: NotificationCente
         {/* Notification list */}
         <ScrollArea className="h-[400px]">
           {isLoading && notifications.length === 0 ? (
-            <div className="flex items-center justify-center h-32">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+            <div className="flex h-32 items-center justify-center">
+              <div className="h-6 w-6 animate-spin rounded-full border-b-2 border-primary"></div>
             </div>
           ) : notifications.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-32 text-muted-foreground">
-              <Bell className="h-8 w-8 mb-2 opacity-50" />
+            <div className="flex h-32 flex-col items-center justify-center text-muted-foreground">
+              <Bell className="mb-2 h-8 w-8 opacity-50" />
               <p className="text-sm">No notifications yet</p>
             </div>
           ) : (
@@ -191,7 +176,7 @@ export function NotificationCenter({ initialUnreadCount = 0 }: NotificationCente
                   type="button"
                   key={notification.id}
                   className={cn(
-                    'flex gap-3 p-4 hover:bg-muted/50 cursor-pointer transition-colors w-full text-left',
+                    'flex w-full cursor-pointer gap-3 p-4 text-left transition-colors hover:bg-muted/50',
                     !notification.readAt && 'bg-primary/5'
                   )}
                   onClick={() => {
@@ -211,14 +196,14 @@ export function NotificationCenter({ initialUnreadCount = 0 }: NotificationCente
                   </div>
 
                   {/* Content */}
-                  <div className="flex-1 min-w-0">
+                  <div className="min-w-0 flex-1">
                     {notification.subject && (
-                      <p className="text-sm font-medium truncate">{notification.subject}</p>
+                      <p className="truncate text-sm font-medium">{notification.subject}</p>
                     )}
-                    <p className="text-sm text-muted-foreground line-clamp-2">
+                    <p className="line-clamp-2 text-sm text-muted-foreground">
                       {notification.body}
                     </p>
-                    <p className="text-xs text-muted-foreground mt-1">
+                    <p className="mt-1 text-xs text-muted-foreground">
                       {formatRelativeTime(notification.sentAt)}
                     </p>
                   </div>

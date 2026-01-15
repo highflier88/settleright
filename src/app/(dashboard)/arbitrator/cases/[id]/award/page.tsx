@@ -15,13 +15,7 @@ import {
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getAuthUser } from '@/lib/auth';
 import type { FindingOfFact, AwardConclusionOfLaw } from '@/lib/award/types';
 import { prisma } from '@/lib/db';
@@ -29,7 +23,6 @@ import { prisma } from '@/lib/db';
 import { AwardReviewForm } from './award-review-form';
 
 import type { Metadata } from 'next';
-
 
 export const metadata: Metadata = {
   title: 'Review Award',
@@ -84,13 +77,25 @@ function formatCurrency(amount: number | null) {
 function getReviewStatusBadge(status: string | null) {
   switch (status) {
     case 'APPROVE':
-      return <Badge variant="default" className="bg-green-600">Approved</Badge>;
+      return (
+        <Badge variant="default" className="bg-green-600">
+          Approved
+        </Badge>
+      );
     case 'MODIFY':
-      return <Badge variant="default" className="bg-blue-600">Modified</Badge>;
+      return (
+        <Badge variant="default" className="bg-blue-600">
+          Modified
+        </Badge>
+      );
     case 'REJECT':
       return <Badge variant="destructive">Rejected</Badge>;
     case 'ESCALATE':
-      return <Badge variant="default" className="bg-purple-600">Escalated</Badge>;
+      return (
+        <Badge variant="default" className="bg-purple-600">
+          Escalated
+        </Badge>
+      );
     default:
       return <Badge variant="outline">Pending Review</Badge>;
   }
@@ -137,30 +142,32 @@ export default async function AwardReviewPage({ params }: PageProps) {
                   <CheckCircle className="h-5 w-5 text-green-600" />
                   Award Has Been Issued
                 </CardTitle>
-                <CardDescription>
-                  Reference: {caseData.award.referenceNumber}
-                </CardDescription>
+                <CardDescription>Reference: {caseData.award.referenceNumber}</CardDescription>
               </div>
-              <Badge variant="default" className="bg-green-600">Final</Badge>
+              <Badge variant="default" className="bg-green-600">
+                Final
+              </Badge>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 md:grid-cols-3">
               <div className="rounded-lg border p-4 text-center">
                 <span className="text-sm text-muted-foreground">Award Amount</span>
-                <p className="text-2xl font-bold mt-1">
-                  {formatCurrency(caseData.award.awardAmount ? Number(caseData.award.awardAmount) : null)}
+                <p className="mt-1 text-2xl font-bold">
+                  {formatCurrency(
+                    caseData.award.awardAmount ? Number(caseData.award.awardAmount) : null
+                  )}
                 </p>
               </div>
               <div className="rounded-lg border p-4 text-center">
                 <span className="text-sm text-muted-foreground">Prevailing Party</span>
-                <p className="text-lg font-medium mt-1 capitalize">
+                <p className="mt-1 text-lg font-medium capitalize">
                   {caseData.award.prevailingParty?.toLowerCase() || 'N/A'}
                 </p>
               </div>
               <div className="rounded-lg border p-4 text-center">
                 <span className="text-sm text-muted-foreground">Issued On</span>
-                <p className="text-lg font-medium mt-1">
+                <p className="mt-1 text-lg font-medium">
                   {caseData.award.issuedAt
                     ? format(new Date(caseData.award.issuedAt), 'MMM d, yyyy')
                     : 'N/A'}
@@ -169,9 +176,13 @@ export default async function AwardReviewPage({ params }: PageProps) {
             </div>
 
             <div className="flex justify-center pt-4">
-              <a href={`/api/cases/${caseData.id}/award/download`} target="_blank" rel="noopener noreferrer">
+              <a
+                href={`/api/cases/${caseData.id}/award/download`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Button>
-                  <Download className="h-4 w-4 mr-2" />
+                  <Download className="mr-2 h-4 w-4" />
                   Download Award PDF
                 </Button>
               </a>
@@ -207,12 +218,12 @@ export default async function AwardReviewPage({ params }: PageProps) {
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground">
-              The AI-generated draft award has not been created yet. Please check back
-              later or ensure the case analysis has been completed.
+              The AI-generated draft award has not been created yet. Please check back later or
+              ensure the case analysis has been completed.
             </p>
             <Link href={`/arbitrator/cases/${caseData.id}`}>
               <Button variant="outline" className="mt-4">
-                <ArrowLeft className="h-4 w-4 mr-2" />
+                <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Case
               </Button>
             </Link>
@@ -250,8 +261,8 @@ export default async function AwardReviewPage({ params }: PageProps) {
               Confidence: {Math.round((draftAward.confidence || 0) * 100)}%
             </Badge>
             {draftAward.citationsVerified && (
-              <Badge variant="outline" className="text-green-600 border-green-600">
-                <CheckCircle className="h-3 w-3 mr-1" />
+              <Badge variant="outline" className="border-green-600 text-green-600">
+                <CheckCircle className="mr-1 h-3 w-3" />
                 Citations Verified
               </Badge>
             )}
@@ -295,35 +306,33 @@ export default async function AwardReviewPage({ params }: PageProps) {
             <Gavel className="h-5 w-5" />
             Award Recommendation
           </CardTitle>
-          <CardDescription>
-            AI-recommended decision based on case analysis
-          </CardDescription>
+          <CardDescription>AI-recommended decision based on case analysis</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-3 mb-6">
+          <div className="mb-6 grid gap-4 md:grid-cols-3">
             <div className="rounded-lg border-2 border-primary/20 bg-primary/5 p-4 text-center">
               <span className="text-sm text-muted-foreground">Recommended Award</span>
-              <p className="text-3xl font-bold mt-1 text-primary">
+              <p className="mt-1 text-3xl font-bold text-primary">
                 {formatCurrency(draftAward.awardAmount ? Number(draftAward.awardAmount) : null)}
               </p>
             </div>
             <div className="rounded-lg border p-4 text-center">
               <span className="text-sm text-muted-foreground">Prevailing Party</span>
-              <p className="text-xl font-medium mt-1 capitalize">
+              <p className="mt-1 text-xl font-medium capitalize">
                 {draftAward.prevailingParty?.toLowerCase() || 'N/A'}
               </p>
             </div>
             <div className="rounded-lg border p-4 text-center">
               <span className="text-sm text-muted-foreground">Generated</span>
-              <p className="text-lg font-medium mt-1">
+              <p className="mt-1 text-lg font-medium">
                 {format(new Date(draftAward.generatedAt), 'MMM d, yyyy')}
               </p>
             </div>
           </div>
 
           <div className="rounded-lg border p-4">
-            <h4 className="font-medium mb-2">Decision Narrative</h4>
-            <p className="text-sm whitespace-pre-wrap">{draftAward.decision}</p>
+            <h4 className="mb-2 font-medium">Decision Narrative</h4>
+            <p className="whitespace-pre-wrap text-sm">{draftAward.decision}</p>
           </div>
         </CardContent>
       </Card>
@@ -335,15 +344,11 @@ export default async function AwardReviewPage({ params }: PageProps) {
             <FileText className="h-5 w-5" />
             Findings of Fact ({findingsOfFact.length})
           </CardTitle>
-          <CardDescription>
-            Factual determinations based on evidence and testimony
-          </CardDescription>
+          <CardDescription>Factual determinations based on evidence and testimony</CardDescription>
         </CardHeader>
         <CardContent>
           {findingsOfFact.length === 0 ? (
-            <p className="text-muted-foreground text-center py-8">
-              No findings of fact available.
-            </p>
+            <p className="py-8 text-center text-muted-foreground">No findings of fact available.</p>
           ) : (
             <div className="space-y-4">
               {findingsOfFact.map((finding, index) => (
@@ -354,7 +359,7 @@ export default async function AwardReviewPage({ params }: PageProps) {
                     </span>
                     <div className="flex-1">
                       <p className="text-sm">{finding.finding}</p>
-                      <div className="flex items-center gap-2 mt-2">
+                      <div className="mt-2 flex items-center gap-2">
                         <Badge variant="outline" className="text-xs">
                           {finding.basis === 'undisputed'
                             ? 'Undisputed'
@@ -374,7 +379,7 @@ export default async function AwardReviewPage({ params }: PageProps) {
                         )}
                       </div>
                       {finding.credibilityNote && (
-                        <p className="text-xs text-muted-foreground mt-2 italic">
+                        <p className="mt-2 text-xs italic text-muted-foreground">
                           {finding.credibilityNote}
                         </p>
                       )}
@@ -394,13 +399,11 @@ export default async function AwardReviewPage({ params }: PageProps) {
             <Scale className="h-5 w-5" />
             Conclusions of Law ({conclusionsOfLaw.length})
           </CardTitle>
-          <CardDescription>
-            Legal conclusions based on applicable law
-          </CardDescription>
+          <CardDescription>Legal conclusions based on applicable law</CardDescription>
         </CardHeader>
         <CardContent>
           {conclusionsOfLaw.length === 0 ? (
-            <p className="text-muted-foreground text-center py-8">
+            <p className="py-8 text-center text-muted-foreground">
               No conclusions of law available.
             </p>
           ) : (
@@ -412,10 +415,10 @@ export default async function AwardReviewPage({ params }: PageProps) {
                       {conclusion.number || index + 1}
                     </span>
                     <div className="flex-1">
-                      <p className="font-medium text-sm mb-1">{conclusion.issue}</p>
+                      <p className="mb-1 text-sm font-medium">{conclusion.issue}</p>
                       <p className="text-sm">{conclusion.conclusion}</p>
                       {conclusion.legalBasis && conclusion.legalBasis.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mt-2">
+                        <div className="mt-2 flex flex-wrap gap-1">
                           {conclusion.legalBasis.map((citation, i) => (
                             <Badge key={i} variant="secondary" className="text-xs">
                               {citation}
@@ -423,11 +426,12 @@ export default async function AwardReviewPage({ params }: PageProps) {
                           ))}
                         </div>
                       )}
-                      {conclusion.supportingFindings && conclusion.supportingFindings.length > 0 && (
-                        <p className="text-xs text-muted-foreground mt-2">
-                          Based on Findings: {conclusion.supportingFindings.join(', ')}
-                        </p>
-                      )}
+                      {conclusion.supportingFindings &&
+                        conclusion.supportingFindings.length > 0 && (
+                          <p className="mt-2 text-xs text-muted-foreground">
+                            Based on Findings: {conclusion.supportingFindings.join(', ')}
+                          </p>
+                        )}
                     </div>
                   </div>
                 </div>
@@ -441,9 +445,7 @@ export default async function AwardReviewPage({ params }: PageProps) {
       <Card>
         <CardHeader>
           <CardTitle>Full Reasoning</CardTitle>
-          <CardDescription>
-            Complete reasoning for the award recommendation
-          </CardDescription>
+          <CardDescription>Complete reasoning for the award recommendation</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="prose prose-sm max-w-none">

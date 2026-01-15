@@ -4,12 +4,7 @@
  * Creates mock User objects for testing.
  */
 
-import {
-  generateId,
-  randomEmail,
-  randomPhone,
-  randomDate,
-} from './utils';
+import { generateId, randomEmail, randomPhone, randomDate } from './utils';
 
 export interface UserFactoryOptions {
   id?: string;

@@ -43,7 +43,11 @@ function getFileIcon(file: File) {
   if (file.type.startsWith('image/')) {
     return <ImageIcon className="h-5 w-5" aria-hidden="true" />;
   }
-  if (file.type.includes('spreadsheet') || file.type === 'text/csv' || file.type.includes('excel')) {
+  if (
+    file.type.includes('spreadsheet') ||
+    file.type === 'text/csv' ||
+    file.type.includes('excel')
+  ) {
     return <Table className="h-5 w-5" />;
   }
   if (file.type === 'application/pdf' || file.type.includes('word') || file.type === 'text/plain') {
@@ -128,9 +132,7 @@ export function EvidenceUploadForm({
   };
 
   const updateDescription = (index: number, description: string) => {
-    setFiles((prev) =>
-      prev.map((f, i) => (i === index ? { ...f, description } : f))
-    );
+    setFiles((prev) => prev.map((f, i) => (i === index ? { ...f, description } : f)));
   };
 
   const handleDragEnter = (e: React.DragEvent) => {
@@ -185,9 +187,7 @@ export function EvidenceUploadForm({
 
       // Update status to uploading
       setFiles((prev) =>
-        prev.map((f, idx) =>
-          idx === i ? { ...f, status: 'uploading', progress: 0 } : f
-        )
+        prev.map((f, idx) => (idx === i ? { ...f, status: 'uploading', progress: 0 } : f))
       );
 
       try {
@@ -209,9 +209,7 @@ export function EvidenceUploadForm({
 
         // Update status to success
         setFiles((prev) =>
-          prev.map((f, idx) =>
-            idx === i ? { ...f, status: 'success', progress: 100 } : f
-          )
+          prev.map((f, idx) => (idx === i ? { ...f, status: 'success', progress: 100 } : f))
         );
         successCount++;
       } catch (error) {
@@ -280,8 +278,8 @@ export function EvidenceUploadForm({
               }
             }}
             className={`
-              relative flex flex-col items-center justify-center w-full h-48
-              border-2 border-dashed rounded-lg cursor-pointer transition-colors
+              relative flex h-48 w-full cursor-pointer flex-col items-center
+              justify-center rounded-lg border-2 border-dashed transition-colors
               ${
                 isDragging
                   ? 'border-primary bg-primary/5'
@@ -289,13 +287,13 @@ export function EvidenceUploadForm({
               }
             `}
           >
-            <Upload className={`h-10 w-10 mb-3 ${isDragging ? 'text-primary' : 'text-muted-foreground'}`} />
+            <Upload
+              className={`mb-3 h-10 w-10 ${isDragging ? 'text-primary' : 'text-muted-foreground'}`}
+            />
             <p className="text-sm font-medium">
               {isDragging ? 'Drop files here' : 'Drag & drop files here'}
             </p>
-            <p className="text-xs text-muted-foreground mt-1">
-              or click to browse
-            </p>
+            <p className="mt-1 text-xs text-muted-foreground">or click to browse</p>
             <input
               ref={fileInputRef}
               type="file"
@@ -313,40 +311,38 @@ export function EvidenceUploadForm({
         <Card>
           <CardHeader>
             <CardTitle>Upload Queue ({files.length})</CardTitle>
-            <CardDescription>
-              Add optional descriptions before uploading
-            </CardDescription>
+            <CardDescription>Add optional descriptions before uploading</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {files.map((fileToUpload, index) => (
               <div
                 key={`${fileToUpload.file.name}-${index}`}
-                className={`p-4 rounded-lg border ${
+                className={`rounded-lg border p-4 ${
                   fileToUpload.status === 'success'
                     ? 'border-green-500 bg-green-50 dark:bg-green-950'
                     : fileToUpload.status === 'error'
-                    ? 'border-destructive bg-destructive/10'
-                    : 'border-border'
+                      ? 'border-destructive bg-destructive/10'
+                      : 'border-border'
                 }`}
               >
                 <div className="flex items-start gap-3">
                   {/* File Icon */}
-                  <div className="flex-shrink-0 p-2 rounded bg-muted">
+                  <div className="flex-shrink-0 rounded bg-muted p-2">
                     {getFileIcon(fileToUpload.file)}
                   </div>
 
                   {/* File Info */}
-                  <div className="flex-1 min-w-0 space-y-2">
+                  <div className="min-w-0 flex-1 space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="min-w-0">
-                        <p className="font-medium truncate">{fileToUpload.file.name}</p>
+                        <p className="truncate font-medium">{fileToUpload.file.name}</p>
                         <p className="text-xs text-muted-foreground">
                           {formatFileSize(fileToUpload.file.size)}
                         </p>
                       </div>
 
                       {/* Status Indicator / Remove Button */}
-                      <div className="flex-shrink-0 ml-2">
+                      <div className="ml-2 flex-shrink-0">
                         {fileToUpload.status === 'success' ? (
                           <CheckCircle className="h-5 w-5 text-green-600" />
                         ) : fileToUpload.status === 'error' ? (
@@ -397,7 +393,7 @@ export function EvidenceUploadForm({
             ))}
 
             {/* Upload Button */}
-            <div className="flex items-center justify-between pt-4 border-t">
+            <div className="flex items-center justify-between border-t pt-4">
               <p className="text-sm text-muted-foreground">
                 {pendingFiles.length} file(s) ready to upload
               </p>
@@ -410,10 +406,7 @@ export function EvidenceUploadForm({
                     Clear Errors
                   </Button>
                 )}
-                <Button
-                  onClick={uploadFiles}
-                  disabled={pendingFiles.length === 0 || isUploading}
-                >
+                <Button onClick={uploadFiles} disabled={pendingFiles.length === 0 || isUploading}>
                   {isUploading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -437,8 +430,8 @@ export function EvidenceUploadForm({
         <CardContent className="py-4">
           <p className="text-sm text-muted-foreground">
             <strong>Tips:</strong> You can select multiple files at once. Each file can have an
-            optional description to help identify its contents. Files are automatically checked
-            for duplicates and validated against size limits.
+            optional description to help identify its contents. Files are automatically checked for
+            duplicates and validated against size limits.
           </p>
         </CardContent>
       </Card>

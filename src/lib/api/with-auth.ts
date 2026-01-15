@@ -10,7 +10,6 @@ import { rateLimit, rateLimitConfigs } from '@/lib/rate-limit';
 import { hasPermission, type Permission } from '@/lib/rbac';
 import { logAuditEvent } from '@/lib/services/audit';
 
-
 import type { User } from '@prisma/client';
 
 export interface AuthenticatedRequest extends NextRequest {
@@ -28,7 +27,10 @@ interface WithAuthOptions {
   rateLimit?: keyof typeof rateLimitConfigs | { limit: number; window: number };
   auditAction?: AuditAction;
   getCaseId?: (request: NextRequest, context?: { params: Record<string, string> }) => string | null;
-  getMetadata?: (request: NextRequest, context?: { params: Record<string, string> }) => Record<string, unknown>;
+  getMetadata?: (
+    request: NextRequest,
+    context?: { params: Record<string, string> }
+  ) => Record<string, unknown>;
 }
 
 export function withAuth(handler: RouteHandler, options: WithAuthOptions = {}) {

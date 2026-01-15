@@ -17,7 +17,7 @@ import { prisma } from '@/lib/db';
 // ============================================================================
 
 export interface KeyPair {
-  publicKey: string;  // PEM encoded
+  publicKey: string; // PEM encoded
   privateKey: string; // PEM encoded
   algorithm: 'RSA-SHA256';
   keySize: number;
@@ -43,11 +43,11 @@ export interface SigningCertificate {
 }
 
 export interface SignatureResult {
-  signature: string;        // Base64 encoded PKCS#7/CMS signature
+  signature: string; // Base64 encoded PKCS#7/CMS signature
   signedAt: Date;
   algorithm: string;
   certificateFingerprint: string;
-  documentHash: string;     // SHA-256 of the signed document
+  documentHash: string; // SHA-256 of the signed document
 }
 
 export interface VerificationResult {
@@ -336,7 +336,9 @@ export function verifySignature(
 
     // Get signing time from authenticated attributes
     let signedAt: Date | null = null;
-    const signerInfo = signerInfos[0] as { authenticatedAttributes?: Array<{ type: string; value?: string }> } | undefined;
+    const signerInfo = signerInfos[0] as
+      | { authenticatedAttributes?: Array<{ type: string; value?: string }> }
+      | undefined;
     if (signerInfo?.authenticatedAttributes) {
       for (const attr of signerInfo.authenticatedAttributes) {
         if (attr.type === forge.pki.oids.signingTime && attr.value) {
@@ -384,9 +386,7 @@ function createFailedVerification(errors: string[]): VerificationResult {
 /**
  * Get or create signing credentials for an arbitrator
  */
-export async function getSigningCredentials(
-  arbitratorId: string
-): Promise<SigningCredentials> {
+export async function getSigningCredentials(arbitratorId: string): Promise<SigningCredentials> {
   // Check if arbitrator already has signing credentials
   const arbitrator = await prisma.user.findUnique({
     where: { id: arbitratorId },

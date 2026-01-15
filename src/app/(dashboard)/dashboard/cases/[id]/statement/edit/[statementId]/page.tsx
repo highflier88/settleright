@@ -12,7 +12,6 @@ import { StatementSubmissionForm } from '../../statement-form';
 
 import type { Metadata } from 'next';
 
-
 export const metadata: Metadata = {
   title: 'Edit Statement',
   description: 'Edit your statement',

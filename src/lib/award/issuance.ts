@@ -9,14 +9,8 @@ import { NotificationType } from '@prisma/client';
 
 import { prisma } from '@/lib/db';
 import { createAuditLog } from '@/lib/services/audit';
-import {
-  createInAppNotification,
-  NotificationTemplates,
-} from '@/lib/services/notification';
-import {
-  getSigningCredentials,
-  signPdfDocument,
-} from '@/lib/signature';
+import { createInAppNotification, NotificationTemplates } from '@/lib/services/notification';
+import { getSigningCredentials, signPdfDocument } from '@/lib/signature';
 import { uploadFile } from '@/lib/storage/blob';
 
 import { getDraftAward } from './generator';
@@ -84,9 +78,7 @@ export interface IssuedAward {
 /**
  * Finalize and issue an approved draft award
  */
-export async function finalizeAward(
-  input: FinalizeAwardInput
-): Promise<FinalizeAwardResult> {
+export async function finalizeAward(input: FinalizeAwardInput): Promise<FinalizeAwardResult> {
   const { caseId, arbitratorId, ipAddress, userAgent } = input;
 
   // 1. Get the approved draft award
@@ -128,8 +120,7 @@ export async function finalizeAward(
     throw new Error('Only the assigned arbitrator can finalize the award');
   }
 
-  const arbitratorName =
-    caseData.arbitratorAssignment?.arbitrator?.name || 'Arbitrator';
+  const arbitratorName = caseData.arbitratorAssignment?.arbitrator?.name || 'Arbitrator';
 
   // 3. Generate unique reference number
   const sequence = await getNextAwardSequence();
@@ -247,9 +238,7 @@ export async function finalizeAward(
         ? caseData.respondent?.name || 'Respondent'
         : 'Split Decision';
 
-  const awardAmountStr = draftAward.awardAmount
-    ? formatCurrency(draftAward.awardAmount)
-    : 'N/A';
+  const awardAmountStr = draftAward.awardAmount ? formatCurrency(draftAward.awardAmount) : 'N/A';
 
   // Notify claimant
   if (caseData.claimantId) {
@@ -369,9 +358,7 @@ export async function finalizeAward(
 /**
  * Get the issued award for a case
  */
-export async function getIssuedAward(
-  caseId: string
-): Promise<IssuedAward | null> {
+export async function getIssuedAward(caseId: string): Promise<IssuedAward | null> {
   const award = await prisma.award.findUnique({
     where: { caseId },
     include: {

@@ -31,20 +31,14 @@ export async function createSessionMetadata(
   await setSession(metadata.clerkSessionId, sessionData, SESSION_TTL);
 }
 
-export async function getSessionMetadata(
-  sessionId: string
-): Promise<SessionMetadata | null> {
+export async function getSessionMetadata(sessionId: string): Promise<SessionMetadata | null> {
   return getSession<SessionMetadata>(sessionId);
 }
 
 export async function updateSessionActivity(sessionId: string): Promise<void> {
   const session = await getSessionMetadata(sessionId);
   if (session) {
-    await setSession(
-      sessionId,
-      { ...session, lastActiveAt: Date.now() },
-      SESSION_TTL
-    );
+    await setSession(sessionId, { ...session, lastActiveAt: Date.now() }, SESSION_TTL);
   }
 }
 

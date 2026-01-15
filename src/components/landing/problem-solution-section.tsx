@@ -119,7 +119,7 @@ export function ProblemSolutionSection() {
         {/* Comparison Grid */}
         <div className="grid gap-8 md:grid-cols-2">
           {/* Problems Column */}
-          <div className="rounded-xl border border-dashed border-destructive/30 bg-destructive/5 p-6 md:p-8 animate-in fade-in slide-in-from-left-4 duration-500">
+          <div className="rounded-xl border border-dashed border-destructive/30 bg-destructive/5 p-6 duration-500 animate-in fade-in slide-in-from-left-4 md:p-8">
             <h3 className="mb-6 text-center text-xl font-semibold text-muted-foreground">
               Traditional Court
             </h3>
@@ -129,7 +129,7 @@ export function ProblemSolutionSection() {
                   key={item.title}
                   className={cn(
                     'flex gap-4 rounded-lg p-3 transition-colors hover:bg-background/60',
-                    'animate-in fade-in slide-in-from-left-2',
+                    'animate-in fade-in slide-in-from-left-2'
                   )}
                   style={{ animationDelay: `${(index + 1) * 100}ms` }}
                 >
@@ -146,17 +146,15 @@ export function ProblemSolutionSection() {
           </div>
 
           {/* Solutions Column */}
-          <div className="rounded-xl border-2 border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10 p-6 shadow-lg md:p-8 animate-in fade-in slide-in-from-right-4 duration-500">
-            <h3 className="mb-6 text-center text-xl font-semibold text-primary">
-              Settleright.ai
-            </h3>
+          <div className="rounded-xl border-2 border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10 p-6 shadow-lg duration-500 animate-in fade-in slide-in-from-right-4 md:p-8">
+            <h3 className="mb-6 text-center text-xl font-semibold text-primary">Settleright.ai</h3>
             <ul className="space-y-3">
               {solutions.map((item, index) => (
                 <li
                   key={item.title}
                   className={cn(
                     'flex gap-4 rounded-lg p-3 transition-colors hover:bg-background/40',
-                    'animate-in fade-in slide-in-from-right-2',
+                    'animate-in fade-in slide-in-from-right-2'
                   )}
                   style={{ animationDelay: `${(index + 1) * 100}ms` }}
                 >
@@ -174,7 +172,7 @@ export function ProblemSolutionSection() {
         </div>
 
         {/* Statistics Bar */}
-        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300">
+        <div className="mt-12 grid grid-cols-1 gap-6 delay-300 duration-500 animate-in fade-in slide-in-from-bottom-4 sm:grid-cols-3">
           {stats.map((stat) => (
             <div
               key={stat.label}
@@ -190,10 +188,8 @@ export function ProblemSolutionSection() {
         </div>
 
         {/* CTA Section */}
-        <div className="mt-12 text-center animate-in fade-in duration-500 delay-500">
-          <p className="text-lg text-muted-foreground">
-            See how easy it is to get started
-          </p>
+        <div className="mt-12 text-center delay-500 duration-500 animate-in fade-in">
+          <p className="text-lg text-muted-foreground">See how easy it is to get started</p>
           <div className="mt-4">
             <Link href="/sign-up">
               <Button size="lg">Start Your Case</Button>

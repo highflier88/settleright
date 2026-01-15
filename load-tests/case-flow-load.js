@@ -42,7 +42,7 @@ export const options = {
   },
   thresholds: {
     http_req_duration: ['p(95)<1000'], // 95% under 1 second
-    http_req_failed: ['rate<0.05'],    // Less than 5% failures
+    http_req_failed: ['rate<0.05'], // Less than 5% failures
     case_creation_time: ['p(95)<2000'], // Case creation under 2 seconds
     errors: ['rate<0.05'],
   },
@@ -54,7 +54,7 @@ const AUTH_TOKEN = __ENV.AUTH_TOKEN || 'test_token';
 
 const headers = {
   'Content-Type': 'application/json',
-  'Authorization': `Bearer ${AUTH_TOKEN}`,
+  Authorization: `Bearer ${AUTH_TOKEN}`,
 };
 
 // Dispute types for random selection
@@ -80,11 +80,7 @@ function createCase() {
   const payload = generateCasePayload();
   const start = Date.now();
 
-  const res = http.post(
-    `${BASE_URL}/api/cases`,
-    JSON.stringify(payload),
-    { headers }
-  );
+  const res = http.post(`${BASE_URL}/api/cases`, JSON.stringify(payload), { headers });
 
   const duration = Date.now() - start;
   caseCreationTime.add(duration);
@@ -124,11 +120,9 @@ function uploadEvidence(caseId) {
     type: 'DOCUMENT',
   };
 
-  const res = http.post(
-    `${BASE_URL}/api/cases/${caseId}/evidence`,
-    JSON.stringify(payload),
-    { headers }
-  );
+  const res = http.post(`${BASE_URL}/api/cases/${caseId}/evidence`, JSON.stringify(payload), {
+    headers,
+  });
 
   const success = check(res, {
     'evidence uploaded': (r) => r.status === 201 || r.status === 200,
@@ -150,11 +144,9 @@ function submitStatement(caseId) {
     content: `This is a load test statement. ${randomString(100)}`,
   };
 
-  const res = http.post(
-    `${BASE_URL}/api/cases/${caseId}/statements`,
-    JSON.stringify(payload),
-    { headers }
-  );
+  const res = http.post(`${BASE_URL}/api/cases/${caseId}/statements`, JSON.stringify(payload), {
+    headers,
+  });
 
   const success = check(res, {
     'statement submitted': (r) => r.status === 201 || r.status === 200,

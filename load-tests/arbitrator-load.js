@@ -41,7 +41,7 @@ const AUTH_TOKEN = __ENV.AUTH_TOKEN || 'arbitrator_test_token';
 
 const headers = {
   'Content-Type': 'application/json',
-  'Authorization': `Bearer ${AUTH_TOKEN}`,
+  Authorization: `Bearer ${AUTH_TOKEN}`,
 };
 
 /**
@@ -254,7 +254,10 @@ function generateSummary(data) {
   summary += `Awards Approved: ${metrics.awards_approved?.values?.count || 0}\n`;
 
   const approvalRate = metrics.awards_reviewed?.values?.count
-    ? ((metrics.awards_approved?.values?.count || 0) / metrics.awards_reviewed.values.count * 100).toFixed(1)
+    ? (
+        ((metrics.awards_approved?.values?.count || 0) / metrics.awards_reviewed.values.count) *
+        100
+      ).toFixed(1)
     : 0;
   summary += `Approval Rate: ${approvalRate}%\n`;
 

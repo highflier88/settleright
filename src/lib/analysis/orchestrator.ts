@@ -61,11 +61,7 @@ export async function runAnalysis(
   // Get or create analysis job
   const job = await getOrCreateAnalysisJob(input.caseId);
 
-  const updateProgress = async (
-    phase: AnalysisPhase,
-    progress: number,
-    message?: string
-  ) => {
+  const updateProgress = async (phase: AnalysisPhase, progress: number, message?: string) => {
     const status = phaseToStatus(phase);
 
     await Promise.all([
@@ -159,10 +155,7 @@ export async function runAnalysis(
       totalTokensUsed += timelineResult.tokensUsed || 0;
 
       // Merge with fact-based events
-      const factEvents = extractEventsFromFacts(
-        extractedFacts.claimant,
-        extractedFacts.respondent
-      );
+      const factEvents = extractEventsFromFacts(extractedFacts.claimant, extractedFacts.respondent);
       timeline = mergeTimelineEvents(timelineResult.timeline.events, factEvents);
 
       // Save intermediate results
@@ -182,11 +175,7 @@ export async function runAnalysis(
 
     let contradictions: Contradiction[] = [];
 
-    if (
-      !opts.skipContradictions &&
-      input.respondentStatement &&
-      disputedFacts.length > 0
-    ) {
+    if (!opts.skipContradictions && input.respondentStatement && disputedFacts.length > 0) {
       const contradictionResult = await detectContradictions(
         disputedFacts,
         input.claimantStatement,

@@ -29,40 +29,40 @@ export interface ParsedCitation {
 
 // California Code abbreviations
 const CA_CODE_ABBREVIATIONS: Record<string, string> = {
-  'civ': 'Cal. Civ. Code',
+  civ: 'Cal. Civ. Code',
   'civ.': 'Cal. Civ. Code',
-  'civil': 'Cal. Civ. Code',
-  'ccp': 'Cal. Code Civ. Proc.',
+  civil: 'Cal. Civ. Code',
+  ccp: 'Cal. Code Civ. Proc.',
   'c.c.p.': 'Cal. Code Civ. Proc.',
   'code civ. proc.': 'Cal. Code Civ. Proc.',
   'bus. & prof.': 'Cal. Bus. & Prof. Code',
   'b&p': 'Cal. Bus. & Prof. Code',
-  'com': 'Cal. Com. Code',
-  'comm': 'Cal. Com. Code',
-  'commercial': 'Cal. Com. Code',
-  'fam': 'Cal. Fam. Code',
-  'family': 'Cal. Fam. Code',
-  'gov': 'Cal. Gov. Code',
-  'govt': 'Cal. Gov. Code',
-  'government': 'Cal. Gov. Code',
-  'lab': 'Cal. Lab. Code',
-  'labor': 'Cal. Lab. Code',
-  'pen': 'Cal. Penal Code',
-  'penal': 'Cal. Penal Code',
-  'prob': 'Cal. Prob. Code',
-  'probate': 'Cal. Prob. Code',
-  'veh': 'Cal. Veh. Code',
-  'vehicle': 'Cal. Veh. Code',
+  com: 'Cal. Com. Code',
+  comm: 'Cal. Com. Code',
+  commercial: 'Cal. Com. Code',
+  fam: 'Cal. Fam. Code',
+  family: 'Cal. Fam. Code',
+  gov: 'Cal. Gov. Code',
+  govt: 'Cal. Gov. Code',
+  government: 'Cal. Gov. Code',
+  lab: 'Cal. Lab. Code',
+  labor: 'Cal. Lab. Code',
+  pen: 'Cal. Penal Code',
+  penal: 'Cal. Penal Code',
+  prob: 'Cal. Prob. Code',
+  probate: 'Cal. Prob. Code',
+  veh: 'Cal. Veh. Code',
+  vehicle: 'Cal. Veh. Code',
   'welf. & inst.': 'Cal. Welf. & Inst. Code',
   'w&i': 'Cal. Welf. & Inst. Code',
   'health & saf.': 'Cal. Health & Safety Code',
   'h&s': 'Cal. Health & Safety Code',
-  'ins': 'Cal. Ins. Code',
-  'insurance': 'Cal. Ins. Code',
-  'corp': 'Cal. Corp. Code',
-  'corporations': 'Cal. Corp. Code',
-  'evid': 'Cal. Evid. Code',
-  'evidence': 'Cal. Evid. Code',
+  ins: 'Cal. Ins. Code',
+  insurance: 'Cal. Ins. Code',
+  corp: 'Cal. Corp. Code',
+  corporations: 'Cal. Corp. Code',
+  evid: 'Cal. Evid. Code',
+  evidence: 'Cal. Evid. Code',
 };
 
 // California court reporters
@@ -122,7 +122,8 @@ function parseCaliforniaStatute(citation: string): ParsedCitation | null {
       const subsection = match[3];
 
       // Normalize code name
-      const normalizedCode = CA_CODE_ABBREVIATIONS[codePart] ||
+      const normalizedCode =
+        CA_CODE_ABBREVIATIONS[codePart] ||
         Object.entries(CA_CODE_ABBREVIATIONS).find(([key]) =>
           codePart.includes(key.replace('.', ''))
         )?.[1];
@@ -161,7 +162,7 @@ function parseCaseLaw(citation: string): ParsedCitation | null {
   // Check for reporter citation
   const allReporters = [...CA_REPORTERS, ...FEDERAL_REPORTERS];
   const reporterPattern = new RegExp(
-    `(\\d+)\\s+(${allReporters.map(r => r.replace('.', '\\.')).join('|')})\\s+(\\d+)`,
+    `(\\d+)\\s+(${allReporters.map((r) => r.replace('.', '\\.')).join('|')})\\s+(\\d+)`,
     'i'
   );
 

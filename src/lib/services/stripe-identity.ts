@@ -193,10 +193,7 @@ export async function redactVerificationSession(sessionId: string): Promise<bool
 }
 
 // Process a verification session update (called from webhook)
-export async function processVerificationUpdate(
-  sessionId: string,
-  status: string
-): Promise<void> {
+export async function processVerificationUpdate(sessionId: string, status: string): Promise<void> {
   if (!stripe) {
     console.error('Stripe not configured');
     return;

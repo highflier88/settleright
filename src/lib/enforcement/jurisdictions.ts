@@ -37,10 +37,11 @@ export const JURISDICTION_INFO: Record<string, JurisdictionFilingInfo> = {
       'The petition must name all parties to the arbitration',
       'The court must confirm the award unless grounds for vacation or correction exist',
       'A confirmed award has the same force and effect as a civil judgment',
-      'The prevailing party may be entitled to attorney\'s fees per the arbitration agreement',
+      "The prevailing party may be entitled to attorney's fees per the arbitration agreement",
     ],
     statute: 'California Code of Civil Procedure §§ 1285-1288.8',
-    statuteText: 'Any party to an arbitration may petition the court to confirm, correct, or vacate the award.',
+    statuteText:
+      'Any party to an arbitration may petition the court to confirm, correct, or vacate the award.',
   },
 
   'US-NY': {
@@ -103,7 +104,8 @@ export const JURISDICTION_INFO: Record<string, JurisdictionFilingInfo> = {
       'Judgment may be enforced as any other civil judgment',
     ],
     statute: 'Texas Civil Practice & Remedies Code Chapter 171',
-    statuteText: 'On application of a party, the court shall confirm an award unless grounds for vacatur exist.',
+    statuteText:
+      'On application of a party, the court shall confirm an award unless grounds for vacatur exist.',
   },
 
   'US-FL': {
@@ -166,7 +168,8 @@ export const JURISDICTION_INFO: Record<string, JurisdictionFilingInfo> = {
       'Post-judgment interest begins accruing from confirmation',
     ],
     statute: 'Illinois Uniform Arbitration Act (710 ILCS 5/)',
-    statuteText: 'Upon application the court shall confirm an award unless grounds for vacatur exist.',
+    statuteText:
+      'Upon application the court shall confirm an award unless grounds for vacatur exist.',
   },
 };
 
@@ -207,11 +210,13 @@ export const DEFAULT_JURISDICTION_INFO: JurisdictionFilingInfo = {
  * Get jurisdiction filing information
  */
 export function getJurisdictionInfo(jurisdiction: string): JurisdictionFilingInfo {
-  return JURISDICTION_INFO[jurisdiction] || {
-    ...DEFAULT_JURISDICTION_INFO,
-    jurisdiction,
-    jurisdictionName: formatJurisdictionName(jurisdiction),
-  };
+  return (
+    JURISDICTION_INFO[jurisdiction] || {
+      ...DEFAULT_JURISDICTION_INFO,
+      jurisdiction,
+      jurisdictionName: formatJurisdictionName(jurisdiction),
+    }
+  );
 }
 
 /**
@@ -222,19 +227,57 @@ function formatJurisdictionName(jurisdiction: string): string {
   if (jurisdiction.startsWith('US-')) {
     const stateCode = jurisdiction.slice(3);
     const stateNames: Record<string, string> = {
-      AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas',
-      CA: 'California', CO: 'Colorado', CT: 'Connecticut', DE: 'Delaware',
-      FL: 'Florida', GA: 'Georgia', HI: 'Hawaii', ID: 'Idaho',
-      IL: 'Illinois', IN: 'Indiana', IA: 'Iowa', KS: 'Kansas',
-      KY: 'Kentucky', LA: 'Louisiana', ME: 'Maine', MD: 'Maryland',
-      MA: 'Massachusetts', MI: 'Michigan', MN: 'Minnesota', MS: 'Mississippi',
-      MO: 'Missouri', MT: 'Montana', NE: 'Nebraska', NV: 'Nevada',
-      NH: 'New Hampshire', NJ: 'New Jersey', NM: 'New Mexico', NY: 'New York',
-      NC: 'North Carolina', ND: 'North Dakota', OH: 'Ohio', OK: 'Oklahoma',
-      OR: 'Oregon', PA: 'Pennsylvania', RI: 'Rhode Island', SC: 'South Carolina',
-      SD: 'South Dakota', TN: 'Tennessee', TX: 'Texas', UT: 'Utah',
-      VT: 'Vermont', VA: 'Virginia', WA: 'Washington', WV: 'West Virginia',
-      WI: 'Wisconsin', WY: 'Wyoming', DC: 'District of Columbia',
+      AL: 'Alabama',
+      AK: 'Alaska',
+      AZ: 'Arizona',
+      AR: 'Arkansas',
+      CA: 'California',
+      CO: 'Colorado',
+      CT: 'Connecticut',
+      DE: 'Delaware',
+      FL: 'Florida',
+      GA: 'Georgia',
+      HI: 'Hawaii',
+      ID: 'Idaho',
+      IL: 'Illinois',
+      IN: 'Indiana',
+      IA: 'Iowa',
+      KS: 'Kansas',
+      KY: 'Kentucky',
+      LA: 'Louisiana',
+      ME: 'Maine',
+      MD: 'Maryland',
+      MA: 'Massachusetts',
+      MI: 'Michigan',
+      MN: 'Minnesota',
+      MS: 'Mississippi',
+      MO: 'Missouri',
+      MT: 'Montana',
+      NE: 'Nebraska',
+      NV: 'Nevada',
+      NH: 'New Hampshire',
+      NJ: 'New Jersey',
+      NM: 'New Mexico',
+      NY: 'New York',
+      NC: 'North Carolina',
+      ND: 'North Dakota',
+      OH: 'Ohio',
+      OK: 'Oklahoma',
+      OR: 'Oregon',
+      PA: 'Pennsylvania',
+      RI: 'Rhode Island',
+      SC: 'South Carolina',
+      SD: 'South Dakota',
+      TN: 'Tennessee',
+      TX: 'Texas',
+      UT: 'Utah',
+      VT: 'Vermont',
+      VA: 'Virginia',
+      WA: 'Washington',
+      WV: 'West Virginia',
+      WI: 'Wisconsin',
+      WY: 'Wyoming',
+      DC: 'District of Columbia',
     };
     return stateNames[stateCode] || stateCode;
   }

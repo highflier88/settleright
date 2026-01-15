@@ -70,14 +70,20 @@ test.describe('Admin Dashboard', () => {
 
     test('should view user details', async ({ page }) => {
       await page.goto('/admin/users');
-      await page.getByRole('link', { name: /view|details/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|details/i })
+        .first()
+        .click();
       await expect(page).toHaveURL(/\/admin\/users\/[a-z0-9-]+/);
       await expect(page.getByText(/user details/i)).toBeVisible();
     });
 
     test('should update user role', async ({ page }) => {
       await page.goto('/admin/users');
-      await page.getByRole('link', { name: /view|details/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|details/i })
+        .first()
+        .click();
 
       await page.getByRole('button', { name: /edit|change role/i }).click();
       await page.getByRole('combobox', { name: /role/i }).selectOption('ARBITRATOR');
@@ -88,7 +94,10 @@ test.describe('Admin Dashboard', () => {
 
     test('should suspend user account', async ({ page }) => {
       await page.goto('/admin/users');
-      await page.getByRole('link', { name: /view|details/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|details/i })
+        .first()
+        .click();
 
       await page.getByRole('button', { name: /suspend|disable/i }).click();
       await page.getByRole('button', { name: /confirm/i }).click();
@@ -127,13 +136,19 @@ test.describe('Admin Dashboard', () => {
 
     test('should view case details', async ({ page }) => {
       await page.goto('/admin/cases');
-      await page.getByRole('link', { name: /view|details/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|details/i })
+        .first()
+        .click();
       await expect(page.getByText(/case details/i)).toBeVisible();
     });
 
     test('should reassign case arbitrator', async ({ page }) => {
       await page.goto('/admin/cases');
-      await page.getByRole('link', { name: /view|details/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|details/i })
+        .first()
+        .click();
 
       await page.getByRole('button', { name: /reassign|change arbitrator/i }).click();
       await page.getByRole('combobox', { name: /arbitrator/i }).selectOption({ index: 1 });
@@ -159,7 +174,10 @@ test.describe('Admin Dashboard', () => {
 
     test('should view arbitrator credentials', async ({ page }) => {
       await page.goto('/admin/arbitrators');
-      await page.getByRole('link', { name: /view|details/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|details/i })
+        .first()
+        .click();
 
       await expect(page.getByText(/credentials|qualifications/i)).toBeVisible();
       await expect(page.getByText(/bar number/i)).toBeVisible();
@@ -167,7 +185,10 @@ test.describe('Admin Dashboard', () => {
 
     test('should verify arbitrator credentials', async ({ page }) => {
       await page.goto('/admin/arbitrators');
-      await page.getByRole('link', { name: /view|details/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|details/i })
+        .first()
+        .click();
 
       await page.getByRole('button', { name: /verify|approve/i }).click();
       await page.getByRole('button', { name: /confirm/i }).click();
@@ -177,7 +198,10 @@ test.describe('Admin Dashboard', () => {
 
     test('should view arbitrator workload', async ({ page }) => {
       await page.goto('/admin/arbitrators');
-      await page.getByRole('link', { name: /view|details/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|details/i })
+        .first()
+        .click();
 
       await expect(page.getByText(/active cases|workload/i)).toBeVisible();
       await expect(page.getByTestId('case-count')).toBeVisible();
@@ -185,7 +209,10 @@ test.describe('Admin Dashboard', () => {
 
     test('should set arbitrator availability', async ({ page }) => {
       await page.goto('/admin/arbitrators');
-      await page.getByRole('link', { name: /view|details/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|details/i })
+        .first()
+        .click();
 
       await page.getByRole('button', { name: /availability|status/i }).click();
       await page.getByRole('combobox', { name: /status/i }).selectOption('AVAILABLE');
@@ -217,13 +244,19 @@ test.describe('Admin Dashboard', () => {
 
     test('should view payment details', async ({ page }) => {
       await page.goto('/admin/payments');
-      await page.getByRole('link', { name: /view|details/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|details/i })
+        .first()
+        .click();
       await expect(page.getByText(/payment details/i)).toBeVisible();
     });
 
     test('should process refund', async ({ page }) => {
       await page.goto('/admin/payments');
-      await page.getByRole('link', { name: /view|details/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|details/i })
+        .first()
+        .click();
 
       const refundButton = page.getByRole('button', { name: /refund/i });
       if (await refundButton.isVisible()) {

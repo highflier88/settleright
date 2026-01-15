@@ -6,18 +6,8 @@ import { History, ChevronDown, ChevronRight, User, Clock, FileText } from 'lucid
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 interface RevisionInfo {
   id: string;
@@ -116,12 +106,10 @@ export function RevisionHistory({
               onOpenChange={() => toggleRevision(revision.id)}
             >
               <div
-                className={`border rounded-lg ${
-                  isCurrent ? 'border-primary bg-primary/5' : ''
-                }`}
+                className={`rounded-lg border ${isCurrent ? 'border-primary bg-primary/5' : ''}`}
               >
                 <CollapsibleTrigger asChild>
-                  <button className="w-full flex items-center justify-between p-3 hover:bg-muted/50 transition-colors rounded-lg">
+                  <button className="flex w-full items-center justify-between rounded-lg p-3 transition-colors hover:bg-muted/50">
                     <div className="flex items-center gap-3">
                       {isExpanded ? (
                         <ChevronDown className="h-4 w-4 text-muted-foreground" />
@@ -136,9 +124,7 @@ export function RevisionHistory({
                           </Badge>
                         )}
                       </div>
-                      <Badge
-                        className={`${changeTypeInfo.color} text-white text-xs`}
-                      >
+                      <Badge className={`${changeTypeInfo.color} text-xs text-white`}>
                         {changeTypeInfo.label}
                       </Badge>
                     </div>
@@ -150,9 +136,9 @@ export function RevisionHistory({
                 </CollapsibleTrigger>
 
                 <CollapsibleContent>
-                  <div className="px-3 pb-3 pt-0 space-y-3 border-t">
+                  <div className="space-y-3 border-t px-3 pb-3 pt-0">
                     {/* Modified By */}
-                    <div className="flex items-center gap-2 text-sm pt-3">
+                    <div className="flex items-center gap-2 pt-3 text-sm">
                       <User className="h-4 w-4 text-muted-foreground" />
                       <span className="text-muted-foreground">Modified by:</span>
                       <span className="font-medium">
@@ -163,16 +149,10 @@ export function RevisionHistory({
                     {/* Changed Fields */}
                     {revision.changedFields.length > 0 && (
                       <div className="space-y-1">
-                        <span className="text-sm text-muted-foreground">
-                          Changed fields:
-                        </span>
+                        <span className="text-sm text-muted-foreground">Changed fields:</span>
                         <div className="flex flex-wrap gap-1">
                           {revision.changedFields.map((field) => (
-                            <Badge
-                              key={field}
-                              variant="outline"
-                              className="text-xs"
-                            >
+                            <Badge key={field} variant="outline" className="text-xs">
                               {field}
                             </Badge>
                           ))}
@@ -183,12 +163,8 @@ export function RevisionHistory({
                     {/* Change Summary */}
                     {revision.changeSummary && (
                       <div className="space-y-1">
-                        <span className="text-sm text-muted-foreground">
-                          Summary:
-                        </span>
-                        <p className="text-sm bg-muted/50 rounded p-2">
-                          {revision.changeSummary}
-                        </p>
+                        <span className="text-sm text-muted-foreground">Summary:</span>
+                        <p className="rounded bg-muted/50 p-2 text-sm">{revision.changeSummary}</p>
                       </div>
                     )}
 
@@ -200,7 +176,7 @@ export function RevisionHistory({
                         onClick={() => onViewRevision(revision.id)}
                         className="mt-2"
                       >
-                        <FileText className="h-4 w-4 mr-2" />
+                        <FileText className="mr-2 h-4 w-4" />
                         View This Version
                       </Button>
                     )}

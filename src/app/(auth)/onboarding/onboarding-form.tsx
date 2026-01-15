@@ -149,15 +149,8 @@ export function OnboardingForm({ user }: OnboardingFormProps) {
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="name">Full Name</Label>
-            <Input
-              id="name"
-              placeholder="John Doe"
-              {...register('name')}
-              disabled={isLoading}
-            />
-            {errors.name && (
-              <p className="text-sm text-destructive">{errors.name.message}</p>
-            )}
+            <Input id="name" placeholder="John Doe" {...register('name')} disabled={isLoading} />
+            {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
           </div>
 
           <div className="space-y-2">
@@ -169,9 +162,7 @@ export function OnboardingForm({ user }: OnboardingFormProps) {
               {...register('phone')}
               disabled={isLoading}
             />
-            {errors.phone && (
-              <p className="text-sm text-destructive">{errors.phone.message}</p>
-            )}
+            {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
           </div>
 
           <div className="space-y-2">

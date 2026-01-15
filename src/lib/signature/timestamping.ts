@@ -21,10 +21,10 @@ import forge from 'node-forge';
 // ============================================================================
 
 export interface TimestampRequest {
-  messageImprint: string;      // SHA-256 hash of the data to timestamp
-  nonce: string;               // Random nonce for replay protection
-  certReq: boolean;            // Whether to request the TSA certificate
-  policyId?: string;           // Optional timestamp policy OID
+  messageImprint: string; // SHA-256 hash of the data to timestamp
+  nonce: string; // Random nonce for replay protection
+  certReq: boolean; // Whether to request the TSA certificate
+  policyId?: string; // Optional timestamp policy OID
 }
 
 export interface TimestampResponse {
@@ -32,7 +32,7 @@ export interface TimestampResponse {
   statusString?: string;
   failInfo?: string;
   timestamp: Date | null;
-  timestampToken: string | null;  // Base64 encoded timestamp token
+  timestampToken: string | null; // Base64 encoded timestamp token
   serialNumber: string | null;
   tsaName: string | null;
   messageImprint: string | null;
@@ -127,11 +127,7 @@ export async function requestTimestamp(
 /**
  * Build an ASN.1 TimeStampReq structure
  */
-function buildTimeStampReq(
-  hash: Buffer,
-  nonce: string,
-  certReq: boolean
-): forge.asn1.Asn1 {
+function buildTimeStampReq(hash: Buffer, nonce: string, certReq: boolean): forge.asn1.Asn1 {
   // TimeStampReq ::= SEQUENCE {
   //   version         INTEGER { v1(1) },
   //   messageImprint  MessageImprint,
@@ -156,12 +152,7 @@ function buildTimeStampReq(
     [
       // AlgorithmIdentifier
       forge.asn1.create(forge.asn1.Class.UNIVERSAL, forge.asn1.Type.SEQUENCE, true, [
-        forge.asn1.create(
-          forge.asn1.Class.UNIVERSAL,
-          forge.asn1.Type.OID,
-          false,
-          sha256Oid
-        ),
+        forge.asn1.create(forge.asn1.Class.UNIVERSAL, forge.asn1.Type.OID, false, sha256Oid),
         forge.asn1.create(forge.asn1.Class.UNIVERSAL, forge.asn1.Type.NULL, false, ''),
       ]),
       // HashedMessage
@@ -194,12 +185,7 @@ function buildTimeStampReq(
   // Build TimeStampReq
   return forge.asn1.create(forge.asn1.Class.UNIVERSAL, forge.asn1.Type.SEQUENCE, true, [
     // Version (1)
-    forge.asn1.create(
-      forge.asn1.Class.UNIVERSAL,
-      forge.asn1.Type.INTEGER,
-      false,
-      '\x01'
-    ),
+    forge.asn1.create(forge.asn1.Class.UNIVERSAL, forge.asn1.Type.INTEGER, false, '\x01'),
     messageImprint,
     nonceAsn1,
     certReqAsn1,
@@ -223,7 +209,11 @@ function parseTimeStampResp(
     // }
 
     // Check if we have a valid response structure
-    if (asn1.type !== forge.asn1.Type.SEQUENCE || !asn1.value || (asn1.value as forge.asn1.Asn1[]).length < 1) {
+    if (
+      asn1.type !== forge.asn1.Type.SEQUENCE ||
+      !asn1.value ||
+      (asn1.value as forge.asn1.Asn1[]).length < 1
+    ) {
       throw new Error('Invalid TimeStampResp structure');
     }
 

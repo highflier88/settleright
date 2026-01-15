@@ -14,7 +14,6 @@ import { EvidenceList } from './evidence-list';
 
 import type { Metadata } from 'next';
 
-
 export const metadata: Metadata = {
   title: 'Evidence',
   description: 'View and manage case evidence',
@@ -62,9 +61,7 @@ export default async function EvidencePage({ params }: PageProps) {
             </Link>
             <h1 className="text-2xl font-bold tracking-tight">Evidence</h1>
           </div>
-          <p className="text-muted-foreground">
-            Case {caseData.referenceNumber}
-          </p>
+          <p className="text-muted-foreground">Case {caseData.referenceNumber}</p>
         </div>
         {canUpload && (
           <Button asChild>
@@ -80,23 +77,17 @@ export default async function EvidencePage({ params }: PageProps) {
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Total Files
-            </CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total Files</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalFiles}</div>
-            <p className="text-xs text-muted-foreground">
-              {stats.remainingFiles} remaining
-            </p>
+            <p className="text-xs text-muted-foreground">{stats.remainingFiles} remaining</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Total Size
-            </CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total Size</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatFileSize(stats.totalSize)}</div>
@@ -130,9 +121,7 @@ export default async function EvidencePage({ params }: PageProps) {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Other Party
-            </CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Other Party</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
@@ -152,12 +141,7 @@ export default async function EvidencePage({ params }: PageProps) {
       </div>
 
       {/* Evidence List */}
-      <EvidenceList
-        caseId={params.id}
-        evidence={evidence}
-        userId={user.id}
-        canDelete={canUpload}
-      />
+      <EvidenceList caseId={params.id} evidence={evidence} userId={user.id} canDelete={canUpload} />
 
       {/* Help Card */}
       <Card>
@@ -166,16 +150,20 @@ export default async function EvidencePage({ params }: PageProps) {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-start gap-3">
-            <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+            <FileText className="mt-0.5 h-5 w-5 flex-shrink-0 text-muted-foreground" />
             <div>
               <p className="font-medium">Documents</p>
               <p className="text-sm text-muted-foreground">
-                PDF, DOC, DOCX, TXT files for contracts, emails, receipts, and other written evidence.
+                PDF, DOC, DOCX, TXT files for contracts, emails, receipts, and other written
+                evidence.
               </p>
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <ImageIcon className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" aria-hidden="true" />
+            <ImageIcon
+              className="mt-0.5 h-5 w-5 flex-shrink-0 text-muted-foreground"
+              aria-hidden="true"
+            />
             <div>
               <p className="font-medium">Images</p>
               <p className="text-sm text-muted-foreground">
@@ -184,7 +172,7 @@ export default async function EvidencePage({ params }: PageProps) {
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <Table className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+            <Table className="mt-0.5 h-5 w-5 flex-shrink-0 text-muted-foreground" />
             <div>
               <p className="font-medium">Spreadsheets</p>
               <p className="text-sm text-muted-foreground">
@@ -192,7 +180,7 @@ export default async function EvidencePage({ params }: PageProps) {
               </p>
             </div>
           </div>
-          <p className="text-xs text-muted-foreground border-t pt-4 mt-4">
+          <p className="mt-4 border-t pt-4 text-xs text-muted-foreground">
             Maximum file size: 25MB per file. Total limit: 100MB per case, 50 files maximum.
           </p>
         </CardContent>

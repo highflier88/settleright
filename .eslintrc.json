@@ -41,14 +41,7 @@
     "import/order": [
       "error",
       {
-        "groups": [
-          "builtin",
-          "external",
-          "internal",
-          ["parent", "sibling"],
-          "index",
-          "type"
-        ],
+        "groups": ["builtin", "external", "internal", ["parent", "sibling"], "index", "type"],
         "pathGroups": [
           {
             "pattern": "react",
@@ -78,14 +71,7 @@
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off"
   },
-  "ignorePatterns": [
-    "node_modules/",
-    ".next/",
-    "out/",
-    "coverage/",
-    "*.config.js",
-    "*.config.mjs"
-  ],
+  "ignorePatterns": ["node_modules/", ".next/", "out/", "coverage/", "*.config.js", "*.config.mjs"],
   "overrides": [
     {
       "files": ["**/__tests__/**/*.ts", "**/__tests__/**/*.tsx", "**/*.test.ts", "**/*.test.tsx"],

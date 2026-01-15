@@ -69,11 +69,9 @@ export async function reconstructTimeline(
       ],
     });
 
-    const responseText =
-      response.content[0]?.type === 'text' ? response.content[0].text : '';
+    const responseText = response.content[0]?.type === 'text' ? response.content[0].text : '';
 
-    const tokensUsed =
-      (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
+    const tokensUsed = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
 
     const timeline = parseTimelineResponse(responseText, disputedFacts);
 
@@ -133,9 +131,7 @@ export function extractEventsFromFacts(
 /**
  * Extract timeline events from evidence entities
  */
-export function extractEventsFromEvidence(
-  evidenceSummaries: EvidenceSummary[]
-): TimelineEvent[] {
+export function extractEventsFromEvidence(evidenceSummaries: EvidenceSummary[]): TimelineEvent[] {
   const events: TimelineEvent[] = [];
 
   evidenceSummaries.forEach((evidence, evidenceIndex) => {
@@ -200,7 +196,10 @@ function parseTimelineResponse(
   try {
     let jsonStr = responseText.trim();
     if (jsonStr.startsWith('```')) {
-      jsonStr = jsonStr.replace(/```json?\n?/, '').replace(/```$/, '').trim();
+      jsonStr = jsonStr
+        .replace(/```json?\n?/, '')
+        .replace(/```$/, '')
+        .trim();
     }
 
     const parsed = JSON.parse(jsonStr) as {
@@ -231,17 +230,16 @@ function parseTimelineResponse(
     // Parse events
     const events: TimelineEvent[] = (parsed.events || [])
       .map((item, index) => {
-        const source = (['claimant', 'respondent', 'evidence'].includes(
-          item.source || ''
-        )
-          ? item.source
-          : 'claimant') as 'claimant' | 'respondent' | 'evidence';
+        const source = (
+          ['claimant', 'respondent', 'evidence'].includes(item.source || '')
+            ? item.source
+            : 'claimant'
+        ) as 'claimant' | 'respondent' | 'evidence';
 
         // Check if event relates to a disputed fact
         const eventLower = (item.event || '').toLowerCase();
         const isDisputed =
-          item.disputed ||
-          disputedTopics.some((topic) => eventLower.includes(topic));
+          item.disputed || disputedTopics.some((topic) => eventLower.includes(topic));
 
         return {
           id: item.id || `event_${index + 1}`,
@@ -259,11 +257,11 @@ function parseTimelineResponse(
     // Parse undated events
     const undatedEvents: TimelineEvent[] = (parsed.undatedEvents || [])
       .map((item, index) => {
-        const source = (['claimant', 'respondent', 'evidence'].includes(
-          item.source || ''
-        )
-          ? item.source
-          : 'claimant') as 'claimant' | 'respondent' | 'evidence';
+        const source = (
+          ['claimant', 'respondent', 'evidence'].includes(item.source || '')
+            ? item.source
+            : 'claimant'
+        ) as 'claimant' | 'respondent' | 'evidence';
 
         return {
           id: item.id || `undated_${index + 1}`,
@@ -301,9 +299,7 @@ function parseTimelineResponse(
 /**
  * Merge and deduplicate timeline events from multiple sources
  */
-export function mergeTimelineEvents(
-  ...eventSources: TimelineEvent[][]
-): TimelineEvent[] {
+export function mergeTimelineEvents(...eventSources: TimelineEvent[][]): TimelineEvent[] {
   const allEvents = eventSources.flat();
 
   // Deduplicate by checking for similar events on same date

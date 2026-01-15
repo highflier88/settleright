@@ -47,17 +47,13 @@ export const idSchema = z.object({
 
 export const emailSchema = z.string().email('Invalid email address');
 
-export const phoneSchema = z.string().regex(
-  /^\+?[1-9]\d{1,14}$/,
-  'Invalid phone number format'
-);
+export const phoneSchema = z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number format');
 
 export const currencySchema = z.coerce
   .number()
   .min(0, 'Amount must be positive')
   .transform((val) => Math.round(val * 100) / 100);
 
-export const jurisdictionSchema = z.string().regex(
-  /^[A-Z]{2}(-[A-Z]{2,3})?$/,
-  'Invalid jurisdiction format (e.g., US-CA)'
-);
+export const jurisdictionSchema = z
+  .string()
+  .regex(/^[A-Z]{2}(-[A-Z]{2,3})?$/, 'Invalid jurisdiction format (e.g., US-CA)');

@@ -27,13 +27,10 @@ export default function SignUpPage() {
             card: 'shadow-none border rounded-lg',
             headerTitle: 'hidden',
             headerSubtitle: 'hidden',
-            socialButtonsBlockButton:
-              'bg-background border hover:bg-muted text-foreground',
-            formButtonPrimary:
-              'bg-primary hover:bg-primary/90 text-primary-foreground',
+            socialButtonsBlockButton: 'bg-background border hover:bg-muted text-foreground',
+            formButtonPrimary: 'bg-primary hover:bg-primary/90 text-primary-foreground',
             footerActionLink: 'text-primary hover:text-primary/90',
-            formFieldInput:
-              'bg-background border-input focus:ring-2 focus:ring-ring',
+            formFieldInput: 'bg-background border-input focus:ring-2 focus:ring-ring',
             dividerLine: 'bg-border',
             dividerText: 'text-muted-foreground',
           },

@@ -110,13 +110,14 @@ export function ExtensionRequestForm({
             Request Deadline Extension
           </DialogTitle>
           <DialogDescription>
-            Request additional time for {deadlineType === 'evidence' ? 'evidence submission' : 'rebuttal statement'}.
+            Request additional time for{' '}
+            {deadlineType === 'evidence' ? 'evidence submission' : 'rebuttal statement'}.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           {/* Current Deadline */}
-          <div className="rounded-lg border p-3 bg-muted/50">
+          <div className="rounded-lg border bg-muted/50 p-3">
             <p className="text-sm text-muted-foreground">Current Deadline</p>
             <p className="font-medium">
               {currentDeadline.toLocaleDateString('en-US', {
@@ -149,7 +150,7 @@ export function ExtensionRequestForm({
 
           {/* New Deadline Preview */}
           {newDeadline && (
-            <div className="rounded-lg border p-3 bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800">
+            <div className="rounded-lg border border-green-200 bg-green-50 p-3 dark:border-green-800 dark:bg-green-950">
               <p className="text-sm text-green-700 dark:text-green-300">New Deadline</p>
               <p className="font-medium text-green-800 dark:text-green-200">
                 {newDeadline.toLocaleDateString('en-US', {
@@ -180,12 +181,13 @@ export function ExtensionRequestForm({
           </div>
 
           {/* Warning */}
-          <div className="flex items-start gap-2 p-3 rounded-lg border border-amber-200 bg-amber-50 dark:bg-amber-950 dark:border-amber-800">
-            <AlertTriangle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
+          <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-950">
+            <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-600" />
             <div className="text-sm text-amber-800 dark:text-amber-200">
               <p className="font-medium">Please note</p>
               <p className="text-amber-700 dark:text-amber-300">
-                Extensions affect both parties&apos; deadlines. The other party will be notified of the new deadline.
+                Extensions affect both parties&apos; deadlines. The other party will be notified of
+                the new deadline.
               </p>
             </div>
           </div>
@@ -195,7 +197,10 @@ export function ExtensionRequestForm({
           <Button variant="outline" onClick={() => setIsOpen(false)} disabled={isSubmitting}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit} disabled={isSubmitting || !requestedDays || reason.length < 10}>
+          <Button
+            onClick={handleSubmit}
+            disabled={isSubmitting || !requestedDays || reason.length < 10}
+          >
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

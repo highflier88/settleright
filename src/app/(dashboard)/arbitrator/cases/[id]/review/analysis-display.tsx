@@ -18,17 +18,8 @@ import {
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Progress } from '@/components/ui/progress';
 
 import type { AnalysisJob } from '@prisma/client';
@@ -159,10 +150,10 @@ export function AnalysisDisplay({
   if (!analysisJob) {
     return (
       <Card>
-        <CardContent className="flex flex-col items-center justify-center h-64">
-          <Scale className="h-12 w-12 text-muted-foreground mb-4" />
+        <CardContent className="flex h-64 flex-col items-center justify-center">
+          <Scale className="mb-4 h-12 w-12 text-muted-foreground" />
           <p className="text-muted-foreground">No analysis has been performed yet</p>
-          <p className="text-sm text-muted-foreground mt-2">
+          <p className="mt-2 text-sm text-muted-foreground">
             Analysis will be generated once evidence submission is complete
           </p>
         </CardContent>
@@ -176,15 +167,16 @@ export function AnalysisDisplay({
   const conclusionsOfLaw = parseConclusionsOfLaw(analysisJob.conclusionsOfLaw);
 
   // Derive award recommendation from damages calculation and burden of proof
-  const awardRecommendation: AwardRecommendation | null = damagesCalculation && burdenOfProof
-    ? {
-        prevailingParty: burdenOfProof.overallBurdenMet ? 'claimant' : 'respondent',
-        awardAmount: damagesCalculation.recommendedTotal,
-        reasoning: burdenOfProof.overallBurdenMet
-          ? `Based on the evidence, claimant has met their burden of proof. Recommended award: ${formatCurrency(damagesCalculation.recommendedTotal)}.`
-          : 'Claimant has not met their burden of proof. Award to respondent.',
-      }
-    : null;
+  const awardRecommendation: AwardRecommendation | null =
+    damagesCalculation && burdenOfProof
+      ? {
+          prevailingParty: burdenOfProof.overallBurdenMet ? 'claimant' : 'respondent',
+          awardAmount: damagesCalculation.recommendedTotal,
+          reasoning: burdenOfProof.overallBurdenMet
+            ? `Based on the evidence, claimant has met their burden of proof. Recommended award: ${formatCurrency(damagesCalculation.recommendedTotal)}.`
+            : 'Claimant has not met their burden of proof. Award to respondent.',
+        }
+      : null;
 
   return (
     <div className="space-y-4">
@@ -248,7 +240,7 @@ export function AnalysisDisplay({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-4 md:grid-cols-3 mb-4">
+            <div className="mb-4 grid gap-4 md:grid-cols-3">
               <div className="rounded-lg border bg-background p-4 text-center">
                 <p className="text-sm text-muted-foreground">Recommended Award</p>
                 <p className="text-2xl font-bold text-primary">
@@ -269,7 +261,7 @@ export function AnalysisDisplay({
               </div>
             </div>
             <div className="rounded-lg border bg-background p-4">
-              <p className="text-sm font-medium mb-2 flex items-center gap-2">
+              <p className="mb-2 flex items-center gap-2 text-sm font-medium">
                 <Lightbulb className="h-4 w-4" />
                 Reasoning
               </p>
@@ -285,12 +277,19 @@ export function AnalysisDisplay({
           <Card>
             <CardHeader className="pb-3">
               <CollapsibleTrigger asChild>
-                <Button variant="ghost" className="w-full justify-between p-0 h-auto hover:bg-transparent">
+                <Button
+                  variant="ghost"
+                  className="h-auto w-full justify-between p-0 hover:bg-transparent"
+                >
                   <CardTitle className="flex items-center gap-2">
                     <Scale className="h-5 w-5" />
                     Legal Issues Identified ({legalIssues.length})
                   </CardTitle>
-                  {legalExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                  {legalExpanded ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
                 </Button>
               </CollapsibleTrigger>
             </CardHeader>
@@ -298,9 +297,11 @@ export function AnalysisDisplay({
               <CardContent className="space-y-4">
                 {legalIssues.map((issue, index) => (
                   <div key={index} className="rounded-lg border p-4">
-                    <div className="flex items-start justify-between mb-2">
+                    <div className="mb-2 flex items-start justify-between">
                       <div>
-                        <Badge variant="outline" className="mb-1">{issue.category}</Badge>
+                        <Badge variant="outline" className="mb-1">
+                          {issue.category}
+                        </Badge>
                         <p className="font-medium">{issue.description}</p>
                       </div>
                     </div>
@@ -308,7 +309,7 @@ export function AnalysisDisplay({
                     {/* Elements */}
                     {issue.elements && issue.elements.length > 0 && (
                       <div className="mt-3">
-                        <p className="text-sm font-medium mb-2">Legal Elements:</p>
+                        <p className="mb-2 text-sm font-medium">Legal Elements:</p>
                         <div className="space-y-1">
                           {issue.elements.map((element, elemIndex) => (
                             <div key={elemIndex} className="flex items-center gap-2 text-sm">
@@ -319,7 +320,11 @@ export function AnalysisDisplay({
                               ) : (
                                 <AlertCircle className="h-4 w-4 text-amber-500" />
                               )}
-                              <span className={element.isSatisfied === false ? 'text-muted-foreground' : ''}>
+                              <span
+                                className={
+                                  element.isSatisfied === false ? 'text-muted-foreground' : ''
+                                }
+                              >
                                 {element.description}
                               </span>
                             </div>
@@ -352,7 +357,10 @@ export function AnalysisDisplay({
           <Card>
             <CardHeader className="pb-3">
               <CollapsibleTrigger asChild>
-                <Button variant="ghost" className="w-full justify-between p-0 h-auto hover:bg-transparent">
+                <Button
+                  variant="ghost"
+                  className="h-auto w-full justify-between p-0 hover:bg-transparent"
+                >
                   <CardTitle className="flex items-center gap-2">
                     <Scale className="h-5 w-5" />
                     Burden of Proof Analysis
@@ -360,7 +368,11 @@ export function AnalysisDisplay({
                       {burdenOfProof.overallBurdenMet ? 'Met' : 'Not Met'}
                     </Badge>
                   </CardTitle>
-                  {burdenExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                  {burdenExpanded ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
                 </Button>
               </CollapsibleTrigger>
             </CardHeader>
@@ -368,13 +380,13 @@ export function AnalysisDisplay({
               <CardContent className="space-y-4">
                 {burdenOfProof.analyses.map((analysis, index) => (
                   <div key={index} className="rounded-lg border p-4">
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="mb-2 flex items-center justify-between">
                       <p className="font-medium">{analysis.issue}</p>
                       <div className="flex items-center gap-2">
                         <span className="text-sm text-muted-foreground">
                           {Math.round(analysis.probability * 100)}%
                         </span>
-                        <Progress value={analysis.probability * 100} className="w-20 h-2" />
+                        <Progress value={analysis.probability * 100} className="h-2 w-20" />
                       </div>
                     </div>
                     <p className="text-sm text-muted-foreground">{analysis.reasoning}</p>
@@ -392,27 +404,40 @@ export function AnalysisDisplay({
           <Card>
             <CardHeader className="pb-3">
               <CollapsibleTrigger asChild>
-                <Button variant="ghost" className="w-full justify-between p-0 h-auto hover:bg-transparent">
+                <Button
+                  variant="ghost"
+                  className="h-auto w-full justify-between p-0 hover:bg-transparent"
+                >
                   <CardTitle className="flex items-center gap-2">
                     Damages Calculation
-                    <Badge variant="outline">{formatCurrency(damagesCalculation.recommendedTotal)}</Badge>
+                    <Badge variant="outline">
+                      {formatCurrency(damagesCalculation.recommendedTotal)}
+                    </Badge>
                   </CardTitle>
-                  {damagesExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                  {damagesExpanded ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
                 </Button>
               </CollapsibleTrigger>
             </CardHeader>
             <CollapsibleContent>
               <CardContent>
-                <div className="grid gap-4 md:grid-cols-3 mb-4">
+                <div className="mb-4 grid gap-4 md:grid-cols-3">
                   <div className="rounded-lg border p-3 text-center">
                     <p className="text-sm text-muted-foreground">Claimed</p>
-                    <p className="text-lg font-semibold">{formatCurrency(damagesCalculation.claimedTotal)}</p>
+                    <p className="text-lg font-semibold">
+                      {formatCurrency(damagesCalculation.claimedTotal)}
+                    </p>
                   </div>
                   <div className="rounded-lg border p-3 text-center">
                     <p className="text-sm text-muted-foreground">Supported</p>
-                    <p className="text-lg font-semibold">{formatCurrency(damagesCalculation.supportedTotal)}</p>
+                    <p className="text-lg font-semibold">
+                      {formatCurrency(damagesCalculation.supportedTotal)}
+                    </p>
                   </div>
-                  <div className="rounded-lg border p-3 text-center bg-primary/5">
+                  <div className="rounded-lg border bg-primary/5 p-3 text-center">
                     <p className="text-sm text-muted-foreground">Recommended</p>
                     <p className="text-lg font-semibold text-primary">
                       {formatCurrency(damagesCalculation.recommendedTotal)}
@@ -423,7 +448,10 @@ export function AnalysisDisplay({
                 {damagesCalculation.items && damagesCalculation.items.length > 0 && (
                   <div className="space-y-2">
                     {damagesCalculation.items.map((item, index) => (
-                      <div key={index} className="flex items-center justify-between rounded-lg border p-3">
+                      <div
+                        key={index}
+                        className="flex items-center justify-between rounded-lg border p-3"
+                      >
                         <div className="flex items-center gap-2">
                           {item.supported ? (
                             <CheckCircle className="h-4 w-4 text-green-600" />
@@ -431,7 +459,7 @@ export function AnalysisDisplay({
                             <XCircle className="h-4 w-4 text-destructive" />
                           )}
                           <div>
-                            <p className="font-medium text-sm">{item.description}</p>
+                            <p className="text-sm font-medium">{item.description}</p>
                             <p className="text-xs text-muted-foreground">{item.basis}</p>
                           </div>
                         </div>
@@ -448,16 +476,16 @@ export function AnalysisDisplay({
 
                 {damagesCalculation.interestCalculation && (
                   <div className="mt-4 rounded-lg border bg-muted/30 p-3">
-                    <p className="text-sm font-medium mb-2">Interest Calculation</p>
+                    <p className="mb-2 text-sm font-medium">Interest Calculation</p>
                     <div className="grid gap-2 text-sm">
                       <p>
-                        Rate: {(damagesCalculation.interestCalculation.rate * 100).toFixed(1)}% per annum
+                        Rate: {(damagesCalculation.interestCalculation.rate * 100).toFixed(1)}% per
+                        annum
                       </p>
-                      <p>
-                        Period: {damagesCalculation.interestCalculation.days} days
-                      </p>
+                      <p>Period: {damagesCalculation.interestCalculation.days} days</p>
                       <p className="font-medium">
-                        Interest Amount: {formatCurrency(damagesCalculation.interestCalculation.amount)}
+                        Interest Amount:{' '}
+                        {formatCurrency(damagesCalculation.interestCalculation.amount)}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {damagesCalculation.interestCalculation.statutoryBasis}
@@ -477,12 +505,19 @@ export function AnalysisDisplay({
           <Card>
             <CardHeader className="pb-3">
               <CollapsibleTrigger asChild>
-                <Button variant="ghost" className="w-full justify-between p-0 h-auto hover:bg-transparent">
+                <Button
+                  variant="ghost"
+                  className="h-auto w-full justify-between p-0 hover:bg-transparent"
+                >
                   <CardTitle className="flex items-center gap-2">
                     <BookOpen className="h-5 w-5" />
                     Conclusions of Law ({conclusionsOfLaw.length})
                   </CardTitle>
-                  {conclusionsExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                  {conclusionsExpanded ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
                 </Button>
               </CollapsibleTrigger>
             </CardHeader>
@@ -490,11 +525,11 @@ export function AnalysisDisplay({
               <CardContent className="space-y-3">
                 {conclusionsOfLaw.map((conclusion, index) => (
                   <div key={index} className="rounded-lg border p-4">
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="mb-2 flex items-center justify-between">
                       <Badge variant="outline">{conclusion.issue}</Badge>
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground">Confidence</span>
-                        <Progress value={conclusion.confidence * 100} className="w-16 h-2" />
+                        <Progress value={conclusion.confidence * 100} className="h-2 w-16" />
                         <span className="text-xs">{Math.round(conclusion.confidence * 100)}%</span>
                       </div>
                     </div>

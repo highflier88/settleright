@@ -74,8 +74,8 @@ export function createMockPrismaClient(): MockPrismaClient {
   } as unknown as MockPrismaClient;
 
   // Set up $transaction to pass the mock client to the callback
-  (mockClient.$transaction as jest.Mock).mockImplementation((callback: (tx: MockPrismaClient) => unknown) =>
-    callback(mockClient)
+  (mockClient.$transaction as jest.Mock).mockImplementation(
+    (callback: (tx: MockPrismaClient) => unknown) => callback(mockClient)
   );
 
   return mockClient;

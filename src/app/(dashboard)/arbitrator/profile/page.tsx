@@ -2,25 +2,10 @@ import { redirect } from 'next/navigation';
 
 import { UserRole } from '@prisma/client';
 import { format } from 'date-fns';
-import {
-  User,
-  Scale,
-  Award,
-  Clock,
-  CheckCircle,
-  MapPin,
-  Briefcase,
-  Calendar,
-} from 'lucide-react';
+import { User, Scale, Award, Clock, CheckCircle, MapPin, Briefcase, Calendar } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getAuthUser } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 
@@ -95,9 +80,7 @@ export default async function ArbitratorProfilePage() {
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Arbitrator Profile</h1>
-          <p className="text-muted-foreground">
-            Your arbitrator profile has not been set up yet.
-          </p>
+          <p className="text-muted-foreground">Your arbitrator profile has not been set up yet.</p>
         </div>
 
         <Card>
@@ -116,9 +99,7 @@ export default async function ArbitratorProfilePage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Arbitrator Profile</h1>
-        <p className="text-muted-foreground">
-          View and manage your profile settings
-        </p>
+        <p className="text-muted-foreground">View and manage your profile settings</p>
       </div>
 
       {/* Profile Header */}
@@ -263,9 +244,7 @@ export default async function ArbitratorProfilePage() {
               <Briefcase className="h-5 w-5" />
               Specialties
             </CardTitle>
-            <CardDescription>
-              Types of disputes you specialize in
-            </CardDescription>
+            <CardDescription>Types of disputes you specialize in</CardDescription>
           </CardHeader>
           <CardContent>
             {profile.specialties && profile.specialties.length > 0 ? (

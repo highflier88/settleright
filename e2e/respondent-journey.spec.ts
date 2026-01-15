@@ -32,12 +32,8 @@ test.describe('Respondent Journey', () => {
       await page.goto('/invitation/test-invitation-token');
 
       // Should see account options
-      await expect(
-        page.getByRole('button', { name: /create account|sign up/i })
-      ).toBeVisible();
-      await expect(
-        page.getByRole('link', { name: /sign in|login|already have/i })
-      ).toBeVisible();
+      await expect(page.getByRole('button', { name: /create account|sign up/i })).toBeVisible();
+      await expect(page.getByRole('link', { name: /sign in|login|already have/i })).toBeVisible();
     });
 
     test('should accept invitation and join case', async ({ page }) => {
@@ -70,7 +66,10 @@ test.describe('Respondent Journey', () => {
   test.describe('Identity Verification', () => {
     test('should prompt for KYC verification', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
 
       // If KYC not complete, should show prompt
       const kycPrompt = page.getByText(/verify your identity|kyc required/i);
@@ -96,7 +95,10 @@ test.describe('Respondent Journey', () => {
   test.describe('Response to Claim', () => {
     test('should view claimant statement', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
       await page.getByRole('tab', { name: /statement/i }).click();
 
       // Should see claimant's statement
@@ -105,7 +107,10 @@ test.describe('Respondent Journey', () => {
 
     test('should submit response statement', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
       await page.getByRole('tab', { name: /statement/i }).click();
 
       const response = `
@@ -128,7 +133,10 @@ test.describe('Respondent Journey', () => {
 
     test('should upload defense evidence', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
       await page.getByRole('tab', { name: /evidence/i }).click();
 
       // Upload delivery confirmation
@@ -149,7 +157,10 @@ test.describe('Respondent Journey', () => {
   test.describe('Agreement Signing', () => {
     test('should view arbitration agreement', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
       await page.getByRole('tab', { name: /agreement/i }).click();
 
       await expect(page.getByText(/SUBMISSION AGREEMENT/i)).toBeVisible();
@@ -159,7 +170,10 @@ test.describe('Respondent Journey', () => {
 
     test('should sign agreement as respondent', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
       await page.getByRole('tab', { name: /agreement/i }).click();
 
       // Check required acknowledgments
@@ -175,7 +189,10 @@ test.describe('Respondent Journey', () => {
 
     test('should see claimant signature status', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
       await page.getByRole('tab', { name: /agreement/i }).click();
 
       // Check for signature status indicators
@@ -189,14 +206,20 @@ test.describe('Respondent Journey', () => {
   test.describe('Response Fee Payment', () => {
     test('should see response fee requirement', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
 
       await expect(page.getByText(/response fee|payment required/i)).toBeVisible();
     });
 
     test('should pay response fee', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
 
       await page.getByRole('button', { name: /pay.*fee|checkout/i }).click();
 
@@ -211,7 +234,10 @@ test.describe('Respondent Journey', () => {
   test.describe('Case Progress', () => {
     test('should view case timeline', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
 
       await expect(page.getByTestId('case-timeline')).toBeVisible();
     });
@@ -226,7 +252,10 @@ test.describe('Respondent Journey', () => {
 
     test('should view approaching deadlines', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
 
       // Check deadline display
       await expect(page.getByText(/evidence deadline|response due/i)).toBeVisible();
@@ -250,7 +279,10 @@ test.describe('Respondent Journey', () => {
 
     test('should view award details', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
 
       const awardTab = page.getByRole('tab', { name: /award/i });
       if (await awardTab.isVisible()) {
@@ -264,7 +296,10 @@ test.describe('Respondent Journey', () => {
 
     test('should download award PDF', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
 
       const awardTab = page.getByRole('tab', { name: /award/i });
       if (await awardTab.isVisible()) {
@@ -289,7 +324,10 @@ test.describe('Respondent Journey', () => {
 test.describe('Counterclaim', () => {
   test('should submit counterclaim', async ({ page }) => {
     await page.goto('/dashboard/cases');
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
 
     // Check for counterclaim option
     const counterclaimButton = page.getByRole('button', { name: /counterclaim|file counter/i });
@@ -311,7 +349,10 @@ test.describe('Counterclaim', () => {
 test.describe('Settlement', () => {
   test('should view settlement offer', async ({ page }) => {
     await page.goto('/dashboard/cases');
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
 
     // Check for settlement offers
     const settlementTab = page.getByRole('tab', { name: /settlement|offers/i });
@@ -323,7 +364,10 @@ test.describe('Settlement', () => {
 
   test('should respond to settlement offer', async ({ page }) => {
     await page.goto('/dashboard/cases');
-    await page.getByRole('link', { name: /view|open/i }).first().click();
+    await page
+      .getByRole('link', { name: /view|open/i })
+      .first()
+      .click();
 
     const settlementTab = page.getByRole('tab', { name: /settlement|offers/i });
     if (await settlementTab.isVisible()) {
@@ -333,7 +377,7 @@ test.describe('Settlement', () => {
       const acceptButton = page.getByRole('button', { name: /accept/i });
       const counterButton = page.getByRole('button', { name: /counter/i });
 
-      if (await acceptButton.isVisible() || await counterButton.isVisible()) {
+      if ((await acceptButton.isVisible()) || (await counterButton.isVisible())) {
         await expect(acceptButton.or(counterButton)).toBeVisible();
       }
     }

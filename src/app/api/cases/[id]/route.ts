@@ -1,4 +1,3 @@
-
 import { AuditAction, CaseStatus } from '@prisma/client';
 
 import { NotFoundError, ForbiddenError } from '@/lib/api/errors';
@@ -16,7 +15,6 @@ import {
 } from '@/lib/services/case';
 import { validateBody } from '@/lib/validations';
 import { updateCaseSchema } from '@/lib/validations/case';
-
 
 // GET /api/cases/[id] - Get case details
 export const GET = withAuth(
@@ -161,9 +159,7 @@ export const DELETE = withAuth(
         CaseStatus.PENDING_AGREEMENT,
       ];
       if (!deletableStatuses.includes(existingCase.status)) {
-        throw new ForbiddenError(
-          'Case cannot be withdrawn after agreement has been signed'
-        );
+        throw new ForbiddenError('Case cannot be withdrawn after agreement has been signed');
       }
 
       // Soft delete

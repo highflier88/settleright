@@ -62,7 +62,7 @@ export function buildFindingsOfFactPrompt(params: {
       (f, i) => `${i + 1}. Topic: ${f.topic}
    - Claimant says: ${f.claimantPosition}
    - Respondent says: ${f.respondentPosition}
-   - Resolution: ${f.resolved === 'claimant' ? 'Claimant\'s position accepted' : f.resolved === 'respondent' ? 'Respondent\'s position accepted' : 'Partially accepted'}
+   - Resolution: ${f.resolved === 'claimant' ? "Claimant's position accepted" : f.resolved === 'respondent' ? "Respondent's position accepted" : 'Partially accepted'}
    - Reasoning: ${f.reasoning}`
     )
     .join('\n\n');
@@ -136,9 +136,7 @@ export function buildConclusionsOfLawPrompt(params: {
     )
     .join('\n\n');
 
-  const findingsList = findingsOfFact
-    .map((f) => `${f.number}. ${f.finding}`)
-    .join('\n');
+  const findingsList = findingsOfFact.map((f) => `${f.number}. ${f.finding}`).join('\n');
 
   return `Draft the CONCLUSIONS OF LAW section for this arbitration award.
 

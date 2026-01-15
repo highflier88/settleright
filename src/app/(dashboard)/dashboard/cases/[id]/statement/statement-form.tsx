@@ -21,11 +21,7 @@ import * as z from 'zod';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -206,12 +202,12 @@ export function StatementSubmissionForm({
                   ? 'Describe your position on this dispute. Include relevant facts, your understanding of events, and the basis for your claims or defenses...'
                   : 'Address the points raised in the other party&apos;s statement. Clarify any misunderstandings and provide additional context...'
               }
-              className="min-h-[300px] mt-2"
+              className="mt-2 min-h-[300px]"
             />
             {errors.narrative && (
-              <p className="text-sm text-destructive mt-1">{errors.narrative.message}</p>
+              <p className="mt-1 text-sm text-destructive">{errors.narrative.message}</p>
             )}
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="mt-1 text-xs text-muted-foreground">
               Minimum 100 characters. Be clear and specific.
             </p>
           </div>
@@ -223,19 +219,21 @@ export function StatementSubmissionForm({
         <Card>
           <CardHeader>
             <CollapsibleTrigger asChild>
-              <div className="flex items-center justify-between cursor-pointer">
+              <div className="flex cursor-pointer items-center justify-between">
                 <div>
                   <CardTitle className="flex items-center gap-2">
                     <Calendar className="h-5 w-5" />
                     Timeline of Events
-                    <span className="text-muted-foreground font-normal text-sm">(Optional)</span>
+                    <span className="text-sm font-normal text-muted-foreground">(Optional)</span>
                   </CardTitle>
-                  <CardDescription>
-                    Add key dates and events relevant to your case
-                  </CardDescription>
+                  <CardDescription>Add key dates and events relevant to your case</CardDescription>
                 </div>
                 <Button variant="ghost" size="sm">
-                  {showTimeline ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                  {showTimeline ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
             </CollapsibleTrigger>
@@ -243,7 +241,7 @@ export function StatementSubmissionForm({
           <CollapsibleContent>
             <CardContent className="space-y-4">
               {timelineFields.map((field, index) => (
-                <div key={field.id} className="flex gap-4 items-start p-4 border rounded-lg">
+                <div key={field.id} className="flex items-start gap-4 rounded-lg border p-4">
                   <div className="flex-1 space-y-3">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
@@ -254,7 +252,7 @@ export function StatementSubmissionForm({
                           className="mt-1"
                         />
                         {errors.timeline?.[index]?.date && (
-                          <p className="text-sm text-destructive mt-1">
+                          <p className="mt-1 text-sm text-destructive">
                             {errors.timeline[index]?.date?.message}
                           </p>
                         )}
@@ -267,7 +265,7 @@ export function StatementSubmissionForm({
                           className="mt-1"
                         />
                         {errors.timeline?.[index]?.title && (
-                          <p className="text-sm text-destructive mt-1">
+                          <p className="mt-1 text-sm text-destructive">
                             {errors.timeline[index]?.title?.message}
                           </p>
                         )}
@@ -321,19 +319,23 @@ export function StatementSubmissionForm({
           <Card>
             <CardHeader>
               <CollapsibleTrigger asChild>
-                <div className="flex items-center justify-between cursor-pointer">
+                <div className="flex cursor-pointer items-center justify-between">
                   <div>
                     <CardTitle className="flex items-center gap-2">
                       <DollarSign className="h-5 w-5" />
                       Claim Itemization
-                      <span className="text-muted-foreground font-normal text-sm">(Optional)</span>
+                      <span className="text-sm font-normal text-muted-foreground">(Optional)</span>
                     </CardTitle>
                     <CardDescription>
                       Break down your claim into specific items and amounts
                     </CardDescription>
                   </div>
                   <Button variant="ghost" size="sm">
-                    {showClaims ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                    {showClaims ? (
+                      <ChevronUp className="h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
               </CollapsibleTrigger>
@@ -341,7 +343,7 @@ export function StatementSubmissionForm({
             <CollapsibleContent>
               <CardContent className="space-y-4">
                 {claimFields.map((field, index) => (
-                  <div key={field.id} className="flex gap-4 items-start p-4 border rounded-lg">
+                  <div key={field.id} className="flex items-start gap-4 rounded-lg border p-4">
                     <div className="flex-1 space-y-3">
                       <div className="grid grid-cols-3 gap-4">
                         <div className="col-span-2">
@@ -352,7 +354,7 @@ export function StatementSubmissionForm({
                             className="mt-1"
                           />
                           {errors.claimItems?.[index]?.description && (
-                            <p className="text-sm text-destructive mt-1">
+                            <p className="mt-1 text-sm text-destructive">
                               {errors.claimItems[index]?.description?.message}
                             </p>
                           )}
@@ -367,7 +369,7 @@ export function StatementSubmissionForm({
                             className="mt-1"
                           />
                           {errors.claimItems?.[index]?.amount && (
-                            <p className="text-sm text-destructive mt-1">
+                            <p className="mt-1 text-sm text-destructive">
                               {errors.claimItems[index]?.amount?.message}
                             </p>
                           )}
@@ -410,7 +412,7 @@ export function StatementSubmissionForm({
                 ))}
 
                 {claimFields.length > 0 && (
-                  <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
+                  <div className="flex items-center justify-between rounded-lg bg-muted p-4">
                     <span className="font-medium">Total Claimed Amount</span>
                     <span className="text-xl font-bold">
                       ${totalClaimedAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}

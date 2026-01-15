@@ -24,7 +24,9 @@ export function formatEvidenceSummaries(evidence: EvidenceSummary[]): string {
         e.summary ? `Summary: ${e.summary}` : null,
         e.keyPoints?.length ? `Key points: ${e.keyPoints.join('; ')}` : null,
         e.entities?.dates?.length ? `Dates mentioned: ${e.entities.dates.join(', ')}` : null,
-        e.entities?.amounts?.length ? `Amounts mentioned: $${e.entities.amounts.join(', $')}` : null,
+        e.entities?.amounts?.length
+          ? `Amounts mentioned: $${e.entities.amounts.join(', $')}`
+          : null,
       ];
       return parts.filter(Boolean).join('\n');
     })

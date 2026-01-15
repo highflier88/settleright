@@ -116,44 +116,41 @@ export async function getPerformanceMetrics(
   const totalCasesCompleted = completedAssignments.length;
 
   const casesThisMonth = completedAssignments.filter(
-    a => a.reviewCompletedAt && a.reviewCompletedAt >= startOfMonth
+    (a) => a.reviewCompletedAt && a.reviewCompletedAt >= startOfMonth
   ).length;
 
   const casesThisWeek = completedAssignments.filter(
-    a => a.reviewCompletedAt && a.reviewCompletedAt >= startOfWeek
+    (a) => a.reviewCompletedAt && a.reviewCompletedAt >= startOfWeek
   ).length;
 
   // Calculate review times
   const reviewTimes = completedAssignments
-    .filter(a => a.reviewStartedAt && a.reviewCompletedAt)
-    .map(a => {
+    .filter((a) => a.reviewStartedAt && a.reviewCompletedAt)
+    .map((a) => {
       const start = a.reviewStartedAt!.getTime();
       const end = a.reviewCompletedAt!.getTime();
       return Math.round((end - start) / (1000 * 60)); // Minutes
     });
 
-  const averageReviewTimeMinutes = reviewTimes.length > 0
-    ? Math.round(reviewTimes.reduce((a, b) => a + b, 0) / reviewTimes.length)
-    : 0;
+  const averageReviewTimeMinutes =
+    reviewTimes.length > 0
+      ? Math.round(reviewTimes.reduce((a, b) => a + b, 0) / reviewTimes.length)
+      : 0;
 
   const sortedTimes = [...reviewTimes].sort((a, b) => a - b);
-  const medianReviewTimeMinutes = sortedTimes.length > 0
-    ? sortedTimes[Math.floor(sortedTimes.length / 2)] ?? 0
-    : 0;
+  const medianReviewTimeMinutes =
+    sortedTimes.length > 0 ? (sortedTimes[Math.floor(sortedTimes.length / 2)] ?? 0) : 0;
 
   // On-time completion rate
-  const onTimeCount = completedAssignments.filter(a => {
+  const onTimeCount = completedAssignments.filter((a) => {
     if (!a.reviewCompletedAt || !a.dueBy) return false;
     return a.reviewCompletedAt <= a.dueBy;
   }).length;
 
-  const onTimeCompletionRate = totalCasesCompleted > 0
-    ? Math.round((onTimeCount / totalCasesCompleted) * 100)
-    : 100;
+  const onTimeCompletionRate =
+    totalCasesCompleted > 0 ? Math.round((onTimeCount / totalCasesCompleted) * 100) : 100;
 
-  const totalReviewTimeHours = Math.round(
-    reviewTimes.reduce((a, b) => a + b, 0) / 60 * 10
-  ) / 10;
+  const totalReviewTimeHours = Math.round((reviewTimes.reduce((a, b) => a + b, 0) / 60) * 10) / 10;
 
   return {
     totalCasesCompleted,
@@ -169,9 +166,7 @@ export async function getPerformanceMetrics(
 /**
  * Get workload metrics for an arbitrator
  */
-export async function getWorkloadMetrics(
-  arbitratorProfileId: string
-): Promise<WorkloadMetrics> {
+export async function getWorkloadMetrics(arbitratorProfileId: string): Promise<WorkloadMetrics> {
   const profile = await prisma.arbitratorProfile.findUnique({
     where: { id: arbitratorProfileId },
     include: {
@@ -203,24 +198,22 @@ export async function getWorkloadMetrics(
   const assignments = profile.user.assignedCases;
 
   // Calculate metrics
-  const pendingCases = assignments.filter(
-    a => !a.reviewStartedAt && !a.reviewCompletedAt
-  ).length;
+  const pendingCases = assignments.filter((a) => !a.reviewStartedAt && !a.reviewCompletedAt).length;
 
   const casesInProgress = assignments.filter(
-    a => a.reviewStartedAt && !a.reviewCompletedAt
+    (a) => a.reviewStartedAt && !a.reviewCompletedAt
   ).length;
 
   const overdueCases = assignments.filter(
-    a => !a.reviewCompletedAt && a.dueBy && a.dueBy < now
+    (a) => !a.reviewCompletedAt && a.dueBy && a.dueBy < now
   ).length;
 
   const dueSoon = assignments.filter(
-    a => !a.reviewCompletedAt && a.dueBy && a.dueBy >= now && a.dueBy <= threeDaysFromNow
+    (a) => !a.reviewCompletedAt && a.dueBy && a.dueBy >= now && a.dueBy <= threeDaysFromNow
   ).length;
 
   // Current week load
-  const currentWeekLoad = assignments.filter(a => {
+  const currentWeekLoad = assignments.filter((a) => {
     if (a.reviewCompletedAt) {
       return a.reviewCompletedAt >= startOfWeek && a.reviewCompletedAt < endOfWeek;
     }
@@ -228,9 +221,8 @@ export async function getWorkloadMetrics(
   }).length;
 
   const maxCasesPerWeek = profile.maxCasesPerWeek;
-  const capacityUtilization = maxCasesPerWeek > 0
-    ? Math.round((currentWeekLoad / maxCasesPerWeek) * 100)
-    : 0;
+  const capacityUtilization =
+    maxCasesPerWeek > 0 ? Math.round((currentWeekLoad / maxCasesPerWeek) * 100) : 0;
 
   return {
     pendingCases,
@@ -250,9 +242,7 @@ export async function getWorkloadMetrics(
 /**
  * Get earnings trends for an arbitrator
  */
-export async function getEarningsTrends(
-  arbitratorProfileId: string
-): Promise<EarningsTrends> {
+export async function getEarningsTrends(arbitratorProfileId: string): Promise<EarningsTrends> {
   const compensations = await prisma.arbitratorCompensation.findMany({
     where: { arbitratorProfileId },
     orderBy: { calculatedAt: 'desc' },
@@ -297,12 +287,11 @@ export async function getEarningsTrends(
 
   // Calculate averages
   const totalCases = compensations.filter(
-    c => c.status === 'PAID' || c.status === 'CALCULATED' || c.status === 'APPROVED'
+    (c) => c.status === 'PAID' || c.status === 'CALCULATED' || c.status === 'APPROVED'
   ).length;
 
-  const averageEarningsPerCase = totalCases > 0
-    ? Math.round((totalLifetimeEarnings / totalCases) * 100) / 100
-    : 0;
+  const averageEarningsPerCase =
+    totalCases > 0 ? Math.round((totalLifetimeEarnings / totalCases) * 100) / 100 : 0;
 
   const totalMonths = monthlyData.size || 1;
   const averageEarningsPerMonth = Math.round((totalLifetimeEarnings / totalMonths) * 100) / 100;
@@ -341,9 +330,7 @@ export async function getEarningsTrends(
 /**
  * Get quality metrics for an arbitrator
  */
-export async function getQualityMetrics(
-  arbitratorProfileId: string
-): Promise<QualityMetrics> {
+export async function getQualityMetrics(arbitratorProfileId: string): Promise<QualityMetrics> {
   const profile = await prisma.arbitratorProfile.findUnique({
     where: { id: arbitratorProfileId },
     include: {
@@ -382,9 +369,10 @@ export async function getQualityMetrics(
   }
 
   // Escalation rate
-  const escalationRate = awards.length > 0
-    ? Math.round((profile.user.escalationsCreated.length / awards.length) * 100)
-    : 0;
+  const escalationRate =
+    awards.length > 0
+      ? Math.round((profile.user.escalationsCreated.length / awards.length) * 100)
+      : 0;
 
   // Note: Revision rate and other quality metrics would need additional data from QC module
   // For now, return placeholder values
@@ -511,7 +499,5 @@ export async function getRecentActivity(
   }
 
   // Sort by timestamp and limit
-  return activities
-    .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
-    .slice(0, limit);
+  return activities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime()).slice(0, limit);
 }

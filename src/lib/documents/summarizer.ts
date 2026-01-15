@@ -124,7 +124,10 @@ function parseSummaryResponse(responseText: string): SummarizationResult {
   try {
     let jsonStr = responseText.trim();
     if (jsonStr.startsWith('```')) {
-      jsonStr = jsonStr.replace(/```json?\n?/, '').replace(/```$/, '').trim();
+      jsonStr = jsonStr
+        .replace(/```json?\n?/, '')
+        .replace(/```$/, '')
+        .trim();
     }
 
     const parsed = JSON.parse(jsonStr) as {

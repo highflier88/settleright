@@ -73,25 +73,25 @@ export async function POST(req: Request) {
   const eventType = evt.type;
 
   if (eventType === 'user.created') {
-    const { id, email_addresses, primary_email_address_id, first_name, last_name, phone_numbers, primary_phone_number_id } =
-      evt.data;
+    const {
+      id,
+      email_addresses,
+      primary_email_address_id,
+      first_name,
+      last_name,
+      phone_numbers,
+      primary_phone_number_id,
+    } = evt.data;
 
-    const primaryEmail = email_addresses.find(
-      (email) => email.id === primary_email_address_id
-    );
+    const primaryEmail = email_addresses.find((email) => email.id === primary_email_address_id);
 
-    const primaryPhone = phone_numbers.find(
-      (phone) => phone.id === primary_phone_number_id
-    );
+    const primaryPhone = phone_numbers.find((phone) => phone.id === primary_phone_number_id);
 
     if (!primaryEmail) {
       return NextResponse.json({ error: 'No primary email found' }, { status: 400 });
     }
 
-    const name =
-      first_name || last_name
-        ? `${first_name ?? ''} ${last_name ?? ''}`.trim()
-        : null;
+    const name = first_name || last_name ? `${first_name ?? ''} ${last_name ?? ''}`.trim() : null;
 
     try {
       const user = await prisma.user.create({
@@ -120,25 +120,25 @@ export async function POST(req: Request) {
   }
 
   if (eventType === 'user.updated') {
-    const { id, email_addresses, primary_email_address_id, first_name, last_name, phone_numbers, primary_phone_number_id } =
-      evt.data;
+    const {
+      id,
+      email_addresses,
+      primary_email_address_id,
+      first_name,
+      last_name,
+      phone_numbers,
+      primary_phone_number_id,
+    } = evt.data;
 
-    const primaryEmail = email_addresses.find(
-      (email) => email.id === primary_email_address_id
-    );
+    const primaryEmail = email_addresses.find((email) => email.id === primary_email_address_id);
 
-    const primaryPhone = phone_numbers.find(
-      (phone) => phone.id === primary_phone_number_id
-    );
+    const primaryPhone = phone_numbers.find((phone) => phone.id === primary_phone_number_id);
 
     if (!primaryEmail) {
       return NextResponse.json({ error: 'No primary email found' }, { status: 400 });
     }
 
-    const name =
-      first_name || last_name
-        ? `${first_name ?? ''} ${last_name ?? ''}`.trim()
-        : null;
+    const name = first_name || last_name ? `${first_name ?? ''} ${last_name ?? ''}`.trim() : null;
 
     try {
       const user = await prisma.user.update({

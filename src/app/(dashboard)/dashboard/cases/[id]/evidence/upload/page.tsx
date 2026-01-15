@@ -7,12 +7,18 @@ import { ArrowLeft } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getAuthUser } from '@/lib/auth';
 import { userHasAccessToCase, getCaseWithDetails } from '@/lib/services/case';
-import { getEvidenceStats, formatFileSize, MAX_FILE_SIZE, MAX_TOTAL_SIZE_PER_CASE, MAX_FILES_PER_CASE, ALLOWED_FILE_TYPES } from '@/lib/services/evidence';
+import {
+  getEvidenceStats,
+  formatFileSize,
+  MAX_FILE_SIZE,
+  MAX_TOTAL_SIZE_PER_CASE,
+  MAX_FILES_PER_CASE,
+  ALLOWED_FILE_TYPES,
+} from '@/lib/services/evidence';
 
 import { EvidenceUploadForm } from './evidence-upload-form';
 
 import type { Metadata } from 'next';
-
 
 export const metadata: Metadata = {
   title: 'Upload Evidence',
@@ -64,18 +70,14 @@ export default async function UploadEvidencePage({ params }: PageProps) {
           </Link>
           <h1 className="text-2xl font-bold tracking-tight">Upload Evidence</h1>
         </div>
-        <p className="text-muted-foreground">
-          Case {caseData.referenceNumber}
-        </p>
+        <p className="text-muted-foreground">Case {caseData.referenceNumber}</p>
       </div>
 
       {/* Limits Info */}
       <Card>
         <CardHeader>
           <CardTitle>Upload Limits</CardTitle>
-          <CardDescription>
-            Current usage and remaining capacity for this case
-          </CardDescription>
+          <CardDescription>Current usage and remaining capacity for this case</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-3">
@@ -84,24 +86,19 @@ export default async function UploadEvidencePage({ params }: PageProps) {
               <p className="text-2xl font-bold">
                 {stats.totalFiles} / {MAX_FILES_PER_CASE}
               </p>
-              <p className="text-xs text-muted-foreground">
-                {stats.remainingFiles} remaining
-              </p>
+              <p className="text-xs text-muted-foreground">{stats.remainingFiles} remaining</p>
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">Total Size</p>
-              <p className="text-2xl font-bold">
-                {formatFileSize(stats.totalSize)}
-              </p>
+              <p className="text-2xl font-bold">{formatFileSize(stats.totalSize)}</p>
               <p className="text-xs text-muted-foreground">
-                {formatFileSize(stats.remainingSize)} remaining of {formatFileSize(MAX_TOTAL_SIZE_PER_CASE)}
+                {formatFileSize(stats.remainingSize)} remaining of{' '}
+                {formatFileSize(MAX_TOTAL_SIZE_PER_CASE)}
               </p>
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">Max File Size</p>
-              <p className="text-2xl font-bold">
-                {formatFileSize(MAX_FILE_SIZE)}
-              </p>
+              <p className="text-2xl font-bold">{formatFileSize(MAX_FILE_SIZE)}</p>
               <p className="text-xs text-muted-foreground">per file</p>
             </div>
           </div>

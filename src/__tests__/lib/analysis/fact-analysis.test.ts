@@ -326,8 +326,7 @@ describe('Fact Analysis Module', () => {
         { id: 'f3', statement: '', category: 'event', confidence: 0.7 },
       ];
 
-      const avgConfidence =
-        facts.reduce((sum, f) => sum + f.confidence, 0) / facts.length;
+      const avgConfidence = facts.reduce((sum, f) => sum + f.confidence, 0) / facts.length;
 
       expect(avgConfidence).toBeCloseTo(0.8, 2);
     });
@@ -336,9 +335,30 @@ describe('Fact Analysis Module', () => {
   describe('Timeline ordering', () => {
     it('should sort timeline events by date', () => {
       const events: TimelineEvent[] = [
-        { id: 'te1', date: '2025-03-01', event: 'Event 3', source: 'claimant', sourceId: 's1', disputed: false },
-        { id: 'te2', date: '2025-01-01', event: 'Event 1', source: 'claimant', sourceId: 's1', disputed: false },
-        { id: 'te3', date: '2025-02-01', event: 'Event 2', source: 'respondent', sourceId: 's2', disputed: false },
+        {
+          id: 'te1',
+          date: '2025-03-01',
+          event: 'Event 3',
+          source: 'claimant',
+          sourceId: 's1',
+          disputed: false,
+        },
+        {
+          id: 'te2',
+          date: '2025-01-01',
+          event: 'Event 1',
+          source: 'claimant',
+          sourceId: 's1',
+          disputed: false,
+        },
+        {
+          id: 'te3',
+          date: '2025-02-01',
+          event: 'Event 2',
+          source: 'respondent',
+          sourceId: 's2',
+          disputed: false,
+        },
       ];
 
       const sortedEvents = [...events].sort((a, b) => a.date.localeCompare(b.date));
@@ -350,8 +370,22 @@ describe('Fact Analysis Module', () => {
 
     it('should identify disputed vs undisputed events', () => {
       const events: TimelineEvent[] = [
-        { id: 'te1', date: '2025-01-01', event: 'Agreed event', source: 'claimant', sourceId: 's1', disputed: false },
-        { id: 'te2', date: '2025-02-01', event: 'Disputed event', source: 'respondent', sourceId: 's2', disputed: true },
+        {
+          id: 'te1',
+          date: '2025-01-01',
+          event: 'Agreed event',
+          source: 'claimant',
+          sourceId: 's1',
+          disputed: false,
+        },
+        {
+          id: 'te2',
+          date: '2025-02-01',
+          event: 'Disputed event',
+          source: 'respondent',
+          sourceId: 's2',
+          disputed: true,
+        },
       ];
 
       const disputedEvents = events.filter((e) => e.disputed);

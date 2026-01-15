@@ -59,9 +59,7 @@ export async function storeInvitationToken(
   await kv.set(`${PREFIXES.invitationToken}${token}`, { caseId }, { ex: ttlSeconds });
 }
 
-export async function getInvitationToken(
-  token: string
-): Promise<{ caseId: string } | null> {
+export async function getInvitationToken(token: string): Promise<{ caseId: string } | null> {
   return kv.get(`${PREFIXES.invitationToken}${token}`);
 }
 
@@ -85,9 +83,7 @@ export async function setAnalysisProgress(
   await kv.set(`${PREFIXES.analysisJob}${jobId}`, progress, { ex: 60 * 60 * 24 }); // 24 hours
 }
 
-export async function getAnalysisProgress(
-  jobId: string
-): Promise<AnalysisProgress | null> {
+export async function getAnalysisProgress(jobId: string): Promise<AnalysisProgress | null> {
   return kv.get(`${PREFIXES.analysisJob}${jobId}`);
 }
 

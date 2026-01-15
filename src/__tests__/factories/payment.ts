@@ -39,10 +39,10 @@ export function createPayment(options: PaymentFactoryOptions = {}) {
     status,
     amount: mockDecimal(options.amount ?? 99),
     currency: options.currency ?? 'USD',
-    stripeSessionId: options.stripeSessionId ?? (status !== 'PENDING' ? `cs_${generateId()}` : null),
+    stripeSessionId:
+      options.stripeSessionId ?? (status !== 'PENDING' ? `cs_${generateId()}` : null),
     stripePaymentIntentId:
-      options.stripePaymentIntentId ??
-      (status === 'COMPLETED' ? `pi_${generateId()}` : null),
+      options.stripePaymentIntentId ?? (status === 'COMPLETED' ? `pi_${generateId()}` : null),
     paidAt: options.paidAt ?? (status === 'COMPLETED' ? new Date() : null),
     failedAt: status === 'FAILED' ? new Date() : null,
     refundedAt: status === 'REFUNDED' ? new Date() : null,
@@ -55,18 +55,14 @@ export function createPayment(options: PaymentFactoryOptions = {}) {
 /**
  * Create a pending payment
  */
-export function createPendingPayment(
-  options: Omit<PaymentFactoryOptions, 'status'> = {}
-) {
+export function createPendingPayment(options: Omit<PaymentFactoryOptions, 'status'> = {}) {
   return createPayment({ ...options, status: 'PENDING' });
 }
 
 /**
  * Create a completed payment
  */
-export function createCompletedPayment(
-  options: Omit<PaymentFactoryOptions, 'status'> = {}
-) {
+export function createCompletedPayment(options: Omit<PaymentFactoryOptions, 'status'> = {}) {
   return createPayment({
     ...options,
     status: 'COMPLETED',
@@ -77,27 +73,21 @@ export function createCompletedPayment(
 /**
  * Create a failed payment
  */
-export function createFailedPayment(
-  options: Omit<PaymentFactoryOptions, 'status'> = {}
-) {
+export function createFailedPayment(options: Omit<PaymentFactoryOptions, 'status'> = {}) {
   return createPayment({ ...options, status: 'FAILED' });
 }
 
 /**
  * Create a refunded payment
  */
-export function createRefundedPayment(
-  options: Omit<PaymentFactoryOptions, 'status'> = {}
-) {
+export function createRefundedPayment(options: Omit<PaymentFactoryOptions, 'status'> = {}) {
   return createPayment({ ...options, status: 'REFUNDED' });
 }
 
 /**
  * Create a filing fee payment
  */
-export function createFilingFeePayment(
-  options: Omit<PaymentFactoryOptions, 'type'> = {}
-) {
+export function createFilingFeePayment(options: Omit<PaymentFactoryOptions, 'type'> = {}) {
   return createPayment({
     ...options,
     type: 'FILING_FEE',
@@ -108,9 +98,7 @@ export function createFilingFeePayment(
 /**
  * Create a response fee payment
  */
-export function createResponseFeePayment(
-  options: Omit<PaymentFactoryOptions, 'type'> = {}
-) {
+export function createResponseFeePayment(options: Omit<PaymentFactoryOptions, 'type'> = {}) {
   return createPayment({
     ...options,
     type: 'RESPONSE_FEE',
@@ -121,9 +109,7 @@ export function createResponseFeePayment(
 /**
  * Create an expedited fee payment
  */
-export function createExpeditedFeePayment(
-  options: Omit<PaymentFactoryOptions, 'type'> = {}
-) {
+export function createExpeditedFeePayment(options: Omit<PaymentFactoryOptions, 'type'> = {}) {
   return createPayment({
     ...options,
     type: 'EXPEDITED_FEE',
@@ -134,11 +120,7 @@ export function createExpeditedFeePayment(
 /**
  * Create a set of payments for a case
  */
-export function createPaymentSet(
-  caseId: string,
-  claimantId: string,
-  respondentId: string
-) {
+export function createPaymentSet(caseId: string, claimantId: string, respondentId: string) {
   return [
     createFilingFeePayment({
       caseId,

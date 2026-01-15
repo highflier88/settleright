@@ -17,18 +17,18 @@ const paymentsResponseTime = new Trend('payments_response_time');
 // Test configuration
 export const options = {
   stages: [
-    { duration: '1m', target: 10 },  // Ramp up to 10 users
-    { duration: '3m', target: 10 },  // Stay at 10 users
-    { duration: '2m', target: 50 },  // Ramp up to 50 users
-    { duration: '5m', target: 50 },  // Stay at 50 users
+    { duration: '1m', target: 10 }, // Ramp up to 10 users
+    { duration: '3m', target: 10 }, // Stay at 10 users
+    { duration: '2m', target: 50 }, // Ramp up to 50 users
+    { duration: '5m', target: 50 }, // Stay at 50 users
     { duration: '2m', target: 100 }, // Ramp up to 100 users
     { duration: '5m', target: 100 }, // Stay at 100 users
-    { duration: '2m', target: 0 },   // Ramp down
+    { duration: '2m', target: 0 }, // Ramp down
   ],
   thresholds: {
-    http_req_duration: ['p(95)<500'],  // 95% of requests should be below 500ms
-    http_req_failed: ['rate<0.01'],    // Error rate should be below 1%
-    errors: ['rate<0.01'],             // Custom error rate below 1%
+    http_req_duration: ['p(95)<500'], // 95% of requests should be below 500ms
+    http_req_failed: ['rate<0.01'], // Error rate should be below 1%
+    errors: ['rate<0.01'], // Custom error rate below 1%
   },
 };
 
@@ -39,7 +39,7 @@ const AUTH_TOKEN = __ENV.AUTH_TOKEN || 'test_token';
 // Common headers
 const headers = {
   'Content-Type': 'application/json',
-  'Authorization': `Bearer ${AUTH_TOKEN}`,
+  Authorization: `Bearer ${AUTH_TOKEN}`,
 };
 
 /**
@@ -85,8 +85,7 @@ export default function () {
     const res = http.get(`${BASE_URL}/api/cases/${caseId}`, { headers });
 
     check(res, {
-      'single case fetch status is 200 or 404': (r) =>
-        r.status === 200 || r.status === 404,
+      'single case fetch status is 200 or 404': (r) => r.status === 200 || r.status === 404,
     });
   });
 
@@ -113,8 +112,7 @@ export default function () {
     paymentsResponseTime.add(duration);
 
     check(res, {
-      'payment status fetch successful': (r) =>
-        r.status === 200 || r.status === 404,
+      'payment status fetch successful': (r) => r.status === 200 || r.status === 404,
     });
   });
 

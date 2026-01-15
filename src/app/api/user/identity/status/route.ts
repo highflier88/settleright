@@ -5,7 +5,6 @@ import { requireAuth } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { getVerificationSession, isVerificationValid } from '@/lib/services/stripe-identity';
 
-
 export async function GET() {
   try {
     const user = await requireAuth();
@@ -23,10 +22,7 @@ export async function GET() {
     }
 
     // Check if we need to sync status from Stripe
-    if (
-      verification.status === KYCStatus.PENDING &&
-      verification.providerSessionId
-    ) {
+    if (verification.status === KYCStatus.PENDING && verification.providerSessionId) {
       const session = await getVerificationSession(verification.providerSessionId);
       if (session) {
         // Map Stripe status to our status

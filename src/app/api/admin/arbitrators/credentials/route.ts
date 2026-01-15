@@ -7,7 +7,6 @@
 
 import { type NextRequest, NextResponse } from 'next/server';
 
-
 import {
   getPendingVerifications,
   getExpiringCredentials,
@@ -55,10 +54,7 @@ export async function GET(request: NextRequest) {
     console.error('[Admin Credentials API] GET error:', error);
     const message = error instanceof Error ? error.message : 'Failed to get credentials';
     const status = message.includes('required') || message.includes('Insufficient') ? 401 : 500;
-    return NextResponse.json(
-      { success: false, error: message },
-      { status }
-    );
+    return NextResponse.json({ success: false, error: message }, { status });
   }
 }
 
@@ -67,7 +63,7 @@ export async function POST(request: NextRequest) {
     // Verify admin role
     const user = await requireRole('ADMIN');
 
-    const body = await request.json() as {
+    const body = (await request.json()) as {
       arbitratorProfileId: string;
       status: CredentialVerificationStatus;
       notes?: string;
@@ -89,7 +85,11 @@ export async function POST(request: NextRequest) {
     }
 
     const validStatuses: CredentialVerificationStatus[] = [
-      'PENDING', 'IN_REVIEW', 'VERIFIED', 'REJECTED', 'EXPIRED'
+      'PENDING',
+      'IN_REVIEW',
+      'VERIFIED',
+      'REJECTED',
+      'EXPIRED',
     ];
     if (!validStatuses.includes(body.status)) {
       return NextResponse.json(
@@ -116,9 +116,6 @@ export async function POST(request: NextRequest) {
     console.error('[Admin Credentials API] POST error:', error);
     const message = error instanceof Error ? error.message : 'Failed to verify credentials';
     const status = message.includes('required') || message.includes('Insufficient') ? 401 : 500;
-    return NextResponse.json(
-      { success: false, error: message },
-      { status }
-    );
+    return NextResponse.json({ success: false, error: message }, { status });
   }
 }

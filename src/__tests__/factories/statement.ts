@@ -25,9 +25,10 @@ export function createStatement(options: StatementFactoryOptions = {}) {
   const createdAt = options.createdAt ?? new Date();
   const type = options.type ?? 'CLAIMANT';
 
-  const defaultContent = type === 'CLAIMANT'
-    ? 'CLAIMANT STATEMENT OF CLAIM: This is the claimant statement...'
-    : 'RESPONDENT STATEMENT OF DEFENSE: This is the respondent statement...';
+  const defaultContent =
+    type === 'CLAIMANT'
+      ? 'CLAIMANT STATEMENT OF CLAIM: This is the claimant statement...'
+      : 'RESPONDENT STATEMENT OF DEFENSE: This is the respondent statement...';
 
   return {
     id,

@@ -49,9 +49,7 @@ Sentry.init({
       // Remove sensitive body data
       if (event.request.data) {
         const sanitizedData =
-          typeof event.request.data === 'string'
-            ? event.request.data
-            : { ...event.request.data };
+          typeof event.request.data === 'string' ? event.request.data : { ...event.request.data };
 
         if (typeof sanitizedData === 'object') {
           delete sanitizedData.password;

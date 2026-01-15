@@ -5,11 +5,7 @@
  * Supports document detection with confidence scoring.
  */
 
-import {
-  TextractClient,
-  DetectDocumentTextCommand,
-  type Block,
-} from '@aws-sdk/client-textract';
+import { TextractClient, DetectDocumentTextCommand, type Block } from '@aws-sdk/client-textract';
 
 import type { OCRResult, OCRBlock } from '@/types/documents';
 
@@ -25,7 +21,9 @@ function getTextractClient(): TextractClient {
 
     // Check for required credentials
     if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
-      throw new Error('AWS credentials not configured. Set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.');
+      throw new Error(
+        'AWS credentials not configured. Set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.'
+      );
     }
 
     textractClient = new TextractClient({
@@ -65,7 +63,9 @@ export async function performOCR(buffer: Buffer): Promise<OCRResult> {
     };
   } catch (error) {
     console.error('Textract OCR failed:', error);
-    throw new Error(`OCR processing failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    throw new Error(
+      `OCR processing failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+    );
   }
 }
 

@@ -99,9 +99,7 @@ const DECIDED_STATUSES: CaseStatus[] = ['DECIDED', 'CLOSED'];
 /**
  * Detect potential bias in an arbitrator's decisions
  */
-export async function detectBias(
-  arbitratorId: string
-): Promise<BiasDetectionResult> {
+export async function detectBias(arbitratorId: string): Promise<BiasDetectionResult> {
   // Get arbitrator info
   const arbitrator = await prisma.user.findUnique({
     where: { id: arbitratorId },
@@ -134,8 +132,8 @@ export async function detectBias(
 
   // Filter to decided cases with awards
   const decidedCases = assignments
-    .filter(a => DECIDED_STATUSES.includes(a.case.status) && a.case.award !== null)
-    .map(a => ({
+    .filter((a) => DECIDED_STATUSES.includes(a.case.status) && a.case.award !== null)
+    .map((a) => ({
       ...a.case,
       award: a.case.award!,
     }));
@@ -197,44 +195,38 @@ async function getPlatformMetrics(): Promise<PlatformMetrics> {
 
   // Count unique arbitrators
   const arbitratorIds = new Set(
-    cases
-      .map(c => c.arbitratorAssignment?.arbitratorId)
-      .filter((id): id is string => !!id)
+    cases.map((c) => c.arbitratorAssignment?.arbitratorId).filter((id): id is string => !!id)
   );
 
   // Calculate claimant win rate
-  const claimantWins = cases.filter(
-    c => c.award?.prevailingParty === 'CLAIMANT'
-  ).length;
-  const averageClaimantWinRate = cases.length > 0
-    ? claimantWins / cases.length
-    : 0.5;
+  const claimantWins = cases.filter((c) => c.award?.prevailingParty === 'CLAIMANT').length;
+  const averageClaimantWinRate = cases.length > 0 ? claimantWins / cases.length : 0.5;
 
   // Calculate average award ratio
   const ratios = cases
-    .filter(c => c.amount && c.amount.toNumber() > 0)
-    .map(c => {
+    .filter((c) => c.amount && c.amount.toNumber() > 0)
+    .map((c) => {
       const award = c.award?.awardAmount?.toNumber() || 0;
       const dispute = c.amount?.toNumber() || 1;
       return award / dispute;
     });
 
-  const averageAwardRatio = ratios.length > 0
-    ? ratios.reduce((a, b) => a + b, 0) / ratios.length
-    : 0.5;
+  const averageAwardRatio =
+    ratios.length > 0 ? ratios.reduce((a, b) => a + b, 0) / ratios.length : 0.5;
 
   // Calculate average days to decision
   const daysToDecision = cases
-    .filter(c => c.award?.issuedAt)
-    .map(c => {
+    .filter((c) => c.award?.issuedAt)
+    .map((c) => {
       const created = c.createdAt.getTime();
       const issued = c.award?.issuedAt?.getTime() ?? created;
       return Math.floor((issued - created) / (1000 * 60 * 60 * 24));
     });
 
-  const averageDaysToDecision = daysToDecision.length > 0
-    ? daysToDecision.reduce((a, b) => a + b, 0) / daysToDecision.length
-    : 30;
+  const averageDaysToDecision =
+    daysToDecision.length > 0
+      ? daysToDecision.reduce((a, b) => a + b, 0) / daysToDecision.length
+      : 30;
 
   return {
     totalCases: cases.length,
@@ -266,14 +258,10 @@ function analyzeWinRates(
     };
   }
 
-  const claimantWins = cases.filter(
-    c => c.award?.prevailingParty === 'CLAIMANT'
-  ).length;
-  const respondentWins = cases.filter(
-    c => c.award?.prevailingParty === 'RESPONDENT'
-  ).length;
+  const claimantWins = cases.filter((c) => c.award?.prevailingParty === 'CLAIMANT').length;
+  const respondentWins = cases.filter((c) => c.award?.prevailingParty === 'RESPONDENT').length;
   const splitDecisions = cases.filter(
-    c => c.award?.prevailingParty === 'SPLIT' || c.award?.prevailingParty === null
+    (c) => c.award?.prevailingParty === 'SPLIT' || c.award?.prevailingParty === null
   ).length;
 
   const claimantWinRate = claimantWins / total;
@@ -306,9 +294,7 @@ function analyzeAwardDistribution(
   }>,
   platformMetrics: PlatformMetrics
 ): AwardDistributionAnalysis {
-  const validCases = cases.filter(
-    c => c.amount && c.amount.toNumber() > 0
-  );
+  const validCases = cases.filter((c) => c.amount && c.amount.toNumber() > 0);
 
   if (validCases.length === 0) {
     return {
@@ -321,7 +307,7 @@ function analyzeAwardDistribution(
     };
   }
 
-  const ratios = validCases.map(c => {
+  const ratios = validCases.map((c) => {
     const award = c.award?.awardAmount?.toNumber() || 0;
     const dispute = c.amount?.toNumber() || 1;
     return award / dispute;
@@ -332,8 +318,8 @@ function analyzeAwardDistribution(
   const sortedRatios = [...ratios].sort((a, b) => a - b);
   const medianAwardRatio = sortedRatios[Math.floor(sortedRatios.length / 2)] || 0;
 
-  const fullAwardRate = ratios.filter(r => r >= 0.95).length / ratios.length;
-  const zeroAwardRate = ratios.filter(r => r === 0).length / ratios.length;
+  const fullAwardRate = ratios.filter((r) => r >= 0.95).length / ratios.length;
+  const zeroAwardRate = ratios.filter((r) => r === 0).length / ratios.length;
 
   const deviation = averageAwardRatio - platformMetrics.averageAwardRatio;
 
@@ -357,7 +343,7 @@ function analyzeTimingPatterns(
   }>,
   platformMetrics: PlatformMetrics
 ): TimingAnalysis {
-  const casesWithTiming = cases.filter(c => c.award?.issuedAt);
+  const casesWithTiming = cases.filter((c) => c.award?.issuedAt);
 
   if (casesWithTiming.length === 0) {
     return {
@@ -369,7 +355,7 @@ function analyzeTimingPatterns(
     };
   }
 
-  const daysToDecision = casesWithTiming.map(c => {
+  const daysToDecision = casesWithTiming.map((c) => {
     const created = c.createdAt.getTime();
     const issued = c.award?.issuedAt?.getTime() ?? created;
     return Math.floor((issued - created) / (1000 * 60 * 60 * 24));
@@ -380,8 +366,8 @@ function analyzeTimingPatterns(
   const sortedDays = [...daysToDecision].sort((a, b) => a - b);
   const medianDaysToDecision = sortedDays[Math.floor(sortedDays.length / 2)] || 0;
 
-  const rushDecisionRate = daysToDecision.filter(d => d < 7).length / daysToDecision.length;
-  const delayedDecisionRate = daysToDecision.filter(d => d > 90).length / daysToDecision.length;
+  const rushDecisionRate = daysToDecision.filter((d) => d < 7).length / daysToDecision.length;
+  const delayedDecisionRate = daysToDecision.filter((d) => d > 90).length / daysToDecision.length;
 
   return {
     averageDaysToDecision,
@@ -557,7 +543,7 @@ export async function generateBiasReport(): Promise<BiasReport> {
   const platformMetrics = await getPlatformMetrics();
 
   // Count flagged arbitrators
-  const flaggedArbitrators = analyses.filter(a => a.biasScore > 0.3).length;
+  const flaggedArbitrators = analyses.filter((a) => a.biasScore > 0.3).length;
 
   return {
     reportId: `BIAS-${Date.now()}`,
@@ -580,9 +566,11 @@ export async function getBiasMetrics(
   const assignments = await prisma.arbitratorAssignment.findMany({
     where: {
       arbitratorId,
-      ...(period ? {
-        assignedAt: { gte: period.start, lte: period.end },
-      } : {}),
+      ...(period
+        ? {
+            assignedAt: { gte: period.start, lte: period.end },
+          }
+        : {}),
     },
     include: {
       case: {
@@ -601,8 +589,8 @@ export async function getBiasMetrics(
 
   // Filter to decided cases with awards
   const cases = assignments
-    .filter(a => DECIDED_STATUSES.includes(a.case.status) && a.case.award !== null)
-    .map(a => ({
+    .filter((a) => DECIDED_STATUSES.includes(a.case.status) && a.case.award !== null)
+    .map((a) => ({
       ...a.case,
       award: a.case.award!,
     }));
@@ -610,35 +598,31 @@ export async function getBiasMetrics(
   const totalCases = cases.length;
 
   // Calculate claimant win rate
-  const claimantWins = cases.filter(
-    c => c.award?.prevailingParty === 'CLAIMANT'
-  ).length;
+  const claimantWins = cases.filter((c) => c.award?.prevailingParty === 'CLAIMANT').length;
   const claimantWinRate = totalCases > 0 ? claimantWins / totalCases : 0;
 
   // Calculate average award ratio
-  const validCases = cases.filter(
-    c => c.amount && c.amount.toNumber() > 0
-  );
-  const ratios = validCases.map(c => {
+  const validCases = cases.filter((c) => c.amount && c.amount.toNumber() > 0);
+  const ratios = validCases.map((c) => {
     const award = c.award?.awardAmount?.toNumber() || 0;
     const dispute = c.amount?.toNumber() || 1;
     return award / dispute;
   });
-  const averageAwardRatio = ratios.length > 0
-    ? ratios.reduce((a, b) => a + b, 0) / ratios.length
-    : 0;
+  const averageAwardRatio =
+    ratios.length > 0 ? ratios.reduce((a, b) => a + b, 0) / ratios.length : 0;
 
   // Calculate average days to decision
   const daysToDecision = cases
-    .filter(c => c.award?.issuedAt)
-    .map(c => {
+    .filter((c) => c.award?.issuedAt)
+    .map((c) => {
       const created = c.createdAt.getTime();
       const issued = c.award?.issuedAt?.getTime() ?? created;
       return Math.floor((issued - created) / (1000 * 60 * 60 * 24));
     });
-  const averageDaysToDecision = daysToDecision.length > 0
-    ? daysToDecision.reduce((a, b) => a + b, 0) / daysToDecision.length
-    : 0;
+  const averageDaysToDecision =
+    daysToDecision.length > 0
+      ? daysToDecision.reduce((a, b) => a + b, 0) / daysToDecision.length
+      : 0;
 
   // Calculate bias score (simplified)
   let biasScore = 0;
@@ -648,9 +632,7 @@ export async function getBiasMetrics(
 
   return {
     arbitratorId,
-    period: period
-      ? `${period.start.toISOString()} - ${period.end.toISOString()}`
-      : 'all-time',
+    period: period ? `${period.start.toISOString()} - ${period.end.toISOString()}` : 'all-time',
     totalCases,
     claimantWinRate,
     averageAwardRatio,

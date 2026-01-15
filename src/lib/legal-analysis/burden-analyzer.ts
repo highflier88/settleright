@@ -52,14 +52,8 @@ export async function analyzeBurdenOfProof(params: {
   jurisdiction: string;
   legalContext?: string;
 }): Promise<BurdenOfProofResult> {
-  const {
-    issues,
-    extractedFacts,
-    credibilityScores,
-    contradictions,
-    jurisdiction,
-    legalContext,
-  } = params;
+  const { issues, extractedFacts, credibilityScores, contradictions, jurisdiction, legalContext } =
+    params;
 
   const client = getAnthropicClient();
 
@@ -108,17 +102,11 @@ export async function analyzeBurdenOfProof(params: {
       ],
     });
 
-    const responseText =
-      response.content[0]?.type === 'text' ? response.content[0].text : '';
+    const responseText = response.content[0]?.type === 'text' ? response.content[0].text : '';
 
-    const tokensUsed =
-      (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
+    const tokensUsed = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
 
-    const result = parseBurdenAnalysisResponse(
-      responseText,
-      issues,
-      jurisdiction
-    );
+    const result = parseBurdenAnalysisResponse(responseText, issues, jurisdiction);
 
     return { ...result, tokensUsed };
   } catch (error) {
@@ -141,7 +129,11 @@ function parseBurdenAnalysisResponse(
     const jsonMatch = responseText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
       console.warn('No JSON found in burden analysis response');
-      return getDefaultBurdenAnalysis(issues, { claimant: { overall: 0.5 }, respondent: { overall: 0.5 } }, jurisdiction);
+      return getDefaultBurdenAnalysis(
+        issues,
+        { claimant: { overall: 0.5 }, respondent: { overall: 0.5 } },
+        jurisdiction
+      );
     }
 
     const parsed = JSON.parse(jsonMatch[0]) as {
@@ -198,7 +190,11 @@ function parseBurdenAnalysisResponse(
     };
   } catch (error) {
     console.error('Failed to parse burden analysis response:', error);
-    return getDefaultBurdenAnalysis(issues, { claimant: { overall: 0.5 }, respondent: { overall: 0.5 } }, jurisdiction);
+    return getDefaultBurdenAnalysis(
+      issues,
+      { claimant: { overall: 0.5 }, respondent: { overall: 0.5 } },
+      jurisdiction
+    );
   }
 }
 
@@ -229,10 +225,7 @@ function validateStandard(standard?: string): BurdenOfProofStandard {
 /**
  * Generate summary from analyses
  */
-function generateSummary(
-  analyses: BurdenAnalysis[],
-  overallBurdenMet: boolean
-): string {
+function generateSummary(analyses: BurdenAnalysis[], overallBurdenMet: boolean): string {
   const claimantAnalyses = analyses.filter((a) => a.party === 'claimant');
   const metCount = claimantAnalyses.filter((a) => a.isMet === true).length;
   const totalCount = claimantAnalyses.length;
@@ -295,10 +288,7 @@ function getDefaultBurdenAnalysis(
 /**
  * Check if a specific element's burden is met
  */
-export function isElementBurdenMet(
-  elementId: string,
-  analyses: BurdenAnalysis[]
-): boolean | null {
+export function isElementBurdenMet(elementId: string, analyses: BurdenAnalysis[]): boolean | null {
   const analysis = analyses.find(
     (a) => a.issue.includes(elementId) || a.keyEvidence.includes(elementId)
   );
@@ -315,12 +305,10 @@ export function getApplicableBurdenStandard(
   const standard = getBurdenStandard(jurisdiction, issueCategory);
 
   const descriptions: Record<BurdenOfProofStandard, string> = {
-    preponderance:
-      'More likely than not (greater than 50% probability)',
+    preponderance: 'More likely than not (greater than 50% probability)',
     clear_and_convincing:
       'Highly probable, substantially more likely than not (approximately 75%+)',
-    beyond_reasonable_doubt:
-      'No reasonable doubt (approximately 95%+, typically criminal only)',
+    beyond_reasonable_doubt: 'No reasonable doubt (approximately 95%+, typically criminal only)',
   };
 
   return {

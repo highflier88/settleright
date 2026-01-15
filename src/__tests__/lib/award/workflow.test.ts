@@ -32,23 +32,25 @@ jest.mock('@/lib/db', () => ({
     user: {
       findMany: jest.fn(),
     },
-    $transaction: jest.fn((callback) => callback({
-      draftAward: {
-        update: jest.fn().mockResolvedValue({}),
-        findUnique: jest.fn().mockResolvedValue({
-          id: 'draft-1',
-          findingsOfFact: '[]',
-          conclusionsOfLaw: '[]',
-          decision: 'Test decision',
-          awardAmount: { toNumber: () => 5000 },
-          prevailingParty: 'CLAIMANT',
-          reasoning: 'Test reasoning',
-        }),
-      },
-      draftAwardRevision: {
-        create: jest.fn().mockResolvedValue({}),
-      },
-    })),
+    $transaction: jest.fn((callback) =>
+      callback({
+        draftAward: {
+          update: jest.fn().mockResolvedValue({}),
+          findUnique: jest.fn().mockResolvedValue({
+            id: 'draft-1',
+            findingsOfFact: '[]',
+            conclusionsOfLaw: '[]',
+            decision: 'Test decision',
+            awardAmount: { toNumber: () => 5000 },
+            prevailingParty: 'CLAIMANT',
+            reasoning: 'Test reasoning',
+          }),
+        },
+        draftAwardRevision: {
+          create: jest.fn().mockResolvedValue({}),
+        },
+      })
+    ),
   },
 }));
 
@@ -241,9 +243,9 @@ describe('Award Workflow', () => {
     it('should throw error if draft award not found', async () => {
       (mockPrisma.draftAward.findUnique as jest.Mock).mockResolvedValue(null);
 
-      await expect(
-        modifyDraftAward('case-1', 'user-1', { awardAmount: 5000 })
-      ).rejects.toThrow('Draft award not found');
+      await expect(modifyDraftAward('case-1', 'user-1', { awardAmount: 5000 })).rejects.toThrow(
+        'Draft award not found'
+      );
     });
 
     it('should handle prevailingParty conversion', async () => {
@@ -426,9 +428,7 @@ describe('Award Workflow', () => {
     it('should throw error if draft award not found', async () => {
       (mockPrisma.draftAward.findUnique as jest.Mock).mockResolvedValue(null);
 
-      await expect(approveDraftAward('case-1', 'user-1')).rejects.toThrow(
-        'Draft award not found'
-      );
+      await expect(approveDraftAward('case-1', 'user-1')).rejects.toThrow('Draft award not found');
     });
   });
 });

@@ -23,10 +23,7 @@ export async function GET(request: NextRequest) {
     const { userId: clerkId } = auth();
 
     if (!clerkId) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
     }
 
     // Get user and profile
@@ -36,10 +33,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'User not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: 'User not found' }, { status: 404 });
     }
 
     if (!user.arbitratorProfile) {
@@ -73,10 +67,7 @@ export async function GET(request: NextRequest) {
           data = await getRecentActivity(user.arbitratorProfile.id, limit);
           break;
         default:
-          return NextResponse.json(
-            { success: false, error: 'Invalid section' },
-            { status: 400 }
-          );
+          return NextResponse.json({ success: false, error: 'Invalid section' }, { status: 400 });
       }
 
       return NextResponse.json({
@@ -95,9 +86,6 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('[Arbitrator Analytics API] GET error:', error);
     const message = error instanceof Error ? error.message : 'Failed to get analytics';
-    return NextResponse.json(
-      { success: false, error: message },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }

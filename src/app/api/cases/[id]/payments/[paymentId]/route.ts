@@ -56,9 +56,7 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
     const isAdmin = request.user.role === 'ADMIN';
 
     if (!isParty && !isArbitrator && !isAdmin) {
-      return errorResponse(
-        new ForbiddenError('You do not have access to this case')
-      );
+      return errorResponse(new ForbiddenError('You do not have access to this case'));
     }
 
     // Get payment
@@ -107,9 +105,7 @@ export const DELETE = withAuth(
     try {
       // Only admins can process refunds
       if (request.user.role !== 'ADMIN') {
-        return errorResponse(
-          new ForbiddenError('Only administrators can process refunds')
-        );
+        return errorResponse(new ForbiddenError('Only administrators can process refunds'));
       }
 
       // Parse refund reason

@@ -88,11 +88,9 @@ export async function detectContradictions(
       ],
     });
 
-    const responseText =
-      response.content[0]?.type === 'text' ? response.content[0].text : '';
+    const responseText = response.content[0]?.type === 'text' ? response.content[0].text : '';
 
-    const tokensUsed =
-      (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
+    const tokensUsed = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
 
     const result = parseContradictionResponse(responseText);
 
@@ -113,13 +111,14 @@ export async function detectContradictions(
 /**
  * Parse contradiction response from Claude
  */
-function parseContradictionResponse(
-  responseText: string
-): Omit<ContradictionResult, 'tokensUsed'> {
+function parseContradictionResponse(responseText: string): Omit<ContradictionResult, 'tokensUsed'> {
   try {
     let jsonStr = responseText.trim();
     if (jsonStr.startsWith('```')) {
-      jsonStr = jsonStr.replace(/```json?\n?/, '').replace(/```$/, '').trim();
+      jsonStr = jsonStr
+        .replace(/```json?\n?/, '')
+        .replace(/```$/, '')
+        .trim();
     }
 
     const parsed = JSON.parse(jsonStr) as {
@@ -151,17 +150,12 @@ function parseContradictionResponse(
           respondentClaim: item.respondentClaim || '',
           severity,
           analysis: item.analysis || '',
-          relatedFactIds: Array.isArray(item.relatedFactIds)
-            ? item.relatedFactIds
-            : undefined,
+          relatedFactIds: Array.isArray(item.relatedFactIds) ? item.relatedFactIds : undefined,
           caseImpact: item.caseImpact,
         };
       })
       .filter(
-        (c) =>
-          c.topic.length > 0 &&
-          c.claimantClaim.length > 0 &&
-          c.respondentClaim.length > 0
+        (c) => c.topic.length > 0 && c.claimantClaim.length > 0 && c.respondentClaim.length > 0
       );
 
     return {
@@ -217,9 +211,7 @@ export function getContradictionsBySeverity(
 /**
  * Get major contradictions that are most likely to affect case outcome
  */
-export function getMajorContradictions(
-  contradictions: Contradiction[]
-): Contradiction[] {
+export function getMajorContradictions(contradictions: Contradiction[]): Contradiction[] {
   return contradictions.filter((c) => c.severity === 'major');
 }
 
@@ -227,9 +219,7 @@ export function getMajorContradictions(
  * Calculate contradiction score for credibility assessment
  * Returns 0-1 where higher = more contradictions/issues
  */
-export function calculateContradictionScore(
-  contradictions: Contradiction[]
-): number {
+export function calculateContradictionScore(contradictions: Contradiction[]): number {
   if (contradictions.length === 0) return 0;
 
   // Weight by severity
@@ -239,10 +229,7 @@ export function calculateContradictionScore(
     minor: 0.2,
   };
 
-  const totalWeight = contradictions.reduce(
-    (sum, c) => sum + weights[c.severity],
-    0
-  );
+  const totalWeight = contradictions.reduce((sum, c) => sum + weights[c.severity], 0);
 
   // Normalize to 0-1 (assume max 5 major contradictions = 1.0)
   return Math.min(1, totalWeight / 5);
@@ -251,9 +238,7 @@ export function calculateContradictionScore(
 /**
  * Format contradictions for display or further analysis
  */
-export function formatContradictionsForPrompt(
-  contradictions: Contradiction[]
-): string {
+export function formatContradictionsForPrompt(contradictions: Contradiction[]): string {
   if (contradictions.length === 0) {
     return 'No contradictions identified.';
   }
@@ -276,9 +261,7 @@ export function formatContradictionsForPrompt(
 /**
  * Analyze pattern of contradictions
  */
-export function analyzeContradictionPattern(
-  contradictions: Contradiction[]
-): {
+export function analyzeContradictionPattern(contradictions: Contradiction[]): {
   dominantSeverity: ContradictionSeverity;
   topicsCovered: string[];
   overallAssessment: string;

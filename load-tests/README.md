@@ -5,6 +5,7 @@ This directory contains load testing scripts for the arbitration platform.
 ## Prerequisites
 
 Install k6:
+
 ```bash
 # macOS
 brew install k6
@@ -36,28 +37,36 @@ BASE_URL=https://staging.settleright.ai k6 run load-tests/api-load.js
 ## Test Scenarios
 
 ### api-load.js
+
 Basic API endpoint load testing:
+
 - Case listing
 - Case creation
 - Evidence upload
 
 ### case-flow-load.js
+
 Full case lifecycle load testing:
+
 - Case initiation
 - Evidence submission
 - Statement submission
 - Status monitoring
 
 ### arbitrator-load.js
+
 Arbitrator workflow load testing:
+
 - Case queue loading
 - Draft award review
 - Award signing
 
 ### concurrent-100-cases.js ⭐ NEW
+
 **100 Concurrent Cases Load Test**
 
 Simulates 100 simultaneous active cases being processed through the full lifecycle:
+
 - Ramps up to 100 concurrent virtual users
 - Each VU creates and manages a case through:
   - Case creation
@@ -69,6 +78,7 @@ Simulates 100 simultaneous active cases being processed through the full lifecyc
 - Includes background health checks
 
 **Run:**
+
 ```bash
 k6 run load-tests/concurrent-100-cases.js
 ```
@@ -87,11 +97,13 @@ k6 run load-tests/concurrent-100-cases.js
 ## Running Tests
 
 ### Basic Load Test
+
 ```bash
 k6 run load-tests/api-load.js
 ```
 
 ### With Custom Options
+
 ```bash
 # Custom virtual users and duration
 k6 run --vus 50 --duration 5m load-tests/api-load.js
@@ -101,11 +113,13 @@ k6 run --iterations 1000 load-tests/api-load.js
 ```
 
 ### Generate HTML Report
+
 ```bash
 K6_WEB_DASHBOARD=true k6 run load-tests/api-load.js
 ```
 
 ### Environment Variables
+
 ```bash
 export BASE_URL=https://staging.settleright.ai
 export AUTH_TOKEN=your_test_token
@@ -131,6 +145,7 @@ k6 run --out influxdb=http://localhost:8086/k6 load-tests/api-load.js
 ## Thresholds
 
 Default thresholds for all tests:
+
 - 95th percentile response time < 500ms (basic) / < 2000ms (concurrent)
 - Error rate < 5%
 - Request success rate > 95%
@@ -138,6 +153,7 @@ Default thresholds for all tests:
 ## Test Results
 
 Results are saved to `load-tests/results/`:
+
 - `concurrent-100-summary.json` - 100 concurrent cases test summary
 - `case-flow-summary.json` - Case flow test summary
 - `api-load-summary.json` - API load test summary
@@ -145,6 +161,7 @@ Results are saved to `load-tests/results/`:
 ## CI/CD Integration
 
 ### GitHub Actions Example
+
 ```yaml
 - name: Run Load Tests
   run: |
@@ -158,6 +175,7 @@ Results are saved to `load-tests/results/`:
 ```
 
 ### Performance Regression Detection
+
 ```bash
 # Compare against baseline
 k6 run --out json=current.json load-tests/api-load.js
@@ -173,6 +191,7 @@ k6 run --out json=current.json load-tests/api-load.js
 ## Scaling Tests
 
 For larger scale tests:
+
 ```bash
 # 200 concurrent users
 k6 run --vus 200 --duration 30m load-tests/concurrent-100-cases.js
@@ -186,11 +205,13 @@ k6 run --out cloud load-tests/concurrent-100-cases.js
 ### Common Issues
 
 1. **Connection refused**: Ensure the application is running
+
    ```bash
    npm run dev  # In another terminal
    ```
 
 2. **Authentication errors**: Set valid auth token
+
    ```bash
    export AUTH_TOKEN=$(curl -s https://api.example.com/auth | jq -r .token)
    ```
@@ -198,6 +219,7 @@ k6 run --out cloud load-tests/concurrent-100-cases.js
 3. **High error rates**: Check application logs and database connections
 
 ### Debug Mode
+
 ```bash
 k6 run --http-debug=full load-tests/api-load.js
 ```

@@ -85,9 +85,7 @@ export interface SimilarAward {
 /**
  * Analyze award consistency with prior decisions
  */
-export async function analyzeConsistency(
-  awardId: string
-): Promise<ConsistencyAnalysisResult> {
+export async function analyzeConsistency(awardId: string): Promise<ConsistencyAnalysisResult> {
   // Get the award with case details
   const award = await prisma.award.findUnique({
     where: { id: awardId },
@@ -153,7 +151,7 @@ export async function analyzeConsistency(
   );
 
   // Format similar cases for response
-  const similarCaseComparisons: SimilarCaseComparison[] = similarCases.map(sc => ({
+  const similarCaseComparisons: SimilarCaseComparison[] = similarCases.map((sc) => ({
     caseId: sc.caseId,
     caseReference: sc.caseReference,
     disputeAmount: sc.disputeAmount,
@@ -183,17 +181,19 @@ async function findSimilarCases(
   excludeCaseId: string,
   disputeAmount: number,
   disputeType: DisputeType
-): Promise<Array<{
-  caseId: string;
-  caseReference: string;
-  disputeAmount: number;
-  awardAmount: number;
-  findingsCount: number;
-  conclusionsCount: number;
-  similarity: number;
-  arbitratorId: string;
-  decidedAt: Date;
-}>> {
+): Promise<
+  Array<{
+    caseId: string;
+    caseReference: string;
+    disputeAmount: number;
+    awardAmount: number;
+    findingsCount: number;
+    conclusionsCount: number;
+    similarity: number;
+    arbitratorId: string;
+    decidedAt: Date;
+  }>
+> {
   // Find cases with similar characteristics
   const similarCases = await prisma.case.findMany({
     where: {
@@ -224,8 +224,8 @@ async function findSimilarCases(
 
   // Calculate similarity scores
   return similarCases
-    .filter(c => c.award !== null)
-    .map(c => {
+    .filter((c) => c.award !== null)
+    .map((c) => {
       const caseDisputeAmount = c.amount?.toNumber() || 0;
       const awardAmount = c.award!.awardAmount?.toNumber() || 0;
 
@@ -234,8 +234,8 @@ async function findSimilarCases(
       const maxAmount = Math.max(caseDisputeAmount, disputeAmount, 1);
       const amountSimilarity = 1 - Math.min(amountDiff / maxAmount, 1);
 
-      const findings = c.award!.findingsOfFact as unknown[] || [];
-      const conclusions = c.award!.conclusionsOfLaw as unknown[] || [];
+      const findings = (c.award!.findingsOfFact as unknown[]) || [];
+      const conclusions = (c.award!.conclusionsOfLaw as unknown[]) || [];
 
       return {
         caseId: c.id,
@@ -249,7 +249,7 @@ async function findSimilarCases(
         decidedAt: c.award!.issuedAt || new Date(),
       };
     })
-    .filter(c => c.similarity > 0.3) // Only include reasonably similar cases
+    .filter((c) => c.similarity > 0.3) // Only include reasonably similar cases
     .sort((a, b) => b.similarity - a.similarity)
     .slice(0, 20); // Top 20 most similar
 }
@@ -267,37 +267,33 @@ function analyzeDamageConsistency(
   // Calculate statistics from similar cases
   // Note: ratios could be used for more advanced analysis
   const _ratios = similarCases
-    .filter(c => c.disputeAmount > 0)
-    .map(c => c.awardAmount / c.disputeAmount);
+    .filter((c) => c.disputeAmount > 0)
+    .map((c) => c.awardAmount / c.disputeAmount);
   void _ratios; // Acknowledge unused variable (for future use)
 
-  const amounts = similarCases.map(c => c.awardAmount);
+  const amounts = similarCases.map((c) => c.awardAmount);
 
   // Calculate mean and standard deviation
-  const categoryAverage = amounts.length > 0
-    ? amounts.reduce((a, b) => a + b, 0) / amounts.length
-    : 0;
+  const categoryAverage =
+    amounts.length > 0 ? amounts.reduce((a, b) => a + b, 0) / amounts.length : 0;
 
   const sortedAmounts = [...amounts].sort((a, b) => a - b);
-  const categoryMedian = sortedAmounts.length > 0
-    ? sortedAmounts[Math.floor(sortedAmounts.length / 2)] || 0
-    : 0;
+  const categoryMedian =
+    sortedAmounts.length > 0 ? sortedAmounts[Math.floor(sortedAmounts.length / 2)] || 0 : 0;
 
-  const variance = amounts.length > 1
-    ? amounts.reduce((sum, val) => sum + Math.pow(val - categoryAverage, 2), 0) / (amounts.length - 1)
-    : 0;
+  const variance =
+    amounts.length > 1
+      ? amounts.reduce((sum, val) => sum + Math.pow(val - categoryAverage, 2), 0) /
+        (amounts.length - 1)
+      : 0;
   const categoryStdDev = Math.sqrt(variance);
 
   // Calculate z-score
-  const zScore = categoryStdDev > 0
-    ? (awardAmount - categoryAverage) / categoryStdDev
-    : 0;
+  const zScore = categoryStdDev > 0 ? (awardAmount - categoryAverage) / categoryStdDev : 0;
 
   // Calculate percentile
-  const belowCount = amounts.filter(a => a < awardAmount).length;
-  const percentile = amounts.length > 0
-    ? (belowCount / amounts.length) * 100
-    : 50;
+  const belowCount = amounts.filter((a) => a < awardAmount).length;
+  const percentile = amounts.length > 0 ? (belowCount / amounts.length) * 100 : 50;
 
   // Determine if outlier (beyond 2 standard deviations)
   const isOutlier = Math.abs(zScore) > 2;
@@ -327,13 +323,15 @@ function analyzeReasoningConsistency(
   const conclusionsCount = Array.isArray(conclusionsOfLaw) ? conclusionsOfLaw.length : 0;
 
   // Calculate averages from similar cases
-  const avgFindingsInCategory = similarCases.length > 0
-    ? similarCases.reduce((sum, c) => sum + c.findingsCount, 0) / similarCases.length
-    : 0;
+  const avgFindingsInCategory =
+    similarCases.length > 0
+      ? similarCases.reduce((sum, c) => sum + c.findingsCount, 0) / similarCases.length
+      : 0;
 
-  const avgConclusionsInCategory = similarCases.length > 0
-    ? similarCases.reduce((sum, c) => sum + c.conclusionsCount, 0) / similarCases.length
-    : 0;
+  const avgConclusionsInCategory =
+    similarCases.length > 0
+      ? similarCases.reduce((sum, c) => sum + c.conclusionsCount, 0) / similarCases.length
+      : 0;
 
   // Check for standard structure
   const missingElements: string[] = [];

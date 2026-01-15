@@ -6,7 +6,12 @@ import { RateLimitError } from './api/errors';
 interface KVClient {
   zremrangebyscore: (key: string, min: number, max: number) => Promise<number>;
   zcard: (key: string) => Promise<number>;
-  zrange: <T>(key: string, start: number, stop: number, options?: { withScores?: boolean }) => Promise<T>;
+  zrange: <T>(
+    key: string,
+    start: number,
+    stop: number,
+    options?: { withScores?: boolean }
+  ) => Promise<T>;
   zadd: (key: string, options: { score: number; member: string }) => Promise<number | null>;
   expire: (key: string, seconds: number) => Promise<number>;
 }
@@ -90,7 +95,8 @@ export async function rateLimit(
     if (count >= limit) {
       // Get the oldest entry to calculate reset time
       const oldest = await kvClient.zrange<number[]>(key, 0, 0, { withScores: true });
-      const resetTime = oldest.length > 1 && oldest[1] !== undefined ? oldest[1] + window : now + window;
+      const resetTime =
+        oldest.length > 1 && oldest[1] !== undefined ? oldest[1] + window : now + window;
 
       return {
         success: false,

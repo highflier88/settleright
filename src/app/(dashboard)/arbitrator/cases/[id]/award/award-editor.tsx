@@ -137,11 +137,7 @@ export function AwardEditor({
   };
 
   // Conclusion handlers
-  const updateConclusion = (
-    index: number,
-    field: keyof ConclusionOfLaw,
-    value: string
-  ) => {
+  const updateConclusion = (index: number, field: keyof ConclusionOfLaw, value: string) => {
     setConclusions((prev) =>
       prev.map((c, i) => {
         if (i !== index) return c;
@@ -173,10 +169,7 @@ export function AwardEditor({
   };
 
   // Decision handlers
-  const updateDecision = <K extends keyof AwardDecision>(
-    field: K,
-    value: AwardDecision[K]
-  ) => {
+  const updateDecision = <K extends keyof AwardDecision>(field: K, value: AwardDecision[K]) => {
     setDecision({ ...decision, [field]: value });
     markModified('decision');
   };
@@ -209,15 +202,14 @@ export function AwardEditor({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-blue-600">
             <Edit className="h-5 w-5" />
             Edit Award
           </DialogTitle>
           <DialogDescription>
-            Make modifications to the draft award. All changes will be tracked
-            and versioned.
+            Make modifications to the draft award. All changes will be tracked and versioned.
           </DialogDescription>
         </DialogHeader>
 
@@ -252,10 +244,7 @@ export function AwardEditor({
                     <Select
                       value={decision.prevailingParty}
                       onValueChange={(v) =>
-                        updateDecision(
-                          'prevailingParty',
-                          v as 'CLAIMANT' | 'RESPONDENT' | 'SPLIT'
-                        )
+                        updateDecision('prevailingParty', v as 'CLAIMANT' | 'RESPONDENT' | 'SPLIT')
                       }
                     >
                       <SelectTrigger>
@@ -352,10 +341,7 @@ export function AwardEditor({
               </AccordionTrigger>
               <AccordionContent className="space-y-4 pt-4">
                 {findings.map((finding, index) => (
-                  <div
-                    key={finding.id}
-                    className="border rounded-lg p-4 space-y-3 bg-muted/30"
-                  >
+                  <div key={finding.id} className="space-y-3 rounded-lg border bg-muted/30 p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <GripVertical className="h-4 w-4 text-muted-foreground" />
@@ -372,20 +358,14 @@ export function AwardEditor({
                     </div>
                     <Textarea
                       value={finding.finding}
-                      onChange={(e) =>
-                        updateFinding(index, 'finding', e.target.value)
-                      }
+                      onChange={(e) => updateFinding(index, 'finding', e.target.value)}
                       rows={3}
                       placeholder="Enter finding of fact..."
                     />
                   </div>
                 ))}
-                <Button
-                  variant="outline"
-                  onClick={addFinding}
-                  className="w-full"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
+                <Button variant="outline" onClick={addFinding} className="w-full">
+                  <Plus className="mr-2 h-4 w-4" />
                   Add Finding
                 </Button>
               </AccordionContent>
@@ -403,10 +383,7 @@ export function AwardEditor({
               </AccordionTrigger>
               <AccordionContent className="space-y-4 pt-4">
                 {conclusions.map((conclusion, index) => (
-                  <div
-                    key={conclusion.id}
-                    className="border rounded-lg p-4 space-y-3 bg-muted/30"
-                  >
+                  <div key={conclusion.id} className="space-y-3 rounded-lg border bg-muted/30 p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <GripVertical className="h-4 w-4 text-muted-foreground" />
@@ -425,9 +402,7 @@ export function AwardEditor({
                       <Label className="text-sm">Conclusion</Label>
                       <Textarea
                         value={conclusion.conclusion}
-                        onChange={(e) =>
-                          updateConclusion(index, 'conclusion', e.target.value)
-                        }
+                        onChange={(e) => updateConclusion(index, 'conclusion', e.target.value)}
                         rows={3}
                         placeholder="Enter conclusion of law..."
                       />
@@ -436,21 +411,15 @@ export function AwardEditor({
                       <Label className="text-sm">Legal Basis</Label>
                       <Textarea
                         value={conclusion.legalBasis}
-                        onChange={(e) =>
-                          updateConclusion(index, 'legalBasis', e.target.value)
-                        }
+                        onChange={(e) => updateConclusion(index, 'legalBasis', e.target.value)}
                         rows={2}
                         placeholder="Citation or legal basis..."
                       />
                     </div>
                   </div>
                 ))}
-                <Button
-                  variant="outline"
-                  onClick={addConclusion}
-                  className="w-full"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
+                <Button variant="outline" onClick={addConclusion} className="w-full">
+                  <Plus className="mr-2 h-4 w-4" />
                   Add Conclusion
                 </Button>
               </AccordionContent>
@@ -507,12 +476,12 @@ export function AwardEditor({
           >
             {isLoading ? (
               <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Saving...
               </>
             ) : (
               <>
-                <Save className="h-4 w-4 mr-2" />
+                <Save className="mr-2 h-4 w-4" />
                 Save Changes
               </>
             )}

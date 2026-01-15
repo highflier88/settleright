@@ -138,10 +138,7 @@ async function rateLimit(): Promise<void> {
 /**
  * Make authenticated request to CourtListener API
  */
-async function makeRequest<T>(
-  endpoint: string,
-  params: Record<string, string> = {}
-): Promise<T> {
+async function makeRequest<T>(endpoint: string, params: Record<string, string> = {}): Promise<T> {
   await rateLimit();
 
   const url = new URL(`${config.baseUrl}${endpoint}`);
@@ -235,9 +232,7 @@ export async function getCaliforniaCourts(): Promise<CourtListenerCourt[]> {
 
   // Filter to California courts
   return response.results.filter(
-    (court) =>
-      court.id.startsWith('cal') ||
-      court.citation_string.toLowerCase().includes('cal')
+    (court) => court.id.startsWith('cal') || court.citation_string.toLowerCase().includes('cal')
   );
 }
 

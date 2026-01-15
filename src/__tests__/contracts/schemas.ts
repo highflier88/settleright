@@ -118,12 +118,7 @@ export const EvidenceTypeSchema = z.enum([
   'OTHER',
 ]);
 
-export const EvidenceStatusSchema = z.enum([
-  'UPLOADED',
-  'PROCESSING',
-  'READY',
-  'FAILED',
-]);
+export const EvidenceStatusSchema = z.enum(['UPLOADED', 'PROCESSING', 'READY', 'FAILED']);
 
 export const EvidenceSchema = z.object({
   id: z.string(),
@@ -193,16 +188,20 @@ export const AwardResponseSchema = SuccessResponseSchema.extend({
 export const DraftAwardSchema = z.object({
   id: z.string(),
   caseId: z.string(),
-  findingsOfFact: z.array(z.object({
-    id: z.string(),
-    number: z.number(),
-    finding: z.string(),
-  })),
-  conclusionsOfLaw: z.array(z.object({
-    id: z.string(),
-    number: z.number(),
-    conclusion: z.string(),
-  })),
+  findingsOfFact: z.array(
+    z.object({
+      id: z.string(),
+      number: z.number(),
+      finding: z.string(),
+    })
+  ),
+  conclusionsOfLaw: z.array(
+    z.object({
+      id: z.string(),
+      number: z.number(),
+      conclusion: z.string(),
+    })
+  ),
   decision: z.string(),
   awardAmount: z.number().nullable(),
   prevailingParty: PrevailingPartySchema,
@@ -219,18 +218,9 @@ export const DraftAwardResponseSchema = SuccessResponseSchema.extend({
 // Payment Schemas
 // ============================================================================
 
-export const PaymentTypeSchema = z.enum([
-  'FILING_FEE',
-  'RESPONSE_FEE',
-  'EXPEDITED_FEE',
-]);
+export const PaymentTypeSchema = z.enum(['FILING_FEE', 'RESPONSE_FEE', 'EXPEDITED_FEE']);
 
-export const PaymentStatusSchema = z.enum([
-  'PENDING',
-  'COMPLETED',
-  'FAILED',
-  'REFUNDED',
-]);
+export const PaymentStatusSchema = z.enum(['PENDING', 'COMPLETED', 'FAILED', 'REFUNDED']);
 
 export const PaymentSchema = z.object({
   id: z.string(),

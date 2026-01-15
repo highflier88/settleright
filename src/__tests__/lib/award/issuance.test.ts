@@ -47,7 +47,9 @@ const mockPrisma = prisma as jest.Mocked<typeof prisma>;
 const mockGetDraftAward = getDraftAward as jest.MockedFunction<typeof getDraftAward>;
 
 // Helper to create mock draft award response
-const createMockDraftAward = (overrides: Partial<Awaited<ReturnType<typeof getDraftAward>>> = {}) => ({
+const createMockDraftAward = (
+  overrides: Partial<Awaited<ReturnType<typeof getDraftAward>>> = {}
+) => ({
   id: 'draft-1',
   caseId: 'case-1',
   findingsOfFact: [],
@@ -95,9 +97,7 @@ describe('Award Issuance Service', () => {
 
     it('should return false if draft award not approved', async () => {
       (mockPrisma.award.findUnique as jest.Mock).mockResolvedValue(null);
-      mockGetDraftAward.mockResolvedValue(
-        createMockDraftAward({ reviewStatus: 'MODIFY' })
-      );
+      mockGetDraftAward.mockResolvedValue(createMockDraftAward({ reviewStatus: 'MODIFY' }));
 
       const result = await canIssueAward('case-1');
 

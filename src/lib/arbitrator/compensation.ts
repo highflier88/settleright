@@ -14,7 +14,6 @@ import { prisma } from '@/lib/db';
 
 import type { CompensationType, CompensationStatus } from '@prisma/client';
 
-
 // ============================================================================
 // TYPES
 // ============================================================================
@@ -184,11 +183,7 @@ export async function createCompensationRecord(
   reviewTimeMinutes?: number
 ): Promise<CompensationRecord> {
   // Calculate compensation
-  const calculation = await calculateCompensation(
-    arbitratorProfileId,
-    caseId,
-    reviewTimeMinutes
-  );
+  const calculation = await calculateCompensation(arbitratorProfileId, caseId, reviewTimeMinutes);
 
   // Get case data for additional info
   const caseData = await prisma.case.findUnique({
@@ -287,10 +282,7 @@ export async function markCompensationPaid(
 /**
  * Dispute a compensation
  */
-export async function disputeCompensation(
-  compensationId: string,
-  reason: string
-): Promise<void> {
+export async function disputeCompensation(compensationId: string, reason: string): Promise<void> {
   await prisma.arbitratorCompensation.update({
     where: { id: compensationId },
     data: {
@@ -308,9 +300,7 @@ export async function disputeCompensation(
 /**
  * Get earnings summary for an arbitrator
  */
-export async function getEarningsSummary(
-  arbitratorProfileId: string
-): Promise<EarningsSummary> {
+export async function getEarningsSummary(arbitratorProfileId: string): Promise<EarningsSummary> {
   const compensations = await prisma.arbitratorCompensation.findMany({
     where: { arbitratorProfileId },
   });
@@ -346,7 +336,7 @@ export async function getEarningsSummary(
   }
 
   const casesCompleted = compensations.filter(
-    c => c.status === 'PAID' || c.status === 'CALCULATED' || c.status === 'APPROVED'
+    (c) => c.status === 'PAID' || c.status === 'CALCULATED' || c.status === 'APPROVED'
   ).length;
 
   const averagePerCase = casesCompleted > 0 ? totalEarned / casesCompleted : 0;
@@ -388,7 +378,7 @@ export async function getCompensationHistory(
     skip: offset,
   });
 
-  return compensations.map(comp => ({
+  return compensations.map((comp) => ({
     id: comp.id,
     caseId: comp.caseId,
     caseReference: comp.case.referenceNumber,
@@ -407,18 +397,18 @@ export async function getCompensationHistory(
 /**
  * Get pending compensations for payout processing
  */
-export async function getPendingCompensations(
-  options: { limit?: number } = {}
-): Promise<Array<{
-  id: string;
-  arbitratorProfileId: string;
-  arbitratorName: string | null;
-  arbitratorEmail: string;
-  stripeConnectId: string | null;
-  amount: number;
-  caseReference: string;
-  calculatedAt: Date;
-}>> {
+export async function getPendingCompensations(options: { limit?: number } = {}): Promise<
+  Array<{
+    id: string;
+    arbitratorProfileId: string;
+    arbitratorName: string | null;
+    arbitratorEmail: string;
+    stripeConnectId: string | null;
+    amount: number;
+    caseReference: string;
+    calculatedAt: Date;
+  }>
+> {
   const { limit = 100 } = options;
 
   const compensations = await prisma.arbitratorCompensation.findMany({
@@ -437,7 +427,7 @@ export async function getPendingCompensations(
     take: limit,
   });
 
-  return compensations.map(comp => ({
+  return compensations.map((comp) => ({
     id: comp.id,
     arbitratorProfileId: comp.arbitratorProfileId,
     arbitratorName: comp.arbitratorProfile.user.name,
@@ -465,8 +455,12 @@ export async function updateCompensationRates(
     where: { id: arbitratorProfileId },
     data: {
       ...(rates.compensationType && { compensationType: rates.compensationType }),
-      ...(rates.baseFeePerCase !== undefined && { baseFeePerCase: new Decimal(rates.baseFeePerCase) }),
-      ...(rates.percentageRate !== undefined && { percentageRate: new Decimal(rates.percentageRate) }),
+      ...(rates.baseFeePerCase !== undefined && {
+        baseFeePerCase: new Decimal(rates.baseFeePerCase),
+      }),
+      ...(rates.percentageRate !== undefined && {
+        percentageRate: new Decimal(rates.percentageRate),
+      }),
       ...(rates.hourlyRate !== undefined && { hourlyRate: new Decimal(rates.hourlyRate) }),
     },
   });

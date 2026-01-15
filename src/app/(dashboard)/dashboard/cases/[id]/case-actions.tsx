@@ -4,13 +4,7 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import {
-  MoreVertical,
-  RefreshCw,
-  XCircle,
-  Trash2,
-  Download,
-} from 'lucide-react';
+import { MoreVertical, RefreshCw, XCircle, Trash2, Download } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -49,8 +43,7 @@ export function CaseActions({
     invitationStatus !== 'CANCELLED';
 
   const canWithdrawCase =
-    isClaimant &&
-    ['DRAFT', 'PENDING_RESPONDENT', 'PENDING_AGREEMENT'].includes(status);
+    isClaimant && ['DRAFT', 'PENDING_RESPONDENT', 'PENDING_AGREEMENT'].includes(status);
 
   const handleResendInvitation = async () => {
     setIsLoading(true);
@@ -99,11 +92,7 @@ export function CaseActions({
   };
 
   const handleWithdrawCase = async () => {
-    if (
-      !confirm(
-        'Are you sure you want to withdraw this case? This action cannot be undone.'
-      )
-    ) {
+    if (!confirm('Are you sure you want to withdraw this case? This action cannot be undone.')) {
       return;
     }
 

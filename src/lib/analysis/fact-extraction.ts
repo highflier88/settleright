@@ -9,12 +9,7 @@ import Anthropic from '@anthropic-ai/sdk';
 
 import { buildFactExtractionPrompt, FACT_ANALYSIS_SYSTEM_PROMPT } from './prompts';
 
-import type {
-  EvidenceSummary,
-  ExtractedFact,
-  ExtractedFactsResult,
-  FactCategory,
-} from './types';
+import type { EvidenceSummary, ExtractedFact, ExtractedFactsResult, FactCategory } from './types';
 
 // Singleton Anthropic client
 let anthropicClient: Anthropic | null = null;
@@ -68,12 +63,10 @@ export async function extractFactsFromStatement(
     });
 
     // Extract text from response
-    const responseText =
-      response.content[0]?.type === 'text' ? response.content[0].text : '';
+    const responseText = response.content[0]?.type === 'text' ? response.content[0].text : '';
 
     // Calculate tokens used
-    const tokensUsed =
-      (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
+    const tokensUsed = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
 
     // Parse the response
     const facts = parseFactExtractionResponse(responseText, partyType);
@@ -135,7 +128,10 @@ function parseFactExtractionResponse(
     // Extract JSON from response (handle potential markdown code blocks)
     let jsonStr = responseText.trim();
     if (jsonStr.startsWith('```')) {
-      jsonStr = jsonStr.replace(/```json?\n?/, '').replace(/```$/, '').trim();
+      jsonStr = jsonStr
+        .replace(/```json?\n?/, '')
+        .replace(/```$/, '')
+        .trim();
     }
 
     const parsed = JSON.parse(jsonStr) as Array<{
@@ -155,13 +151,7 @@ function parseFactExtractionResponse(
     }
 
     // Valid categories
-    const validCategories: FactCategory[] = [
-      'event',
-      'claim',
-      'admission',
-      'denial',
-      'allegation',
-    ];
+    const validCategories: FactCategory[] = ['event', 'claim', 'admission', 'denial', 'allegation'];
 
     return parsed
       .map((item, index) => {
@@ -223,9 +213,8 @@ export function estimateFactExtractionCost(
 ): number {
   // Rough estimate: ~4 chars per token
   const claimantInputTokens = Math.ceil((claimantStatementLength + 2000) / 4);
-  const respondentInputTokens = respondentStatementLength > 0
-    ? Math.ceil((respondentStatementLength + 2000) / 4)
-    : 0;
+  const respondentInputTokens =
+    respondentStatementLength > 0 ? Math.ceil((respondentStatementLength + 2000) / 4) : 0;
 
   const totalInputTokens = claimantInputTokens + respondentInputTokens;
   const outputTokens = 1024 * 2; // ~2048 tokens output for both

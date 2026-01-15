@@ -42,10 +42,10 @@ export function AuditStats() {
         {Array.from({ length: 4 }, (_, i) => (
           <Card key={i}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <div className="h-4 w-24 animate-pulse bg-muted rounded" />
+              <div className="h-4 w-24 animate-pulse rounded bg-muted" />
             </CardHeader>
             <CardContent>
-              <div className="h-8 w-16 animate-pulse bg-muted rounded" />
+              <div className="h-8 w-16 animate-pulse rounded bg-muted" />
             </CardContent>
           </Card>
         ))}

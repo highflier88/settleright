@@ -47,13 +47,10 @@ export const POST = withAuth(
 
       // Verify user has access to this case
       const userId = request.user.id;
-      const isParty =
-        caseData.claimantId === userId || caseData.respondentId === userId;
+      const isParty = caseData.claimantId === userId || caseData.respondentId === userId;
 
       if (!isParty) {
-        return errorResponse(
-          new ForbiddenError('You do not have access to this case')
-        );
+        return errorResponse(new ForbiddenError('You do not have access to this case'));
       }
 
       // Check if fact analysis is complete
@@ -67,9 +64,7 @@ export const POST = withAuth(
 
       if (!factAnalysis || factAnalysis.status !== 'COMPLETED') {
         return errorResponse(
-          new BadRequestError(
-            'Fact analysis must be completed before running legal analysis'
-          )
+          new BadRequestError('Fact analysis must be completed before running legal analysis')
         );
       }
 
@@ -79,10 +74,7 @@ export const POST = withAuth(
       };
 
       // Check if legal analysis already exists
-      if (
-        factAnalysis.legalAnalysisStatus === 'COMPLETED' &&
-        !body.force
-      ) {
+      if (factAnalysis.legalAnalysisStatus === 'COMPLETED' && !body.force) {
         return NextResponse.json({
           success: true,
           message: 'Legal analysis already completed',
@@ -109,9 +101,7 @@ export const POST = withAuth(
 
       if (!input) {
         return errorResponse(
-          new BadRequestError(
-            'Could not load analysis input. Ensure fact analysis is complete.'
-          )
+          new BadRequestError('Could not load analysis input. Ensure fact analysis is complete.')
         );
       }
 
@@ -146,16 +136,19 @@ export const POST = withAuth(
           },
         });
       } else {
-        return NextResponse.json({
-          success: false,
-          message: 'Legal analysis failed',
-          data: {
-            caseId,
-            jobId: result.jobId,
-            status: 'FAILED',
-            error: result.error,
+        return NextResponse.json(
+          {
+            success: false,
+            message: 'Legal analysis failed',
+            data: {
+              caseId,
+              jobId: result.jobId,
+              status: 'FAILED',
+              error: result.error,
+            },
           },
-        }, { status: 500 });
+          { status: 500 }
+        );
       }
     } catch (error) {
       console.error('Error starting legal analysis:', error);
@@ -195,13 +188,10 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
 
     // Verify user has access to this case
     const userId = request.user.id;
-    const isParty =
-      caseData.claimantId === userId || caseData.respondentId === userId;
+    const isParty = caseData.claimantId === userId || caseData.respondentId === userId;
 
     if (!isParty) {
-      return errorResponse(
-        new ForbiddenError('You do not have access to this case')
-      );
+      return errorResponse(new ForbiddenError('You do not have access to this case'));
     }
 
     // Get legal analysis status

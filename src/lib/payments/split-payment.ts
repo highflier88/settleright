@@ -63,9 +63,7 @@ export interface SplitStatus {
 /**
  * Create split payment sessions for multiple parties
  */
-export async function createSplitPayment(
-  input: SplitPaymentInput
-): Promise<SplitPaymentResult> {
+export async function createSplitPayment(input: SplitPaymentInput): Promise<SplitPaymentResult> {
   const { caseId, type, totalAmount, splits, description } = input;
 
   // Validate percentages sum to 100
@@ -90,7 +88,7 @@ export async function createSplitPayment(
   const paymentResults: SplitPaymentResult['payments'] = [];
 
   for (const split of splits) {
-    const amount = Math.round((totalAmount * split.percentage) / 100 * 100) / 100; // Round to 2 decimals
+    const amount = Math.round(((totalAmount * split.percentage) / 100) * 100) / 100; // Round to 2 decimals
 
     // Create payment record
     const payment = await prisma.payment.create({
@@ -115,7 +113,8 @@ export async function createSplitPayment(
             currency: 'usd',
             product_data: {
               name: `${type.replace('_', ' ')} - Split Payment`,
-              description: description || `Case ${caseData.referenceNumber} - ${split.percentage}% share`,
+              description:
+                description || `Case ${caseData.referenceNumber} - ${split.percentage}% share`,
               metadata: {
                 caseId,
                 caseReference: caseData.referenceNumber,

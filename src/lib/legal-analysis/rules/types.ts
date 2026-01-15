@@ -126,17 +126,10 @@ export interface RuleEngine {
   calculateInterest(jurisdiction: string, params: InterestParams): InterestResult;
 
   /** Get applicable statutes */
-  getApplicableStatutes(
-    jurisdiction: string,
-    disputeType: string,
-    issues: string[]
-  ): string[];
+  getApplicableStatutes(jurisdiction: string, disputeType: string, issues: string[]): string[];
 
   /** Get burden of proof standard */
-  getBurdenStandard(
-    jurisdiction: string,
-    issueType: string
-  ): BurdenOfProofStandard;
+  getBurdenStandard(jurisdiction: string, issueType: string): BurdenOfProofStandard;
 
   /** Check statute of limitations */
   checkStatuteOfLimitations(
@@ -146,14 +139,8 @@ export interface RuleEngine {
   ): { withinLimit: boolean; limitYears: number; expirationDate: Date };
 
   /** Get damages caps */
-  getDamagesCaps(
-    jurisdiction: string,
-    disputeType: string
-  ): DamagesCap[];
+  getDamagesCaps(jurisdiction: string, disputeType: string): DamagesCap[];
 
   /** Get special rules */
-  getSpecialRules(
-    jurisdiction: string,
-    category: string
-  ): SpecialRule[];
+  getSpecialRules(jurisdiction: string, category: string): SpecialRule[];
 }

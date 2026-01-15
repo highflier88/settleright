@@ -160,13 +160,12 @@ export async function selectAuditSample(
 
   // 2. High-value award sampling
   const highValueAwards = awards.filter(
-    a => (a.awardAmount?.toNumber() || 0) >= SAMPLING_CONFIG.highValueThreshold &&
-         !selectedAwardIds.has(a.id)
+    (a) =>
+      (a.awardAmount?.toNumber() || 0) >= SAMPLING_CONFIG.highValueThreshold &&
+      !selectedAwardIds.has(a.id)
   );
 
-  const highValueSampleCount = Math.ceil(
-    highValueAwards.length * SAMPLING_CONFIG.highValueRate
-  );
+  const highValueSampleCount = Math.ceil(highValueAwards.length * SAMPLING_CONFIG.highValueRate);
 
   const shuffledHighValue = shuffleArray(highValueAwards);
   for (let i = 0; i < Math.min(highValueSampleCount, shuffledHighValue.length); i++) {
@@ -181,11 +180,10 @@ export async function selectAuditSample(
 
   // 3. New arbitrator sampling
   const arbitratorCaseCounts = await getArbitratorCaseCounts();
-  const newArbitratorAwards = awards.filter(a => {
+  const newArbitratorAwards = awards.filter((a) => {
     const arbId = a.case.arbitratorAssignment?.arbitratorId;
-    const count = arbId ? (arbitratorCaseCounts.get(arbId) || 0) : 0;
-    return count <= SAMPLING_CONFIG.newArbitratorThreshold &&
-           !selectedAwardIds.has(a.id);
+    const count = arbId ? arbitratorCaseCounts.get(arbId) || 0 : 0;
+    return count <= SAMPLING_CONFIG.newArbitratorThreshold && !selectedAwardIds.has(a.id);
   });
 
   const newArbSampleCount = Math.ceil(
@@ -204,10 +202,8 @@ export async function selectAuditSample(
   }
 
   // 4. Random sampling to fill remaining quota
-  const remainingAwards = awards.filter(a => !selectedAwardIds.has(a.id));
-  const randomSampleCount = Math.ceil(
-    remainingAwards.length * SAMPLING_CONFIG.baseRate
-  );
+  const remainingAwards = awards.filter((a) => !selectedAwardIds.has(a.id));
+  const randomSampleCount = Math.ceil(remainingAwards.length * SAMPLING_CONFIG.baseRate);
 
   const targetTotal = Math.min(maxSamples, samples.length + randomSampleCount);
   const shuffledRemaining = shuffleArray(remainingAwards);
@@ -247,7 +243,7 @@ function selectRiskBasedSamples(
   // This would integrate with consistency analysis in production
   // For now, flag awards with extreme amounts
 
-  const amounts = awards.map(a => a.awardAmount?.toNumber() || 0);
+  const amounts = awards.map((a) => a.awardAmount?.toNumber() || 0);
   const mean = amounts.reduce((a, b) => a + b, 0) / amounts.length;
   const variance = amounts.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / amounts.length;
   const stdDev = Math.sqrt(variance);
@@ -400,10 +396,7 @@ export async function getAuditQueue(
     limit?: number;
   } = {}
 ): Promise<AuditTask[]> {
-  const {
-    status = ['pending', 'in_progress'],
-    limit = 50,
-  } = options;
+  const { status = ['pending', 'in_progress'], limit = 50 } = options;
 
   // Get recent awards that could be audited
   const awards = await prisma.award.findMany({
@@ -457,14 +450,12 @@ export async function getAuditQueue(
 /**
  * Calculate risk score for an award
  */
-function calculateRiskScore(
-  award: {
-    awardAmount: { toNumber(): number } | null;
-    case: {
-      amount: { toNumber(): number } | null;
-    };
-  }
-): number {
+function calculateRiskScore(award: {
+  awardAmount: { toNumber(): number } | null;
+  case: {
+    amount: { toNumber(): number } | null;
+  };
+}): number {
   const awardAmount = award.awardAmount?.toNumber() || 0;
   const disputeAmount = award.case.amount?.toNumber() || 1;
 
@@ -521,10 +512,8 @@ export async function getAuditStats(
     periodEnd?: Date;
   } = {}
 ): Promise<AuditStats> {
-  const {
-    periodStart = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-    periodEnd = new Date(),
-  } = options;
+  const { periodStart = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), periodEnd = new Date() } =
+    options;
 
   // Get awards in period
   const awards = await prisma.award.findMany({

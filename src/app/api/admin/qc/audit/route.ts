@@ -41,18 +41,15 @@ export async function GET(request: NextRequest) {
       success: true,
       data: {
         queue,
-        totalPending: queue.filter(t => t.status === 'pending').length,
-        totalInProgress: queue.filter(t => t.status === 'in_progress').length,
+        totalPending: queue.filter((t) => t.status === 'pending').length,
+        totalInProgress: queue.filter((t) => t.status === 'in_progress').length,
       },
     });
   } catch (error) {
     console.error('[Audit API] GET error:', error);
     const message = error instanceof Error ? error.message : 'Failed to fetch audit data';
     const status = message.includes('required') || message.includes('Insufficient') ? 401 : 500;
-    return NextResponse.json(
-      { success: false, error: message },
-      { status }
-    );
+    return NextResponse.json({ success: false, error: message }, { status });
   }
 }
 
@@ -61,7 +58,7 @@ export async function POST(request: NextRequest) {
     // Verify admin role
     await requireRole('ADMIN');
 
-    const body = await request.json() as {
+    const body = (await request.json()) as {
       periodDays?: number;
       maxSamples?: number;
       includeRiskBased?: boolean;
@@ -106,9 +103,6 @@ export async function POST(request: NextRequest) {
     console.error('[Audit API] POST error:', error);
     const message = error instanceof Error ? error.message : 'Failed to select audit sample';
     const status = message.includes('required') || message.includes('Insufficient') ? 401 : 500;
-    return NextResponse.json(
-      { success: false, error: message },
-      { status }
-    );
+    return NextResponse.json({ success: false, error: message }, { status });
   }
 }

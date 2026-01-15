@@ -7,14 +7,18 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getAuthUser } from '@/lib/auth';
 import { DISPUTE_TYPE_LABELS } from '@/lib/services/case';
-import { getInvitationByToken, getInvitationTimeRemaining, getInvitationStatusLabel } from '@/lib/services/invitation';
+import {
+  getInvitationByToken,
+  getInvitationTimeRemaining,
+  getInvitationStatusLabel,
+} from '@/lib/services/invitation';
 
 import { InvitationActions } from './invitation-actions';
 
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'You\'ve Been Invited to Respond',
+  title: "You've Been Invited to Respond",
   description: 'Review and respond to an arbitration case',
 };
 
@@ -43,13 +47,12 @@ export default async function InvitationPage({ params }: PageProps) {
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       <div className="mx-auto max-w-2xl px-4 py-12">
         {/* Header */}
-        <div className="text-center mb-8">
-          <Scale className="h-16 w-16 mx-auto text-primary mb-4" />
-          <h1 className="text-3xl font-bold tracking-tight">
-            You&apos;ve Been Invited to Respond
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            {invitation.case.claimant.name ?? 'Someone'} has filed a dispute and invited you to respond.
+        <div className="mb-8 text-center">
+          <Scale className="mx-auto mb-4 h-16 w-16 text-primary" />
+          <h1 className="text-3xl font-bold tracking-tight">You&apos;ve Been Invited to Respond</h1>
+          <p className="mt-2 text-muted-foreground">
+            {invitation.case.claimant.name ?? 'Someone'} has filed a dispute and invited you to
+            respond.
           </p>
         </div>
 
@@ -58,7 +61,7 @@ export default async function InvitationPage({ params }: PageProps) {
           <Card className="mb-6 border-destructive bg-destructive/10">
             <CardContent className="flex items-center gap-3 py-4">
               <AlertTriangle className="h-5 w-5 text-destructive" />
-              <p className="text-destructive font-medium">
+              <p className="font-medium text-destructive">
                 This invitation has expired. Please contact the claimant for a new invitation.
               </p>
             </CardContent>
@@ -69,7 +72,7 @@ export default async function InvitationPage({ params }: PageProps) {
           <Card className="mb-6 border-green-500 bg-green-500/10">
             <CardContent className="flex items-center gap-3 py-4">
               <Scale className="h-5 w-5 text-green-600" />
-              <p className="text-green-700 dark:text-green-400 font-medium">
+              <p className="font-medium text-green-700 dark:text-green-400">
                 You&apos;ve already accepted this invitation. View the case in your dashboard.
               </p>
             </CardContent>
@@ -80,7 +83,7 @@ export default async function InvitationPage({ params }: PageProps) {
           <Card className="mb-6 border-amber-500 bg-amber-500/10">
             <CardContent className="flex items-center gap-3 py-4">
               <AlertTriangle className="h-5 w-5 text-amber-600" />
-              <p className="text-amber-700 dark:text-amber-400 font-medium">
+              <p className="font-medium text-amber-700 dark:text-amber-400">
                 This invitation has been cancelled by the claimant.
               </p>
             </CardContent>
@@ -94,9 +97,7 @@ export default async function InvitationPage({ params }: PageProps) {
               <CardTitle>Case Summary</CardTitle>
               <Badge variant="outline">{invitation.case.referenceNumber}</Badge>
             </div>
-            <CardDescription>
-              Review the details of the dispute before responding
-            </CardDescription>
+            <CardDescription>Review the details of the dispute before responding</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid gap-4 md:grid-cols-2">
@@ -124,12 +125,12 @@ export default async function InvitationPage({ params }: PageProps) {
 
             <div>
               <span className="text-sm text-muted-foreground">Description</span>
-              <p className="mt-1 text-sm whitespace-pre-wrap bg-muted/50 p-4 rounded-lg">
+              <p className="mt-1 whitespace-pre-wrap rounded-lg bg-muted/50 p-4 text-sm">
                 {invitation.case.description}
               </p>
             </div>
 
-            <div className="flex items-center justify-between pt-4 border-t">
+            <div className="flex items-center justify-between border-t pt-4">
               <div className="flex items-center gap-2 text-sm">
                 <Clock className="h-4 w-4 text-muted-foreground" />
                 <span className="text-muted-foreground">Filed on</span>
@@ -157,18 +158,18 @@ export default async function InvitationPage({ params }: PageProps) {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">Status</span>
               <Badge variant={isExpired ? 'destructive' : isAccepted ? 'default' : 'secondary'}>
                 {getInvitationStatusLabel(invitation.status)}
               </Badge>
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">Sent to</span>
               <span className="font-medium">{invitation.email}</span>
             </div>
             {!isExpired && !isAccepted && !isCancelled && (
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Time remaining</span>
                 <span className="font-medium text-amber-600">
                   {timeRemaining.daysRemaining} days, {timeRemaining.hoursRemaining} hours
@@ -195,14 +196,14 @@ export default async function InvitationPage({ params }: PageProps) {
             <CardTitle>What Happens Next?</CardTitle>
           </CardHeader>
           <CardContent>
-            <ol className="list-decimal list-inside space-y-3 text-sm text-muted-foreground">
+            <ol className="list-inside list-decimal space-y-3 text-sm text-muted-foreground">
               <li>
                 <strong className="text-foreground">Accept the Invitation</strong> - Create an
                 account or log in with the email address the invitation was sent to.
               </li>
               <li>
-                <strong className="text-foreground">Verify Your Identity</strong> - Complete a
-                quick identity verification to ensure the enforceability of the arbitration.
+                <strong className="text-foreground">Verify Your Identity</strong> - Complete a quick
+                identity verification to ensure the enforceability of the arbitration.
               </li>
               <li>
                 <strong className="text-foreground">Sign the Submission Agreement</strong> - Both

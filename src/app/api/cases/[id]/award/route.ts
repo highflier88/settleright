@@ -10,11 +10,7 @@ import { NextResponse } from 'next/server';
 import { BadRequestError, ForbiddenError, NotFoundError } from '@/lib/api/errors';
 import { errorResponse } from '@/lib/api/response';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
-import {
-  finalizeAward,
-  getIssuedAward,
-  canIssueAward,
-} from '@/lib/award';
+import { finalizeAward, getIssuedAward, canIssueAward } from '@/lib/award';
 import { prisma } from '@/lib/db';
 
 /**
@@ -50,14 +46,11 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
 
     // Verify user has access to this case
     const userId = request.user.id;
-    const isParty =
-      caseData.claimantId === userId || caseData.respondentId === userId;
+    const isParty = caseData.claimantId === userId || caseData.respondentId === userId;
     const isArbitrator = caseData.arbitratorAssignment?.arbitratorId === userId;
 
     if (!isParty && !isArbitrator) {
-      return errorResponse(
-        new ForbiddenError('You do not have access to this case')
-      );
+      return errorResponse(new ForbiddenError('You do not have access to this case'));
     }
 
     // Get issued award
@@ -144,16 +137,14 @@ export const POST = withAuth(
       // Check if award can be issued
       const canIssue = await canIssueAward(caseId);
       if (!canIssue.canIssue) {
-        return errorResponse(
-          new BadRequestError(canIssue.reason || 'Cannot issue award')
-        );
+        return errorResponse(new BadRequestError(canIssue.reason || 'Cannot issue award'));
       }
 
       // Get IP address and user agent for signature
       const forwardedFor = request.headers.get('x-forwarded-for');
       const ipAddress = forwardedFor
-        ? (forwardedFor.split(',')[0]?.trim() || 'unknown')
-        : (request.headers.get('x-real-ip') || 'unknown');
+        ? forwardedFor.split(',')[0]?.trim() || 'unknown'
+        : request.headers.get('x-real-ip') || 'unknown';
       const userAgent = request.headers.get('user-agent') || 'unknown';
 
       // Finalize the award

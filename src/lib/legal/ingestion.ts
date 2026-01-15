@@ -7,14 +7,8 @@
 
 import { prisma } from '@/lib/db';
 
-import {
-  generateEmbeddings,
-  prepareDocumentForEmbedding,
-} from './embeddings';
-import {
-  upsertVectors,
-  getNamespaceForDocument,
-} from './pinecone';
+import { generateEmbeddings, prepareDocumentForEmbedding } from './embeddings';
+import { upsertVectors, getNamespaceForDocument } from './pinecone';
 import { getAllSectionsForIngestion } from './sources/california-leginfo';
 import { fetchCaliforniaCaseLaw } from './sources/courtlistener';
 
@@ -139,21 +133,21 @@ export async function ingestDocument(params: {
         id: chunk.id,
         values: embedding,
         metadata: {
-        documentId: chunk.documentId,
-        citation: chunk.metadata.citation,
-        title: chunk.metadata.title,
-        sourceType: chunk.metadata.sourceType,
-        jurisdiction: chunk.metadata.jurisdiction,
-        jurisdictionLevel: chunk.metadata.jurisdictionLevel,
-        chunkIndex: chunk.chunkIndex,
-        totalChunks: chunk.totalChunks,
-        textPreview: chunk.textPreview,
-        codeSection: chunk.metadata.codeSection,
-        disputeTypes: chunk.metadata.disputeTypes,
-        topics: chunk.metadata.topics,
-        effectiveDate: chunk.metadata.effectiveDate,
-      } as LegalVectorMetadata,
-    };
+          documentId: chunk.documentId,
+          citation: chunk.metadata.citation,
+          title: chunk.metadata.title,
+          sourceType: chunk.metadata.sourceType,
+          jurisdiction: chunk.metadata.jurisdiction,
+          jurisdictionLevel: chunk.metadata.jurisdictionLevel,
+          chunkIndex: chunk.chunkIndex,
+          totalChunks: chunk.totalChunks,
+          textPreview: chunk.textPreview,
+          codeSection: chunk.metadata.codeSection,
+          disputeTypes: chunk.metadata.disputeTypes,
+          topics: chunk.metadata.topics,
+          effectiveDate: chunk.metadata.effectiveDate,
+        } as LegalVectorMetadata,
+      };
     });
 
     // Upsert to Pinecone

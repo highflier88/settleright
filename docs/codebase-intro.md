@@ -35,50 +35,53 @@ Settleright.ai is an online dispute resolution (ODR) platform that provides lega
 
 ### Development Status
 
-| Phase | Status | Description |
-|-------|--------|-------------|
-| Phase 1 | ✅ Complete | Authentication, users, KYC |
+| Phase   | Status      | Description                           |
+| ------- | ----------- | ------------------------------------- |
+| Phase 1 | ✅ Complete | Authentication, users, KYC            |
 | Phase 2 | ✅ Complete | Case management, evidence, statements |
-| Phase 3 | ✅ Complete | AI analysis engine, award generation |
-| Phase 4 | ✅ Complete | Arbitrator portal, human review |
-| Phase 5 | ✅ Complete | Compliance, enforcement, payments |
-| Phase 6 | ✅ Complete | Testing, QA, legal review setup |
+| Phase 3 | ✅ Complete | AI analysis engine, award generation  |
+| Phase 4 | ✅ Complete | Arbitrator portal, human review       |
+| Phase 5 | ✅ Complete | Compliance, enforcement, payments     |
+| Phase 6 | ✅ Complete | Testing, QA, legal review setup       |
 
 ---
 
 ## 2. Technology Stack
 
 ### Frontend
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| Next.js | 14.2 | React framework (App Router) |
-| React | 18.3 | UI library |
-| TypeScript | 5.4 | Type safety |
-| TailwindCSS | 3.4 | Styling |
-| Radix UI | Latest | Headless UI components |
-| React Hook Form | 7.51 | Form handling |
-| Zod | 3.23 | Schema validation |
-| React Query | 5.36 | Server state management |
+
+| Technology      | Version | Purpose                      |
+| --------------- | ------- | ---------------------------- |
+| Next.js         | 14.2    | React framework (App Router) |
+| React           | 18.3    | UI library                   |
+| TypeScript      | 5.4     | Type safety                  |
+| TailwindCSS     | 3.4     | Styling                      |
+| Radix UI        | Latest  | Headless UI components       |
+| React Hook Form | 7.51    | Form handling                |
+| Zod             | 3.23    | Schema validation            |
+| React Query     | 5.36    | Server state management      |
 
 ### Backend
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| Next.js API Routes | 14.2 | API endpoints |
-| Prisma | 5.14 | ORM / Database client |
-| PostgreSQL | - | Primary database |
-| Vercel Blob | - | File storage |
-| Vercel KV | - | Redis cache |
+
+| Technology         | Version | Purpose               |
+| ------------------ | ------- | --------------------- |
+| Next.js API Routes | 14.2    | API endpoints         |
+| Prisma             | 5.14    | ORM / Database client |
+| PostgreSQL         | -       | Primary database      |
+| Vercel Blob        | -       | File storage          |
+| Vercel KV          | -       | Redis cache           |
 
 ### External Services
-| Service | Purpose |
-|---------|---------|
-| Clerk | Authentication |
-| Stripe | Payments + KYC (Identity) |
-| SendGrid | Transactional email |
-| Twilio | SMS notifications |
-| Anthropic Claude | AI analysis |
-| Pinecone | Vector database for legal research |
-| Sentry | Error tracking |
+
+| Service          | Purpose                            |
+| ---------------- | ---------------------------------- |
+| Clerk            | Authentication                     |
+| Stripe           | Payments + KYC (Identity)          |
+| SendGrid         | Transactional email                |
+| Twilio           | SMS notifications                  |
+| Anthropic Claude | AI analysis                        |
+| Pinecone         | Vector database for legal research |
+| Sentry           | Error tracking                     |
 
 ---
 
@@ -241,14 +244,15 @@ export const POST = withAuth(
     return successResponse(data, 201);
   },
   {
-    permissions: ['case:create'],           // RBAC check
-    rateLimit: 'api',                       // Rate limiting
-    auditAction: AuditAction.CASE_CREATED,  // Audit logging
+    permissions: ['case:create'], // RBAC check
+    rateLimit: 'api', // Rate limiting
+    auditAction: AuditAction.CASE_CREATED, // Audit logging
   }
 );
 ```
 
 **What `withAuth` provides:**
+
 - Authentication verification (via Clerk)
 - RBAC permission checking
 - Rate limiting (per IP)
@@ -291,14 +295,14 @@ Use custom error classes for consistent HTTP responses:
 
 ```typescript
 import {
-  BadRequestError,      // 400
-  UnauthorizedError,    // 401
-  ForbiddenError,       // 403
-  NotFoundError,        // 404
-  ConflictError,        // 409
-  ValidationError,      // 422
-  RateLimitError,       // 429
-  InternalServerError   // 500
+  BadRequestError, // 400
+  UnauthorizedError, // 401
+  ForbiddenError, // 403
+  NotFoundError, // 404
+  ConflictError, // 409
+  ValidationError, // 422
+  RateLimitError, // 429
+  InternalServerError, // 500
 } from '@/lib/api/errors';
 
 // Usage
@@ -334,14 +338,14 @@ await prisma.case.update({
 ### Case Service (`/src/lib/services/case.ts`)
 
 ```typescript
-createCase(input)              // Create case + invitation
-getCaseById(caseId)            // Get single case
-getCaseWithDetails(caseId)     // Get with all relations
-getUserCases(userId, options)  // Paginated list
-updateCaseStatus(caseId, status)
-softDeleteCase(caseId)
-userHasAccessToCase(userId, caseId)
-calculateFilingFee(amount)
+createCase(input); // Create case + invitation
+getCaseById(caseId); // Get single case
+getCaseWithDetails(caseId); // Get with all relations
+getUserCases(userId, options); // Paginated list
+updateCaseStatus(caseId, status);
+softDeleteCase(caseId);
+userHasAccessToCase(userId, caseId);
+calculateFilingFee(amount);
 ```
 
 ### Evidence Service (`/src/lib/services/evidence.ts`)
@@ -372,11 +376,11 @@ generateConsentText(role, caseRef)
 ### Audit Service (`/src/lib/services/audit.ts`)
 
 ```typescript
-createAuditLog(entry)
-verifyAuditLogIntegrity()      // SHA-256 chain verification
-getAuditLogs(filters, pagination)
-getCaseAuditLogs(caseId)
-exportAuditLogs(filters, format)
+createAuditLog(entry);
+verifyAuditLogIntegrity(); // SHA-256 chain verification
+getAuditLogs(filters, pagination);
+getCaseAuditLogs(caseId);
+exportAuditLogs(filters, format);
 ```
 
 ### Notification Service (`/src/lib/services/notification-dispatcher.ts`)
@@ -396,47 +400,47 @@ dispatchNotification({
 
 ### Case Management
 
-| Method | Route | Description |
-|--------|-------|-------------|
-| POST | `/api/cases` | Create new case |
-| GET | `/api/cases` | List user's cases |
-| GET | `/api/cases/[id]` | Get case details |
-| PATCH | `/api/cases/[id]` | Update case |
-| DELETE | `/api/cases/[id]` | Soft delete case |
+| Method | Route             | Description       |
+| ------ | ----------------- | ----------------- |
+| POST   | `/api/cases`      | Create new case   |
+| GET    | `/api/cases`      | List user's cases |
+| GET    | `/api/cases/[id]` | Get case details  |
+| PATCH  | `/api/cases/[id]` | Update case       |
+| DELETE | `/api/cases/[id]` | Soft delete case  |
 
 ### Evidence
 
-| Method | Route | Description |
-|--------|-------|-------------|
-| POST | `/api/cases/[id]/evidence` | Upload evidence |
-| GET | `/api/cases/[id]/evidence` | List evidence |
+| Method | Route                                   | Description     |
+| ------ | --------------------------------------- | --------------- |
+| POST   | `/api/cases/[id]/evidence`              | Upload evidence |
+| GET    | `/api/cases/[id]/evidence`              | List evidence   |
 | DELETE | `/api/cases/[id]/evidence/[evidenceId]` | Delete evidence |
 
 ### Agreement
 
-| Method | Route | Description |
-|--------|-------|-------------|
-| GET | `/api/cases/[id]/agreement` | Get agreement |
-| POST | `/api/cases/[id]/agreement` | Sign agreement |
+| Method | Route                       | Description    |
+| ------ | --------------------------- | -------------- |
+| GET    | `/api/cases/[id]/agreement` | Get agreement  |
+| POST   | `/api/cases/[id]/agreement` | Sign agreement |
 
 ### Awards
 
-| Method | Route | Description |
-|--------|-------|-------------|
-| POST | `/api/cases/[id]/draft-award` | Generate AI draft |
-| GET | `/api/cases/[id]/draft-award` | Get draft award |
-| PATCH | `/api/cases/[id]/draft-award` | Review/modify draft |
-| POST | `/api/cases/[id]/award` | Issue final award |
-| GET | `/api/cases/[id]/award/download` | Download PDF |
+| Method | Route                            | Description         |
+| ------ | -------------------------------- | ------------------- |
+| POST   | `/api/cases/[id]/draft-award`    | Generate AI draft   |
+| GET    | `/api/cases/[id]/draft-award`    | Get draft award     |
+| PATCH  | `/api/cases/[id]/draft-award`    | Review/modify draft |
+| POST   | `/api/cases/[id]/award`          | Issue final award   |
+| GET    | `/api/cases/[id]/award/download` | Download PDF        |
 
 ### User
 
-| Method | Route | Description |
-|--------|-------|-------------|
-| GET | `/api/user/me` | Get current user |
-| POST | `/api/user/profile` | Update profile |
-| POST | `/api/user/identity/start` | Start KYC |
-| GET | `/api/user/identity/status` | Check KYC status |
+| Method | Route                       | Description      |
+| ------ | --------------------------- | ---------------- |
+| GET    | `/api/user/me`              | Get current user |
+| POST   | `/api/user/profile`         | Update profile   |
+| POST   | `/api/user/identity/start`  | Start KYC        |
+| GET    | `/api/user/identity/status` | Check KYC status |
 
 ---
 
@@ -448,8 +452,8 @@ dispatchNotification({
 // Get authenticated user
 import { getAuthUser, requireAuth } from '@/lib/auth';
 
-const user = await getAuthUser();     // Returns null if not authenticated
-const user = await requireAuth();     // Throws if not authenticated
+const user = await getAuthUser(); // Returns null if not authenticated
+const user = await requireAuth(); // Throws if not authenticated
 ```
 
 ### Authorization (RBAC)
@@ -469,6 +473,7 @@ requirePermission(user.role, 'arbitrator:sign');
 ```
 
 **Key Permissions:**
+
 - `case:create`, `case:read`, `case:update`, `case:delete`
 - `evidence:upload`, `evidence:read`, `evidence:delete`
 - `statement:submit`, `statement:read`
@@ -717,21 +722,21 @@ export const POST = withAuth(
 
 ## 13. Key Files Reference
 
-| File | Description |
-|------|-------------|
-| `prisma/schema.prisma` | Complete database schema |
-| `src/lib/db.ts` | Prisma client singleton |
-| `src/lib/auth.ts` | Authentication helpers |
-| `src/lib/rbac.ts` | Role-based access control |
-| `src/lib/api/with-auth.ts` | API middleware |
-| `src/lib/api/response.ts` | Response formatting |
-| `src/lib/api/errors.ts` | Error classes |
-| `src/lib/services/*.ts` | Business logic services |
-| `src/lib/validations/*.ts` | Zod schemas |
-| `src/app/api/**/*.ts` | API endpoints |
-| `next.config.mjs` | Next.js config |
-| `tailwind.config.ts` | Tailwind config |
-| `.env.example` | Environment template |
+| File                       | Description               |
+| -------------------------- | ------------------------- |
+| `prisma/schema.prisma`     | Complete database schema  |
+| `src/lib/db.ts`            | Prisma client singleton   |
+| `src/lib/auth.ts`          | Authentication helpers    |
+| `src/lib/rbac.ts`          | Role-based access control |
+| `src/lib/api/with-auth.ts` | API middleware            |
+| `src/lib/api/response.ts`  | Response formatting       |
+| `src/lib/api/errors.ts`    | Error classes             |
+| `src/lib/services/*.ts`    | Business logic services   |
+| `src/lib/validations/*.ts` | Zod schemas               |
+| `src/app/api/**/*.ts`      | API endpoints             |
+| `next.config.mjs`          | Next.js config            |
+| `tailwind.config.ts`       | Tailwind config           |
+| `.env.example`             | Environment template      |
 
 ---
 

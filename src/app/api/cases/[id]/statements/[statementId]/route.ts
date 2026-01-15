@@ -1,4 +1,3 @@
-
 import { NotFoundError, ForbiddenError, BadRequestError } from '@/lib/api/errors';
 import { successResponse, errorResponse } from '@/lib/api/response';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';

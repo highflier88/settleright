@@ -32,10 +32,7 @@ export default async function IdentityVerificationPage() {
         </p>
       </div>
 
-      <IdentityVerificationCard
-        user={user}
-        verification={verification}
-      />
+      <IdentityVerificationCard user={user} verification={verification} />
     </div>
   );
 }

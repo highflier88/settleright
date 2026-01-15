@@ -99,7 +99,7 @@
   /* Better focus indicator for interactive elements */
   a:focus-visible,
   button:focus-visible,
-  [role="button"]:focus-visible {
+  [role='button']:focus-visible {
     @apply ring-offset-2;
   }
 
@@ -135,11 +135,11 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
-    @apply bg-muted rounded-full;
+    @apply rounded-full bg-muted;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50;
+    @apply rounded-full bg-muted-foreground/30 hover:bg-muted-foreground/50;
   }
 
   /* Text balance */
@@ -161,7 +161,7 @@
 
   /* Smooth image loading */
   .img-loading {
-    @apply bg-muted animate-pulse;
+    @apply animate-pulse bg-muted;
   }
 
   /* Print styles */

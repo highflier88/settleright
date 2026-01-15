@@ -23,10 +23,7 @@ export async function GET(request: NextRequest) {
     const { userId: clerkId } = auth();
 
     if (!clerkId) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
     }
 
     // Check configuration
@@ -47,10 +44,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'User not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: 'User not found' }, { status: 404 });
     }
 
     if (!user.arbitratorProfile) {
@@ -86,10 +80,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('[Stripe Connect API] GET error:', error);
     const message = error instanceof Error ? error.message : 'Failed to get account status';
-    return NextResponse.json(
-      { success: false, error: message },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }
 
@@ -98,10 +89,7 @@ export async function POST(request: NextRequest) {
     const { userId: clerkId } = auth();
 
     if (!clerkId) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
     }
 
     // Check configuration
@@ -119,10 +107,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'User not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: 'User not found' }, { status: 404 });
     }
 
     if (!user.arbitratorProfile) {
@@ -140,7 +125,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json() as { action?: string };
+    const body = (await request.json()) as { action?: string };
 
     // If action is 'dashboard', generate dashboard link
     if (body.action === 'dashboard') {
@@ -151,9 +136,7 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      const dashboardUrl = await generateDashboardLink(
-        user.arbitratorProfile.stripeConnectId
-      );
+      const dashboardUrl = await generateDashboardLink(user.arbitratorProfile.stripeConnectId);
 
       return NextResponse.json({
         success: true,
@@ -171,9 +154,6 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('[Stripe Connect API] POST error:', error);
     const message = error instanceof Error ? error.message : 'Failed to setup Stripe Connect';
-    return NextResponse.json(
-      { success: false, error: message },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }

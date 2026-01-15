@@ -113,9 +113,7 @@ export function calculateTotalClaim(claimItems: ClaimItem[]): number {
 }
 
 // Create a new statement
-export async function createStatement(
-  input: CreateStatementInput
-): Promise<StatementResult> {
+export async function createStatement(input: CreateStatementInput): Promise<StatementResult> {
   try {
     const { caseId, userId, type, content } = input;
 
@@ -206,7 +204,9 @@ export async function createStatement(
         submittedById: userId,
         type,
         content: content.narrative,
-        claimItems: content.claimItems ? (JSON.parse(JSON.stringify(content)) as object) : undefined,
+        claimItems: content.claimItems
+          ? (JSON.parse(JSON.stringify(content)) as object)
+          : undefined,
         version: 1,
       },
     });
@@ -237,9 +237,7 @@ export async function createStatement(
 }
 
 // Update an existing statement (creates new version)
-export async function updateStatement(
-  input: UpdateStatementInput
-): Promise<StatementResult> {
+export async function updateStatement(input: UpdateStatementInput): Promise<StatementResult> {
   try {
     const { statementId, userId, content } = input;
 
@@ -282,12 +280,18 @@ export async function updateStatement(
 
     // Check deadlines
     const now = new Date();
-    if (existingStatement.type === StatementType.INITIAL && existingStatement.case.evidenceDeadline) {
+    if (
+      existingStatement.type === StatementType.INITIAL &&
+      existingStatement.case.evidenceDeadline
+    ) {
       if (now > existingStatement.case.evidenceDeadline) {
         return { success: false, error: 'Initial statement deadline has passed' };
       }
     }
-    if (existingStatement.type === StatementType.REBUTTAL && existingStatement.case.rebuttalDeadline) {
+    if (
+      existingStatement.type === StatementType.REBUTTAL &&
+      existingStatement.case.rebuttalDeadline
+    ) {
       if (now > existingStatement.case.rebuttalDeadline) {
         return { success: false, error: 'Rebuttal statement deadline has passed' };
       }
@@ -299,7 +303,9 @@ export async function updateStatement(
       where: { id: statementId },
       data: {
         content: content.narrative,
-        claimItems: content.claimItems ? (JSON.parse(JSON.stringify(content)) as object) : undefined,
+        claimItems: content.claimItems
+          ? (JSON.parse(JSON.stringify(content)) as object)
+          : undefined,
         version: newVersion,
         updatedAt: new Date(),
       },
@@ -339,10 +345,7 @@ export async function getStatementById(statementId: string): Promise<Statement |
 }
 
 // Get all statements for a case
-export async function getCaseStatements(
-  caseId: string,
-  userId: string
-): Promise<Statement[]> {
+export async function getCaseStatements(caseId: string, userId: string): Promise<Statement[]> {
   // Verify user has access to the case
   const caseRecord = await prisma.case.findUnique({
     where: { id: caseId },
@@ -367,10 +370,7 @@ export async function getCaseStatements(
 }
 
 // Get user's statements for a case
-export async function getUserStatements(
-  caseId: string,
-  userId: string
-): Promise<Statement[]> {
+export async function getUserStatements(caseId: string, userId: string): Promise<Statement[]> {
   return prisma.statement.findMany({
     where: {
       caseId,
@@ -459,9 +459,11 @@ export async function canSubmitStatement(
 export function parseStatementContent(statement: Statement): StatementContent {
   try {
     if (statement.claimItems) {
-      const parsed = (typeof statement.claimItems === 'string'
-        ? JSON.parse(statement.claimItems)
-        : statement.claimItems) as { timeline?: TimelineEntry[]; claimItems?: ClaimItem[] };
+      const parsed = (
+        typeof statement.claimItems === 'string'
+          ? JSON.parse(statement.claimItems)
+          : statement.claimItems
+      ) as { timeline?: TimelineEntry[]; claimItems?: ClaimItem[] };
 
       return {
         narrative: statement.content,
@@ -495,7 +497,8 @@ export function getStatementStatusInfo(
   const rebuttal = userStatements.find((s) => s.type === StatementType.REBUTTAL);
 
   const dates = userStatements.map((s) => s.updatedAt);
-  const lastUpdated = dates.length > 0 ? new Date(Math.max(...dates.map((d) => d.getTime()))) : undefined;
+  const lastUpdated =
+    dates.length > 0 ? new Date(Math.max(...dates.map((d) => d.getTime()))) : undefined;
 
   return {
     hasInitial: !!initial,

@@ -23,14 +23,14 @@ main (production)
 
 ### Branch Types
 
-| Branch | Purpose | Base | Merges To |
-|--------|---------|------|-----------|
-| `main` | Production code | - | - |
-| `develop` | Integration branch | `main` | `main` |
-| `feature/*` | New features | `develop` | `develop` |
-| `fix/*` | Bug fixes | `develop` | `develop` |
-| `hotfix/*` | Critical production fixes | `main` | `main` + `develop` |
-| `release/*` | Release preparation | `develop` | `main` + `develop` |
+| Branch      | Purpose                   | Base      | Merges To          |
+| ----------- | ------------------------- | --------- | ------------------ |
+| `main`      | Production code           | -         | -                  |
+| `develop`   | Integration branch        | `main`    | `main`             |
+| `feature/*` | New features              | `develop` | `develop`          |
+| `fix/*`     | Bug fixes                 | `develop` | `develop`          |
+| `hotfix/*`  | Critical production fixes | `main`    | `main` + `develop` |
+| `release/*` | Release preparation       | `develop` | `main` + `develop` |
 
 ---
 
@@ -88,34 +88,34 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/) speci
 
 ### Types
 
-| Type | Description |
-|------|-------------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `docs` | Documentation only |
-| `style` | Formatting, missing semicolons, etc. |
+| Type       | Description                                             |
+| ---------- | ------------------------------------------------------- |
+| `feat`     | New feature                                             |
+| `fix`      | Bug fix                                                 |
+| `docs`     | Documentation only                                      |
+| `style`    | Formatting, missing semicolons, etc.                    |
 | `refactor` | Code change that neither fixes a bug nor adds a feature |
-| `perf` | Performance improvement |
-| `test` | Adding or updating tests |
-| `chore` | Build process, dependencies, tooling |
-| `ci` | CI/CD configuration |
-| `revert` | Reverting a previous commit |
+| `perf`     | Performance improvement                                 |
+| `test`     | Adding or updating tests                                |
+| `chore`    | Build process, dependencies, tooling                    |
+| `ci`       | CI/CD configuration                                     |
+| `revert`   | Reverting a previous commit                             |
 
 ### Scopes
 
-| Scope | Description |
-|-------|-------------|
-| `api` | Backend API |
-| `web` | Frontend application |
-| `db` | Database schema/migrations |
-| `auth` | Authentication |
-| `case` | Case management |
-| `evidence` | Evidence handling |
-| `ai` | AI analysis |
-| `arbitration` | Arbitrator workflow |
-| `payment` | Payment processing |
-| `infra` | Infrastructure |
-| `deps` | Dependencies |
+| Scope         | Description                |
+| ------------- | -------------------------- |
+| `api`         | Backend API                |
+| `web`         | Frontend application       |
+| `db`          | Database schema/migrations |
+| `auth`        | Authentication             |
+| `case`        | Case management            |
+| `evidence`    | Evidence handling          |
+| `ai`          | AI analysis                |
+| `arbitration` | Arbitrator workflow        |
+| `payment`     | Payment processing         |
+| `infra`       | Infrastructure             |
+| `deps`        | Dependencies               |
 
 ### Examples
 
@@ -262,9 +262,11 @@ git push origin --delete release/v1.2.0
 
 ```markdown
 ## Description
+
 <!-- What does this PR do? -->
 
 ## Type of Change
+
 - [ ] Feature (new functionality)
 - [ ] Bug fix (non-breaking change that fixes an issue)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
@@ -274,15 +276,19 @@ git push origin --delete release/v1.2.0
 - [ ] Test update
 
 ## Related Issues
+
 <!-- Link to related issues: Closes #123 -->
 
 ## How Has This Been Tested?
+
 <!-- Describe the tests you ran -->
+
 - [ ] Unit tests
 - [ ] Integration tests
 - [ ] Manual testing
 
 ## Checklist
+
 - [ ] My code follows the project's coding standards
 - [ ] I have added tests that prove my fix/feature works
 - [ ] All new and existing tests pass
@@ -291,20 +297,21 @@ git push origin --delete release/v1.2.0
 - [ ] I have considered security implications
 
 ## Screenshots (if applicable)
+
 <!-- Add screenshots for UI changes -->
 ```
 
 ### Review Requirements
 
-| Change Type | Reviewers Required | Approvals Needed |
-|-------------|-------------------|------------------|
-| Documentation only | 1 | 1 |
-| Minor bug fix | 1 | 1 |
-| Feature | 2 | 1 |
-| API changes | 2 | 2 |
-| Database changes | 2 | 2 |
-| Security-related | 2 + Security lead | 2 |
-| Infrastructure | 2 + DevOps | 2 |
+| Change Type        | Reviewers Required | Approvals Needed |
+| ------------------ | ------------------ | ---------------- |
+| Documentation only | 1                  | 1                |
+| Minor bug fix      | 1                  | 1                |
+| Feature            | 2                  | 1                |
+| API changes        | 2                  | 2                |
+| Database changes   | 2                  | 2                |
+| Security-related   | 2 + Security lead  | 2                |
+| Infrastructure     | 2 + DevOps         | 2                |
 
 ### Merge Strategy
 
@@ -364,6 +371,7 @@ Every PR triggers:
 ### Auto-merge
 
 PRs can be set to auto-merge after:
+
 - All status checks pass
 - Required reviews obtained
 - Branch is up to date

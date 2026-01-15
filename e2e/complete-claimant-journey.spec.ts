@@ -30,10 +30,12 @@ test.describe('Complete Claimant Journey', () => {
 
       // Step 3: Claim Details
       await page.getByLabel(/amount/i).fill('7500');
-      await page.getByLabel(/description/i).fill(
-        'Breach of contract for consulting services. ' +
-        'Respondent failed to deliver agreed-upon deliverables and has refused to refund payment.'
-      );
+      await page
+        .getByLabel(/description/i)
+        .fill(
+          'Breach of contract for consulting services. ' +
+            'Respondent failed to deliver agreed-upon deliverables and has refused to refund payment.'
+        );
       await page.getByRole('button', { name: /next|continue/i }).click();
 
       // Step 4: Respondent Information
@@ -56,7 +58,10 @@ test.describe('Complete Claimant Journey', () => {
       await page.goto('/dashboard/cases');
 
       // Find a case pending payment
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
 
       // Should see payment required
       await expect(page.getByText(/filing fee|payment required/i)).toBeVisible();
@@ -71,7 +76,10 @@ test.describe('Complete Claimant Journey', () => {
 
     test('should upload evidence documents', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
       await page.getByRole('tab', { name: /evidence/i }).click();
 
       // Upload contract document
@@ -99,7 +107,10 @@ test.describe('Complete Claimant Journey', () => {
 
     test('should write and submit statement of claim', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
       await page.getByRole('tab', { name: /statement/i }).click();
 
       const statement = `
@@ -123,7 +134,10 @@ test.describe('Complete Claimant Journey', () => {
 
     test('should sign arbitration agreement', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
       await page.getByRole('tab', { name: /agreement/i }).click();
 
       // Read agreement content
@@ -146,7 +160,10 @@ test.describe('Complete Claimant Journey', () => {
 
     test('should track case progress on timeline', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
 
       // Check timeline visibility
       await expect(page.getByTestId('case-timeline')).toBeVisible();
@@ -160,7 +177,10 @@ test.describe('Complete Claimant Journey', () => {
 
     test('should view case status and deadlines', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
 
       // Check status display
       await expect(page.getByTestId('case-status')).toBeVisible();
@@ -172,7 +192,10 @@ test.describe('Complete Claimant Journey', () => {
     test('should receive and view final award', async ({ page }) => {
       // Navigate to a decided case
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
 
       // If case has an award
       const awardTab = page.getByRole('tab', { name: /award/i });
@@ -191,7 +214,10 @@ test.describe('Complete Claimant Journey', () => {
 
     test('should download enforcement package', async ({ page }) => {
       await page.goto('/dashboard/cases');
-      await page.getByRole('link', { name: /view|open/i }).first().click();
+      await page
+        .getByRole('link', { name: /view|open/i })
+        .first()
+        .click();
 
       const awardTab = page.getByRole('tab', { name: /award/i });
       if (await awardTab.isVisible()) {

@@ -247,8 +247,14 @@ describe('Blob Storage Service', () => {
   describe('listCaseFiles', () => {
     it('should list all files for a case', async () => {
       const blobs = [
-        { url: 'https://blob.com/evidence/case-123/doc1.pdf', pathname: 'evidence/case-123/doc1.pdf' },
-        { url: 'https://blob.com/evidence/case-123/doc2.pdf', pathname: 'evidence/case-123/doc2.pdf' },
+        {
+          url: 'https://blob.com/evidence/case-123/doc1.pdf',
+          pathname: 'evidence/case-123/doc1.pdf',
+        },
+        {
+          url: 'https://blob.com/evidence/case-123/doc2.pdf',
+          pathname: 'evidence/case-123/doc2.pdf',
+        },
       ];
       mockList.mockResolvedValue({ blobs });
 

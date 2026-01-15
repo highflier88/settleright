@@ -19,11 +19,7 @@ export const createCaseSchema = z.object({
 });
 
 export const updateCaseSchema = z.object({
-  description: z
-    .string()
-    .min(50)
-    .max(10000)
-    .optional(),
+  description: z.string().min(50).max(10000).optional(),
   amount: currencySchema.optional(),
 });
 

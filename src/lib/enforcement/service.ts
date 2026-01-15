@@ -7,10 +7,7 @@
 
 import archiver from 'archiver';
 
-import {
-  generateAwardCertificate,
-  type AwardCertificateInput,
-} from '@/lib/award/pdf-generator';
+import { generateAwardCertificate, type AwardCertificateInput } from '@/lib/award/pdf-generator';
 import { prisma } from '@/lib/db';
 
 import {
@@ -36,9 +33,7 @@ const PLATFORM_RULES_VERSION = '1.0';
 /**
  * Generate a complete enforcement package for an award
  */
-export async function generateEnforcementPackage(
-  caseId: string
-): Promise<EnforcementKit> {
+export async function generateEnforcementPackage(caseId: string): Promise<EnforcementKit> {
   // Get award and all related data
   const award = await prisma.award.findUnique({
     where: { caseId },

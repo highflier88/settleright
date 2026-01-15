@@ -111,11 +111,9 @@ export async function calculateDamages(params: {
       ],
     });
 
-    const responseText =
-      response.content[0]?.type === 'text' ? response.content[0].text : '';
+    const responseText = response.content[0]?.type === 'text' ? response.content[0].text : '';
 
-    const tokensUsed =
-      (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
+    const tokensUsed = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
 
     const result = parseDamagesResponse(
       responseText,
@@ -237,8 +235,9 @@ function parseDamagesResponse(
     // Calculate or use provided interest
     let interestCalculation: InterestCalculation | undefined;
     if (parsed.interestCalculation && parsed.interestCalculation.interestAmount) {
-      const startDateValue = (parsed.interestCalculation.startDate || breachDate || '');
-      const endDateValue = (parsed.interestCalculation.endDate || new Date().toISOString().split('T')[0]) as string;
+      const startDateValue = parsed.interestCalculation.startDate || breachDate || '';
+      const endDateValue = (parsed.interestCalculation.endDate ||
+        new Date().toISOString().split('T')[0]) as string;
       interestCalculation = {
         principal: parsed.interestCalculation.principal || 0,
         rate: parsed.interestCalculation.rate || 0.1,
@@ -261,8 +260,7 @@ function parseDamagesResponse(
 
     // Calculate totals
     const supportedTotal =
-      parsed.supportedTotal ||
-      items.reduce((sum, item) => sum + item.supportedAmount, 0);
+      parsed.supportedTotal || items.reduce((sum, item) => sum + item.supportedAmount, 0);
 
     const recommendedTotal =
       parsed.recommendedTotal ||
@@ -316,9 +314,7 @@ function validateDamagesType(type?: string): DamagesType {
 /**
  * Validate adjustment type
  */
-function validateAdjustmentType(
-  type?: string
-): DamagesAdjustment['type'] {
+function validateAdjustmentType(type?: string): DamagesAdjustment['type'] {
   const validTypes: Array<DamagesAdjustment['type']> = [
     'mitigation',
     'limitation',

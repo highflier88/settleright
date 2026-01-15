@@ -4,11 +4,7 @@ import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { DashboardNav } from '@/components/layout/dashboard-nav';
 import { getAuthUser } from '@/lib/auth';
 
-export default async function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await getAuthUser();
 
   if (!user) {

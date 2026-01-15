@@ -42,24 +42,27 @@ const KYC_STATUS_LABELS: Record<KYCStatus, string> = {
   EXPIRED: 'Expired',
 };
 
-const KYC_STATUS_VARIANTS: Record<KYCStatus, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-  NOT_STARTED: 'outline',
-  PENDING: 'secondary',
-  VERIFIED: 'default',
-  FAILED: 'destructive',
-  EXPIRED: 'destructive',
-};
+const KYC_STATUS_VARIANTS: Record<KYCStatus, 'default' | 'secondary' | 'destructive' | 'outline'> =
+  {
+    NOT_STARTED: 'outline',
+    PENDING: 'secondary',
+    VERIFIED: 'default',
+    FAILED: 'destructive',
+    EXPIRED: 'destructive',
+  };
 
 export async function UsersTable({ searchParams }: UsersTableProps) {
   const page = parseInt(searchParams.page ?? '1', 10);
   const perPage = 20;
   const search = searchParams.search;
-  const roleFilter = searchParams.role && Object.values(UserRole).includes(searchParams.role as UserRole)
-    ? (searchParams.role as UserRole)
-    : undefined;
-  const kycFilter = searchParams.kycStatus && Object.values(KYCStatus).includes(searchParams.kycStatus as KYCStatus)
-    ? (searchParams.kycStatus as KYCStatus)
-    : undefined;
+  const roleFilter =
+    searchParams.role && Object.values(UserRole).includes(searchParams.role as UserRole)
+      ? (searchParams.role as UserRole)
+      : undefined;
+  const kycFilter =
+    searchParams.kycStatus && Object.values(KYCStatus).includes(searchParams.kycStatus as KYCStatus)
+      ? (searchParams.kycStatus as KYCStatus)
+      : undefined;
 
   const where: Prisma.UserWhereInput = {};
 
@@ -221,20 +224,15 @@ export async function UsersTable({ searchParams }: UsersTableProps) {
       {/* Pagination */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Showing {(page - 1) * perPage + 1} to {Math.min(page * perPage, total)} of{' '}
-          {total} users
+          Showing {(page - 1) * perPage + 1} to {Math.min(page * perPage, total)} of {total} users
         </p>
         <div className="flex gap-2">
-          <Link
-            href={`/admin/users?page=${page - 1}${search ? `&search=${search}` : ''}`}
-          >
+          <Link href={`/admin/users?page=${page - 1}${search ? `&search=${search}` : ''}`}>
             <Button variant="outline" size="sm" disabled={page <= 1}>
               Previous
             </Button>
           </Link>
-          <Link
-            href={`/admin/users?page=${page + 1}${search ? `&search=${search}` : ''}`}
-          >
+          <Link href={`/admin/users?page=${page + 1}${search ? `&search=${search}` : ''}`}>
             <Button variant="outline" size="sm" disabled={page >= totalPages}>
               Next
             </Button>

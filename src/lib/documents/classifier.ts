@@ -32,13 +32,16 @@ function getAnthropicClient(): Anthropic {
  * Document type descriptions for classification
  */
 const DOCUMENT_TYPE_DESCRIPTIONS: Record<DocumentType, string> = {
-  CONTRACT: 'Legal agreement, contract, terms of service, lease agreement, or similar binding document',
+  CONTRACT:
+    'Legal agreement, contract, terms of service, lease agreement, or similar binding document',
   INVOICE: 'Invoice, bill for services or goods, itemized charges',
   RECEIPT: 'Receipt, proof of payment, transaction confirmation',
   CORRESPONDENCE: 'Email, letter, message, or other written communication between parties',
-  LEGAL_NOTICE: 'Demand letter, cease and desist, legal notice, court filing, or formal legal communication',
+  LEGAL_NOTICE:
+    'Demand letter, cease and desist, legal notice, court filing, or formal legal communication',
   BANK_STATEMENT: 'Bank statement, financial statement, account summary, or transaction history',
-  PHOTO_EVIDENCE: 'Photograph of physical evidence, damaged goods, conditions, or visual documentation',
+  PHOTO_EVIDENCE:
+    'Photograph of physical evidence, damaged goods, conditions, or visual documentation',
   OTHER: 'Document that does not fit into other categories',
 };
 
@@ -107,7 +110,10 @@ function parseClassificationResponse(responseText: string): ClassificationResult
     // Extract JSON from response (handle potential markdown code blocks)
     let jsonStr = responseText.trim();
     if (jsonStr.startsWith('```')) {
-      jsonStr = jsonStr.replace(/```json?\n?/, '').replace(/```$/, '').trim();
+      jsonStr = jsonStr
+        .replace(/```json?\n?/, '')
+        .replace(/```$/, '')
+        .trim();
     }
 
     const parsed = JSON.parse(jsonStr) as {
@@ -154,7 +160,11 @@ export function classifyByFilename(fileName: string): DocumentType | null {
   const lowerName = fileName.toLowerCase();
 
   // Check for common patterns
-  if (lowerName.includes('contract') || lowerName.includes('agreement') || lowerName.includes('terms')) {
+  if (
+    lowerName.includes('contract') ||
+    lowerName.includes('agreement') ||
+    lowerName.includes('terms')
+  ) {
     return 'CONTRACT';
   }
   if (lowerName.includes('invoice') || lowerName.includes('bill')) {
@@ -166,14 +176,14 @@ export function classifyByFilename(fileName: string): DocumentType | null {
   if (lowerName.includes('statement') || lowerName.includes('bank')) {
     return 'BANK_STATEMENT';
   }
-  if (lowerName.includes('letter') || lowerName.includes('email') || lowerName.includes('correspondence')) {
+  if (
+    lowerName.includes('letter') ||
+    lowerName.includes('email') ||
+    lowerName.includes('correspondence')
+  ) {
     return 'CORRESPONDENCE';
   }
-  if (
-    lowerName.includes('notice') ||
-    lowerName.includes('demand') ||
-    lowerName.includes('legal')
-  ) {
+  if (lowerName.includes('notice') || lowerName.includes('demand') || lowerName.includes('legal')) {
     return 'LEGAL_NOTICE';
   }
   if (

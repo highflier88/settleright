@@ -68,9 +68,7 @@ export async function generateEmbeddings(texts: string[]): Promise<number[][]> {
     });
 
     // Maintain order
-    const batchEmbeddings = response.data
-      .sort((a, b) => a.index - b.index)
-      .map((d) => d.embedding);
+    const batchEmbeddings = response.data.sort((a, b) => a.index - b.index).map((d) => d.embedding);
 
     embeddings.push(...batchEmbeddings);
   }
@@ -274,7 +272,10 @@ export function chunkLegalDocument(
     }
 
     // If we got reasonable chunks, return them
-    if (chunks.length > 0 && chunks.every((c) => estimateTokens(c.text) <= MAX_TOKENS_PER_CHUNK * 1.5)) {
+    if (
+      chunks.length > 0 &&
+      chunks.every((c) => estimateTokens(c.text) <= MAX_TOKENS_PER_CHUNK * 1.5)
+    ) {
       return chunks;
     }
   }

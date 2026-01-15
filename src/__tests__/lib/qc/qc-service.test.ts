@@ -170,8 +170,8 @@ describe('QC Service', () => {
       const result = await runQualityCheck('award-1', { checkType: 'full' });
 
       expect(result.issues.length).toBeGreaterThan(0);
-      expect(result.issues.some(i => i.category === 'citation')).toBe(true);
-      expect(result.issues.find(i => i.category === 'citation')?.severity).toBe('high');
+      expect(result.issues.some((i) => i.category === 'citation')).toBe(true);
+      expect(result.issues.find((i) => i.category === 'citation')?.severity).toBe('high');
     });
 
     it('should detect consistency outliers', async () => {
@@ -203,7 +203,7 @@ describe('QC Service', () => {
 
       const result = await runQualityCheck('award-1', { checkType: 'full' });
 
-      expect(result.issues.some(i => i.category === 'consistency')).toBe(true);
+      expect(result.issues.some((i) => i.category === 'consistency')).toBe(true);
       expect(result.recommendations.length).toBeGreaterThan(0);
     });
 
@@ -240,8 +240,8 @@ describe('QC Service', () => {
 
       const result = await runQualityCheck('award-1', { checkType: 'full' });
 
-      expect(result.issues.some(i => i.category === 'bias')).toBe(true);
-      expect(result.recommendations.some(r => r.includes('bias'))).toBe(true);
+      expect(result.issues.some((i) => i.category === 'bias')).toBe(true);
+      expect(result.recommendations.some((r) => r.includes('bias'))).toBe(true);
     });
 
     it('should detect insufficient findings', async () => {
@@ -260,9 +260,9 @@ describe('QC Service', () => {
 
       const result = await runQualityCheck('award-1', { checkType: 'quick' });
 
-      expect(result.issues.some(i =>
-        i.category === 'structure' && i.description.includes('findings')
-      )).toBe(true);
+      expect(
+        result.issues.some((i) => i.category === 'structure' && i.description.includes('findings'))
+      ).toBe(true);
     });
 
     it('should throw error if award not found', async () => {
@@ -323,7 +323,13 @@ describe('QC Service', () => {
       mockDetectBias.mockResolvedValue({
         biasScore: 0.8,
         flags: [
-          { type: 'bias', severity: 'critical', description: 'Critical bias', statistic: 0.9, threshold: 0.5 },
+          {
+            type: 'bias',
+            severity: 'critical',
+            description: 'Critical bias',
+            statistic: 0.9,
+            threshold: 0.5,
+          },
         ],
       });
 

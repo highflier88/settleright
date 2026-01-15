@@ -291,9 +291,9 @@ describe('Compliance Reports Service', () => {
       expect(result.auditLogIntegrity.isValid).toBe(false);
       expect(result.auditLogIntegrity.invalidLogs).toBe(2);
       expect(result.auditLogIntegrity.chainStatus).toBe('partial');
-      expect(result.recommendations.some((r) => r.includes('Audit log chain integrity issues'))).toBe(
-        true
-      );
+      expect(
+        result.recommendations.some((r) => r.includes('Audit log chain integrity issues'))
+      ).toBe(true);
     });
 
     it('should identify cases without audit trail', async () => {

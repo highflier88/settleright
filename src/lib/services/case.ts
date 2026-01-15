@@ -130,10 +130,7 @@ export async function createCase(input: CreateCaseInput): Promise<CreateCaseResu
 }
 
 // Get a case by ID (excludes soft-deleted cases by default)
-export async function getCaseById(
-  caseId: string,
-  includeDeleted = false
-): Promise<Case | null> {
+export async function getCaseById(caseId: string, includeDeleted = false): Promise<Case | null> {
   return prisma.case.findFirst({
     where: {
       id: caseId,
@@ -189,10 +186,7 @@ export interface GetUserCasesOptions {
   role?: 'claimant' | 'respondent' | 'all';
 }
 
-export async function getUserCases(
-  userId: string,
-  options: GetUserCasesOptions = {}
-) {
+export async function getUserCases(userId: string, options: GetUserCasesOptions = {}) {
   const { page = 1, limit = 20, status, role = 'all' } = options;
   const skip = (page - 1) * limit;
 
@@ -269,10 +263,7 @@ export async function updateCaseStatus(
 }
 
 // Soft delete a case
-export async function softDeleteCase(
-  caseId: string,
-  userId: string
-): Promise<boolean> {
+export async function softDeleteCase(caseId: string, userId: string): Promise<boolean> {
   try {
     await prisma.case.update({
       where: { id: caseId },

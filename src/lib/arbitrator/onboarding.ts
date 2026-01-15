@@ -10,12 +10,7 @@
 
 import { prisma } from '@/lib/db';
 
-import type {
-  OnboardingStatus,
-  CredentialVerificationStatus,
-  DisputeType,
-} from '@prisma/client';
-
+import type { OnboardingStatus, CredentialVerificationStatus, DisputeType } from '@prisma/client';
 
 // ============================================================================
 // TYPES
@@ -53,11 +48,57 @@ export interface OnboardingProgress {
 
 // US States for bar registration
 export const US_STATES = [
-  'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL',
-  'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME',
-  'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH',
-  'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI',
-  'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY',
+  'AL',
+  'AK',
+  'AZ',
+  'AR',
+  'CA',
+  'CO',
+  'CT',
+  'DE',
+  'DC',
+  'FL',
+  'GA',
+  'HI',
+  'ID',
+  'IL',
+  'IN',
+  'IA',
+  'KS',
+  'KY',
+  'LA',
+  'ME',
+  'MD',
+  'MA',
+  'MI',
+  'MN',
+  'MS',
+  'MO',
+  'MT',
+  'NE',
+  'NV',
+  'NH',
+  'NJ',
+  'NM',
+  'NY',
+  'NC',
+  'ND',
+  'OH',
+  'OK',
+  'OR',
+  'PA',
+  'RI',
+  'SC',
+  'SD',
+  'TN',
+  'TX',
+  'UT',
+  'VT',
+  'VA',
+  'WA',
+  'WV',
+  'WI',
+  'WY',
 ] as const;
 
 // ============================================================================
@@ -125,13 +166,13 @@ export async function completeOnboarding(
   }
 
   // Validate bar state
-  if (!US_STATES.includes(barState as typeof US_STATES[number])) {
+  if (!US_STATES.includes(barState as (typeof US_STATES)[number])) {
     throw new Error('Invalid bar state');
   }
 
   // Validate jurisdictions
   for (const jurisdiction of jurisdictions) {
-    if (!US_STATES.includes(jurisdiction as typeof US_STATES[number])) {
+    if (!US_STATES.includes(jurisdiction as (typeof US_STATES)[number])) {
       throw new Error(`Invalid jurisdiction: ${jurisdiction}`);
     }
   }
@@ -235,9 +276,7 @@ export async function saveOnboardingProgress(
 /**
  * Get onboarding progress for a user
  */
-export async function getOnboardingProgress(
-  userId: string
-): Promise<OnboardingProgress | null> {
+export async function getOnboardingProgress(userId: string): Promise<OnboardingProgress | null> {
   const profile = await prisma.arbitratorProfile.findUnique({
     where: { userId },
   });
@@ -281,9 +320,8 @@ export async function getOnboardingProgress(
   }
 
   const totalSteps = completedSteps.length + pendingSteps.length;
-  const percentComplete = totalSteps > 0
-    ? Math.round((completedSteps.length / totalSteps) * 100)
-    : 0;
+  const percentComplete =
+    totalSteps > 0 ? Math.round((completedSteps.length / totalSteps) * 100) : 0;
 
   return {
     status: profile.onboardingStatus,
@@ -361,22 +399,60 @@ export async function canBecomeArbitrator(userId: string): Promise<{
  */
 export function getAvailableJurisdictions(): Array<{ code: string; name: string }> {
   const stateNames: Record<string, string> = {
-    AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas',
-    CA: 'California', CO: 'Colorado', CT: 'Connecticut', DE: 'Delaware',
-    DC: 'District of Columbia', FL: 'Florida', GA: 'Georgia', HI: 'Hawaii',
-    ID: 'Idaho', IL: 'Illinois', IN: 'Indiana', IA: 'Iowa',
-    KS: 'Kansas', KY: 'Kentucky', LA: 'Louisiana', ME: 'Maine',
-    MD: 'Maryland', MA: 'Massachusetts', MI: 'Michigan', MN: 'Minnesota',
-    MS: 'Mississippi', MO: 'Missouri', MT: 'Montana', NE: 'Nebraska',
-    NV: 'Nevada', NH: 'New Hampshire', NJ: 'New Jersey', NM: 'New Mexico',
-    NY: 'New York', NC: 'North Carolina', ND: 'North Dakota', OH: 'Ohio',
-    OK: 'Oklahoma', OR: 'Oregon', PA: 'Pennsylvania', RI: 'Rhode Island',
-    SC: 'South Carolina', SD: 'South Dakota', TN: 'Tennessee', TX: 'Texas',
-    UT: 'Utah', VT: 'Vermont', VA: 'Virginia', WA: 'Washington',
-    WV: 'West Virginia', WI: 'Wisconsin', WY: 'Wyoming',
+    AL: 'Alabama',
+    AK: 'Alaska',
+    AZ: 'Arizona',
+    AR: 'Arkansas',
+    CA: 'California',
+    CO: 'Colorado',
+    CT: 'Connecticut',
+    DE: 'Delaware',
+    DC: 'District of Columbia',
+    FL: 'Florida',
+    GA: 'Georgia',
+    HI: 'Hawaii',
+    ID: 'Idaho',
+    IL: 'Illinois',
+    IN: 'Indiana',
+    IA: 'Iowa',
+    KS: 'Kansas',
+    KY: 'Kentucky',
+    LA: 'Louisiana',
+    ME: 'Maine',
+    MD: 'Maryland',
+    MA: 'Massachusetts',
+    MI: 'Michigan',
+    MN: 'Minnesota',
+    MS: 'Mississippi',
+    MO: 'Missouri',
+    MT: 'Montana',
+    NE: 'Nebraska',
+    NV: 'Nevada',
+    NH: 'New Hampshire',
+    NJ: 'New Jersey',
+    NM: 'New Mexico',
+    NY: 'New York',
+    NC: 'North Carolina',
+    ND: 'North Dakota',
+    OH: 'Ohio',
+    OK: 'Oklahoma',
+    OR: 'Oregon',
+    PA: 'Pennsylvania',
+    RI: 'Rhode Island',
+    SC: 'South Carolina',
+    SD: 'South Dakota',
+    TN: 'Tennessee',
+    TX: 'Texas',
+    UT: 'Utah',
+    VT: 'Vermont',
+    VA: 'Virginia',
+    WA: 'Washington',
+    WV: 'West Virginia',
+    WI: 'Wisconsin',
+    WY: 'Wyoming',
   };
 
-  return US_STATES.map(code => ({
+  return US_STATES.map((code) => ({
     code,
     name: stateNames[code] || code,
   }));
@@ -385,7 +461,11 @@ export function getAvailableJurisdictions(): Array<{ code: string; name: string 
 /**
  * Get list of available specialties for selection
  */
-export function getAvailableSpecialties(): Array<{ value: DisputeType; label: string; description: string }> {
+export function getAvailableSpecialties(): Array<{
+  value: DisputeType;
+  label: string;
+  description: string;
+}> {
   return [
     {
       value: 'CONTRACT',

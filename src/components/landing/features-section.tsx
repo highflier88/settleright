@@ -76,11 +76,11 @@ export function FeaturesSection() {
     <SectionWrapper id="features">
       <div className="mx-auto max-w-6xl">
         {/* Section Header */}
-        <div className="mb-16 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="mb-16 text-center duration-500 animate-in fade-in slide-in-from-bottom-4">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
             Why Choose Settleright.ai?
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
             Modern dispute resolution designed for speed, fairness, and enforceability.
           </p>
         </div>
@@ -93,7 +93,7 @@ export function FeaturesSection() {
               className={cn(
                 'group relative rounded-xl border bg-background p-6 transition-all duration-300',
                 'hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5',
-                'animate-in fade-in slide-in-from-bottom-4',
+                'animate-in fade-in slide-in-from-bottom-4'
               )}
               style={{ animationDelay: `${(index + 1) * 75}ms` }}
             >
@@ -109,7 +109,7 @@ export function FeaturesSection() {
               <h3 className="text-lg font-semibold transition-colors duration-300 group-hover:text-primary">
                 {feature.title}
               </h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 {feature.description}
               </p>
 
@@ -122,7 +122,7 @@ export function FeaturesSection() {
         </div>
 
         {/* Bottom Highlight */}
-        <div className="mt-16 text-center animate-in fade-in duration-500 delay-700">
+        <div className="mt-16 text-center delay-700 duration-500 animate-in fade-in">
           <div className="inline-flex items-center gap-2 rounded-full border bg-muted/50 px-4 py-2 text-sm text-muted-foreground">
             <ShieldCheck className="h-4 w-4 text-primary" />
             <span>All features included with every filing</span>

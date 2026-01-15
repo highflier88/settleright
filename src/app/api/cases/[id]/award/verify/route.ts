@@ -46,15 +46,12 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
 
     // Verify user has access to this case
     const userId = request.user.id;
-    const isParty =
-      caseData.claimantId === userId || caseData.respondentId === userId;
+    const isParty = caseData.claimantId === userId || caseData.respondentId === userId;
     const isArbitrator = caseData.arbitratorAssignment?.arbitratorId === userId;
     const isAdmin = request.user.role === 'ADMIN';
 
     if (!isParty && !isArbitrator && !isAdmin) {
-      return errorResponse(
-        new ForbiddenError('You do not have access to this case')
-      );
+      return errorResponse(new ForbiddenError('You do not have access to this case'));
     }
 
     // Get the award
@@ -160,8 +157,7 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
 
     // Overall validity
     verificationResult.overallValid =
-      verificationResult.signature.verified &&
-      verificationResult.document.integrityVerified;
+      verificationResult.signature.verified && verificationResult.document.integrityVerified;
 
     return NextResponse.json({
       success: true,

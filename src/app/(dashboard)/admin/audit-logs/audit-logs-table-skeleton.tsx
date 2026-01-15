@@ -28,7 +28,7 @@ export function AuditLogsTableSkeleton() {
               <TableRow key={i}>
                 {Array.from({ length: 6 }, (_, j) => (
                   <TableCell key={j}>
-                    <div className="h-4 w-full animate-pulse bg-muted rounded" />
+                    <div className="h-4 w-full animate-pulse rounded bg-muted" />
                   </TableCell>
                 ))}
               </TableRow>

@@ -2,13 +2,7 @@
 
 import { useState } from 'react';
 
-import {
-  FileText,
-  MessageSquare,
-  Scale,
-  Gavel,
-  StickyNote,
-} from 'lucide-react';
+import { FileText, MessageSquare, Scale, Gavel, StickyNote } from 'lucide-react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 

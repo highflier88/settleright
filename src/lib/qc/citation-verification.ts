@@ -59,24 +59,57 @@ const CITATION_PATTERNS = {
 
 // Known valid statute prefixes for quick validation
 const KNOWN_STATUTE_PREFIXES = [
-  'U.S.C.', 'USC', 'C.F.R.', 'CFR',
-  'Cal.', 'N.Y.', 'Tex.', 'Fla.', 'Ill.',
-  'Restatement', 'U.C.C.', 'UCC',
+  'U.S.C.',
+  'USC',
+  'C.F.R.',
+  'CFR',
+  'Cal.',
+  'N.Y.',
+  'Tex.',
+  'Fla.',
+  'Ill.',
+  'Restatement',
+  'U.C.C.',
+  'UCC',
 ];
 
 // Known court reporters
 const KNOWN_REPORTERS = [
-  'U.S.', 'S.Ct.', 'L.Ed.', 'F.', 'F.2d', 'F.3d', 'F.4th',
-  'F.Supp.', 'F.Supp.2d', 'F.Supp.3d',
-  'Cal.', 'Cal.App.', 'Cal.Rptr.',
-  'N.Y.', 'N.Y.S.', 'N.Y.S.2d',
-  'A.', 'A.2d', 'A.3d',
-  'N.E.', 'N.E.2d', 'N.E.3d',
-  'N.W.', 'N.W.2d',
-  'P.', 'P.2d', 'P.3d',
-  'S.E.', 'S.E.2d',
-  'S.W.', 'S.W.2d', 'S.W.3d',
-  'So.', 'So.2d', 'So.3d',
+  'U.S.',
+  'S.Ct.',
+  'L.Ed.',
+  'F.',
+  'F.2d',
+  'F.3d',
+  'F.4th',
+  'F.Supp.',
+  'F.Supp.2d',
+  'F.Supp.3d',
+  'Cal.',
+  'Cal.App.',
+  'Cal.Rptr.',
+  'N.Y.',
+  'N.Y.S.',
+  'N.Y.S.2d',
+  'A.',
+  'A.2d',
+  'A.3d',
+  'N.E.',
+  'N.E.2d',
+  'N.E.3d',
+  'N.W.',
+  'N.W.2d',
+  'P.',
+  'P.2d',
+  'P.3d',
+  'S.E.',
+  'S.E.2d',
+  'S.W.',
+  'S.W.2d',
+  'S.W.3d',
+  'So.',
+  'So.2d',
+  'So.3d',
 ];
 
 // ============================================================================
@@ -143,13 +176,13 @@ export function verifyCitationFormat(citation: string): {
   }
 
   // Check if it looks like a statute
-  if (KNOWN_STATUTE_PREFIXES.some(prefix => trimmed.includes(prefix))) {
+  if (KNOWN_STATUTE_PREFIXES.some((prefix) => trimmed.includes(prefix))) {
     errors.push('Appears to be a statute but format is non-standard');
     return { isValid: false, type: 'statute', errors, suggestions };
   }
 
   // Check if it contains a reporter name
-  if (KNOWN_REPORTERS.some(reporter => trimmed.includes(reporter))) {
+  if (KNOWN_REPORTERS.some((reporter) => trimmed.includes(reporter))) {
     errors.push('Contains reporter name but format is incomplete');
     return { isValid: false, type: 'case_law', errors, suggestions };
   }
@@ -232,9 +265,7 @@ export async function checkCitationExists(
     }
 
     // Check for valid reporter
-    const hasValidReporter = KNOWN_REPORTERS.some(reporter =>
-      citation.includes(reporter)
-    );
+    const hasValidReporter = KNOWN_REPORTERS.some((reporter) => citation.includes(reporter));
 
     if (hasValidReporter) {
       notes.push('Contains recognized reporter');
@@ -256,15 +287,15 @@ export async function checkCitationExists(
 /**
  * Verify a single citation
  */
-export async function verifyCitation(
-  citation: string
-): Promise<CitationVerificationResult> {
+export async function verifyCitation(citation: string): Promise<CitationVerificationResult> {
   const formatResult = verifyCitationFormat(citation);
   const existenceResult = await checkCitationExists(citation, formatResult.type);
 
   const errors = [...formatResult.errors];
   if (!existenceResult.exists) {
-    errors.push(...existenceResult.notes.filter(n => n.includes('outside') || n.includes('future')));
+    errors.push(
+      ...existenceResult.notes.filter((n) => n.includes('outside') || n.includes('future'))
+    );
   }
 
   // Calculate overall validity
@@ -288,9 +319,7 @@ export async function verifyCitation(
 /**
  * Verify all citations in an award
  */
-export async function verifyCitations(
-  awardId: string
-): Promise<CitationReport> {
+export async function verifyCitations(awardId: string): Promise<CitationReport> {
   // Get the award with citations
   const award = await prisma.award.findUnique({
     where: { id: awardId },
@@ -354,13 +383,11 @@ export async function verifyCitations(
   }
 
   // Calculate statistics
-  const validCount = verificationResults.filter(r => r.isValid).length;
-  const invalidCount = verificationResults.filter(r => !r.isValid && r.confidence > 0.5).length;
-  const unverifiedCount = verificationResults.filter(r => r.confidence <= 0.5).length;
+  const validCount = verificationResults.filter((r) => r.isValid).length;
+  const invalidCount = verificationResults.filter((r) => !r.isValid && r.confidence > 0.5).length;
+  const unverifiedCount = verificationResults.filter((r) => r.confidence <= 0.5).length;
 
-  const overallScore = citations.size > 0
-    ? validCount / citations.size
-    : 1.0;
+  const overallScore = citations.size > 0 ? validCount / citations.size : 1.0;
 
   return {
     awardId,

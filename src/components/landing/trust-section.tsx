@@ -112,18 +112,19 @@ export function TrustSection() {
     <SectionWrapper id="trust" background="muted">
       <div className="mx-auto max-w-6xl">
         {/* Section Header */}
-        <div className="mb-16 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="mb-16 text-center duration-500 animate-in fade-in slide-in-from-bottom-4">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
             Built on Trust & Legal Validity
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-            Our platform meets the highest standards for legal compliance, security, and professional arbitration.
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+            Our platform meets the highest standards for legal compliance, security, and
+            professional arbitration.
           </p>
         </div>
 
         {/* Legal Validity Grid */}
         <div className="mb-12">
-          <div className="flex items-center justify-center gap-2 mb-8">
+          <div className="mb-8 flex items-center justify-center gap-2">
             <Scale className="h-5 w-5 text-primary" />
             <h3 className="text-xl font-semibold">Legal Validity</h3>
           </div>
@@ -134,7 +135,7 @@ export function TrustSection() {
                 className={cn(
                   'group rounded-xl border bg-background p-6 transition-all duration-300',
                   'hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5',
-                  'animate-in fade-in slide-in-from-bottom-4',
+                  'animate-in fade-in slide-in-from-bottom-4'
                 )}
                 style={{ animationDelay: `${(index + 1) * 100}ms` }}
               >
@@ -144,7 +145,7 @@ export function TrustSection() {
                 <h4 className="font-semibold transition-colors duration-300 group-hover:text-primary">
                   {feature.title}
                 </h4>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {feature.description}
                 </p>
               </div>
@@ -153,10 +154,10 @@ export function TrustSection() {
         </div>
 
         {/* Security & Arbitrator Row */}
-        <div className="grid gap-8 lg:grid-cols-2 mb-12">
+        <div className="mb-12 grid gap-8 lg:grid-cols-2">
           {/* Security Section */}
-          <div className="rounded-xl border bg-background p-6 md:p-8 animate-in fade-in slide-in-from-left-4 duration-500 delay-300">
-            <div className="flex items-center gap-2 mb-6">
+          <div className="rounded-xl border bg-background p-6 delay-300 duration-500 animate-in fade-in slide-in-from-left-4 md:p-8">
+            <div className="mb-6 flex items-center gap-2">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
                 <ShieldCheck className="h-5 w-5 text-primary" />
               </div>
@@ -181,22 +182,19 @@ export function TrustSection() {
           </div>
 
           {/* Arbitrator Credentials */}
-          <div className="rounded-xl border bg-background p-6 md:p-8 animate-in fade-in slide-in-from-right-4 duration-500 delay-300">
-            <div className="flex items-center gap-2 mb-6">
+          <div className="rounded-xl border bg-background p-6 delay-300 duration-500 animate-in fade-in slide-in-from-right-4 md:p-8">
+            <div className="mb-6 flex items-center gap-2">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
                 <UserCheck className="h-5 w-5 text-primary" />
               </div>
               <h3 className="text-lg font-semibold">Professional Arbitrators</h3>
             </div>
-            <p className="text-muted-foreground mb-6">
+            <p className="mb-6 text-muted-foreground">
               Every case is reviewed by a qualified human arbitrator who makes the final decision.
             </p>
             <div className="space-y-3">
               {arbitratorCredentials.map((credential) => (
-                <div
-                  key={credential}
-                  className="flex items-center gap-3"
-                >
+                <div key={credential} className="flex items-center gap-3">
                   <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10">
                     <BadgeCheck className="h-3.5 w-3.5 text-primary" />
                   </div>
@@ -217,14 +215,14 @@ export function TrustSection() {
         </div>
 
         {/* Our Commitment */}
-        <div className="rounded-xl border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 p-8 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-500">
-          <h3 className="text-center text-lg font-semibold mb-8">Our Commitment to You</h3>
+        <div className="rounded-xl border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 p-8 delay-500 duration-500 animate-in fade-in slide-in-from-bottom-4">
+          <h3 className="mb-8 text-center text-lg font-semibold">Our Commitment to You</h3>
           <div className="grid gap-6 sm:grid-cols-3">
             {commitments.map((commitment, index) => (
               <div
                 key={commitment.title}
                 className={cn(
-                  'flex flex-col items-center text-center px-4',
+                  'flex flex-col items-center px-4 text-center',
                   index < commitments.length - 1 && 'sm:border-r sm:border-primary/20'
                 )}
               >
@@ -239,7 +237,7 @@ export function TrustSection() {
         </div>
 
         {/* Trust Badges Row */}
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-center animate-in fade-in duration-500 delay-700">
+        <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-center delay-700 duration-500 animate-in fade-in">
           <div className="flex items-center gap-2 rounded-full border bg-background px-4 py-2 text-sm">
             <ShieldCheck className="h-4 w-4 text-primary" />
             <span>256-bit SSL</span>

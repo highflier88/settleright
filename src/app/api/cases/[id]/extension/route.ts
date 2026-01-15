@@ -1,4 +1,3 @@
-
 import { NotFoundError, ForbiddenError, BadRequestError } from '@/lib/api/errors';
 import { successResponse, errorResponse } from '@/lib/api/response';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
@@ -81,7 +80,9 @@ export const POST = withAuth(
 
       // Validate reason
       if (!reason || typeof reason !== 'string' || reason.length < 10) {
-        throw new BadRequestError('Please provide a reason for the extension (minimum 10 characters)');
+        throw new BadRequestError(
+          'Please provide a reason for the extension (minimum 10 characters)'
+        );
       }
 
       const result = await requestExtension({

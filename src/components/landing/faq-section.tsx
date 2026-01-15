@@ -120,14 +120,14 @@ export function FAQSection() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   const displayedFaqs = activeCategory
-    ? faqCategories.find((cat) => cat.name === activeCategory)?.faqs ?? []
+    ? (faqCategories.find((cat) => cat.name === activeCategory)?.faqs ?? [])
     : allFaqs;
 
   return (
     <SectionWrapper id="faq">
       <div className="mx-auto max-w-4xl">
         {/* Section Header */}
-        <div className="mb-12 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="mb-12 text-center duration-500 animate-in fade-in slide-in-from-bottom-4">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
             Frequently Asked Questions
           </h2>
@@ -137,7 +137,7 @@ export function FAQSection() {
         </div>
 
         {/* Category Filter */}
-        <div className="mb-8 flex flex-wrap items-center justify-center gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100">
+        <div className="mb-8 flex flex-wrap items-center justify-center gap-2 delay-100 duration-500 animate-in fade-in slide-in-from-bottom-4">
           <Button
             variant={activeCategory === null ? 'default' : 'outline'}
             size="sm"
@@ -162,7 +162,7 @@ export function FAQSection() {
         </div>
 
         {/* FAQ Accordion */}
-        <div className="rounded-xl border bg-background p-6 md:p-8 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200">
+        <div className="rounded-xl border bg-background p-6 delay-200 duration-500 animate-in fade-in slide-in-from-bottom-4 md:p-8">
           <Accordion type="single" collapsible className="w-full">
             {displayedFaqs.map((faq, index) => (
               <AccordionItem
@@ -174,10 +174,10 @@ export function FAQSection() {
                 )}
                 style={{ animationDelay: `${(index + 1) * 50}ms` }}
               >
-                <AccordionTrigger className="text-left hover:text-primary transition-colors py-5">
+                <AccordionTrigger className="py-5 text-left transition-colors hover:text-primary">
                   <span className="pr-4">{faq.question}</span>
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground pb-5 leading-relaxed">
+                <AccordionContent className="pb-5 leading-relaxed text-muted-foreground">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
@@ -186,17 +186,14 @@ export function FAQSection() {
         </div>
 
         {/* Quick Stats */}
-        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300">
+        <div className="mt-8 grid grid-cols-2 gap-4 delay-300 duration-500 animate-in fade-in slide-in-from-bottom-4 sm:grid-cols-4">
           {[
             { label: 'Questions Answered', value: `${allFaqs.length}` },
             { label: 'Response Time', value: '< 24hrs' },
             { label: 'Support', value: 'Email' },
             { label: 'Help Center', value: 'Coming Soon' },
           ].map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-lg border bg-muted/30 p-4 text-center"
-            >
+            <div key={stat.label} className="rounded-lg border bg-muted/30 p-4 text-center">
               <p className="text-lg font-semibold">{stat.value}</p>
               <p className="text-xs text-muted-foreground">{stat.label}</p>
             </div>
@@ -204,7 +201,7 @@ export function FAQSection() {
         </div>
 
         {/* Still Have Questions CTA */}
-        <div className="mt-12 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-8 text-center animate-in fade-in slide-in-from-bottom-4 duration-500 delay-500">
+        <div className="mt-12 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-8 text-center delay-500 duration-500 animate-in fade-in slide-in-from-bottom-4">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
             <MessageCircle className="h-7 w-7 text-primary" />
           </div>

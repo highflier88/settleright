@@ -3,15 +3,7 @@
 import { useState, useEffect } from 'react';
 
 import { format } from 'date-fns';
-import {
-  StickyNote,
-  Plus,
-  Trash2,
-  Save,
-  Edit,
-  Clock,
-  AlertCircle,
-} from 'lucide-react';
+import { StickyNote, Plus, Trash2, Save, Edit, Clock, AlertCircle } from 'lucide-react';
 
 import {
   AlertDialog,
@@ -26,13 +18,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -128,9 +114,7 @@ export function NotesPanel({ caseId }: NotesPanelProps) {
     if (editingNote) {
       // Update existing note
       const updatedNotes = notes.map((note) =>
-        note.id === editingNote.id
-          ? { ...note, title, content, category, updatedAt: now }
-          : note
+        note.id === editingNote.id ? { ...note, title, content, category, updatedAt: now } : note
       );
       saveNotes(updatedNotes);
     } else {
@@ -162,9 +146,8 @@ export function NotesPanel({ caseId }: NotesPanelProps) {
     saveNotes(updatedNotes);
   };
 
-  const filteredNotes = filterCategory === 'all'
-    ? notes
-    : notes.filter((note) => note.category === filterCategory);
+  const filteredNotes =
+    filterCategory === 'all' ? notes : notes.filter((note) => note.category === filterCategory);
 
   return (
     <div className="space-y-4">
@@ -177,9 +160,7 @@ export function NotesPanel({ caseId }: NotesPanelProps) {
                 <StickyNote className="h-5 w-5" />
                 Review Notes
               </CardTitle>
-              <CardDescription>
-                Private notes for this case review
-              </CardDescription>
+              <CardDescription>Private notes for this case review</CardDescription>
             </div>
             <div className="flex items-center gap-2">
               <Select value={filterCategory} onValueChange={setFilterCategory}>
@@ -197,7 +178,7 @@ export function NotesPanel({ caseId }: NotesPanelProps) {
               </Select>
               {!isAdding && (
                 <Button onClick={() => setIsAdding(true)}>
-                  <Plus className="h-4 w-4 mr-2" />
+                  <Plus className="mr-2 h-4 w-4" />
                   Add Note
                 </Button>
               )}
@@ -210,9 +191,7 @@ export function NotesPanel({ caseId }: NotesPanelProps) {
       {isAdding && (
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg">
-              {editingNote ? 'Edit Note' : 'New Note'}
-            </CardTitle>
+            <CardTitle className="text-lg">{editingNote ? 'Edit Note' : 'New Note'}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
@@ -256,7 +235,7 @@ export function NotesPanel({ caseId }: NotesPanelProps) {
                 Cancel
               </Button>
               <Button onClick={handleSaveNote} disabled={!title.trim() || !content.trim()}>
-                <Save className="h-4 w-4 mr-2" />
+                <Save className="mr-2 h-4 w-4" />
                 {editingNote ? 'Update Note' : 'Save Note'}
               </Button>
             </div>
@@ -268,10 +247,10 @@ export function NotesPanel({ caseId }: NotesPanelProps) {
       <Card>
         <CardContent className="pt-4">
           {filteredNotes.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-64 text-muted-foreground">
-              <StickyNote className="h-12 w-12 mb-4 opacity-50" />
+            <div className="flex h-64 flex-col items-center justify-center text-muted-foreground">
+              <StickyNote className="mb-4 h-12 w-12 opacity-50" />
               <p>{notes.length === 0 ? 'No notes yet' : 'No notes in this category'}</p>
-              <p className="text-sm mt-2">
+              <p className="mt-2 text-sm">
                 Click &quot;Add Note&quot; to create your first note for this case
               </p>
             </div>
@@ -281,11 +260,13 @@ export function NotesPanel({ caseId }: NotesPanelProps) {
                 {filteredNotes.map((note) => (
                   <div
                     key={note.id}
-                    className="rounded-lg border p-4 hover:shadow-md transition-shadow"
+                    className="rounded-lg border p-4 transition-shadow hover:shadow-md"
                   >
-                    <div className="flex items-start justify-between mb-2">
+                    <div className="mb-2 flex items-start justify-between">
                       <div className="flex items-center gap-2">
-                        <div className={`h-2 w-2 rounded-full ${getCategoryColor(note.category)}`} />
+                        <div
+                          className={`h-2 w-2 rounded-full ${getCategoryColor(note.category)}`}
+                        />
                         <h3 className="font-medium">{note.title}</h3>
                         <Badge variant="outline" className="text-xs">
                           {getCategoryLabel(note.category)}
@@ -330,7 +311,7 @@ export function NotesPanel({ caseId }: NotesPanelProps) {
                         </AlertDialog>
                       </div>
                     </div>
-                    <p className="text-sm whitespace-pre-wrap mb-2">{note.content}</p>
+                    <p className="mb-2 whitespace-pre-wrap text-sm">{note.content}</p>
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <Clock className="h-3 w-3" />
@@ -354,14 +335,14 @@ export function NotesPanel({ caseId }: NotesPanelProps) {
       {/* Info Banner */}
       <Card className="border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950/30">
         <CardContent className="flex items-start gap-3 pt-4">
-          <AlertCircle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
+          <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-600" />
           <div className="text-sm">
             <p className="font-medium text-amber-800 dark:text-amber-200">
               Notes are stored locally
             </p>
-            <p className="text-amber-700 dark:text-amber-300 mt-1">
-              These notes are stored in your browser and are only visible to you.
-              They will persist across sessions but will be lost if you clear your browser data.
+            <p className="mt-1 text-amber-700 dark:text-amber-300">
+              These notes are stored in your browser and are only visible to you. They will persist
+              across sessions but will be lost if you clear your browser data.
             </p>
           </div>
         </CardContent>

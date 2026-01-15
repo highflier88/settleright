@@ -1,4 +1,3 @@
-
 import { CaseStatus } from '@prisma/client';
 
 import { BadRequestError, ForbiddenError } from '@/lib/api/errors';
@@ -10,7 +9,6 @@ import { sendCaseInvitationEmail } from '@/lib/services/email';
 import { sendSms } from '@/lib/services/twilio';
 import { validateBody } from '@/lib/validations';
 import { createCaseSchema } from '@/lib/validations/case';
-
 
 // POST /api/cases - Create a new case
 export const POST = withAuth(

@@ -52,10 +52,7 @@ function verifyCronSecret(request: NextRequest): boolean {
 export async function POST(request: NextRequest) {
   // Verify cron secret
   if (!verifyCronSecret(request)) {
-    return NextResponse.json(
-      { success: false, error: 'Unauthorized' },
-      { status: 401 }
-    );
+    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
@@ -103,10 +100,7 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   // Verify cron secret
   if (!verifyCronSecret(request)) {
-    return NextResponse.json(
-      { success: false, error: 'Unauthorized' },
-      { status: 401 }
-    );
+    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
   }
 
   try {

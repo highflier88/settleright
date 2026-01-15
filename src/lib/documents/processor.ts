@@ -111,11 +111,7 @@ export async function processDocument(
 
     // Step 2: Extract text
     await updateProgress('extracting', 20, 'Extracting text');
-    const extractionResult = await extractText(
-      fileBuffer,
-      evidence.fileType,
-      evidence.fileName
-    );
+    const extractionResult = await extractText(fileBuffer, evidence.fileType, evidence.fileName);
     let extractedText = cleanExtractedText(extractionResult.text);
 
     // Step 3: OCR if needed

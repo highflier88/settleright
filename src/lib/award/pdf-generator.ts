@@ -53,9 +53,7 @@ const TEXT_WIDTH = PAGE_WIDTH - MARGIN_LEFT - MARGIN_RIGHT;
 /**
  * Generate a professional PDF document for the award
  */
-export async function generateAwardPdf(
-  input: AwardPdfInput
-): Promise<AwardPdfResult> {
+export async function generateAwardPdf(input: AwardPdfInput): Promise<AwardPdfResult> {
   const pdfDoc = await PDFDocument.create();
 
   // Embed fonts
@@ -76,11 +74,7 @@ export async function generateAwardPdf(
   };
 
   // Helper function to draw centered text
-  const drawCenteredText = (
-    text: string,
-    fontSize: number,
-    font = timesRoman
-  ) => {
+  const drawCenteredText = (text: string, fontSize: number, font = timesRoman) => {
     ensureSpace(fontSize + 4);
     const textWidth = font.widthOfTextAtSize(text, fontSize);
     page.drawText(text, {
@@ -94,12 +88,7 @@ export async function generateAwardPdf(
   };
 
   // Helper function to draw left-aligned text with word wrap
-  const drawWrappedText = (
-    text: string,
-    fontSize: number,
-    font = timesRoman,
-    indent = 0
-  ) => {
+  const drawWrappedText = (text: string, fontSize: number, font = timesRoman, indent = 0) => {
     const words = text.split(' ');
     let line = '';
     const effectiveWidth = TEXT_WIDTH - indent;
@@ -235,9 +224,7 @@ export async function generateAwardPdf(
     }
 
     if (conclusion.supportingFindings.length > 0) {
-      const refs = conclusion.supportingFindings
-        .map((n) => `Finding No. ${n}`)
-        .join(', ');
+      const refs = conclusion.supportingFindings.map((n) => `Finding No. ${n}`).join(', ');
       drawWrappedText(`See ${refs}.`, 10, timesRomanItalic, 24);
     }
 
@@ -296,11 +283,7 @@ export async function generateAwardPdf(
   yPosition -= 8;
 
   const signedTimeStr = input.signedAt.toISOString();
-  drawWrappedText(
-    `Digitally signed on ${signedTimeStr}`,
-    9,
-    timesRomanItalic
-  );
+  drawWrappedText(`Digitally signed on ${signedTimeStr}`, 9, timesRomanItalic);
 
   yPosition -= SECTION_SPACING;
   drawHorizontalLine();
@@ -317,11 +300,7 @@ export async function generateAwardPdf(
   yPosition -= 12;
 
   drawWrappedText(`Jurisdiction: ${input.jurisdiction}`, 9, timesRomanItalic);
-  drawWrappedText(
-    `Original Case Reference: ${input.caseReference}`,
-    9,
-    timesRomanItalic
-  );
+  drawWrappedText(`Original Case Reference: ${input.caseReference}`, 9, timesRomanItalic);
 
   // Serialize PDF to bytes
   const pdfBytes = await pdfDoc.save();
@@ -408,11 +387,7 @@ export async function generateAwardCertificate(
   let yPosition = PAGE_HEIGHT - MARGIN_TOP;
 
   // Helper function to draw centered text
-  const drawCentered = (
-    text: string,
-    fontSize: number,
-    font = helvetica
-  ) => {
+  const drawCentered = (text: string, fontSize: number, font = helvetica) => {
     const textWidth = font.widthOfTextAtSize(text, fontSize);
     page.drawText(text, {
       x: (PAGE_WIDTH - textWidth) / 2,
@@ -425,11 +400,7 @@ export async function generateAwardCertificate(
   };
 
   // Helper function to draw labeled value
-  const drawLabelValue = (
-    label: string,
-    value: string,
-    fontSize: number = 11
-  ) => {
+  const drawLabelValue = (label: string, value: string, fontSize: number = 11) => {
     page.drawText(label, {
       x: MARGIN_LEFT,
       y: yPosition,
@@ -593,7 +564,8 @@ export async function generateAwardCertificate(
   // ========================================
 
   yPosition -= 8;
-  const verificationNotice = 'This certificate confirms the issuance of a binding arbitration award. The award document bears a digital signature and RFC 3161 timestamp that can be independently verified. The document hash above can be used to verify the integrity of the original award document.';
+  const verificationNotice =
+    'This certificate confirms the issuance of a binding arbitration award. The award document bears a digital signature and RFC 3161 timestamp that can be independently verified. The document hash above can be used to verify the integrity of the original award document.';
 
   const words = verificationNotice.split(' ');
   let line = '';

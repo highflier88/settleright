@@ -37,8 +37,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Settleright.ai - AI-Powered Dispute Resolution',
-    description:
-      'Resolve disputes in days with legally binding AI-assisted arbitration.',
+    description: 'Resolve disputes in days with legally binding AI-assisted arbitration.',
   },
 };
 
@@ -147,7 +146,7 @@ export default function HomePage() {
         {/* Skip to main content - Accessibility */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:outline-none"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:outline-none"
         >
           Skip to main content
         </a>

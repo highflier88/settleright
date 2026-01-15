@@ -4,14 +4,7 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import {
-  CheckCircle,
-  Edit,
-  XCircle,
-  AlertTriangle,
-  Gavel,
-  Loader2,
-} from 'lucide-react';
+import { CheckCircle, Edit, XCircle, AlertTriangle, Gavel, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import {
@@ -26,13 +19,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -339,9 +326,7 @@ export function AwardReviewForm({
             <Gavel className="h-5 w-5" />
             Review & Decision
           </CardTitle>
-          <CardDescription>
-            Review the draft award and submit your decision
-          </CardDescription>
+          <CardDescription>Review the draft award and submit your decision</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Review Notes */}
@@ -375,10 +360,10 @@ export function AwardReviewForm({
                     isSelected
                       ? 'border-primary bg-primary/5'
                       : 'border-muted hover:border-muted-foreground/20'
-                  } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  } ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
                 >
                   <Icon
-                    className={`h-5 w-5 mt-0.5 ${
+                    className={`mt-0.5 h-5 w-5 ${
                       option.decision === 'APPROVE'
                         ? 'text-green-600'
                         : option.decision === 'MODIFY'
@@ -390,13 +375,9 @@ export function AwardReviewForm({
                   />
                   <div>
                     <p className="font-medium">{option.label}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {option.description}
-                    </p>
+                    <p className="text-sm text-muted-foreground">{option.description}</p>
                   </div>
-                  {isSelected && isLoading && (
-                    <Loader2 className="h-4 w-4 ml-auto animate-spin" />
-                  )}
+                  {isSelected && isLoading && <Loader2 className="ml-auto h-4 w-4 animate-spin" />}
                 </button>
               );
             })}
@@ -405,14 +386,14 @@ export function AwardReviewForm({
           {/* Finalize Button (only shown if approved) */}
           {isApproved && (
             <div className="border-t pt-6">
-              <div className="rounded-lg border border-green-200 bg-green-50 p-4 mb-4 dark:border-green-900 dark:bg-green-950">
+              <div className="mb-4 rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-900 dark:bg-green-950">
                 <div className="flex items-center gap-2 text-green-800 dark:text-green-200">
                   <CheckCircle className="h-5 w-5" />
                   <span className="font-medium">Award Approved</span>
                 </div>
-                <p className="text-sm text-green-700 dark:text-green-300 mt-1">
-                  You have approved this draft award. Click below to generate the
-                  final PDF document and notify the parties.
+                <p className="mt-1 text-sm text-green-700 dark:text-green-300">
+                  You have approved this draft award. Click below to generate the final PDF document
+                  and notify the parties.
                 </p>
               </div>
 
@@ -425,12 +406,12 @@ export function AwardReviewForm({
                   >
                     {isFinalizing ? (
                       <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         Issuing Award...
                       </>
                     ) : (
                       <>
-                        <Gavel className="h-4 w-4 mr-2" />
+                        <Gavel className="mr-2 h-4 w-4" />
                         Issue Final Award
                       </>
                     )}
@@ -441,15 +422,14 @@ export function AwardReviewForm({
                     <AlertDialogTitle>Issue Final Award?</AlertDialogTitle>
                     <AlertDialogDescription>
                       This action will:
-                      <ul className="list-disc list-inside mt-2 space-y-1">
+                      <ul className="mt-2 list-inside list-disc space-y-1">
                         <li>Generate a formal PDF award document</li>
                         <li>Digitally sign the award with your credentials</li>
                         <li>Send notifications to both parties</li>
                         <li>Mark the case as DECIDED</li>
                       </ul>
                       <p className="mt-3 font-medium">
-                        This action cannot be undone. The award will be final and
-                        binding.
+                        This action cannot be undone. The award will be final and binding.
                       </p>
                     </AlertDialogDescription>
                   </AlertDialogHeader>
@@ -473,20 +453,20 @@ export function AwardReviewForm({
               <p className="text-sm text-amber-800 dark:text-amber-200">
                 {selectedDecision === 'MODIFY' && (
                   <>
-                    The award has been marked for modification. Your changes have
-                    been saved and a new version has been created.
+                    The award has been marked for modification. Your changes have been saved and a
+                    new version has been created.
                   </>
                 )}
                 {selectedDecision === 'REJECT' && (
                   <>
-                    The award has been rejected. The AI analysis will be reviewed
-                    and a new draft award will be generated based on your feedback.
+                    The award has been rejected. The AI analysis will be reviewed and a new draft
+                    award will be generated based on your feedback.
                   </>
                 )}
                 {selectedDecision === 'ESCALATE' && (
                   <>
-                    This case has been escalated for senior review. A supervisor
-                    will be notified to assist with this case.
+                    This case has been escalated for senior review. A supervisor will be notified to
+                    assist with this case.
                   </>
                 )}
               </p>

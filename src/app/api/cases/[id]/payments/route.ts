@@ -61,9 +61,7 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
     const isAdmin = request.user.role === 'ADMIN';
 
     if (!isParty && !isArbitrator && !isAdmin) {
-      return errorResponse(
-        new ForbiddenError('You do not have access to this case')
-      );
+      return errorResponse(new ForbiddenError('You do not have access to this case'));
     }
 
     // Get payment status and history
@@ -115,7 +113,11 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context) => {
       );
     }
 
-    const { type, disputeAmount: providedDisputeAmount, amount: providedAmount } = validationResult.data;
+    const {
+      type,
+      disputeAmount: providedDisputeAmount,
+      amount: providedAmount,
+    } = validationResult.data;
 
     // Get case and verify access
     const caseData = await prisma.case.findUnique({
@@ -133,15 +135,11 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context) => {
 
     // Validate payment type access
     if (type === 'FILING_FEE' && !isClaimant && !isAdmin) {
-      return errorResponse(
-        new ForbiddenError('Only the claimant can pay the filing fee')
-      );
+      return errorResponse(new ForbiddenError('Only the claimant can pay the filing fee'));
     }
 
     if (type === 'RESPONSE_FEE' && !isRespondent && !isAdmin) {
-      return errorResponse(
-        new ForbiddenError('Only the respondent can pay the response fee')
-      );
+      return errorResponse(new ForbiddenError('Only the respondent can pay the response fee'));
     }
 
     // Check if already paid
@@ -155,9 +153,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context) => {
     });
 
     if (existingPayment) {
-      return errorResponse(
-        new BadRequestError('This fee has already been paid')
-      );
+      return errorResponse(new BadRequestError('This fee has already been paid'));
     }
 
     // Calculate fee amount

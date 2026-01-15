@@ -1,4 +1,3 @@
-
 import { StatementType } from '@prisma/client';
 
 import { NotFoundError, ForbiddenError, BadRequestError } from '@/lib/api/errors';
@@ -15,7 +14,6 @@ import {
   MAX_TIMELINE_ENTRIES,
   MAX_CLAIM_ITEMS,
 } from '@/lib/services/statement';
-
 
 // GET /api/cases/[id]/statements - List statements for a case
 export const GET = withAuth(

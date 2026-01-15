@@ -1,4 +1,3 @@
-
 import { NotFoundError, ForbiddenError } from '@/lib/api/errors';
 import { successResponse, errorResponse } from '@/lib/api/response';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
@@ -47,9 +46,7 @@ export const GET = withAuth(
       // Calculate overall status
       const allDeadlines = Object.values(deadlines).filter(Boolean) as DeadlineInfo[];
       const passedCount = allDeadlines.filter((d) => d.isPassed).length;
-      const urgentCount = allDeadlines.filter(
-        (d) => !d.isPassed && d.hoursRemaining <= 24
-      ).length;
+      const urgentCount = allDeadlines.filter((d) => !d.isPassed && d.hoursRemaining <= 24).length;
       const warningCount = allDeadlines.filter(
         (d) => !d.isPassed && d.hoursRemaining > 24 && d.daysRemaining <= 3
       ).length;

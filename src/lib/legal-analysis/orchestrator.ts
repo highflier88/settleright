@@ -66,11 +66,7 @@ export async function runLegalAnalysis(
     throw new Error(`No analysis job found for case ${input.caseId}`);
   }
 
-  const updateProgress = async (
-    phase: LegalAnalysisPhase,
-    progress: number,
-    message?: string
-  ) => {
+  const updateProgress = async (phase: LegalAnalysisPhase, progress: number, message?: string) => {
     await Promise.all([
       prisma.analysisJob.update({
         where: { id: job.id },
@@ -95,7 +91,8 @@ export async function runLegalAnalysis(
     // Retrieve legal context from Phase 3.1 (if available)
     let legalContext: string | undefined;
     try {
-      const { getLegalContextForAnalysis, formatLegalContextForPrompt } = await import('@/lib/legal/retrieval');
+      const { getLegalContextForAnalysis, formatLegalContextForPrompt } =
+        await import('@/lib/legal/retrieval');
       const context = await getLegalContextForAnalysis({
         jurisdiction: input.jurisdiction,
         // Cast to any to handle string vs DisputeType enum mismatch
@@ -224,9 +221,7 @@ export async function runLegalAnalysis(
       );
 
       // Apply CLRA minimum if applicable
-      const hasClraViolation = issues.some(
-        (i) => i.category === 'consumer_protection'
-      );
+      const hasClraViolation = issues.some((i) => i.category === 'consumer_protection');
       damagesCalculation = applyClraMinimum(
         damagesCalculation,
         input.jurisdiction,
@@ -256,11 +251,7 @@ export async function runLegalAnalysis(
       conclusionsOfLaw = generateConclusions(issues, burdenOfProof, damagesCalculation);
 
       // Generate award recommendation
-      awardRecommendation = generateAwardRecommendation(
-        burdenOfProof,
-        damagesCalculation,
-        issues
-      );
+      awardRecommendation = generateAwardRecommendation(burdenOfProof, damagesCalculation, issues);
 
       // Save intermediate results
       await prisma.analysisJob.update({
@@ -281,18 +272,20 @@ export async function runLegalAnalysis(
     const citationsUsed = aggregateCitations(issues, damagesCalculation);
 
     // Score confidence
-    const { overallConfidence, factors, tokensUsed: confidenceTokens } =
-      await scoreConfidence({
-        issues,
-        burdenOfProof,
-        damagesCalculation,
-        contradictions: input.contradictions,
-        citationsUsed,
-        evidenceCount: input.evidenceSummaries.length,
-        credibilityDelta:
-          input.credibilityScores.claimant.overall -
-          input.credibilityScores.respondent.overall,
-      });
+    const {
+      overallConfidence,
+      factors,
+      tokensUsed: confidenceTokens,
+    } = await scoreConfidence({
+      issues,
+      burdenOfProof,
+      damagesCalculation,
+      contradictions: input.contradictions,
+      citationsUsed,
+      evidenceCount: input.evidenceSummaries.length,
+      credibilityDelta:
+        input.credibilityScores.claimant.overall - input.credibilityScores.respondent.overall,
+    });
 
     totalTokensUsed += confidenceTokens;
 
@@ -391,9 +384,7 @@ function updateIssueElements(
     elements: issue.elements.map((element) => {
       // Find matching burden analysis
       const analysis = analyses.find(
-        (a) =>
-          a.issue.includes(element.name) ||
-          a.issue.includes(issue.description)
+        (a) => a.issue.includes(element.name) || a.issue.includes(issue.description)
       );
 
       if (analysis) {
@@ -480,7 +471,8 @@ function generateConclusions(
 
     // Find related burden analyses
     const relevantAnalyses = burdenOfProof.analyses.filter(
-      (a) => a.issue.includes(issue.description) || issue.elements.some((e) => a.issue.includes(e.name))
+      (a) =>
+        a.issue.includes(issue.description) || issue.elements.some((e) => a.issue.includes(e.name))
     );
 
     const avgConfidence =
@@ -521,7 +513,8 @@ function generateConclusions(
         ? [damagesCalculation.interestCalculation.statutoryBasis]
         : [],
       supportingFacts: damagesCalculation.items.flatMap((i) => i.evidenceSupport).slice(0, 5),
-      confidence: damagesCalculation.items.reduce((sum, i) => sum + i.confidence, 0) /
+      confidence:
+        damagesCalculation.items.reduce((sum, i) => sum + i.confidence, 0) /
         (damagesCalculation.items.length || 1),
     });
   }
@@ -538,9 +531,7 @@ function generateAwardRecommendation(
   issues: NonNullable<LegalAnalysisResult['legalIssues']>
 ): AwardRecommendation {
   // Determine prevailing party
-  const issuesWon = issues.filter((i) =>
-    i.elements.every((e) => e.isSatisfied === true)
-  );
+  const issuesWon = issues.filter((i) => i.elements.every((e) => e.isSatisfied === true));
 
   let prevailingParty: AwardRecommendation['prevailingParty'];
   let reasoning: string;
@@ -608,9 +599,7 @@ export async function getLegalAnalysisStatus(caseId: string) {
 /**
  * Load input for legal analysis from completed fact analysis
  */
-export async function loadLegalAnalysisInput(
-  caseId: string
-): Promise<LegalAnalysisInput | null> {
+export async function loadLegalAnalysisInput(caseId: string): Promise<LegalAnalysisInput | null> {
   const caseData = await prisma.case.findUnique({
     where: { id: caseId },
     select: {
@@ -671,7 +660,8 @@ export async function loadLegalAnalysisInput(
     caseDescription: caseData.description,
     extractedFacts: job.extractedFacts as unknown as LegalAnalysisInput['extractedFacts'],
     disputedFacts: (job.disputedFacts || []) as unknown as LegalAnalysisInput['disputedFacts'],
-    undisputedFacts: (job.undisputedFacts || []) as unknown as LegalAnalysisInput['undisputedFacts'],
+    undisputedFacts: (job.undisputedFacts ||
+      []) as unknown as LegalAnalysisInput['undisputedFacts'],
     contradictions: (job.contradictions || []) as unknown as LegalAnalysisInput['contradictions'],
     credibilityScores: (job.credibilityScores || {
       claimant: { overall: 0.5 },
@@ -683,8 +673,7 @@ export async function loadLegalAnalysisInput(
       documentType: e.documentType || undefined,
       summary: e.summary || undefined,
       keyPoints: e.keyPoints || undefined,
-      submittedBy:
-        e.submittedById === caseWithClaimant?.claimantId ? 'claimant' : 'respondent',
+      submittedBy: e.submittedById === caseWithClaimant?.claimantId ? 'claimant' : 'respondent',
     })),
   };
 }

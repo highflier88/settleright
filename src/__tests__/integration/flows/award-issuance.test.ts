@@ -5,14 +5,8 @@
  */
 
 import { prisma } from '@/lib/db';
-import {
-  getDraftAward,
-  submitDraftAwardReview,
-} from '@/lib/award/generator';
-import {
-  getIssuedAward,
-  canIssueAward,
-} from '@/lib/award/issuance';
+import { getDraftAward, submitDraftAwardReview } from '@/lib/award/generator';
+import { getIssuedAward, canIssueAward } from '@/lib/award/issuance';
 import { generateAwardCertificate } from '@/lib/award/pdf-generator';
 import { uploadFile } from '@/lib/storage/blob';
 import { createInAppNotification } from '@/lib/services/notification';

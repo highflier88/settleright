@@ -32,7 +32,9 @@ export function NotificationPreferences() {
       try {
         const response = await fetch('/api/notifications/preferences');
         if (response.ok) {
-          const data = (await response.json()) as { data: { preferences: NotificationPreferences } };
+          const data = (await response.json()) as {
+            data: { preferences: NotificationPreferences };
+          };
           setPreferences(data.data.preferences);
         }
       } catch (error) {
@@ -108,21 +110,17 @@ export function NotificationPreferences() {
             <Bell className="h-5 w-5" />
             Notification Channels
           </CardTitle>
-          <CardDescription>
-            Choose how you want to receive notifications
-          </CardDescription>
+          <CardDescription>Choose how you want to receive notifications</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Mail className="h-5 w-5 text-muted-foreground" />
               <div>
-                <Label htmlFor="emailEnabled" className="text-base cursor-pointer">
+                <Label htmlFor="emailEnabled" className="cursor-pointer text-base">
                   Email Notifications
                 </Label>
-                <p className="text-sm text-muted-foreground">
-                  Receive notifications via email
-                </p>
+                <p className="text-sm text-muted-foreground">Receive notifications via email</p>
               </div>
             </div>
             <Switch
@@ -139,7 +137,7 @@ export function NotificationPreferences() {
             <div className="flex items-center gap-3">
               <Smartphone className="h-5 w-5 text-muted-foreground" />
               <div>
-                <Label htmlFor="smsEnabled" className="text-base cursor-pointer">
+                <Label htmlFor="smsEnabled" className="cursor-pointer text-base">
                   SMS Notifications
                 </Label>
                 <p className="text-sm text-muted-foreground">
@@ -161,12 +159,10 @@ export function NotificationPreferences() {
             <div className="flex items-center gap-3">
               <MessageSquare className="h-5 w-5 text-muted-foreground" />
               <div>
-                <Label htmlFor="inAppEnabled" className="text-base cursor-pointer">
+                <Label htmlFor="inAppEnabled" className="cursor-pointer text-base">
                   In-App Notifications
                 </Label>
-                <p className="text-sm text-muted-foreground">
-                  See notifications in your dashboard
-                </p>
+                <p className="text-sm text-muted-foreground">See notifications in your dashboard</p>
               </div>
             </div>
             <Switch
@@ -183,14 +179,12 @@ export function NotificationPreferences() {
       <Card>
         <CardHeader>
           <CardTitle>Notification Types</CardTitle>
-          <CardDescription>
-            Choose which types of notifications you want to receive
-          </CardDescription>
+          <CardDescription>Choose which types of notifications you want to receive</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <Label htmlFor="caseUpdates" className="text-base cursor-pointer">
+              <Label htmlFor="caseUpdates" className="cursor-pointer text-base">
                 Case Updates
               </Label>
               <p className="text-sm text-muted-foreground">
@@ -209,7 +203,7 @@ export function NotificationPreferences() {
 
           <div className="flex items-center justify-between">
             <div>
-              <Label htmlFor="deadlineReminders" className="text-base cursor-pointer">
+              <Label htmlFor="deadlineReminders" className="cursor-pointer text-base">
                 Deadline Reminders
               </Label>
               <p className="text-sm text-muted-foreground">
@@ -228,7 +222,7 @@ export function NotificationPreferences() {
 
           <div className="flex items-center justify-between">
             <div>
-              <Label htmlFor="evidenceUploads" className="text-base cursor-pointer">
+              <Label htmlFor="evidenceUploads" className="cursor-pointer text-base">
                 Evidence Uploads
               </Label>
               <p className="text-sm text-muted-foreground">
@@ -247,12 +241,10 @@ export function NotificationPreferences() {
 
           <div className="flex items-center justify-between">
             <div>
-              <Label htmlFor="awardNotifications" className="text-base cursor-pointer">
+              <Label htmlFor="awardNotifications" className="cursor-pointer text-base">
                 Award Notifications
               </Label>
-              <p className="text-sm text-muted-foreground">
-                When an arbitration award is issued
-              </p>
+              <p className="text-sm text-muted-foreground">When an arbitration award is issued</p>
             </div>
             <Switch
               id="awardNotifications"
@@ -266,12 +258,10 @@ export function NotificationPreferences() {
 
           <div className="flex items-center justify-between">
             <div>
-              <Label htmlFor="marketingEmails" className="text-base cursor-pointer">
+              <Label htmlFor="marketingEmails" className="cursor-pointer text-base">
                 Marketing Emails
               </Label>
-              <p className="text-sm text-muted-foreground">
-                Product updates and announcements
-              </p>
+              <p className="text-sm text-muted-foreground">Product updates and announcements</p>
             </div>
             <Switch
               id="marketingEmails"

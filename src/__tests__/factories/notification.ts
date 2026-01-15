@@ -48,18 +48,14 @@ export function createNotification(options: NotificationFactoryOptions = {}) {
 /**
  * Create an unread notification
  */
-export function createUnreadNotification(
-  options: Omit<NotificationFactoryOptions, 'read'> = {}
-) {
+export function createUnreadNotification(options: Omit<NotificationFactoryOptions, 'read'> = {}) {
   return createNotification({ ...options, read: false });
 }
 
 /**
  * Create a read notification
  */
-export function createReadNotification(
-  options: Omit<NotificationFactoryOptions, 'read'> = {}
-) {
+export function createReadNotification(options: Omit<NotificationFactoryOptions, 'read'> = {}) {
   return createNotification({ ...options, read: true });
 }
 
@@ -122,9 +118,7 @@ export function createPaymentNotification(
 /**
  * Create a mock NotificationPreference
  */
-export function createNotificationPreference(
-  options: NotificationPreferenceFactoryOptions = {}
-) {
+export function createNotificationPreference(options: NotificationPreferenceFactoryOptions = {}) {
   const userId = options.userId ?? generateId();
   const createdAt = new Date();
 

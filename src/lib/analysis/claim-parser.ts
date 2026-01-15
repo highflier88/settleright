@@ -81,11 +81,9 @@ export async function parseClaims(
       ],
     });
 
-    const responseText =
-      response.content[0]?.type === 'text' ? response.content[0].text : '';
+    const responseText = response.content[0]?.type === 'text' ? response.content[0].text : '';
 
-    const tokensUsed =
-      (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
+    const tokensUsed = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
 
     const claims = parseClaimResponse(responseText);
 
@@ -180,8 +178,7 @@ function parseStructuredClaimItems(claimItems: unknown): ParsedClaim[] {
           ? parseFloat(itemObj.amount)
           : undefined;
 
-    const typeStr =
-      typeof itemObj.type === 'string' ? itemObj.type.toLowerCase() : '';
+    const typeStr = typeof itemObj.type === 'string' ? itemObj.type.toLowerCase() : '';
     const type: ClaimType = VALID_CLAIM_TYPES.includes(typeStr as ClaimType)
       ? (typeStr as ClaimType)
       : inferClaimType(description);
@@ -238,10 +235,7 @@ function inferClaimType(description: string): ClaimType {
 /**
  * Link parsed claims to extracted facts
  */
-function linkClaimsToFacts(
-  claims: ParsedClaim[],
-  facts: ExtractedFact[]
-): ParsedClaim[] {
+function linkClaimsToFacts(claims: ParsedClaim[], facts: ExtractedFact[]): ParsedClaim[] {
   return claims.map((claim) => {
     // Find facts that might support this claim
     const supportingFactIds = facts
@@ -269,8 +263,7 @@ function linkClaimsToFacts(
 
     return {
       ...claim,
-      supportingFactIds:
-        supportingFactIds.length > 0 ? supportingFactIds : claim.supportingFactIds,
+      supportingFactIds: supportingFactIds.length > 0 ? supportingFactIds : claim.supportingFactIds,
     };
   });
 }
@@ -282,7 +275,10 @@ function parseClaimResponse(responseText: string): ParsedClaim[] {
   try {
     let jsonStr = responseText.trim();
     if (jsonStr.startsWith('```')) {
-      jsonStr = jsonStr.replace(/```json?\n?/, '').replace(/```$/, '').trim();
+      jsonStr = jsonStr
+        .replace(/```json?\n?/, '')
+        .replace(/```$/, '')
+        .trim();
     }
 
     const parsed = JSON.parse(jsonStr) as Array<{

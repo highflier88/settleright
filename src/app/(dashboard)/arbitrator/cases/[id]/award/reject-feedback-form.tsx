@@ -40,10 +40,26 @@ interface RejectionFeedback {
 }
 
 const REJECTION_CATEGORIES = [
-  { value: 'legal_error', label: 'Legal Error', description: 'Incorrect legal analysis or citation' },
-  { value: 'factual_error', label: 'Factual Error', description: 'Misstatement or misinterpretation of facts' },
-  { value: 'procedural_error', label: 'Procedural Error', description: 'Procedural issues with the analysis' },
-  { value: 'calculation_error', label: 'Calculation Error', description: 'Errors in damages or amounts' },
+  {
+    value: 'legal_error',
+    label: 'Legal Error',
+    description: 'Incorrect legal analysis or citation',
+  },
+  {
+    value: 'factual_error',
+    label: 'Factual Error',
+    description: 'Misstatement or misinterpretation of facts',
+  },
+  {
+    value: 'procedural_error',
+    label: 'Procedural Error',
+    description: 'Procedural issues with the analysis',
+  },
+  {
+    value: 'calculation_error',
+    label: 'Calculation Error',
+    description: 'Errors in damages or amounts',
+  },
   { value: 'other', label: 'Other', description: 'Other issues not covered above' },
 ];
 
@@ -75,9 +91,7 @@ export function RejectFeedbackForm({
 
   const handleSectionToggle = (sectionId: string) => {
     setAffectedSections((prev) =>
-      prev.includes(sectionId)
-        ? prev.filter((s) => s !== sectionId)
-        : [...prev, sectionId]
+      prev.includes(sectionId) ? prev.filter((s) => s !== sectionId) : [...prev, sectionId]
     );
   };
 
@@ -106,8 +120,8 @@ export function RejectFeedbackForm({
             Reject Draft Award
           </DialogTitle>
           <DialogDescription>
-            Please provide detailed feedback on why this award is being rejected.
-            This information will be used to improve the next draft.
+            Please provide detailed feedback on why this award is being rejected. This information
+            will be used to improve the next draft.
           </DialogDescription>
         </DialogHeader>
 
@@ -127,7 +141,7 @@ export function RejectFeedbackForm({
                   <SelectItem key={cat.value} value={cat.value}>
                     <div>
                       <span className="font-medium">{cat.label}</span>
-                      <span className="text-muted-foreground text-sm ml-2">
+                      <span className="ml-2 text-sm text-muted-foreground">
                         - {cat.description}
                       </span>
                     </div>
@@ -152,7 +166,7 @@ export function RejectFeedbackForm({
                   <SelectItem key={sev.value} value={sev.value}>
                     <div>
                       <span className="font-medium">{sev.label}</span>
-                      <span className="text-muted-foreground text-sm ml-2">
+                      <span className="ml-2 text-sm text-muted-foreground">
                         - {sev.description}
                       </span>
                     </div>
@@ -175,7 +189,7 @@ export function RejectFeedbackForm({
                   />
                   <label
                     htmlFor={section.id}
-                    className="text-sm font-medium leading-none cursor-pointer"
+                    className="cursor-pointer text-sm font-medium leading-none"
                   >
                     {section.label}
                   </label>
@@ -213,19 +227,15 @@ export function RejectFeedbackForm({
           <Button variant="outline" onClick={onClose} disabled={isLoading}>
             Cancel
           </Button>
-          <Button
-            variant="destructive"
-            onClick={handleSubmit}
-            disabled={!isValid || isLoading}
-          >
+          <Button variant="destructive" onClick={handleSubmit} disabled={!isValid || isLoading}>
             {isLoading ? (
               <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Submitting...
               </>
             ) : (
               <>
-                <XCircle className="h-4 w-4 mr-2" />
+                <XCircle className="mr-2 h-4 w-4" />
                 Reject Award
               </>
             )}

@@ -183,12 +183,8 @@ export async function GET(request: NextRequest) {
         },
         aggregates: {
           totalAwards: aggregates._count.id,
-          totalAwardAmount: aggregates._sum.awardAmount
-            ? Number(aggregates._sum.awardAmount)
-            : 0,
-          averageAwardAmount: aggregates._avg.awardAmount
-            ? Number(aggregates._avg.awardAmount)
-            : 0,
+          totalAwardAmount: aggregates._sum.awardAmount ? Number(aggregates._sum.awardAmount) : 0,
+          averageAwardAmount: aggregates._avg.awardAmount ? Number(aggregates._avg.awardAmount) : 0,
         },
         byPrevailingParty: byPrevailingParty.map((item) => ({
           prevailingParty: item.prevailingParty,
@@ -201,9 +197,6 @@ export async function GET(request: NextRequest) {
     console.error('[Admin Awards API] GET error:', error);
     const message = error instanceof Error ? error.message : 'Failed to list awards';
     const status = message.includes('required') || message.includes('Insufficient') ? 401 : 500;
-    return NextResponse.json(
-      { success: false, error: message },
-      { status }
-    );
+    return NextResponse.json({ success: false, error: message }, { status });
   }
 }

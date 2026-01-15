@@ -2,11 +2,7 @@ import Link from 'next/link';
 
 import { ArrowLeft } from 'lucide-react';
 
-export default function LegalLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function LegalLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -14,7 +10,7 @@ export default function LegalLayout({
         <div className="container mx-auto flex h-14 items-center px-4">
           <Link
             href="/"
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Settleright.ai
@@ -32,25 +28,24 @@ export default function LegalLayout({
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} Settleright.ai. All rights
-              reserved.
+              &copy; {new Date().getFullYear()} Settleright.ai. All rights reserved.
             </p>
             <nav className="flex gap-4 text-sm text-muted-foreground">
               <Link
                 href="/legal/terms-of-service"
-                className="hover:text-foreground transition-colors"
+                className="transition-colors hover:text-foreground"
               >
                 Terms
               </Link>
               <Link
                 href="/legal/privacy-policy"
-                className="hover:text-foreground transition-colors"
+                className="transition-colors hover:text-foreground"
               >
                 Privacy
               </Link>
               <Link
                 href="/legal/procedural-rules"
-                className="hover:text-foreground transition-colors"
+                className="transition-colors hover:text-foreground"
               >
                 Arbitration Rules
               </Link>

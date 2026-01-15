@@ -51,16 +51,36 @@ export const createDocumentEvidence = (options: EvidenceFactoryOptions = {}) =>
   createEvidence({ ...options, type: 'DOCUMENT', fileName: options.fileName ?? 'contract.pdf' });
 
 export const createImageEvidence = (options: EvidenceFactoryOptions = {}) =>
-  createEvidence({ ...options, type: 'IMAGE', fileName: options.fileName ?? 'photo.jpg', mimeType: 'image/jpeg' });
+  createEvidence({
+    ...options,
+    type: 'IMAGE',
+    fileName: options.fileName ?? 'photo.jpg',
+    mimeType: 'image/jpeg',
+  });
 
 export const createVideoEvidence = (options: EvidenceFactoryOptions = {}) =>
-  createEvidence({ ...options, type: 'VIDEO', fileName: options.fileName ?? 'video.mp4', mimeType: 'video/mp4', fileSize: 1024 * 1024 * 50 });
+  createEvidence({
+    ...options,
+    type: 'VIDEO',
+    fileName: options.fileName ?? 'video.mp4',
+    mimeType: 'video/mp4',
+    fileSize: 1024 * 1024 * 50,
+  });
 
 export const createAudioEvidence = (options: EvidenceFactoryOptions = {}) =>
-  createEvidence({ ...options, type: 'AUDIO', fileName: options.fileName ?? 'audio.mp3', mimeType: 'audio/mpeg' });
+  createEvidence({
+    ...options,
+    type: 'AUDIO',
+    fileName: options.fileName ?? 'audio.mp3',
+    mimeType: 'audio/mpeg',
+  });
 
 export const createCommunicationEvidence = (options: EvidenceFactoryOptions = {}) =>
-  createEvidence({ ...options, type: 'COMMUNICATION', title: options.title ?? 'Email Correspondence' });
+  createEvidence({
+    ...options,
+    type: 'COMMUNICATION',
+    title: options.title ?? 'Email Correspondence',
+  });
 
 export const createFinancialEvidence = (options: EvidenceFactoryOptions = {}) =>
   createEvidence({ ...options, type: 'FINANCIAL', title: options.title ?? 'Bank Statements' });
@@ -71,6 +91,11 @@ export const createFinancialEvidence = (options: EvidenceFactoryOptions = {}) =>
 export function createEvidenceSet(caseId: string, uploadedById: string, count = 5) {
   const types = ['DOCUMENT', 'IMAGE', 'COMMUNICATION', 'FINANCIAL', 'OTHER'];
   return Array.from({ length: count }, (_, i) =>
-    createEvidence({ caseId, uploadedById, type: types[i % types.length], title: `Evidence Item ${i + 1}` })
+    createEvidence({
+      caseId,
+      uploadedById,
+      type: types[i % types.length],
+      title: `Evidence Item ${i + 1}`,
+    })
   );
 }

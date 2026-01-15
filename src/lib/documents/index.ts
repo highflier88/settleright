@@ -42,11 +42,7 @@ export {
 } from './ocr';
 
 // Classification
-export {
-  classifyDocument,
-  classifyByFilename,
-  estimateClassificationCost,
-} from './classifier';
+export { classifyDocument, classifyByFilename, estimateClassificationCost } from './classifier';
 
 // Entity extraction
 export {
@@ -60,11 +56,7 @@ export {
 } from './entities';
 
 // Summarization
-export {
-  summarizeDocument,
-  generateQuickSummary,
-  estimateSummarizationCost,
-} from './summarizer';
+export { summarizeDocument, generateQuickSummary, estimateSummarizationCost } from './summarizer';
 
 // Re-export types
 export type {

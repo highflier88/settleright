@@ -28,21 +28,17 @@ export interface SendSmsResult {
 }
 
 // Send phone verification code using Twilio Verify
-export async function sendPhoneVerification(
-  phoneNumber: string
-): Promise<SendVerificationResult> {
+export async function sendPhoneVerification(phoneNumber: string): Promise<SendVerificationResult> {
   if (!client || !verifyServiceSid) {
     console.error('Twilio not configured');
     return { success: false, error: 'SMS service not configured' };
   }
 
   try {
-    const verification = await client.verify.v2
-      .services(verifyServiceSid)
-      .verifications.create({
-        to: phoneNumber,
-        channel: 'sms',
-      });
+    const verification = await client.verify.v2.services(verifyServiceSid).verifications.create({
+      to: phoneNumber,
+      channel: 'sms',
+    });
 
     return {
       success: true,
@@ -91,10 +87,7 @@ export async function checkPhoneVerification(
 }
 
 // Send a simple SMS message
-export async function sendSms(
-  to: string,
-  body: string
-): Promise<SendSmsResult> {
+export async function sendSms(to: string, body: string): Promise<SendSmsResult> {
   if (!client || !fromNumber) {
     console.error('Twilio not configured');
     return { success: false, error: 'SMS service not configured' };

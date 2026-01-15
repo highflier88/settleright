@@ -10,13 +10,13 @@ This document establishes coding standards, development environment setup, and b
 
 ### Prerequisites
 
-| Tool | Version | Installation |
-|------|---------|--------------|
-| Node.js | 20.x LTS | [nodejs.org](https://nodejs.org) or nvm |
-| pnpm | 8.x | `npm install -g pnpm` |
-| Docker | 24.x | [docker.com](https://docker.com) |
-| Git | 2.40+ | [git-scm.com](https://git-scm.com) |
-| VS Code | Latest | [code.visualstudio.com](https://code.visualstudio.com) |
+| Tool    | Version  | Installation                                           |
+| ------- | -------- | ------------------------------------------------------ |
+| Node.js | 20.x LTS | [nodejs.org](https://nodejs.org) or nvm                |
+| pnpm    | 8.x      | `npm install -g pnpm`                                  |
+| Docker  | 24.x     | [docker.com](https://docker.com)                       |
+| Git     | 2.40+    | [git-scm.com](https://git-scm.com)                     |
+| VS Code | Latest   | [code.visualstudio.com](https://code.visualstudio.com) |
 
 ### Node.js Version Management
 
@@ -33,6 +33,7 @@ nvm alias default 20
 ```
 
 The project includes an `.nvmrc` file:
+
 ```
 20
 ```
@@ -179,6 +180,7 @@ settleright-platform/
 ### TypeScript
 
 **Strict Mode Required:**
+
 ```json
 {
   "compilerOptions": {
@@ -192,6 +194,7 @@ settleright-platform/
 ```
 
 **Type Guidelines:**
+
 - Prefer `interface` over `type` for object shapes
 - Use `type` for unions, intersections, and primitives
 - Avoid `any` - use `unknown` if type is truly unknown
@@ -214,22 +217,23 @@ const user: any = fetchUser();
 
 ### Naming Conventions
 
-| Type | Convention | Example |
-|------|------------|---------|
-| Variables | camelCase | `caseStatus` |
-| Functions | camelCase | `getCaseById` |
-| Classes | PascalCase | `CaseService` |
-| Interfaces | PascalCase | `CaseData` |
-| Types | PascalCase | `CaseStatus` |
-| Constants | SCREAMING_SNAKE_CASE | `MAX_FILE_SIZE` |
-| Files (components) | PascalCase | `CaseCard.tsx` |
-| Files (utilities) | kebab-case | `date-utils.ts` |
-| Database tables | snake_case | `audit_logs` |
-| API routes | kebab-case | `/api/v1/case-evidence` |
+| Type               | Convention           | Example                 |
+| ------------------ | -------------------- | ----------------------- |
+| Variables          | camelCase            | `caseStatus`            |
+| Functions          | camelCase            | `getCaseById`           |
+| Classes            | PascalCase           | `CaseService`           |
+| Interfaces         | PascalCase           | `CaseData`              |
+| Types              | PascalCase           | `CaseStatus`            |
+| Constants          | SCREAMING_SNAKE_CASE | `MAX_FILE_SIZE`         |
+| Files (components) | PascalCase           | `CaseCard.tsx`          |
+| Files (utilities)  | kebab-case           | `date-utils.ts`         |
+| Database tables    | snake_case           | `audit_logs`            |
+| API routes         | kebab-case           | `/api/v1/case-evidence` |
 
 ### File Organization
 
 **Components:**
+
 ```typescript
 // CaseCard.tsx
 import { type FC } from 'react';
@@ -252,6 +256,7 @@ export const CaseCard: FC<CaseCardProps> = ({ case, onClick }) => {
 ```
 
 **Services:**
+
 ```typescript
 // case.service.ts
 import { prisma } from '@/lib/prisma';
@@ -296,6 +301,7 @@ import type { Case } from '@/types';
 ### Error Handling
 
 **API Routes:**
+
 ```typescript
 import { AppError } from '@/lib/errors';
 
@@ -328,6 +334,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 ```
 
 **Frontend:**
+
 ```typescript
 // Use try-catch with typed errors
 try {
@@ -399,6 +406,7 @@ module.exports = {
 ```
 
 Pre-commit hook:
+
 ```bash
 #!/bin/sh
 pnpm lint-staged
@@ -406,6 +414,7 @@ pnpm type-check
 ```
 
 Pre-push hook:
+
 ```bash
 #!/bin/sh
 pnpm test
@@ -532,11 +541,11 @@ test.describe('Case Creation', () => {
 
 ### Test Coverage Requirements
 
-| Type | Minimum Coverage |
-|------|------------------|
-| Unit Tests | 80% |
-| Integration Tests | Critical paths |
-| E2E Tests | Happy paths |
+| Type              | Minimum Coverage |
+| ----------------- | ---------------- |
+| Unit Tests        | 80%              |
+| Integration Tests | Critical paths   |
+| E2E Tests         | Happy paths      |
 
 ---
 
@@ -572,9 +581,7 @@ test.describe('Case Creation', () => {
     "source.organizeImports": true
   },
   "typescript.preferences.importModuleSpecifier": "non-relative",
-  "tailwindCSS.experimental.classRegex": [
-    ["cn\\(([^)]*)\\)", "'([^']*)'"]
-  ]
+  "tailwindCSS.experimental.classRegex": [["cn\\(([^)]*)\\)", "'([^']*)'"]]
 }
 ```
 
@@ -609,8 +616,8 @@ services:
   mailhog:
     image: mailhog/mailhog
     ports:
-      - '1025:1025'  # SMTP
-      - '8025:8025'  # Web UI
+      - '1025:1025' # SMTP
+      - '8025:8025' # Web UI
 
 volumes:
   postgres_data:
@@ -764,6 +771,7 @@ async function generateDraftAward(caseId: string): Promise<DraftAward> {
 ### README Files
 
 Each package should have a README with:
+
 - Purpose and responsibility
 - Setup instructions
 - Key APIs/exports

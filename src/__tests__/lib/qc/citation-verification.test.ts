@@ -60,7 +60,7 @@ describe('Citation Verification', () => {
         const result = verifyCitationFormat('Smith v. Jones, 123 F.3d 456');
 
         expect(result.isValid).toBe(false);
-        expect(result.errors.some(e => e.includes('parenthetical'))).toBe(true);
+        expect(result.errors.some((e) => e.includes('parenthetical'))).toBe(true);
       });
     });
 
@@ -157,7 +157,7 @@ describe('Citation Verification', () => {
       it('should detect double spaces', () => {
         const result = verifyCitationFormat('42  U.S.C.  § 1983');
 
-        expect(result.errors.some(e => e.includes('double spaces'))).toBe(true);
+        expect(result.errors.some((e) => e.includes('double spaces'))).toBe(true);
       });
     });
   });
@@ -174,7 +174,7 @@ describe('Citation Verification', () => {
       const result = await checkCitationExists('99 U.S.C. § 1983', 'statute');
 
       expect(result.exists).toBe(false);
-      expect(result.notes.some(n => n.includes('outside valid range'))).toBe(true);
+      expect(result.notes.some((n) => n.includes('outside valid range'))).toBe(true);
     });
 
     it('should validate CFR title in valid range', async () => {
@@ -199,7 +199,7 @@ describe('Citation Verification', () => {
       );
 
       expect(result.exists).toBe(false);
-      expect(result.notes.some(n => n.includes('future'))).toBe(true);
+      expect(result.notes.some((n) => n.includes('future'))).toBe(true);
     });
 
     it('should reject case citation predating US courts', async () => {
@@ -209,7 +209,7 @@ describe('Citation Verification', () => {
       );
 
       expect(result.exists).toBe(false);
-      expect(result.notes.some(n => n.includes('predates'))).toBe(true);
+      expect(result.notes.some((n) => n.includes('predates'))).toBe(true);
     });
 
     it('should recognize valid reporter', async () => {
@@ -219,7 +219,7 @@ describe('Citation Verification', () => {
       );
 
       expect(result.exists).toBe(true);
-      expect(result.notes.some(n => n.includes('reporter'))).toBe(true);
+      expect(result.notes.some((n) => n.includes('reporter'))).toBe(true);
     });
   });
 

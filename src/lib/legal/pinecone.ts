@@ -20,7 +20,7 @@ export const PINECONE_NAMESPACES = {
   FEDERAL_REGULATIONS: 'federal-regulations',
 } as const;
 
-export type PineconeNamespace = typeof PINECONE_NAMESPACES[keyof typeof PINECONE_NAMESPACES];
+export type PineconeNamespace = (typeof PINECONE_NAMESPACES)[keyof typeof PINECONE_NAMESPACES];
 
 // Metadata stored with each vector
 export interface LegalVectorMetadata {
@@ -150,10 +150,7 @@ export async function queryMultipleNamespaces(
 /**
  * Delete vectors by ID from a namespace
  */
-export async function deleteVectors(
-  namespace: PineconeNamespace,
-  ids: string[]
-): Promise<void> {
+export async function deleteVectors(namespace: PineconeNamespace, ids: string[]): Promise<void> {
   const index = getPineconeIndex();
   const ns = index.namespace(namespace);
   await ns.deleteMany(ids);
@@ -208,7 +205,9 @@ export function getNamespaceForDocument(
   }
 
   if (sourceType === 'REGULATION' || sourceType === 'COURT_RULE') {
-    return isCalifonia ? PINECONE_NAMESPACES.CA_REGULATIONS : PINECONE_NAMESPACES.FEDERAL_REGULATIONS;
+    return isCalifonia
+      ? PINECONE_NAMESPACES.CA_REGULATIONS
+      : PINECONE_NAMESPACES.FEDERAL_REGULATIONS;
   }
 
   return PINECONE_NAMESPACES.CA_STATUTES;

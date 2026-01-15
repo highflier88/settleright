@@ -11,10 +11,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { NotificationType } from '@prisma/client';
 
 import { prisma } from '@/lib/db';
-import {
-  createInAppNotification,
-  NotificationTemplates,
-} from '@/lib/services/notification';
+import { createInAppNotification, NotificationTemplates } from '@/lib/services/notification';
 
 import {
   AWARD_GENERATION_SYSTEM_PROMPT,
@@ -90,11 +87,7 @@ export async function generateDraftAward(
   totalTokens += findingsResult.tokensUsed;
 
   // Phase 2: Generate Conclusions of Law
-  const conclusionsResult = await generateConclusionsOfLaw(
-    client,
-    input,
-    findingsResult.findings
-  );
+  const conclusionsResult = await generateConclusionsOfLaw(client, input, findingsResult.findings);
   totalTokens += conclusionsResult.tokensUsed;
 
   // Phase 3: Generate Decision and Order
@@ -155,8 +148,8 @@ async function generateFindingsOfFact(
   // Prepare disputed facts with resolution info
   const disputedWithResolution = input.disputedFacts.map((df) => {
     // Determine resolution based on burden of proof
-    const burdenAnalysis = input.burdenOfProof.analyses.find(
-      (a) => a.issue.toLowerCase().includes(df.topic.toLowerCase())
+    const burdenAnalysis = input.burdenOfProof.analyses.find((a) =>
+      a.issue.toLowerCase().includes(df.topic.toLowerCase())
     );
 
     let resolved: 'claimant' | 'respondent' | 'partial' = 'partial';
@@ -213,11 +206,9 @@ async function generateFindingsOfFact(
     messages: [{ role: 'user', content: prompt }],
   });
 
-  const responseText =
-    response.content[0]?.type === 'text' ? response.content[0].text : '';
+  const responseText = response.content[0]?.type === 'text' ? response.content[0].text : '';
 
-  const tokensUsed =
-    (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
+  const tokensUsed = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
 
   const findings = parseFindingsResponse(responseText);
 
@@ -309,11 +300,9 @@ async function generateConclusionsOfLaw(
     messages: [{ role: 'user', content: prompt }],
   });
 
-  const responseText =
-    response.content[0]?.type === 'text' ? response.content[0].text : '';
+  const responseText = response.content[0]?.type === 'text' ? response.content[0].text : '';
 
-  const tokensUsed =
-    (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
+  const tokensUsed = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
 
   const conclusions = parseConclusionsResponse(responseText);
 
@@ -409,17 +398,11 @@ async function generateDecisionAndOrder(
     messages: [{ role: 'user', content: prompt }],
   });
 
-  const responseText =
-    response.content[0]?.type === 'text' ? response.content[0].text : '';
+  const responseText = response.content[0]?.type === 'text' ? response.content[0].text : '';
 
-  const tokensUsed =
-    (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
+  const tokensUsed = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
 
-  const decision = parseDecisionResponse(
-    responseText,
-    input,
-    damagesCalculation
-  );
+  const decision = parseDecisionResponse(responseText, input, damagesCalculation);
 
   return { decision, tokensUsed };
 }
@@ -546,10 +529,7 @@ function calculateAwardConfidence(input: DraftAwardInput): number {
 /**
  * Save draft award to database
  */
-async function saveDraftAward(
-  caseId: string,
-  output: DraftAwardOutput
-): Promise<void> {
+async function saveDraftAward(caseId: string, output: DraftAwardOutput): Promise<void> {
   // Delete existing draft if any
   await prisma.draftAward.deleteMany({
     where: { caseId },
@@ -731,9 +711,7 @@ export async function submitDraftAwardReview(
 /**
  * Load draft award input from completed analysis
  */
-export async function loadDraftAwardInput(
-  caseId: string
-): Promise<DraftAwardInput | null> {
+export async function loadDraftAwardInput(caseId: string): Promise<DraftAwardInput | null> {
   // Get case data
   const caseData = await prisma.case.findUnique({
     where: { id: caseId },
@@ -759,10 +737,7 @@ export async function loadDraftAwardInput(
   if (!analysisJob) return null;
 
   // Check both fact and legal analysis are completed
-  if (
-    analysisJob.status !== 'COMPLETED' ||
-    analysisJob.legalAnalysisStatus !== 'COMPLETED'
-  ) {
+  if (analysisJob.status !== 'COMPLETED' || analysisJob.legalAnalysisStatus !== 'COMPLETED') {
     return null;
   }
 
@@ -776,15 +751,18 @@ export async function loadDraftAwardInput(
 
   const undisputedFacts = (analysisJob.undisputedFacts || []) as unknown as StoredUndisputedFact[];
 
-  const credibilityScores = analysisJob.credibilityScores as unknown as StoredCredibilityScores | null;
+  const credibilityScores =
+    analysisJob.credibilityScores as unknown as StoredCredibilityScores | null;
 
   const legalIssues = (analysisJob.legalIssues || []) as unknown as StoredLegalIssue[];
 
   const burdenOfProof = analysisJob.burdenOfProof as unknown as StoredBurdenOfProof | null;
 
-  const damagesCalculation = analysisJob.damagesCalculation as unknown as StoredDamagesCalculation | null;
+  const damagesCalculation =
+    analysisJob.damagesCalculation as unknown as StoredDamagesCalculation | null;
 
-  const conclusionsOfLaw = (analysisJob.conclusionsOfLaw || []) as unknown as StoredConclusionOfLaw[];
+  const conclusionsOfLaw = (analysisJob.conclusionsOfLaw ||
+    []) as unknown as StoredConclusionOfLaw[];
 
   // Get award recommendation from damages calculation or create default
   const awardRecommendation: StoredAwardRecommendation = damagesCalculation
@@ -802,12 +780,7 @@ export async function loadDraftAwardInput(
   const citationsUsed = (analysisJob.citationsUsed || []) as unknown as StoredCitation[];
 
   // Validate required data
-  if (
-    !extractedFacts ||
-    !credibilityScores ||
-    !burdenOfProof ||
-    !damagesCalculation
-  ) {
+  if (!extractedFacts || !credibilityScores || !burdenOfProof || !damagesCalculation) {
     return null;
   }
 

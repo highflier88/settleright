@@ -25,7 +25,17 @@ export async function queueDocument(evidenceId: string): Promise<string> {
   const existing = await prisma.documentProcessingJob.findFirst({
     where: {
       evidenceId,
-      status: { in: ['PENDING', 'QUEUED', 'EXTRACTING', 'OCR_PROCESSING', 'CLASSIFYING', 'EXTRACTING_ENTITIES', 'SUMMARIZING'] },
+      status: {
+        in: [
+          'PENDING',
+          'QUEUED',
+          'EXTRACTING',
+          'OCR_PROCESSING',
+          'CLASSIFYING',
+          'EXTRACTING_ENTITIES',
+          'SUMMARIZING',
+        ],
+      },
     },
   });
 
@@ -79,7 +89,11 @@ export async function queueCaseDocuments(caseId: string): Promise<string[]> {
 export async function processPendingDocuments(
   limit: number = BATCH_SIZE,
   options?: ProcessorOptions
-): Promise<{ processed: number; failed: number; results: Array<{ evidenceId: string; success: boolean; error?: string }> }> {
+): Promise<{
+  processed: number;
+  failed: number;
+  results: Array<{ evidenceId: string; success: boolean; error?: string }>;
+}> {
   // Get pending jobs
   const pendingJobs = await prisma.documentProcessingJob.findMany({
     where: { status: 'PENDING' },
@@ -100,14 +114,10 @@ export async function processPendingDocuments(
   await Promise.all(
     pendingJobs.map(async (job) => {
       try {
-        const result = await processDocument(
-          job.evidenceId,
-          options,
-          async (progress) => {
-            // Cache progress for real-time polling
-            await setCache(`${PROGRESS_CACHE_PREFIX}${job.evidenceId}`, progress, 300);
-          }
-        );
+        const result = await processDocument(job.evidenceId, options, async (progress) => {
+          // Cache progress for real-time polling
+          await setCache(`${PROGRESS_CACHE_PREFIX}${job.evidenceId}`, progress, 300);
+        });
 
         if (result.status === 'COMPLETED') {
           processed++;

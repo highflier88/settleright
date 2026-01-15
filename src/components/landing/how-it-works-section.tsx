@@ -1,14 +1,6 @@
 import Link from 'next/link';
 
-import {
-  FileText,
-  PenTool,
-  Upload,
-  Brain,
-  Scale,
-  Award,
-  type LucideIcon,
-} from 'lucide-react';
+import { FileText, PenTool, Upload, Brain, Scale, Award, type LucideIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -66,10 +58,8 @@ export function HowItWorksSection() {
     <SectionWrapper id="how-it-works">
       <div className="mx-auto max-w-6xl">
         {/* Section Header */}
-        <div className="mb-16 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            How It Works
-          </h2>
+        <div className="mb-16 text-center duration-500 animate-in fade-in slide-in-from-bottom-4">
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">How It Works</h2>
           <p className="mt-4 text-lg text-muted-foreground">
             Six simple steps from filing to resolution
           </p>
@@ -88,7 +78,7 @@ export function HowItWorksSection() {
                   key={step.number}
                   className={cn(
                     'group flex flex-col items-center text-center',
-                    'animate-in fade-in slide-in-from-bottom-4',
+                    'animate-in fade-in slide-in-from-bottom-4'
                   )}
                   style={{ animationDelay: `${(index + 1) * 100}ms` }}
                 >
@@ -100,14 +90,14 @@ export function HowItWorksSection() {
                     </div>
                   </div>
                   {/* Step Number Badge */}
-                  <div className="relative -mt-3 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground shadow-md ring-2 ring-background">
+                  <div className="relative z-20 -mt-3 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground shadow-md ring-2 ring-background">
                     {step.number}
                   </div>
                   {/* Content */}
                   <h3 className="mt-4 text-sm font-semibold transition-colors duration-300 group-hover:text-primary">
                     {step.title}
                   </h3>
-                  <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
                     {step.description}
                   </p>
                 </div>
@@ -124,7 +114,7 @@ export function HowItWorksSection() {
                 key={step.number}
                 className={cn(
                   'group relative flex gap-5',
-                  'animate-in fade-in slide-in-from-left-4',
+                  'animate-in fade-in slide-in-from-left-4'
                 )}
                 style={{ animationDelay: `${(index + 1) * 100}ms` }}
               >
@@ -151,7 +141,7 @@ export function HowItWorksSection() {
                       {step.title}
                     </h3>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {step.description}
                   </p>
                 </div>
@@ -161,16 +151,16 @@ export function HowItWorksSection() {
         </div>
 
         {/* Bottom CTA */}
-        <div className="mt-16 text-center animate-in fade-in duration-500 delay-700">
-          <p className="text-lg text-muted-foreground">
-            Ready to start your case?
-          </p>
+        <div className="mt-16 text-center delay-700 duration-500 animate-in fade-in">
+          <p className="text-lg text-muted-foreground">Ready to start your case?</p>
           <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Link href="/sign-up">
               <Button size="lg">Start Your Case</Button>
             </Link>
             <Link href="#pricing">
-              <Button variant="outline" size="lg">View Pricing</Button>
+              <Button variant="outline" size="lg">
+                View Pricing
+              </Button>
             </Link>
           </div>
         </div>

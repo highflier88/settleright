@@ -79,9 +79,7 @@ export interface UploadEvidenceResult {
 }
 
 // Upload evidence file
-export async function uploadEvidence(
-  input: UploadEvidenceInput
-): Promise<UploadEvidenceResult> {
+export async function uploadEvidence(input: UploadEvidenceInput): Promise<UploadEvidenceResult> {
   try {
     const { caseId, userId, file, description } = input;
 
@@ -205,10 +203,7 @@ export async function uploadEvidence(
 }
 
 // Get evidence for a case
-export async function getCaseEvidence(
-  caseId: string,
-  userId: string
-): Promise<Evidence[]> {
+export async function getCaseEvidence(caseId: string, userId: string): Promise<Evidence[]> {
   // Verify user has access
   const caseRecord = await prisma.case.findUnique({
     where: { id: caseId },
@@ -237,10 +232,7 @@ export async function getEvidenceById(evidenceId: string): Promise<Evidence | nu
 }
 
 // Mark evidence as viewed by opposing party
-export async function markEvidenceViewed(
-  evidenceId: string,
-  viewerId: string
-): Promise<boolean> {
+export async function markEvidenceViewed(evidenceId: string, viewerId: string): Promise<boolean> {
   try {
     const evidence = await prisma.evidence.findUnique({
       where: { id: evidenceId },
@@ -386,12 +378,8 @@ export async function getEvidenceStats(caseId: string): Promise<{
     select: { fileSize: true, submittedById: true },
   });
 
-  const claimantEvidence = evidence.filter(
-    (e) => e.submittedById === caseRecord.claimantId
-  );
-  const respondentEvidence = evidence.filter(
-    (e) => e.submittedById === caseRecord.respondentId
-  );
+  const claimantEvidence = evidence.filter((e) => e.submittedById === caseRecord.claimantId);
+  const respondentEvidence = evidence.filter((e) => e.submittedById === caseRecord.respondentId);
 
   const totalSize = evidence.reduce((sum, e) => sum + e.fileSize, 0);
 

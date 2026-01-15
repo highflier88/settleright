@@ -10,10 +10,7 @@ import { prisma } from '@/lib/db';
 
 import { getCitationUrl, parseCitation } from './citations';
 import { generateEmbedding } from './embeddings';
-import {
-  queryMultipleNamespaces,
-  PINECONE_NAMESPACES,
-} from './pinecone';
+import { queryMultipleNamespaces, PINECONE_NAMESPACES } from './pinecone';
 
 import type { LegalSearchResult, PineconeNamespace } from './pinecone';
 import type { DisputeType, LegalSourceType } from '@prisma/client';
@@ -74,10 +71,7 @@ function getSearchNamespaces(
       );
     }
     // Always include federal
-    namespaces.push(
-      PINECONE_NAMESPACES.FEDERAL_STATUTES,
-      PINECONE_NAMESPACES.FEDERAL_REGULATIONS
-    );
+    namespaces.push(PINECONE_NAMESPACES.FEDERAL_STATUTES, PINECONE_NAMESPACES.FEDERAL_REGULATIONS);
   } else {
     // Filter to requested source types
     for (const type of sourceTypes) {

@@ -20,13 +20,7 @@ import {
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getAuthUser } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 
@@ -112,7 +106,11 @@ function getPriorityBadge(priority: string) {
     case 'urgent':
       return <Badge variant="destructive">Urgent Priority</Badge>;
     case 'high':
-      return <Badge variant="default" className="bg-orange-500">High Priority</Badge>;
+      return (
+        <Badge variant="default" className="bg-orange-500">
+          High Priority
+        </Badge>
+      );
     default:
       return <Badge variant="secondary">Normal Priority</Badge>;
   }
@@ -121,13 +119,25 @@ function getPriorityBadge(priority: string) {
 function getReviewStatusBadge(status: string | null) {
   switch (status) {
     case 'APPROVE':
-      return <Badge variant="default" className="bg-green-600">Approved</Badge>;
+      return (
+        <Badge variant="default" className="bg-green-600">
+          Approved
+        </Badge>
+      );
     case 'MODIFY':
-      return <Badge variant="default" className="bg-blue-600">Modified</Badge>;
+      return (
+        <Badge variant="default" className="bg-blue-600">
+          Modified
+        </Badge>
+      );
     case 'REJECT':
       return <Badge variant="destructive">Rejected</Badge>;
     case 'ESCALATE':
-      return <Badge variant="default" className="bg-purple-600">Escalated</Badge>;
+      return (
+        <Badge variant="default" className="bg-purple-600">
+          Escalated
+        </Badge>
+      );
     default:
       return <Badge variant="outline">Pending Review</Badge>;
   }
@@ -160,35 +170,30 @@ export default async function ArbitratorCaseDetailPage({ params }: PageProps) {
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <Link
-              href="/arbitrator"
-              className="text-muted-foreground hover:text-foreground"
-            >
+            <Link href="/arbitrator" className="text-muted-foreground hover:text-foreground">
               <ArrowLeft className="h-4 w-4" />
             </Link>
-            <h1 className="text-2xl font-bold tracking-tight">
-              Case {caseData.referenceNumber}
-            </h1>
+            <h1 className="text-2xl font-bold tracking-tight">Case {caseData.referenceNumber}</h1>
           </div>
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex flex-wrap items-center gap-2">
             {getPriorityBadge(assignment.priority)}
             <Badge variant="outline">{caseData.disputeType}</Badge>
             <Badge variant="outline">{caseData.jurisdiction}</Badge>
             {isOverdue && (
               <Badge variant="destructive">
-                <AlertTriangle className="h-3 w-3 mr-1" />
+                <AlertTriangle className="mr-1 h-3 w-3" />
                 Overdue
               </Badge>
             )}
             {hasDraftAward && (
-              <Badge variant="outline" className="text-green-600 border-green-600">
-                <CheckCircle className="h-3 w-3 mr-1" />
+              <Badge variant="outline" className="border-green-600 text-green-600">
+                <CheckCircle className="mr-1 h-3 w-3" />
                 Draft Award Ready
               </Badge>
             )}
             {hasIssuedAward && (
               <Badge variant="default" className="bg-green-600">
-                <Gavel className="h-3 w-3 mr-1" />
+                <Gavel className="mr-1 h-3 w-3" />
                 Award Issued
               </Badge>
             )}
@@ -198,14 +203,14 @@ export default async function ArbitratorCaseDetailPage({ params }: PageProps) {
         <div className="flex items-center gap-2">
           <Link href={`/arbitrator/cases/${caseData.id}/review`}>
             <Button variant="outline">
-              <Eye className="h-4 w-4 mr-2" />
+              <Eye className="mr-2 h-4 w-4" />
               Full Review
             </Button>
           </Link>
           {hasDraftAward && !hasIssuedAward && (
             <Link href={`/arbitrator/cases/${caseData.id}/award`}>
               <Button>
-                <Gavel className="h-4 w-4 mr-2" />
+                <Gavel className="mr-2 h-4 w-4" />
                 Review Award
               </Button>
             </Link>
@@ -213,7 +218,7 @@ export default async function ArbitratorCaseDetailPage({ params }: PageProps) {
           {hasIssuedAward && (
             <Link href={`/api/cases/${caseData.id}/award/download`}>
               <Button variant="outline">
-                <Download className="h-4 w-4 mr-2" />
+                <Download className="mr-2 h-4 w-4" />
                 Download Award
               </Button>
             </Link>
@@ -224,7 +229,7 @@ export default async function ArbitratorCaseDetailPage({ params }: PageProps) {
       {/* Assignment Info */}
       <Card className={isOverdue ? 'border-destructive' : ''}>
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-lg">
             <Scale className="h-5 w-5" />
             Assignment Details
           </CardTitle>
@@ -283,9 +288,7 @@ export default async function ArbitratorCaseDetailPage({ params }: PageProps) {
             </div>
             <div>
               <span className="text-sm text-muted-foreground">Filed</span>
-              <p className="font-medium">
-                {format(new Date(caseData.createdAt), 'MMMM d, yyyy')}
-              </p>
+              <p className="font-medium">{format(new Date(caseData.createdAt), 'MMMM d, yyyy')}</p>
             </div>
             <div>
               <span className="text-sm text-muted-foreground">Case Status</span>
@@ -293,7 +296,7 @@ export default async function ArbitratorCaseDetailPage({ params }: PageProps) {
             </div>
             <div>
               <span className="text-sm text-muted-foreground">Description</span>
-              <p className="mt-1 text-sm whitespace-pre-wrap line-clamp-4">
+              <p className="mt-1 line-clamp-4 whitespace-pre-wrap text-sm">
                 {caseData.description}
               </p>
             </div>
@@ -310,27 +313,19 @@ export default async function ArbitratorCaseDetailPage({ params }: PageProps) {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="rounded-lg border p-3">
-              <span className="text-xs text-muted-foreground uppercase tracking-wide">
+              <span className="text-xs uppercase tracking-wide text-muted-foreground">
                 Claimant
               </span>
-              <p className="font-medium mt-1">
-                {caseData.claimant?.name || 'Unknown'}
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {caseData.claimant?.email}
-              </p>
+              <p className="mt-1 font-medium">{caseData.claimant?.name || 'Unknown'}</p>
+              <p className="text-sm text-muted-foreground">{caseData.claimant?.email}</p>
             </div>
-            <div className="text-center text-muted-foreground text-sm">v.</div>
+            <div className="text-center text-sm text-muted-foreground">v.</div>
             <div className="rounded-lg border p-3">
-              <span className="text-xs text-muted-foreground uppercase tracking-wide">
+              <span className="text-xs uppercase tracking-wide text-muted-foreground">
                 Respondent
               </span>
-              <p className="font-medium mt-1">
-                {caseData.respondent?.name || 'Unknown'}
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {caseData.respondent?.email}
-              </p>
+              <p className="mt-1 font-medium">{caseData.respondent?.name || 'Unknown'}</p>
+              <p className="text-sm text-muted-foreground">{caseData.respondent?.email}</p>
             </div>
           </CardContent>
         </Card>
@@ -344,14 +339,12 @@ export default async function ArbitratorCaseDetailPage({ params }: PageProps) {
               <Scale className="h-5 w-5" />
               AI Analysis Summary
             </CardTitle>
-            <CardDescription>
-              Automated analysis of case facts and legal issues
-            </CardDescription>
+            <CardDescription>Automated analysis of case facts and legal issues</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="rounded-lg border p-4">
-                <h4 className="font-medium mb-2">Fact Analysis</h4>
+                <h4 className="mb-2 font-medium">Fact Analysis</h4>
                 <div className="space-y-2 text-sm">
                   <p>
                     <span className="text-muted-foreground">Status: </span>
@@ -367,17 +360,22 @@ export default async function ArbitratorCaseDetailPage({ params }: PageProps) {
                 </div>
               </div>
               <div className="rounded-lg border p-4">
-                <h4 className="font-medium mb-2">Legal Analysis</h4>
+                <h4 className="mb-2 font-medium">Legal Analysis</h4>
                 <div className="space-y-2 text-sm">
                   <p>
                     <span className="text-muted-foreground">Status: </span>
-                    <Badge variant={analysisJob.legalAnalysisStatus === 'COMPLETED' ? 'default' : 'secondary'}>
+                    <Badge
+                      variant={
+                        analysisJob.legalAnalysisStatus === 'COMPLETED' ? 'default' : 'secondary'
+                      }
+                    >
                       {analysisJob.legalAnalysisStatus || 'PENDING'}
                     </Badge>
                   </p>
                   {analysisJob.legalAnalysisCompletedAt && (
                     <p className="text-muted-foreground">
-                      Completed: {format(new Date(analysisJob.legalAnalysisCompletedAt), 'MMM d, yyyy')}
+                      Completed:{' '}
+                      {format(new Date(analysisJob.legalAnalysisCompletedAt), 'MMM d, yyyy')}
                     </p>
                   )}
                 </div>
@@ -397,30 +395,30 @@ export default async function ArbitratorCaseDetailPage({ params }: PageProps) {
                   <Gavel className="h-5 w-5" />
                   Draft Award
                 </CardTitle>
-                <CardDescription>
-                  AI-generated award recommendation
-                </CardDescription>
+                <CardDescription>AI-generated award recommendation</CardDescription>
               </div>
               {getReviewStatusBadge(caseData.draftAward.reviewStatus)}
             </div>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-4 md:grid-cols-3 mb-4">
+            <div className="mb-4 grid gap-4 md:grid-cols-3">
               <div className="rounded-lg border p-4 text-center">
                 <span className="text-sm text-muted-foreground">Recommended Award</span>
-                <p className="text-2xl font-bold mt-1">
-                  {formatCurrency(caseData.draftAward.awardAmount ? Number(caseData.draftAward.awardAmount) : null)}
+                <p className="mt-1 text-2xl font-bold">
+                  {formatCurrency(
+                    caseData.draftAward.awardAmount ? Number(caseData.draftAward.awardAmount) : null
+                  )}
                 </p>
               </div>
               <div className="rounded-lg border p-4 text-center">
                 <span className="text-sm text-muted-foreground">Prevailing Party</span>
-                <p className="text-lg font-medium mt-1 capitalize">
+                <p className="mt-1 text-lg font-medium capitalize">
                   {caseData.draftAward.prevailingParty?.toLowerCase() || 'N/A'}
                 </p>
               </div>
               <div className="rounded-lg border p-4 text-center">
                 <span className="text-sm text-muted-foreground">AI Confidence</span>
-                <p className="text-lg font-medium mt-1">
+                <p className="mt-1 text-lg font-medium">
                   {caseData.draftAward.confidence
                     ? `${Math.round(caseData.draftAward.confidence * 100)}%`
                     : 'N/A'}
@@ -429,17 +427,17 @@ export default async function ArbitratorCaseDetailPage({ params }: PageProps) {
             </div>
 
             <div className="border-t pt-4">
-              <h4 className="font-medium mb-2">Reasoning Summary</h4>
-              <p className="text-sm text-muted-foreground line-clamp-3">
+              <h4 className="mb-2 font-medium">Reasoning Summary</h4>
+              <p className="line-clamp-3 text-sm text-muted-foreground">
                 {caseData.draftAward.reasoning || 'No reasoning provided'}
               </p>
             </div>
 
-            <div className="flex justify-end mt-4">
+            <div className="mt-4 flex justify-end">
               <Link href={`/arbitrator/cases/${caseData.id}/award`}>
                 <Button>
                   Review Full Award
-                  <ChevronRight className="h-4 w-4 ml-2" />
+                  <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
             </div>
@@ -454,13 +452,11 @@ export default async function ArbitratorCaseDetailPage({ params }: PageProps) {
             <FileText className="h-5 w-5" />
             Evidence ({caseData.evidence.length})
           </CardTitle>
-          <CardDescription>
-            Documents and files submitted as evidence
-          </CardDescription>
+          <CardDescription>Documents and files submitted as evidence</CardDescription>
         </CardHeader>
         <CardContent>
           {caseData.evidence.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-8">
+            <p className="py-8 text-center text-sm text-muted-foreground">
               No evidence has been submitted.
             </p>
           ) : (
@@ -474,9 +470,7 @@ export default async function ArbitratorCaseDetailPage({ params }: PageProps) {
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
                         <span>
                           Submitted by{' '}
-                          {ev.submittedById === caseData.claimantId
-                            ? 'Claimant'
-                            : 'Respondent'}
+                          {ev.submittedById === caseData.claimantId ? 'Claimant' : 'Respondent'}
                         </span>
                         <span>|</span>
                         <span>{format(new Date(ev.submittedAt), 'MMM d, yyyy')}</span>
@@ -492,7 +486,7 @@ export default async function ArbitratorCaseDetailPage({ params }: PageProps) {
                   <div className="flex items-center gap-2">
                     <Badge variant="outline">{ev.fileType.split('/')[1] || ev.fileType}</Badge>
                     <Button variant="ghost" size="sm">
-                      <Eye className="h-4 w-4 mr-1" />
+                      <Eye className="mr-1 h-4 w-4" />
                       View
                     </Button>
                   </div>
@@ -510,37 +504,31 @@ export default async function ArbitratorCaseDetailPage({ params }: PageProps) {
             <MessageSquare className="h-5 w-5" />
             Party Statements ({caseData.statements.length})
           </CardTitle>
-          <CardDescription>
-            Written statements from both parties
-          </CardDescription>
+          <CardDescription>Written statements from both parties</CardDescription>
         </CardHeader>
         <CardContent>
           {caseData.statements.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-8">
+            <p className="py-8 text-center text-sm text-muted-foreground">
               No statements have been submitted.
             </p>
           ) : (
             <div className="space-y-4">
               {caseData.statements.map((stmt) => (
                 <div key={stmt.id} className="rounded-lg border p-4">
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="mb-2 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Badge variant="outline">
                         {stmt.submittedById === caseData.claimantId
                           ? "Claimant's Statement"
                           : "Respondent's Statement"}
                       </Badge>
-                      {stmt.type && (
-                        <Badge variant="secondary">{stmt.type}</Badge>
-                      )}
+                      {stmt.type && <Badge variant="secondary">{stmt.type}</Badge>}
                     </div>
                     <span className="text-xs text-muted-foreground">
                       {format(new Date(stmt.submittedAt), 'MMM d, yyyy')}
                     </span>
                   </div>
-                  <p className="text-sm whitespace-pre-wrap line-clamp-6">
-                    {stmt.content}
-                  </p>
+                  <p className="line-clamp-6 whitespace-pre-wrap text-sm">{stmt.content}</p>
                   <Button variant="link" size="sm" className="mt-2 p-0">
                     Read full statement
                   </Button>
@@ -565,13 +553,13 @@ export default async function ArbitratorCaseDetailPage({ params }: PageProps) {
               {hasDraftAward ? (
                 <Link href={`/arbitrator/cases/${caseData.id}/award`}>
                   <Button>
-                    <Gavel className="h-4 w-4 mr-2" />
+                    <Gavel className="mr-2 h-4 w-4" />
                     Review & Finalize Award
                   </Button>
                 </Link>
               ) : (
                 <Button disabled variant="outline">
-                  <Clock className="h-4 w-4 mr-2" />
+                  <Clock className="mr-2 h-4 w-4" />
                   Awaiting Draft Award Generation
                 </Button>
               )}

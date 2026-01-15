@@ -189,10 +189,7 @@ describe('Legal Analysis Module', () => {
         probability: 0.35,
         reasoning: 'Insufficient link between breach and claimed damages',
         keyEvidence: [],
-        weaknesses: [
-          'No expert testimony on causation',
-          'Timeline gaps in evidence',
-        ],
+        weaknesses: ['No expert testimony on causation', 'Timeline gaps in evidence'],
       };
 
       expect(analysis.isMet).toBe(false);
@@ -286,7 +283,7 @@ describe('Legal Analysis Module', () => {
     it('should handle interest calculations', () => {
       const interestCalc: InterestCalculation = {
         principal: 5000,
-        rate: 0.10,
+        rate: 0.1,
         startDate: '2025-01-01',
         endDate: '2026-01-13',
         days: 377,
@@ -294,7 +291,7 @@ describe('Legal Analysis Module', () => {
         statutoryBasis: 'Cal. Civ. Code § 3289',
       };
 
-      expect(interestCalc.rate).toBe(0.10);
+      expect(interestCalc.rate).toBe(0.1);
       expect(interestCalc.interestAmount).toBeGreaterThan(0);
       expect(interestCalc.principal + interestCalc.interestAmount).toBeCloseTo(5516.16, 2);
     });
@@ -338,10 +335,8 @@ describe('Legal Analysis Module', () => {
         startDate: Date,
         endDate: Date
       ): number => {
-        const annualRate = 0.10;
-        const days = Math.floor(
-          (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
-        );
+        const annualRate = 0.1;
+        const days = Math.floor((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
         return principal * annualRate * (days / 365);
       };
 
@@ -415,8 +410,7 @@ describe('Legal Analysis Module', () => {
 
       const allSatisfied = breachElements.every((e) => e.isSatisfied === true);
       const avgConfidence =
-        breachElements.reduce((sum, e) => sum + e.confidence, 0) /
-        breachElements.length;
+        breachElements.reduce((sum, e) => sum + e.confidence, 0) / breachElements.length;
 
       expect(allSatisfied).toBe(true);
       expect(avgConfidence).toBeGreaterThan(0.8);

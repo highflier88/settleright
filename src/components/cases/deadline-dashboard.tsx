@@ -117,14 +117,14 @@ function DeadlineCard({
   const progress = calculateProgress(deadline, totalDays);
 
   return (
-    <div className="p-4 border rounded-lg space-y-3">
+    <div className="space-y-3 rounded-lg border p-4">
       <div className="flex items-start justify-between">
         <div>
           <div className="flex items-center gap-2">
             <h4 className="font-medium">{deadlineLabels[deadline.type]}</h4>
             {getUrgencyBadge(deadline)}
           </div>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="mt-1 text-sm text-muted-foreground">
             {deadlineDescriptions[deadline.type]}
           </p>
         </div>
@@ -159,7 +159,7 @@ function DeadlineCard({
 
       {/* Extension button */}
       {deadline.canExtend && !deadline.isPassed && (
-        <div className="pt-2 border-t">
+        <div className="border-t pt-2">
           <ExtensionRequestForm
             caseId={caseId}
             deadlineType={deadline.type as 'evidence' | 'rebuttal'}
@@ -173,9 +173,7 @@ function DeadlineCard({
 }
 
 export function DeadlineDashboard({ caseId, deadlines, maxExtensionDays }: DeadlineDashboardProps) {
-  const activeDeadlines = Object.entries(deadlines).filter(
-    ([_, d]) => d !== undefined
-  );
+  const activeDeadlines = Object.entries(deadlines).filter(([_, d]) => d !== undefined);
 
   if (activeDeadlines.length === 0) {
     return null;
@@ -195,9 +193,7 @@ export function DeadlineDashboard({ caseId, deadlines, maxExtensionDays }: Deadl
               <Clock className="h-5 w-5" />
               Deadlines
             </CardTitle>
-            <CardDescription>
-              Track important dates for this case
-            </CardDescription>
+            <CardDescription>Track important dates for this case</CardDescription>
           </div>
           {urgentDeadline && urgentDeadline[1].hoursRemaining <= 72 && (
             <Badge
@@ -205,9 +201,7 @@ export function DeadlineDashboard({ caseId, deadlines, maxExtensionDays }: Deadl
               className="gap-1"
             >
               <AlertTriangle className="h-3 w-3" />
-              {urgentDeadline[1].hoursRemaining <= 24
-                ? 'Urgent deadline'
-                : 'Deadline approaching'}
+              {urgentDeadline[1].hoursRemaining <= 24 ? 'Urgent deadline' : 'Deadline approaching'}
             </Badge>
           )}
         </div>
@@ -227,21 +221,18 @@ export function DeadlineDashboard({ caseId, deadlines, maxExtensionDays }: Deadl
 }
 
 // Simple deadline summary for compact display
-export function DeadlineSummary({
-  deadline,
-  label,
-}: {
-  deadline: DeadlineInfo;
-  label?: string;
-}) {
+export function DeadlineSummary({ deadline, label }: { deadline: DeadlineInfo; label?: string }) {
   return (
     <div className="flex items-center gap-2">
       <div
         className={cn(
-          'flex-shrink-0 w-2 h-2 rounded-full',
+          'h-2 w-2 flex-shrink-0 rounded-full',
           deadline.isPassed && 'bg-muted-foreground',
-          !deadline.isPassed && deadline.hoursRemaining <= 24 && 'bg-destructive animate-pulse',
-          !deadline.isPassed && deadline.hoursRemaining > 24 && deadline.daysRemaining <= 3 && 'bg-amber-500',
+          !deadline.isPassed && deadline.hoursRemaining <= 24 && 'animate-pulse bg-destructive',
+          !deadline.isPassed &&
+            deadline.hoursRemaining > 24 &&
+            deadline.daysRemaining <= 3 &&
+            'bg-amber-500',
           !deadline.isPassed && deadline.daysRemaining > 3 && 'bg-green-500'
         )}
       />

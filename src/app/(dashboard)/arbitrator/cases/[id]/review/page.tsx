@@ -94,9 +94,7 @@ export default async function CaseReviewPage({ params }: PageProps) {
   const { assignment: _assignment, caseData } = result;
 
   // Separate evidence by party
-  const claimantEvidence = caseData.evidence.filter(
-    (e) => e.submittedById === caseData.claimantId
-  );
+  const claimantEvidence = caseData.evidence.filter((e) => e.submittedById === caseData.claimantId);
   const respondentEvidence = caseData.evidence.filter(
     (e) => e.submittedById === caseData.respondentId
   );

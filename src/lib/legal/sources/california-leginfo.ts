@@ -124,7 +124,8 @@ export const KEY_CONTRACT_SECTIONS: CaliforniaCodeSection[] = [
     section: '1668',
     title: 'Contracts Against Policy of Law',
     text: `All contracts which have for their object, directly or indirectly, to exempt anyone from responsibility for his own fraud, or willful injury to the person or property of another, or violation of law, whether willful or negligent, are against the policy of the law.`,
-    summary: 'Voids contracts that attempt to exempt parties from responsibility for fraud or willful injury.',
+    summary:
+      'Voids contracts that attempt to exempt parties from responsibility for fraud or willful injury.',
     disputeTypes: ['CONTRACT', 'SERVICE'],
     topics: ['public policy', 'void contracts', 'fraud', 'liability exemption'],
   },
@@ -156,9 +157,16 @@ export const KEY_CONTRACT_SECTIONS: CaliforniaCodeSection[] = [
 (5) Representing that goods or services have sponsorship, approval, characteristics, ingredients, uses, benefits, or quantities which they do not have or that a person has a sponsorship, approval, status, affiliation, or connection which he or she does not have.
 (9) Advertising goods or services with intent not to sell them as advertised.
 (14) Representing that a transaction confers or involves rights, remedies, or obligations which it does not have or involve, or which are prohibited by law.`,
-    summary: 'Lists prohibited unfair and deceptive practices under the Consumer Legal Remedies Act.',
+    summary:
+      'Lists prohibited unfair and deceptive practices under the Consumer Legal Remedies Act.',
     disputeTypes: ['SERVICE', 'GOODS'],
-    topics: ['consumer protection', 'CLRA', 'unfair practices', 'deceptive practices', 'misrepresentation'],
+    topics: [
+      'consumer protection',
+      'CLRA',
+      'unfair practices',
+      'deceptive practices',
+      'misrepresentation',
+    ],
   },
   {
     code: 'Cal. Civ. Code',
@@ -171,7 +179,8 @@ export const KEY_CONTRACT_SECTIONS: CaliforniaCodeSection[] = [
 (3) Restitution of property.
 (4) Punitive damages.
 (5) Any other relief that the court deems proper.`,
-    summary: 'Establishes consumer remedies for CLRA violations including actual damages, restitution, and punitive damages.',
+    summary:
+      'Establishes consumer remedies for CLRA violations including actual damages, restitution, and punitive damages.',
     disputeTypes: ['SERVICE', 'GOODS'],
     topics: ['consumer protection', 'CLRA', 'remedies', 'damages', 'restitution'],
   },
@@ -277,7 +286,8 @@ export const KEY_CONTRACT_SECTIONS: CaliforniaCodeSection[] = [
 (d) The arbitrators exceeded their powers and the award cannot be corrected without affecting the merits of the decision upon the controversy submitted.
 (e) The rights of the party were substantially prejudiced by the refusal of the arbitrators to postpone the hearing upon sufficient cause being shown therefor or by the refusal of the arbitrators to hear evidence material to the controversy or by other conduct of the arbitrators contrary to the provisions of this title.
 (f) An arbitrator making the award either: (1) failed to disclose within the time required for disclosure a ground for disqualification of which the arbitrator was then aware; or (2) was subject to disqualification upon grounds specified in Section 1281.91 but failed upon receipt of timely demand to disqualify himself or herself as required by that provision.`,
-    summary: 'Lists grounds for vacating an arbitration award including fraud, corruption, and arbitrator misconduct.',
+    summary:
+      'Lists grounds for vacating an arbitration award including fraud, corruption, and arbitrator misconduct.',
     disputeTypes: ['CONTRACT', 'SERVICE', 'GOODS', 'PAYMENT', 'OTHER'],
     topics: ['arbitration', 'vacate award', 'grounds', 'fraud', 'misconduct'],
   },
@@ -287,9 +297,7 @@ export const KEY_CONTRACT_SECTIONS: CaliforniaCodeSection[] = [
  * Get all statutes for a specific dispute type
  */
 export function getStatutesForDisputeType(disputeType: DisputeType): CaliforniaCodeSection[] {
-  return KEY_CONTRACT_SECTIONS.filter((section) =>
-    section.disputeTypes.includes(disputeType)
-  );
+  return KEY_CONTRACT_SECTIONS.filter((section) => section.disputeTypes.includes(disputeType));
 }
 
 /**
@@ -306,9 +314,7 @@ export function getStatutesByTopic(topic: string): CaliforniaCodeSection[] {
  * Get a specific section
  */
 export function getSection(code: string, section: string): CaliforniaCodeSection | undefined {
-  return KEY_CONTRACT_SECTIONS.find(
-    (s) => s.code === code && s.section === section
-  );
+  return KEY_CONTRACT_SECTIONS.find((s) => s.code === code && s.section === section);
 }
 
 /**

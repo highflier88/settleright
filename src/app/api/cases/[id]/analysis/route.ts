@@ -7,12 +7,7 @@
 
 import { NextResponse } from 'next/server';
 
-import {
-  getAnalysisStatus,
-  loadAnalysisInput,
-  queueAnalysis,
-  runAnalysis,
-} from '@/lib/analysis';
+import { getAnalysisStatus, loadAnalysisInput, queueAnalysis, runAnalysis } from '@/lib/analysis';
 import { BadRequestError, ForbiddenError, NotFoundError } from '@/lib/api/errors';
 import { errorResponse } from '@/lib/api/response';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
@@ -48,13 +43,10 @@ export const POST = withAuth(
 
       // Verify user has access to this case
       const userId = request.user.id;
-      const isParty =
-        caseData.claimantId === userId || caseData.respondentId === userId;
+      const isParty = caseData.claimantId === userId || caseData.respondentId === userId;
 
       if (!isParty) {
-        return errorResponse(
-          new ForbiddenError('You do not have access to this case')
-        );
+        return errorResponse(new ForbiddenError('You do not have access to this case'));
       }
 
       // Check if analysis already exists and is complete
@@ -64,10 +56,7 @@ export const POST = withAuth(
         force?: boolean;
       };
 
-      if (
-        existingStatus?.status === 'COMPLETED' &&
-        !body.force
-      ) {
+      if (existingStatus?.status === 'COMPLETED' && !body.force) {
         return NextResponse.json({
           success: true,
           message: 'Analysis already completed',
@@ -80,10 +69,7 @@ export const POST = withAuth(
         });
       }
 
-      if (
-        existingStatus?.status === 'PROCESSING' ||
-        existingStatus?.status === 'QUEUED'
-      ) {
+      if (existingStatus?.status === 'PROCESSING' || existingStatus?.status === 'QUEUED') {
         return NextResponse.json({
           success: true,
           message: 'Analysis already in progress',
@@ -128,9 +114,7 @@ export const POST = withAuth(
         return NextResponse.json({
           success: result.status === 'completed',
           message:
-            result.status === 'completed'
-              ? 'Analysis completed successfully'
-              : 'Analysis failed',
+            result.status === 'completed' ? 'Analysis completed successfully' : 'Analysis failed',
           data: {
             caseId,
             jobId: result.jobId,
@@ -180,13 +164,10 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
 
     // Verify user has access to this case
     const userId = request.user.id;
-    const isParty =
-      caseData.claimantId === userId || caseData.respondentId === userId;
+    const isParty = caseData.claimantId === userId || caseData.respondentId === userId;
 
     if (!isParty) {
-      return errorResponse(
-        new ForbiddenError('You do not have access to this case')
-      );
+      return errorResponse(new ForbiddenError('You do not have access to this case'));
     }
 
     // Get analysis status
@@ -215,9 +196,7 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
       failureReason: status.failureReason,
       tokensUsed: status.tokensUsed,
       processingTimeMs: status.processingTimeMs,
-      estimatedCost: status.estimatedCost
-        ? Number(status.estimatedCost)
-        : undefined,
+      estimatedCost: status.estimatedCost ? Number(status.estimatedCost) : undefined,
     };
 
     // Include results if completed

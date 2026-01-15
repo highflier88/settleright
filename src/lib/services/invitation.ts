@@ -21,9 +21,7 @@ export interface InvitationWithCase extends Invitation {
 }
 
 // Get invitation by token
-export async function getInvitationByToken(
-  token: string
-): Promise<InvitationWithCase | null> {
+export async function getInvitationByToken(token: string): Promise<InvitationWithCase | null> {
   return prisma.invitation.findUnique({
     where: { token },
     include: {
@@ -43,9 +41,7 @@ export async function getInvitationByToken(
 }
 
 // Get invitation by case ID
-export async function getInvitationByCaseId(
-  caseId: string
-): Promise<Invitation | null> {
+export async function getInvitationByCaseId(caseId: string): Promise<Invitation | null> {
   return prisma.invitation.findUnique({
     where: { caseId },
   });
@@ -266,10 +262,7 @@ export async function resendInvitation(
 }
 
 // Cancel invitation
-export async function cancelInvitation(
-  caseId: string,
-  userId: string
-): Promise<boolean> {
+export async function cancelInvitation(caseId: string, userId: string): Promise<boolean> {
   try {
     await prisma.invitation.update({
       where: { caseId },

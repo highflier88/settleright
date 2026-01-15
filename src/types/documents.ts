@@ -163,7 +163,12 @@ export type SupportedMimeType = (typeof SUPPORTED_MIME_TYPES)[keyof typeof SUPPO
  * Check if a file type is supported for text extraction
  */
 export function isTextExtractable(mimeType: string): boolean {
-  return ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword', 'text/plain'].includes(mimeType);
+  return [
+    'application/pdf',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/msword',
+    'text/plain',
+  ].includes(mimeType);
 }
 
 /**

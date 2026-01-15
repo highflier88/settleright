@@ -36,10 +36,7 @@ export async function GET(request: NextRequest) {
     console.error('[Admin Compensation API] GET error:', error);
     const message = error instanceof Error ? error.message : 'Failed to get compensations';
     const status = message.includes('required') || message.includes('Insufficient') ? 401 : 500;
-    return NextResponse.json(
-      { success: false, error: message },
-      { status }
-    );
+    return NextResponse.json({ success: false, error: message }, { status });
   }
 }
 
@@ -48,16 +45,13 @@ export async function POST(request: NextRequest) {
     // Verify admin role
     const user = await requireRole('ADMIN');
 
-    const body = await request.json() as {
+    const body = (await request.json()) as {
       action: 'approve' | 'process_payouts';
       compensationId?: string;
     };
 
     if (!body.action) {
-      return NextResponse.json(
-        { success: false, error: 'Action is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: 'Action is required' }, { status: 400 });
     }
 
     if (body.action === 'approve') {
@@ -89,17 +83,11 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    return NextResponse.json(
-      { success: false, error: 'Invalid action' },
-      { status: 400 }
-    );
+    return NextResponse.json({ success: false, error: 'Invalid action' }, { status: 400 });
   } catch (error) {
     console.error('[Admin Compensation API] POST error:', error);
     const message = error instanceof Error ? error.message : 'Failed to process compensation';
     const status = message.includes('required') || message.includes('Insufficient') ? 401 : 500;
-    return NextResponse.json(
-      { success: false, error: message },
-      { status }
-    );
+    return NextResponse.json({ success: false, error: message }, { status });
   }
 }

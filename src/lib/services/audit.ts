@@ -20,11 +20,7 @@ interface AuditLogResult {
 }
 
 // Generate a SHA-256 hash of the log entry for integrity verification
-function generateHash(
-  entry: AuditLogEntry,
-  timestamp: Date,
-  previousHash: string | null
-): string {
+function generateHash(entry: AuditLogEntry, timestamp: Date, previousHash: string | null): string {
   const data = JSON.stringify({
     action: entry.action,
     userId: entry.userId,
@@ -62,7 +58,7 @@ export async function createAuditLog(entry: AuditLogEntry): Promise<AuditLogResu
         caseId: entry.caseId,
         ipAddress: entry.ipAddress,
         userAgent: entry.userAgent,
-        metadata: entry.metadata as object ?? undefined,
+        metadata: (entry.metadata as object) ?? undefined,
         timestamp,
         previousHash,
         hash,
@@ -241,32 +237,20 @@ export async function getAuditLogs(
 }
 
 // Get audit logs for a specific user
-export async function getUserAuditLogs(
-  userId: string,
-  pagination?: PaginationOptions
-) {
+export async function getUserAuditLogs(userId: string, pagination?: PaginationOptions) {
   return getAuditLogs({ userId }, pagination);
 }
 
 // Get audit logs for a specific case
-export async function getCaseAuditLogs(
-  caseId: string,
-  pagination?: PaginationOptions
-) {
+export async function getCaseAuditLogs(caseId: string, pagination?: PaginationOptions) {
   return getAuditLogs({ caseId }, pagination);
 }
 
 // Get authentication-related audit logs
-export async function getAuthenticationLogs(
-  pagination?: PaginationOptions
-) {
+export async function getAuthenticationLogs(pagination?: PaginationOptions) {
   return getAuditLogs(
     {
-      actions: [
-        AuditAction.USER_REGISTERED,
-        AuditAction.USER_LOGIN,
-        AuditAction.USER_LOGOUT,
-      ],
+      actions: [AuditAction.USER_REGISTERED, AuditAction.USER_LOGIN, AuditAction.USER_LOGOUT],
     },
     pagination
   );
@@ -276,11 +260,7 @@ export async function getAuthenticationLogs(
 export async function getKYCLogs(pagination?: PaginationOptions) {
   return getAuditLogs(
     {
-      actions: [
-        AuditAction.KYC_INITIATED,
-        AuditAction.KYC_COMPLETED,
-        AuditAction.KYC_FAILED,
-      ],
+      actions: [AuditAction.KYC_INITIATED, AuditAction.KYC_COMPLETED, AuditAction.KYC_FAILED],
     },
     pagination
   );

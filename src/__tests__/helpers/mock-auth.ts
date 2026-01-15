@@ -48,9 +48,7 @@ export function createMockClerkAuth(userId?: string) {
 /**
  * Create a mock Clerk user
  */
-export function createMockClerkUser(
-  options: Partial<MockClerkUser> = {}
-): MockClerkUser {
+export function createMockClerkUser(options: Partial<MockClerkUser> = {}): MockClerkUser {
   return {
     id: options.id ?? generateId(),
     primaryEmailAddress: {
@@ -67,9 +65,7 @@ export function createMockClerkUser(
 /**
  * Create a mock auth session
  */
-export function createMockAuthSession(
-  options: Partial<MockAuthSession> = {}
-): MockAuthSession {
+export function createMockAuthSession(options: Partial<MockAuthSession> = {}): MockAuthSession {
   const userId = options.userId ?? generateId();
   return {
     userId,

@@ -223,10 +223,7 @@ describe('Agreement Service', () => {
   // ==========================================================================
 
   describe('getAgreementStatusInfo', () => {
-    const createMockAgreement = (
-      status: AgreementStatus,
-      signatures: { role: CaseRole }[]
-    ) => ({
+    const createMockAgreement = (status: AgreementStatus, signatures: { role: CaseRole }[]) => ({
       id: 'agreement-123',
       caseId: 'case-123',
       status,

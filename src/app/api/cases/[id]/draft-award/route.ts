@@ -68,14 +68,11 @@ export const POST = withAuth(
 
       // Verify user has access to this case
       const userId = request.user.id;
-      const isParty =
-        caseData.claimantId === userId || caseData.respondentId === userId;
+      const isParty = caseData.claimantId === userId || caseData.respondentId === userId;
       const isArbitrator = caseData.arbitratorAssignment?.arbitratorId === userId;
 
       if (!isParty && !isArbitrator) {
-        return errorResponse(
-          new ForbiddenError('You do not have access to this case')
-        );
+        return errorResponse(new ForbiddenError('You do not have access to this case'));
       }
 
       // Check if legal analysis is complete
@@ -89,17 +86,13 @@ export const POST = withAuth(
 
       if (!analysisJob || analysisJob.status !== 'COMPLETED') {
         return errorResponse(
-          new BadRequestError(
-            'Fact analysis must be completed before generating draft award'
-          )
+          new BadRequestError('Fact analysis must be completed before generating draft award')
         );
       }
 
       if (analysisJob.legalAnalysisStatus !== 'COMPLETED') {
         return errorResponse(
-          new BadRequestError(
-            'Legal analysis must be completed before generating draft award'
-          )
+          new BadRequestError('Legal analysis must be completed before generating draft award')
         );
       }
 
@@ -207,14 +200,11 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
 
     // Verify user has access to this case
     const userId = request.user.id;
-    const isParty =
-      caseData.claimantId === userId || caseData.respondentId === userId;
+    const isParty = caseData.claimantId === userId || caseData.respondentId === userId;
     const isArbitrator = caseData.arbitratorAssignment?.arbitratorId === userId;
 
     if (!isParty && !isArbitrator) {
-      return errorResponse(
-        new ForbiddenError('You do not have access to this case')
-      );
+      return errorResponse(new ForbiddenError('You do not have access to this case'));
     }
 
     // Get draft award
@@ -275,178 +265,168 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
  * - REJECT: Reject with structured feedback
  * - ESCALATE: Escalate to senior arbitrator
  */
-export const PATCH = withAuth(
-  async (request: AuthenticatedRequest, context) => {
-    const params = context?.params;
-    const caseId = params?.id;
+export const PATCH = withAuth(async (request: AuthenticatedRequest, context) => {
+  const params = context?.params;
+  const caseId = params?.id;
 
-    if (!caseId) {
-      return errorResponse(new BadRequestError('Case ID is required'));
-    }
+  if (!caseId) {
+    return errorResponse(new BadRequestError('Case ID is required'));
+  }
 
-    try {
-      // Get case and verify arbitrator access
-      const caseData = await prisma.case.findUnique({
-        where: { id: caseId },
-        select: {
-          id: true,
-          arbitratorAssignment: {
-            select: {
-              arbitratorId: true,
-            },
+  try {
+    // Get case and verify arbitrator access
+    const caseData = await prisma.case.findUnique({
+      where: { id: caseId },
+      select: {
+        id: true,
+        arbitratorAssignment: {
+          select: {
+            arbitratorId: true,
           },
         },
-      });
+      },
+    });
 
-      if (!caseData) {
-        return errorResponse(new NotFoundError('Case not found'));
-      }
-
-      // Only arbitrator can review
-      const userId = request.user.id;
-      const isArbitrator = caseData.arbitratorAssignment?.arbitratorId === userId;
-      const isAdmin = request.user.role === 'ADMIN';
-
-      if (!isArbitrator && !isAdmin) {
-        return errorResponse(
-          new ForbiddenError('Only the assigned arbitrator can review the draft award')
-        );
-      }
-
-      // Parse request body
-      const body = (await request.json()) as {
-        reviewStatus?: ReviewDecision;
-        reviewNotes?: string;
-        // For MODIFY action
-        modifications?: AwardModification;
-        changeSummary?: string;
-        // For REJECT action
-        rejectionFeedback?: RejectionFeedback;
-        // For ESCALATE action
-        escalation?: EscalationInput;
-      };
-
-      if (!body.reviewStatus) {
-        return errorResponse(
-          new BadRequestError('Review status is required')
-        );
-      }
-
-      const validStatuses = ['APPROVE', 'MODIFY', 'REJECT', 'ESCALATE'];
-      if (!validStatuses.includes(body.reviewStatus)) {
-        return errorResponse(
-          new BadRequestError(
-            `Invalid review status. Must be one of: ${validStatuses.join(', ')}`
-          )
-        );
-      }
-
-      // Check draft award exists
-      const existing = await getDraftAward(caseId);
-      if (!existing) {
-        return errorResponse(
-          new NotFoundError('Draft award not found for this case')
-        );
-      }
-
-      // Handle different workflow actions
-      switch (body.reviewStatus) {
-        case 'APPROVE': {
-          const result = await approveDraftAward(caseId, userId, body.reviewNotes);
-          return NextResponse.json({
-            success: true,
-            message: result.message,
-            data: {
-              reviewStatus: 'APPROVE',
-              nextStep: result.nextStep,
-            },
-          });
-        }
-
-        case 'MODIFY': {
-          if (!body.modifications) {
-            return errorResponse(
-              new BadRequestError('Modifications are required for MODIFY action')
-            );
-          }
-          const result = await modifyDraftAward(
-            caseId,
-            userId,
-            body.modifications,
-            body.changeSummary
-          );
-          return NextResponse.json({
-            success: true,
-            message: 'Award modified successfully',
-            data: {
-              reviewStatus: 'MODIFY',
-              version: result.version,
-              changedFields: result.changedFields,
-              changeSummary: result.changeSummary,
-              modifiedAt: result.modifiedAt,
-            },
-          });
-        }
-
-        case 'REJECT': {
-          if (!body.rejectionFeedback) {
-            return errorResponse(
-              new BadRequestError('Rejection feedback is required for REJECT action')
-            );
-          }
-          const result = await rejectDraftAward(caseId, userId, body.rejectionFeedback);
-          return NextResponse.json({
-            success: true,
-            message: result.message,
-            data: {
-              reviewStatus: 'REJECT',
-              nextStep: 'Case will be re-analyzed based on feedback',
-            },
-          });
-        }
-
-        case 'ESCALATE': {
-          if (!body.escalation) {
-            return errorResponse(
-              new BadRequestError('Escalation details are required for ESCALATE action')
-            );
-          }
-          const result = await escalateDraftAward(caseId, userId, body.escalation);
-          return NextResponse.json({
-            success: true,
-            message: 'Award escalated successfully',
-            data: {
-              reviewStatus: 'ESCALATE',
-              escalationId: result.escalationId,
-              status: result.status,
-              assignedToId: result.assignedToId,
-              assignedToName: result.assignedToName,
-              escalatedAt: result.escalatedAt,
-            },
-          });
-        }
-
-        default: {
-          // Fallback to legacy behavior
-          const result = await submitDraftAwardReview(caseId, {
-            reviewStatus: body.reviewStatus as ReviewDecision,
-            reviewNotes: body.reviewNotes,
-          });
-          return NextResponse.json({
-            success: true,
-            message: `Draft award review submitted: ${String(body.reviewStatus)}`,
-            data: {
-              id: result.id,
-              reviewStatus: result.reviewStatus,
-              reviewedAt: result.reviewedAt,
-              nextStep: result.nextStep,
-            },
-          });
-        }
-      }
-    } catch (error) {
-      console.error('Error submitting draft award review:', error);
-      return errorResponse(error as Error);
+    if (!caseData) {
+      return errorResponse(new NotFoundError('Case not found'));
     }
+
+    // Only arbitrator can review
+    const userId = request.user.id;
+    const isArbitrator = caseData.arbitratorAssignment?.arbitratorId === userId;
+    const isAdmin = request.user.role === 'ADMIN';
+
+    if (!isArbitrator && !isAdmin) {
+      return errorResponse(
+        new ForbiddenError('Only the assigned arbitrator can review the draft award')
+      );
+    }
+
+    // Parse request body
+    const body = (await request.json()) as {
+      reviewStatus?: ReviewDecision;
+      reviewNotes?: string;
+      // For MODIFY action
+      modifications?: AwardModification;
+      changeSummary?: string;
+      // For REJECT action
+      rejectionFeedback?: RejectionFeedback;
+      // For ESCALATE action
+      escalation?: EscalationInput;
+    };
+
+    if (!body.reviewStatus) {
+      return errorResponse(new BadRequestError('Review status is required'));
+    }
+
+    const validStatuses = ['APPROVE', 'MODIFY', 'REJECT', 'ESCALATE'];
+    if (!validStatuses.includes(body.reviewStatus)) {
+      return errorResponse(
+        new BadRequestError(`Invalid review status. Must be one of: ${validStatuses.join(', ')}`)
+      );
+    }
+
+    // Check draft award exists
+    const existing = await getDraftAward(caseId);
+    if (!existing) {
+      return errorResponse(new NotFoundError('Draft award not found for this case'));
+    }
+
+    // Handle different workflow actions
+    switch (body.reviewStatus) {
+      case 'APPROVE': {
+        const result = await approveDraftAward(caseId, userId, body.reviewNotes);
+        return NextResponse.json({
+          success: true,
+          message: result.message,
+          data: {
+            reviewStatus: 'APPROVE',
+            nextStep: result.nextStep,
+          },
+        });
+      }
+
+      case 'MODIFY': {
+        if (!body.modifications) {
+          return errorResponse(new BadRequestError('Modifications are required for MODIFY action'));
+        }
+        const result = await modifyDraftAward(
+          caseId,
+          userId,
+          body.modifications,
+          body.changeSummary
+        );
+        return NextResponse.json({
+          success: true,
+          message: 'Award modified successfully',
+          data: {
+            reviewStatus: 'MODIFY',
+            version: result.version,
+            changedFields: result.changedFields,
+            changeSummary: result.changeSummary,
+            modifiedAt: result.modifiedAt,
+          },
+        });
+      }
+
+      case 'REJECT': {
+        if (!body.rejectionFeedback) {
+          return errorResponse(
+            new BadRequestError('Rejection feedback is required for REJECT action')
+          );
+        }
+        const result = await rejectDraftAward(caseId, userId, body.rejectionFeedback);
+        return NextResponse.json({
+          success: true,
+          message: result.message,
+          data: {
+            reviewStatus: 'REJECT',
+            nextStep: 'Case will be re-analyzed based on feedback',
+          },
+        });
+      }
+
+      case 'ESCALATE': {
+        if (!body.escalation) {
+          return errorResponse(
+            new BadRequestError('Escalation details are required for ESCALATE action')
+          );
+        }
+        const result = await escalateDraftAward(caseId, userId, body.escalation);
+        return NextResponse.json({
+          success: true,
+          message: 'Award escalated successfully',
+          data: {
+            reviewStatus: 'ESCALATE',
+            escalationId: result.escalationId,
+            status: result.status,
+            assignedToId: result.assignedToId,
+            assignedToName: result.assignedToName,
+            escalatedAt: result.escalatedAt,
+          },
+        });
+      }
+
+      default: {
+        // Fallback to legacy behavior
+        const result = await submitDraftAwardReview(caseId, {
+          reviewStatus: body.reviewStatus as ReviewDecision,
+          reviewNotes: body.reviewNotes,
+        });
+        return NextResponse.json({
+          success: true,
+          message: `Draft award review submitted: ${String(body.reviewStatus)}`,
+          data: {
+            id: result.id,
+            reviewStatus: result.reviewStatus,
+            reviewedAt: result.reviewedAt,
+            nextStep: result.nextStep,
+          },
+        });
+      }
+    }
+  } catch (error) {
+    console.error('Error submitting draft award review:', error);
+    return errorResponse(error as Error);
   }
-);
+});

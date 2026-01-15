@@ -14,13 +14,17 @@
 ## Article 1: Scope and Application
 
 ### 1.1 Governing Rules
+
 These Settleright.ai Arbitration Rules ("Rules") govern all arbitration proceedings administered through the Settleright.ai platform ("Platform"). By submitting a dispute to arbitration through the Platform, the parties agree to be bound by these Rules as in effect on the date the Submission Agreement is executed.
 
 ### 1.2 Supremacy
+
 In the event of any conflict between these Rules and the parties' Submission Agreement, the Submission Agreement shall control, except where such conflict would render the arbitration unenforceable under applicable law.
 
 ### 1.3 Scope of Disputes
+
 These Rules apply to civil disputes between two parties involving monetary claims. The Platform does not accept disputes involving:
+
 - Criminal matters
 - Family law matters (divorce, custody, child support)
 - Disputes involving governmental entities
@@ -29,6 +33,7 @@ These Rules apply to civil disputes between two parties involving monetary claim
 - Matters where arbitration is prohibited by law
 
 ### 1.4 Language
+
 All proceedings shall be conducted in English unless both parties agree in writing to another language.
 
 ---
@@ -66,7 +71,9 @@ All proceedings shall be conducted in English unless both parties agree in writi
 ## Article 3: Initiating Arbitration
 
 ### 3.1 Commencement
+
 Arbitration is commenced when a Claimant:
+
 1. Creates an account on the Platform;
 2. Completes identity verification as required by the Platform;
 3. Provides a description of the dispute and the relief sought;
@@ -74,7 +81,9 @@ Arbitration is commenced when a Claimant:
 5. Pays the applicable filing fee.
 
 ### 3.2 Notice to Respondent
+
 Upon commencement, the Platform shall send notice to the Respondent at the email address and/or phone number provided by the Claimant. Such notice shall include:
+
 - The identity of the Claimant;
 - A summary of the dispute;
 - The amount of the claim;
@@ -83,9 +92,11 @@ Upon commencement, the Platform shall send notice to the Respondent at the email
 - A statement that failure to respond may result in a default determination.
 
 ### 3.3 Filing Fee
+
 The Claimant shall pay the filing fee as published on the Platform at the time of filing. Filing fees are non-refundable except as expressly provided in these Rules.
 
 ### 3.4 Amendment of Claims
+
 The Claimant may amend the claim at any time before the Respondent submits their Statement. After that time, amendment requires consent of the Respondent or leave of the Arbitrator.
 
 ---
@@ -93,23 +104,29 @@ The Claimant may amend the claim at any time before the Respondent submits their
 ## Article 4: Response and Participation
 
 ### 4.1 Response Deadline
+
 The Respondent shall have fourteen (14) calendar days from the date notice is sent to:
+
 1. Create an account on the Platform;
 2. Complete identity verification as required by the Platform;
 3. Execute the Submission Agreement; and
 4. Pay any required response fee.
 
 ### 4.2 Extension of Time
+
 A Respondent may request a single extension of up to seven (7) calendar days by submitting a request through the Platform before the original deadline expires. The Platform may grant such extension in its discretion.
 
 ### 4.3 Failure to Respond
+
 If the Respondent fails to respond within the deadline (including any extension):
+
 1. The Claimant shall be notified;
 2. The Claimant may elect to proceed with a default determination or withdraw the claim;
 3. If proceeding, the AI Analysis System shall analyze the claim based solely on the Claimant's submissions;
 4. The Arbitrator shall review and may issue a default Award if the claim is supported by the evidence presented.
 
 ### 4.4 Confirmation of Participation
+
 Execution of the Submission Agreement by both parties constitutes mutual consent to binding arbitration under these Rules.
 
 ---
@@ -117,28 +134,36 @@ Execution of the Submission Agreement by both parties constitutes mutual consent
 ## Article 5: Evidence Submission
 
 ### 5.1 Right to Submit Evidence
+
 Each party has the right to submit Evidence in support of their position. The Platform shall provide equal opportunity to both parties to submit Evidence.
 
 ### 5.2 Acceptable Formats
+
 Evidence may be submitted in the following formats:
+
 - Documents: PDF, DOCX, DOC, TXT
 - Images: JPEG, PNG, GIF, TIFF
 - Video: MP4, MOV (subject to size limits)
 - Audio: MP3, WAV (subject to size limits)
 
 ### 5.3 Evidence Deadline
+
 All Evidence must be submitted within seven (7) calendar days after the Submission Agreement is executed by both parties, or such other period as specified by the Platform.
 
 ### 5.4 Right to Review Opposing Evidence
+
 Each party shall have access to view all Evidence submitted by the opposing party. The Platform shall notify each party when new Evidence is submitted by the opposing party.
 
 ### 5.5 Rebuttal Period
+
 Each party shall have three (3) calendar days after the Evidence deadline to submit rebuttal Evidence or a supplemental Statement responding to the opposing party's submissions.
 
 ### 5.6 Prohibition on Ex Parte Communications
+
 No party shall communicate with the Arbitrator except through the Platform. All submissions are visible to both parties.
 
 ### 5.7 Authenticity
+
 By submitting Evidence, a party represents and warrants that the Evidence is authentic, has not been altered or manipulated, and is submitted in good faith.
 
 ---
@@ -146,19 +171,24 @@ By submitting Evidence, a party represents and warrants that the Evidence is aut
 ## Article 6: Statements
 
 ### 6.1 Initial Statement
+
 Each party shall submit a written Statement describing:
+
 - The facts giving rise to the dispute;
 - The party's position on the issues;
 - The relief sought (for Claimant) or defense to the claim (for Respondent);
 - Any applicable laws, contracts, or agreements the party believes are relevant.
 
 ### 6.2 Statement Deadline
+
 Initial Statements must be submitted concurrently with or before the Evidence deadline.
 
 ### 6.3 Statement Length
+
 Statements shall not exceed 5,000 words unless the Platform authorizes a longer submission based on the complexity of the dispute.
 
 ### 6.4 Supplemental Statements
+
 Supplemental Statements may be submitted during the rebuttal period as described in Section 5.5.
 
 ---
@@ -166,19 +196,24 @@ Supplemental Statements may be submitted during the rebuttal period as described
 ## Article 7: AI Analysis Process
 
 ### 7.1 AI-Assisted Analysis Disclosure
+
 **THE PARTIES ACKNOWLEDGE AND AGREE THAT THE PLATFORM UTILIZES ARTIFICIAL INTELLIGENCE TECHNOLOGY TO ASSIST IN ANALYZING THE DISPUTE.** The AI Analysis System:
+
 - Processes the Evidence and Statements submitted by both parties;
 - Identifies relevant legal principles based on the governing law selected;
 - Analyzes the facts against applicable legal standards;
 - Generates a Draft Award with findings of fact and conclusions of law.
 
 ### 7.2 No Legal Representation
+
 The AI Analysis System does not provide legal advice or legal representation to either party. Each party is responsible for presenting their own case and may consult with independent legal counsel at their own expense.
 
 ### 7.3 Data Processing
+
 The AI Analysis System processes only the information submitted by the parties through the Platform. The system does not access external information about the parties except as provided through the Platform.
 
 ### 7.4 Neutrality
+
 The AI Analysis System is designed to analyze disputes impartially based on the submissions and applicable law. The Platform maintains audit procedures to detect and prevent bias in the AI Analysis System.
 
 ---
@@ -186,32 +221,41 @@ The AI Analysis System is designed to analyze disputes impartially based on the 
 ## Article 8: Arbitrator Review
 
 ### 8.1 Human Review Requirement
+
 All Draft Awards generated by the AI Analysis System are reviewed by a qualified human Arbitrator before issuance.
 
 ### 8.2 Arbitrator Qualifications
+
 Arbitrators on the Platform shall be:
+
 - Licensed attorneys in good standing in at least one jurisdiction; or
 - Retired judges; or
 - Other qualified professionals approved by the Platform.
 
 ### 8.3 Arbitrator Independence
+
 The Arbitrator shall be independent and impartial. The Arbitrator shall have no financial interest in the outcome beyond the fees paid by the Platform and no prior relationship with either party.
 
 ### 8.4 Scope of Review
+
 The Arbitrator shall review:
+
 - The Draft Award for legal accuracy;
 - The reasoning and citations for correctness;
 - The application of law to the facts presented;
 - The procedural record for compliance with these Rules.
 
 ### 8.5 Arbitrator Authority
+
 The Arbitrator may:
+
 - Approve the Draft Award and sign it as the final Award;
 - Modify the Draft Award before signing;
 - Reject the Draft Award and direct further analysis;
 - Request additional information from the parties (in exceptional circumstances).
 
 ### 8.6 No Direct Communication
+
 The Arbitrator shall not communicate directly with the parties. Any request for information shall be transmitted through the Platform.
 
 ---
@@ -219,7 +263,9 @@ The Arbitrator shall not communicate directly with the parties. Any request for 
 ## Article 9: The Award
 
 ### 9.1 Form of Award
+
 The Award shall be in writing and shall include:
+
 - The names and identification of the parties;
 - The case reference number;
 - A summary of the dispute;
@@ -230,22 +276,28 @@ The Award shall be in writing and shall include:
 - The date and signature of the Arbitrator.
 
 ### 9.2 Timeframe
+
 The Platform shall use commercially reasonable efforts to issue the Award within fourteen (14) calendar days after the close of the rebuttal period, subject to Arbitrator availability and case complexity.
 
 ### 9.3 Delivery
+
 The Award shall be delivered to both parties electronically through the Platform. Each party shall receive a PDF copy of the signed Award.
 
 ### 9.4 Finality
+
 **THE AWARD IS FINAL AND BINDING.** By executing the Submission Agreement, the parties waive any right to appeal, review, or challenge the Award except as provided in Section 9.5.
 
 ### 9.5 Limited Grounds for Challenge
+
 An Award may be challenged in a court of competent jurisdiction only on the grounds set forth in the applicable arbitration statute, which may include:
+
 - The Award was procured by corruption, fraud, or undue means;
 - There was evident partiality or corruption of the Arbitrator;
 - The Arbitrator was guilty of misconduct in refusing to hear material evidence or other conduct prejudicing a party's rights;
 - The Arbitrator exceeded their powers.
 
 ### 9.6 Enforcement
+
 The Award may be confirmed and entered as a judgment in any court of competent jurisdiction pursuant to the applicable arbitration statute and/or the New York Convention.
 
 ---
@@ -253,13 +305,16 @@ The Award may be confirmed and entered as a judgment in any court of competent j
 ## Article 10: Confidentiality
 
 ### 10.1 Confidential Proceedings
+
 All arbitration proceedings, including Statements, Evidence, and the Award, are confidential. Neither party shall disclose any information about the arbitration to third parties except:
+
 - As required by law;
 - To enforce or challenge the Award;
 - To professional advisors bound by confidentiality obligations;
 - With the written consent of the other party.
 
 ### 10.2 Platform Confidentiality
+
 The Platform shall maintain the confidentiality of all case materials in accordance with its Privacy Policy.
 
 ---
@@ -267,14 +322,18 @@ The Platform shall maintain the confidentiality of all case materials in accorda
 ## Article 11: Communications and Notices
 
 ### 11.1 Electronic Communications
+
 All communications related to the arbitration shall be made through the Platform. Communications are deemed received when:
+
 - The Platform sends an email notification; and
 - The communication is available for viewing in the party's Platform account.
 
 ### 11.2 Obligation to Monitor
+
 Each party has an affirmative obligation to monitor their Platform account and the email address associated with their account for communications.
 
 ### 11.3 Change of Contact Information
+
 A party must immediately update their contact information on the Platform if it changes during the pendency of the arbitration.
 
 ---
@@ -282,18 +341,23 @@ A party must immediately update their contact information on the Platform if it 
 ## Article 12: Fees and Costs
 
 ### 12.1 Filing Fee
+
 The Claimant shall pay the filing fee as published on the Platform.
 
 ### 12.2 Response Fee
+
 The Respondent may be required to pay a response fee as published on the Platform.
 
 ### 12.3 Fee Schedule
+
 The current fee schedule is published on the Platform website and may be updated from time to time.
 
 ### 12.4 Allocation in Award
+
 The Arbitrator may allocate fees and costs between the parties as part of the Award based on the outcome and other equitable factors.
 
 ### 12.5 No Attorney's Fees
+
 Unless otherwise agreed by the parties or required by the applicable law governing the underlying dispute, each party shall bear their own attorney's fees and costs of preparing their case.
 
 ---
@@ -301,15 +365,19 @@ Unless otherwise agreed by the parties or required by the applicable law governi
 ## Article 13: Withdrawal and Settlement
 
 ### 13.1 Withdrawal by Claimant
+
 The Claimant may withdraw the claim at any time before the Award is issued by submitting a written notice through the Platform. Withdrawal does not entitle the Claimant to a refund of the filing fee.
 
 ### 13.2 Settlement
+
 If the parties reach a settlement at any time before the Award is issued, they shall promptly notify the Platform. Upon notification:
+
 - The arbitration shall be terminated;
 - No Award shall be issued (unless the parties request a consent Award memorializing the settlement);
 - No refund of fees shall be provided.
 
 ### 13.3 Consent Award
+
 The parties may request that the Arbitrator issue a consent Award reflecting the terms of their settlement. Such consent Award shall be enforceable as any other Award.
 
 ---
@@ -317,18 +385,23 @@ The parties may request that the Arbitrator issue a consent Award reflecting the
 ## Article 14: Miscellaneous
 
 ### 14.1 Waiver
+
 A party's failure to object promptly to any non-compliance with these Rules shall be deemed a waiver of the right to object.
 
 ### 14.2 Technical Difficulties
+
 The Platform shall not be responsible for any party's inability to access the Platform due to technical difficulties on the party's end. Parties are responsible for maintaining adequate internet access and compatible devices.
 
 ### 14.3 Interpretation
+
 These Rules shall be interpreted in a manner consistent with their purpose of providing fair, efficient, and enforceable dispute resolution.
 
 ### 14.4 Severability
+
 If any provision of these Rules is held invalid or unenforceable, the remaining provisions shall continue in full force and effect.
 
 ### 14.5 Amendments
+
 The Platform may amend these Rules at any time. Amendments shall apply only to arbitrations commenced after the effective date of the amendment.
 
 ---
@@ -336,9 +409,11 @@ The Platform may amend these Rules at any time. Amendments shall apply only to a
 ## Article 15: Governing Law
 
 ### 15.1 Rules Interpretation
+
 These Rules shall be governed by and construed in accordance with the Federal Arbitration Act (9 U.S.C. § 1 et seq.) to the maximum extent applicable.
 
 ### 15.2 Substantive Dispute
+
 The substantive law governing the underlying dispute between the parties shall be determined by the Submission Agreement.
 
 ---
@@ -347,4 +422,4 @@ The substantive law governing the underlying dispute between the parties shall b
 
 ---
 
-*For questions about these Rules, contact: [INSERT CONTACT EMAIL]*
+_For questions about these Rules, contact: [INSERT CONTACT EMAIL]_

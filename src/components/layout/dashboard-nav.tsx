@@ -128,9 +128,7 @@ export function DashboardNav({ userRole }: DashboardNavProps) {
       {filteredArbitratorItems.length > 0 && (
         <>
           <div className="my-2 border-t" />
-          <p className="px-3 text-xs font-semibold uppercase text-muted-foreground">
-            Arbitrator
-          </p>
+          <p className="px-3 text-xs font-semibold uppercase text-muted-foreground">Arbitrator</p>
           <div className="space-y-1">
             {filteredArbitratorItems.map((item) => (
               <Link

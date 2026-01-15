@@ -14,10 +14,7 @@ export interface ValidationResult {
 /**
  * Validate data against a Zod schema
  */
-export function validateSchema<T extends z.ZodType>(
-  schema: T,
-  data: unknown
-): ValidationResult {
+export function validateSchema<T extends z.ZodType>(schema: T, data: unknown): ValidationResult {
   const result = schema.safeParse(data);
 
   if (result.success) {
@@ -75,9 +72,7 @@ export function toMatchSchema<T extends z.ZodType>(
 /**
  * Validate API response structure
  */
-export function validateApiResponse(
-  response: unknown
-): { isSuccess: boolean; isError: boolean } {
+export function validateApiResponse(response: unknown): { isSuccess: boolean; isError: boolean } {
   const successCheck = z.object({ success: z.literal(true) }).safeParse(response);
   const errorCheck = z.object({ success: z.literal(false) }).safeParse(response);
 

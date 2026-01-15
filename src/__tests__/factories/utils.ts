@@ -65,9 +65,7 @@ export function randomPhone(): string {
  * Generate a random IP address
  */
 export function randomIp(): string {
-  return [1, 2, 3, 4]
-    .map(() => Math.floor(Math.random() * 256))
-    .join('.');
+  return [1, 2, 3, 4].map(() => Math.floor(Math.random() * 256)).join('.');
 }
 
 /**

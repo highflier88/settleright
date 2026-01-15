@@ -9,10 +9,7 @@ import { NextResponse } from 'next/server';
 import { BadRequestError, ForbiddenError, NotFoundError } from '@/lib/api/errors';
 import { errorResponse } from '@/lib/api/response';
 import { withAuth, type AuthenticatedRequest } from '@/lib/api/with-auth';
-import {
-  generateAwardCertificate,
-  type AwardCertificateInput,
-} from '@/lib/award/pdf-generator';
+import { generateAwardCertificate, type AwardCertificateInput } from '@/lib/award/pdf-generator';
 import { prisma } from '@/lib/db';
 import { createAuditLog } from '@/lib/services/audit';
 
@@ -53,15 +50,12 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
 
     // Verify user has access to this case
     const userId = request.user.id;
-    const isParty =
-      caseData.claimantId === userId || caseData.respondentId === userId;
+    const isParty = caseData.claimantId === userId || caseData.respondentId === userId;
     const isArbitrator = caseData.arbitratorAssignment?.arbitratorId === userId;
     const isAdmin = request.user.role === 'ADMIN';
 
     if (!isParty && !isArbitrator && !isAdmin) {
-      return errorResponse(
-        new ForbiddenError('You do not have access to this case')
-      );
+      return errorResponse(new ForbiddenError('You do not have access to this case'));
     }
 
     // Get award with signature details
@@ -120,8 +114,10 @@ export const GET = withAuth(async (request: AuthenticatedRequest, context) => {
         documentType: 'certificate',
         referenceNumber: award.referenceNumber,
       },
-      ipAddress: request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-        request.headers.get('x-real-ip') || 'unknown',
+      ipAddress:
+        request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+        request.headers.get('x-real-ip') ||
+        'unknown',
       userAgent: request.headers.get('user-agent') || 'unknown',
     });
 

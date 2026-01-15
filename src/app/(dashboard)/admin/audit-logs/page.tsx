@@ -32,7 +32,7 @@ export default function AuditLogsPage({ searchParams }: PageProps) {
         </p>
       </div>
 
-      <Suspense fallback={<div className="h-32 animate-pulse bg-muted rounded-lg" />}>
+      <Suspense fallback={<div className="h-32 animate-pulse rounded-lg bg-muted" />}>
         <AuditStats />
       </Suspense>
 

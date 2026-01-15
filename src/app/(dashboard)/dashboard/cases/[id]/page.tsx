@@ -17,7 +17,12 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getAuthUser } from '@/lib/auth';
-import { getCaseWithDetails, userHasAccessToCase, CASE_STATUS_LABELS, DISPUTE_TYPE_LABELS } from '@/lib/services/case';
+import {
+  getCaseWithDetails,
+  userHasAccessToCase,
+  CASE_STATUS_LABELS,
+  DISPUTE_TYPE_LABELS,
+} from '@/lib/services/case';
 import { getInvitationStatusLabel, getInvitationTimeRemaining } from '@/lib/services/invitation';
 
 import { CaseActions } from './case-actions';
@@ -77,15 +82,10 @@ export default async function CaseDetailPage({ params }: PageProps) {
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <Link
-              href="/dashboard/cases"
-              className="text-muted-foreground hover:text-foreground"
-            >
+            <Link href="/dashboard/cases" className="text-muted-foreground hover:text-foreground">
               <ArrowLeft className="h-4 w-4" />
             </Link>
-            <h1 className="text-2xl font-bold tracking-tight">
-              Case {caseData.referenceNumber}
-            </h1>
+            <h1 className="text-2xl font-bold tracking-tight">Case {caseData.referenceNumber}</h1>
           </div>
           <div className="flex items-center gap-2">
             <Badge className={STATUS_COLORS[caseData.status]}>
@@ -143,9 +143,7 @@ export default async function CaseDetailPage({ params }: PageProps) {
               return (
                 <div
                   key={step.status}
-                  className={`flex flex-col items-center ${
-                    index < 4 ? 'flex-1' : ''
-                  }`}
+                  className={`flex flex-col items-center ${index < 4 ? 'flex-1' : ''}`}
                 >
                   <div
                     className={`flex h-10 w-10 items-center justify-center rounded-full border-2 ${
@@ -196,19 +194,15 @@ export default async function CaseDetailPage({ params }: PageProps) {
             </div>
             <div>
               <span className="text-sm text-muted-foreground">Claim Amount</span>
-              <p className="text-2xl font-bold">
-                ${Number(caseData.amount).toLocaleString()}
-              </p>
+              <p className="text-2xl font-bold">${Number(caseData.amount).toLocaleString()}</p>
             </div>
             <div>
               <span className="text-sm text-muted-foreground">Filed</span>
-              <p className="font-medium">
-                {format(new Date(caseData.createdAt), 'MMMM d, yyyy')}
-              </p>
+              <p className="font-medium">{format(new Date(caseData.createdAt), 'MMMM d, yyyy')}</p>
             </div>
             <div>
               <span className="text-sm text-muted-foreground">Description</span>
-              <p className="mt-1 text-sm whitespace-pre-wrap">{caseData.description}</p>
+              <p className="mt-1 whitespace-pre-wrap text-sm">{caseData.description}</p>
             </div>
           </CardContent>
         </Card>
@@ -239,9 +233,7 @@ export default async function CaseDetailPage({ params }: PageProps) {
                     {caseData.respondent.name ?? caseData.respondent.email}
                     {!isClaimant && ' (You)'}
                   </p>
-                  <p className="text-sm text-muted-foreground">
-                    {caseData.respondent.email}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{caseData.respondent.email}</p>
                 </>
               ) : caseData.invitation ? (
                 <div className="mt-2 rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-900 dark:bg-amber-950">
@@ -268,7 +260,7 @@ export default async function CaseDetailPage({ params }: PageProps) {
                         // This would trigger a resend - handled by CaseActions
                       }}
                     >
-                      <RefreshCw className="h-3 w-3 mr-1" />
+                      <RefreshCw className="mr-1 h-3 w-3" />
                       Resend Invitation
                     </Button>
                   )}
@@ -353,9 +345,7 @@ export default async function CaseDetailPage({ params }: PageProps) {
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Status</span>
                   <Badge
-                    variant={
-                      caseData.agreement.status === 'COMPLETE' ? 'default' : 'secondary'
-                    }
+                    variant={caseData.agreement.status === 'COMPLETE' ? 'default' : 'secondary'}
                   >
                     {caseData.agreement.status === 'COMPLETE'
                       ? 'Signed by Both Parties'
@@ -376,7 +366,7 @@ export default async function CaseDetailPage({ params }: PageProps) {
                 ))}
 
                 {caseData.agreement.status !== 'COMPLETE' && (
-                  <Button asChild className="w-full mt-4">
+                  <Button asChild className="mt-4 w-full">
                     <Link href={`/dashboard/cases/${caseData.id}/agreement`}>
                       Review & Sign Agreement
                     </Link>
@@ -397,21 +387,17 @@ export default async function CaseDetailPage({ params }: PageProps) {
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
             <CardTitle>Evidence</CardTitle>
-            <CardDescription>
-              Documents and files submitted as evidence
-            </CardDescription>
+            <CardDescription>Documents and files submitted as evidence</CardDescription>
           </div>
           {caseData.status === 'EVIDENCE_SUBMISSION' && (
             <Button asChild>
-              <Link href={`/dashboard/cases/${caseData.id}/evidence/upload`}>
-                Upload Evidence
-              </Link>
+              <Link href={`/dashboard/cases/${caseData.id}/evidence/upload`}>Upload Evidence</Link>
             </Button>
           )}
         </CardHeader>
         <CardContent>
           {caseData.evidence.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-8">
+            <p className="py-8 text-center text-sm text-muted-foreground">
               No evidence has been submitted yet.
             </p>
           ) : (
@@ -447,22 +433,20 @@ export default async function CaseDetailPage({ params }: PageProps) {
           </div>
           {caseData.status === 'EVIDENCE_SUBMISSION' && (
             <Button asChild>
-              <Link href={`/dashboard/cases/${caseData.id}/statement`}>
-                Submit Statement
-              </Link>
+              <Link href={`/dashboard/cases/${caseData.id}/statement`}>Submit Statement</Link>
             </Button>
           )}
         </CardHeader>
         <CardContent>
           {caseData.statements.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-8">
+            <p className="py-8 text-center text-sm text-muted-foreground">
               No statements have been submitted yet.
             </p>
           ) : (
             <div className="space-y-4">
               {caseData.statements.map((stmt) => (
                 <div key={stmt.id} className="rounded-lg border p-4">
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="mb-2 flex items-center justify-between">
                     <Badge variant="outline">
                       {stmt.submittedById === caseData.claimantId
                         ? "Claimant's Statement"
@@ -472,9 +456,7 @@ export default async function CaseDetailPage({ params }: PageProps) {
                       {format(new Date(stmt.submittedAt), 'MMM d, yyyy')}
                     </span>
                   </div>
-                  <p className="text-sm whitespace-pre-wrap line-clamp-4">
-                    {stmt.content}
-                  </p>
+                  <p className="line-clamp-4 whitespace-pre-wrap text-sm">{stmt.content}</p>
                   <Button variant="link" size="sm" className="mt-2 p-0">
                     Read full statement
                   </Button>

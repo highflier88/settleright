@@ -11,41 +11,35 @@ export const metadata: Metadata = {
 };
 
 async function getStats() {
-  const [
-    totalUsers,
-    totalCases,
-    pendingKyc,
-    activeCases,
-    recentUsers,
-    recentCases,
-  ] = await Promise.all([
-    prisma.user.count(),
-    prisma.case.count(),
-    prisma.identityVerification.count({
-      where: { status: 'PENDING' },
-    }),
-    prisma.case.count({
-      where: {
-        status: {
-          notIn: ['CLOSED', 'DECIDED', 'DRAFT'],
+  const [totalUsers, totalCases, pendingKyc, activeCases, recentUsers, recentCases] =
+    await Promise.all([
+      prisma.user.count(),
+      prisma.case.count(),
+      prisma.identityVerification.count({
+        where: { status: 'PENDING' },
+      }),
+      prisma.case.count({
+        where: {
+          status: {
+            notIn: ['CLOSED', 'DECIDED', 'DRAFT'],
+          },
         },
-      },
-    }),
-    prisma.user.count({
-      where: {
-        createdAt: {
-          gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+      }),
+      prisma.user.count({
+        where: {
+          createdAt: {
+            gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+          },
         },
-      },
-    }),
-    prisma.case.count({
-      where: {
-        createdAt: {
-          gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+      }),
+      prisma.case.count({
+        where: {
+          createdAt: {
+            gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+          },
         },
-      },
-    }),
-  ]);
+      }),
+    ]);
 
   return {
     totalUsers,
@@ -64,9 +58,7 @@ export default async function AdminDashboardPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
-        <p className="text-muted-foreground">
-          Platform overview and administration
-        </p>
+        <p className="text-muted-foreground">Platform overview and administration</p>
       </div>
 
       {/* Stats Grid */}
@@ -78,9 +70,7 @@ export default async function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalUsers}</div>
-            <p className="text-xs text-muted-foreground">
-              +{stats.recentUsers} this week
-            </p>
+            <p className="text-xs text-muted-foreground">+{stats.recentUsers} this week</p>
           </CardContent>
         </Card>
 
@@ -91,9 +81,7 @@ export default async function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalCases}</div>
-            <p className="text-xs text-muted-foreground">
-              +{stats.recentCases} this week
-            </p>
+            <p className="text-xs text-muted-foreground">+{stats.recentCases} this week</p>
           </CardContent>
         </Card>
 
@@ -142,9 +130,7 @@ export default async function AdminDashboardPage() {
         <Card>
           <CardHeader>
             <CardTitle>Case Oversight</CardTitle>
-            <CardDescription>
-              Monitor all cases and intervene when necessary
-            </CardDescription>
+            <CardDescription>Monitor all cases and intervene when necessary</CardDescription>
           </CardHeader>
           <CardContent>
             <a
@@ -159,9 +145,7 @@ export default async function AdminDashboardPage() {
         <Card>
           <CardHeader>
             <CardTitle>System Settings</CardTitle>
-            <CardDescription>
-              Configure platform settings and feature flags
-            </CardDescription>
+            <CardDescription>Configure platform settings and feature flags</CardDescription>
           </CardHeader>
           <CardContent>
             <a

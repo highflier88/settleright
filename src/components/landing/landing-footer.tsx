@@ -1,14 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import {
-  Mail,
-  Scale,
-  Shield,
-  Lock,
-  FileSignature,
-  ArrowRight,
-} from 'lucide-react';
+import { Mail, Scale, Shield, Lock, FileSignature, ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
@@ -59,16 +52,16 @@ export function LandingFooter() {
                 className="h-8 w-auto"
               />
             </Link>
-            <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-xs">
-              AI-powered binding arbitration for faster, affordable dispute resolution.
-              Resolve your disputes in weeks, not months.
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+              AI-powered binding arbitration for faster, affordable dispute resolution. Resolve your
+              disputes in weeks, not months.
             </p>
 
             {/* Contact Email */}
             <div className="mt-6">
               <a
                 href="mailto:support@settleright.ai"
-                className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 <Mail className="h-4 w-4" />
                 support@settleright.ai
@@ -90,7 +83,7 @@ export function LandingFooter() {
           <div className="grid gap-8 sm:grid-cols-3 lg:col-span-8">
             {/* Product Column */}
             <div>
-              <h4 className="text-sm font-semibold mb-4">Product</h4>
+              <h4 className="mb-4 text-sm font-semibold">Product</h4>
               <nav className="flex flex-col gap-3">
                 {productLinks.map((link) => (
                   <a
@@ -106,7 +99,7 @@ export function LandingFooter() {
 
             {/* Company Column */}
             <div>
-              <h4 className="text-sm font-semibold mb-4">Company</h4>
+              <h4 className="mb-4 text-sm font-semibold">Company</h4>
               <nav className="flex flex-col gap-3">
                 {companyLinks.map((link) => (
                   <Link
@@ -122,7 +115,7 @@ export function LandingFooter() {
 
             {/* Legal Column */}
             <div>
-              <h4 className="text-sm font-semibold mb-4">Legal</h4>
+              <h4 className="mb-4 text-sm font-semibold">Legal</h4>
               <nav className="flex flex-col gap-3">
                 {legalLinks.map((link) => (
                   <Link
@@ -139,7 +132,7 @@ export function LandingFooter() {
         </div>
 
         {/* Trust Badges */}
-        <div className="mt-12 pt-8 border-t">
+        <div className="mt-12 border-t pt-8">
           <div className="flex flex-wrap items-center justify-center gap-6">
             {trustBadges.map((badge) => (
               <div
@@ -164,8 +157,8 @@ export function LandingFooter() {
             <div className="flex items-center gap-6 text-sm text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span>
                 </span>
                 All systems operational
               </span>

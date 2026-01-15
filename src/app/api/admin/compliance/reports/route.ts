@@ -51,10 +51,7 @@ export async function GET() {
     console.error('[Compliance Reports API] GET error:', error);
     const message = error instanceof Error ? error.message : 'Failed to get report types';
     const status = message.includes('required') || message.includes('Insufficient') ? 401 : 500;
-    return NextResponse.json(
-      { success: false, error: message },
-      { status }
-    );
+    return NextResponse.json({ success: false, error: message }, { status });
   }
 }
 
@@ -62,8 +59,12 @@ export async function POST(request: NextRequest) {
   try {
     const user = await requireRole('ADMIN');
 
-    const body = await request.json() as {
-      reportType: 'PLATFORM_ACTIVITY' | 'CASE_RESOLUTION' | 'DATA_INTEGRITY' | 'ARBITRATOR_PERFORMANCE';
+    const body = (await request.json()) as {
+      reportType:
+        | 'PLATFORM_ACTIVITY'
+        | 'CASE_RESOLUTION'
+        | 'DATA_INTEGRITY'
+        | 'ARBITRATOR_PERFORMANCE';
       startDate: string;
       endDate: string;
       format?: 'json' | 'csv';
@@ -87,10 +88,7 @@ export async function POST(request: NextRequest) {
     const endDate = new Date(body.endDate);
 
     if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid date format' },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: 'Invalid date format' }, { status: 400 });
     }
 
     if (startDate > endDate) {
@@ -117,10 +115,7 @@ export async function POST(request: NextRequest) {
         report = await generateArbitratorPerformanceReport(options);
         break;
       default:
-        return NextResponse.json(
-          { success: false, error: 'Invalid report type' },
-          { status: 400 }
-        );
+        return NextResponse.json({ success: false, error: 'Invalid report type' }, { status: 400 });
     }
 
     if (body.format === 'csv') {
@@ -141,9 +136,6 @@ export async function POST(request: NextRequest) {
     console.error('[Compliance Reports API] POST error:', error);
     const message = error instanceof Error ? error.message : 'Failed to generate report';
     const status = message.includes('required') || message.includes('Insufficient') ? 401 : 500;
-    return NextResponse.json(
-      { success: false, error: message },
-      { status }
-    );
+    return NextResponse.json({ success: false, error: message }, { status });
   }
 }

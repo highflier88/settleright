@@ -13,7 +13,6 @@ import { getStatementById, parseStatementContent } from '@/lib/services/statemen
 
 import type { Metadata } from 'next';
 
-
 export const metadata: Metadata = {
   title: 'View Statement',
   description: 'View the full statement',
@@ -64,9 +63,7 @@ export default async function ViewStatementPage({ params }: PageProps) {
               {statement.type === StatementType.INITIAL ? 'Initial' : 'Rebuttal'} Statement
             </h1>
           </div>
-          <p className="text-muted-foreground">
-            Case {caseData.referenceNumber}
-          </p>
+          <p className="text-muted-foreground">Case {caseData.referenceNumber}</p>
         </div>
         {canEdit && (
           <Button variant="outline" asChild>
@@ -81,14 +78,12 @@ export default async function ViewStatementPage({ params }: PageProps) {
       {/* Statement Meta */}
       <Card>
         <CardContent className="py-4">
-          <div className="flex items-center justify-between flex-wrap gap-4">
+          <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <Badge variant={isOwn ? 'default' : 'secondary'}>
                 {isOwn ? 'Your Statement' : 'Other Party&apos;s Statement'}
               </Badge>
-              <Badge variant="outline">
-                Version {statement.version}
-              </Badge>
+              <Badge variant="outline">Version {statement.version}</Badge>
             </div>
             <div className="text-sm text-muted-foreground">
               Submitted {new Date(statement.submittedAt).toLocaleDateString()} at{' '}
@@ -112,7 +107,7 @@ export default async function ViewStatementPage({ params }: PageProps) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="prose prose-sm max-w-none dark:prose-invert whitespace-pre-wrap">
+          <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">
             {content.narrative}
           </div>
         </CardContent>
@@ -126,9 +121,7 @@ export default async function ViewStatementPage({ params }: PageProps) {
               <Calendar className="h-5 w-5" />
               Timeline of Events
             </CardTitle>
-            <CardDescription>
-              {content.timeline.length} event(s) documented
-            </CardDescription>
+            <CardDescription>{content.timeline.length} event(s) documented</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="relative space-y-0">
@@ -138,23 +131,21 @@ export default async function ViewStatementPage({ params }: PageProps) {
                   <div key={entry.id} className="flex gap-4 pb-8 last:pb-0">
                     {/* Timeline line */}
                     <div className="flex flex-col items-center">
-                      <div className="w-3 h-3 rounded-full bg-primary" />
+                      <div className="h-3 w-3 rounded-full bg-primary" />
                       {index < content.timeline!.length - 1 && (
                         <div className="w-0.5 flex-1 bg-border" />
                       )}
                     </div>
                     {/* Content */}
                     <div className="flex-1 pb-2">
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="mb-1 flex items-center gap-2">
                         <span className="text-sm font-medium text-muted-foreground">
                           {new Date(entry.date).toLocaleDateString()}
                         </span>
                       </div>
                       <h4 className="font-medium">{entry.title}</h4>
                       {entry.description && (
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {entry.description}
-                        </p>
+                        <p className="mt-1 text-sm text-muted-foreground">{entry.description}</p>
                       )}
                     </div>
                   </div>
@@ -172,16 +163,14 @@ export default async function ViewStatementPage({ params }: PageProps) {
               <DollarSign className="h-5 w-5" />
               Claim Itemization
             </CardTitle>
-            <CardDescription>
-              {content.claimItems.length} item(s) claimed
-            </CardDescription>
+            <CardDescription>{content.claimItems.length} item(s) claimed</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               {content.claimItems.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-3 border rounded-lg"
+                  className="flex items-center justify-between rounded-lg border p-3"
                 >
                   <div>
                     <p className="font-medium">{item.description}</p>
@@ -196,7 +185,7 @@ export default async function ViewStatementPage({ params }: PageProps) {
               ))}
 
               {/* Total */}
-              <div className="flex items-center justify-between p-4 bg-muted rounded-lg mt-4">
+              <div className="mt-4 flex items-center justify-between rounded-lg bg-muted p-4">
                 <span className="font-medium">Total Claimed</span>
                 <span className="text-xl font-bold">
                   $

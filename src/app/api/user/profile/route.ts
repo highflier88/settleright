@@ -8,7 +8,6 @@ import { prisma } from '@/lib/db';
 import { validateBody } from '@/lib/validations';
 import { updateProfileSchema } from '@/lib/validations/user';
 
-
 export async function GET() {
   try {
     const user = await requireAuth();
