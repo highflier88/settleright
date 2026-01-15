@@ -34,6 +34,19 @@ interface UsersTableProps {
   };
 }
 
+interface UserWithDetails {
+  id: string;
+  email: string;
+  name: string | null;
+  role: UserRole;
+  createdAt: Date;
+  identityVerification: { status: KYCStatus } | null;
+  _count: {
+    casesAsClaimant: number;
+    casesAsRespondent: number;
+  };
+}
+
 const USER_ROLES: UserRole[] = ['USER', 'ARBITRATOR', 'ADMIN'];
 const KYC_STATUSES: KYCStatus[] = ['NOT_STARTED', 'PENDING', 'VERIFIED', 'FAILED', 'EXPIRED'];
 
@@ -103,7 +116,7 @@ export async function UsersTable({ searchParams }: UsersTableProps) {
       orderBy: { createdAt: 'desc' },
       skip: (page - 1) * perPage,
       take: perPage,
-    }),
+    }) as Promise<UserWithDetails[]>,
     prisma.user.count({ where }),
   ]);
 
