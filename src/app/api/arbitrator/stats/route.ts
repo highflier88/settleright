@@ -15,6 +15,11 @@ interface ReviewTimeItem {
   reviewCompletedAt: Date | null;
 }
 
+interface DraftAwardStatusGroupBy {
+  reviewStatus: string | null;
+  _count: { id: number };
+}
+
 /**
  * GET - Get arbitrator's performance statistics
  */
@@ -163,8 +168,9 @@ export const GET = withArbitrator(async (request: AuthenticatedRequest) => {
       _count: { id: true },
     });
 
-    const reviewStatusBreakdown = draftAwardStatuses.reduce(
-      (acc, status) => {
+    const typedDraftAwardStatuses = draftAwardStatuses as DraftAwardStatusGroupBy[];
+    const reviewStatusBreakdown = typedDraftAwardStatuses.reduce(
+      (acc: Record<string, number>, status: DraftAwardStatusGroupBy) => {
         if (status.reviewStatus) {
           acc[status.reviewStatus] = status._count.id;
         }
