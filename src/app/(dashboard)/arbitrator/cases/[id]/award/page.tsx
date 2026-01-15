@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
-import { UserRole } from '@prisma/client';
 import { format } from 'date-fns';
 import {
   ArrowLeft,
@@ -106,7 +105,7 @@ export default async function AwardReviewPage({ params }: PageProps) {
   if (!user) return redirect('/sign-in');
 
   // Ensure user is an arbitrator
-  if (user.role !== UserRole.ARBITRATOR && user.role !== UserRole.ADMIN) {
+  if (user.role !== 'ARBITRATOR' && user.role !== 'ADMIN') {
     return redirect('/dashboard');
   }
 

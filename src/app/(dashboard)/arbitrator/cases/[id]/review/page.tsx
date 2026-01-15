@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
-import { UserRole } from '@prisma/client';
 import { ArrowLeft } from 'lucide-react';
 
 import { getAuthUser } from '@/lib/auth';
@@ -90,7 +89,7 @@ export default async function CaseReviewPage({ params }: PageProps) {
   const user = await getAuthUser();
   if (!user) return redirect('/sign-in');
 
-  if (user.role !== UserRole.ARBITRATOR && user.role !== UserRole.ADMIN) {
+  if (user.role !== 'ARBITRATOR' && user.role !== 'ADMIN') {
     return redirect('/dashboard');
   }
 

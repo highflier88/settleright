@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
 
-import { UserRole } from '@prisma/client';
 import { format } from 'date-fns';
 import { User, Scale, Award, Clock, CheckCircle, MapPin, Briefcase, Calendar } from 'lucide-react';
 
@@ -69,7 +68,7 @@ export default async function ArbitratorProfilePage() {
   if (!user) return redirect('/sign-in');
 
   // Ensure user is an arbitrator
-  if (user.role !== UserRole.ARBITRATOR && user.role !== UserRole.ADMIN) {
+  if (user.role !== 'ARBITRATOR' && user.role !== 'ADMIN') {
     return redirect('/dashboard');
   }
 

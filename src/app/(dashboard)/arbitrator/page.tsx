@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-import { UserRole } from '@prisma/client';
 import { Scale, Clock, AlertTriangle, CheckCircle, FileText, ArrowRight } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
@@ -121,7 +120,7 @@ export default async function ArbitratorPage() {
   if (!user) return redirect('/sign-in');
 
   // Ensure user is an arbitrator
-  if (user.role !== UserRole.ARBITRATOR && user.role !== UserRole.ADMIN) {
+  if (user.role !== 'ARBITRATOR' && user.role !== 'ADMIN') {
     return redirect('/dashboard');
   }
 
