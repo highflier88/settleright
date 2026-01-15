@@ -39,7 +39,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { formatFileSize } from '@/lib/services/evidence';
+import { formatFileSize } from '@/lib/services/evidence-utils';
 import type { Evidence } from '@/types/shared';
 
 interface EvidenceListProps {

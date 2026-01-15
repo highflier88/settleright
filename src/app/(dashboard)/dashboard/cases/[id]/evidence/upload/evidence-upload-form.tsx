@@ -22,7 +22,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { formatFileSize, MAX_FILE_SIZE, ALLOWED_FILE_TYPES } from '@/lib/services/evidence';
+import { formatFileSize, MAX_FILE_SIZE, ALLOWED_FILE_TYPES } from '@/lib/services/evidence-utils';
 
 interface EvidenceUploadFormProps {
   caseId: string;
