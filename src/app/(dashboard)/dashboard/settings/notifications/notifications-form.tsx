@@ -11,7 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 
-import type { NotificationPreference } from '@prisma/client';
+import type { NotificationPreference } from '@/types/shared';
 
 interface NotificationsFormProps {
   preferences: NotificationPreference;

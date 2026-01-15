@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { DisputeType } from '@prisma/client';
 import { ArrowLeft, ArrowRight, Check, FileText, Users, Scale, Send } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -23,8 +22,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-
-import type { User } from '@prisma/client';
+import { type User } from '@/types/shared';
 
 // Jurisdictions supported
 const JURISDICTIONS = [

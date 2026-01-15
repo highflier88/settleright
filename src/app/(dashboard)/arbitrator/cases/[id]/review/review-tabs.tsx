@@ -12,7 +12,7 @@ import { EvidenceComparison } from './evidence-comparison';
 import { NotesPanel } from './notes-panel';
 import { StatementComparison } from './statement-comparison';
 
-import type { Evidence, Statement, DraftAward, AnalysisJob } from '@prisma/client';
+import type { Evidence, Statement, DraftAward, AnalysisJob } from '@/types/shared';
 
 interface Party {
   id: string;

@@ -26,7 +26,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import type { Statement } from '@prisma/client';
+import type { Statement } from '@/types/shared';
 import type { JsonValue } from '@prisma/client/runtime/library';
 
 type StatementWithSubmitter = Statement & {

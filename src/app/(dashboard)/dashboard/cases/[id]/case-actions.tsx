@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import type { CaseStatus, InvitationStatus } from '@prisma/client';
+import type { CaseStatus, InvitationStatus } from '@/types/shared';
 
 interface CaseActionsProps {
   caseId: string;

@@ -22,7 +22,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Progress } from '@/components/ui/progress';
 
-import type { AnalysisJob } from '@prisma/client';
+import type { AnalysisJob } from '@/types/shared';
 import type { JsonValue } from '@prisma/client/runtime/library';
 
 interface AnalysisDisplayProps {

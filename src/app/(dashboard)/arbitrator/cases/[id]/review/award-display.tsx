@@ -13,7 +13,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
-import type { DraftAward } from '@prisma/client';
+import type { DraftAward } from '@/types/shared';
 import type { JsonValue } from '@prisma/client/runtime/library';
 
 interface AwardDisplayProps {

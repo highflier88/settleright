@@ -23,7 +23,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 
 import { EvidenceViewer } from './evidence-viewer';
 
-import type { Evidence } from '@prisma/client';
+import type { Evidence } from '@/types/shared';
 
 type EvidenceWithSubmitter = Evidence & {
   submittedBy: { id: string; name: string | null };

@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-import type { User } from '@prisma/client';
+import type { User } from '@/types/shared';
 
 const US_STATES = [
   { value: 'AL', label: 'Alabama' },

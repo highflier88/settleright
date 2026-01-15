@@ -40,7 +40,7 @@ import {
 } from '@/components/ui/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import type { Evidence } from '@prisma/client';
+import type { Evidence } from '@/types/shared';
 
 type EvidenceWithSubmitter = Evidence & {
   submittedBy: { id: string; name: string | null };

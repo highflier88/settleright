@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-import type { CaseStatus, DisputeType, InvitationStatus } from '@prisma/client';
+import type { CaseStatus, DisputeType, InvitationStatus } from '@/types/shared';
 
 interface CaseListItem {
   id: string;

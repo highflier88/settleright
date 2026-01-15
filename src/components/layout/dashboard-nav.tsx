@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import { type UserRole, UserRoles } from '@/types/user';
+import { type UserRole } from '@/types/shared';
 
 interface NavItem {
   title: string;
@@ -53,13 +53,13 @@ const arbitratorNavItems: NavItem[] = [
     title: 'Review Queue',
     href: '/arbitrator',
     icon: Scale,
-    roles: [UserRoles.ARBITRATOR, UserRoles.ADMIN],
+    roles: ['ARBITRATOR', 'ADMIN'],
   },
   {
     title: 'My Reviews',
     href: '/arbitrator/reviews',
     icon: FileText,
-    roles: [UserRoles.ARBITRATOR, UserRoles.ADMIN],
+    roles: ['ARBITRATOR', 'ADMIN'],
   },
 ];
 
@@ -68,25 +68,25 @@ const adminNavItems: NavItem[] = [
     title: 'Admin Dashboard',
     href: '/admin',
     icon: BarChart,
-    roles: [UserRoles.ADMIN],
+    roles: ['ADMIN'],
   },
   {
     title: 'User Management',
     href: '/admin/users',
     icon: Users,
-    roles: [UserRoles.ADMIN],
+    roles: ['ADMIN'],
   },
   {
     title: 'Audit Logs',
     href: '/admin/audit-logs',
     icon: ScrollText,
-    roles: [UserRoles.ADMIN],
+    roles: ['ADMIN'],
   },
   {
     title: 'System Settings',
     href: '/admin/settings',
     icon: Shield,
-    roles: [UserRoles.ADMIN],
+    roles: ['ADMIN'],
   },
 ];
 

@@ -36,7 +36,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import type { AuditAction, AuditLog } from '@prisma/client';
+import type { AuditAction, AuditLog } from '@/types/shared';
 
 interface AuditLogsTableProps {
   searchParams: {

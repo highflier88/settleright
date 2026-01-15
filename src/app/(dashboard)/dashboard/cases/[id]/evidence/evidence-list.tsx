@@ -41,7 +41,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { formatFileSize } from '@/lib/services/evidence';
 
-import type { Evidence } from '@prisma/client';
+import type { Evidence } from '@/types/shared';
 
 interface EvidenceListProps {
   caseId: string;

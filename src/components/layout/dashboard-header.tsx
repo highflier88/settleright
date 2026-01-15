@@ -10,7 +10,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 import { DashboardNav } from './dashboard-nav';
 
-import type { User } from '@prisma/client';
+import type { User } from '@/types/shared';
 
 interface DashboardHeaderProps {
   user: User;

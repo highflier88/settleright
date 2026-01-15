@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { formatDate } from '@/lib/utils';
 
-import type { User, IdentityVerification, KYCStatus } from '@prisma/client';
+import type { User, IdentityVerification, KYCStatus } from '@/types/shared';
 
 interface IdentityVerificationCardProps {
   user: User;
