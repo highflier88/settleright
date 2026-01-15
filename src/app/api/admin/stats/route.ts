@@ -1,8 +1,21 @@
-import { UserRole, CaseStatus, KYCStatus } from '@prisma/client';
-
 import { successResponse } from '@/lib/api/response';
 import { withAdmin, type AuthenticatedRequest } from '@/lib/api/with-auth';
 import { prisma } from '@/lib/db';
+import type { UserRole, CaseStatus, KYCStatus } from '@/types/shared';
+
+const USER_ROLES: UserRole[] = ['USER', 'ARBITRATOR', 'ADMIN'];
+const CASE_STATUSES: CaseStatus[] = [
+  'DRAFT',
+  'PENDING_RESPONDENT',
+  'PENDING_AGREEMENT',
+  'EVIDENCE_SUBMISSION',
+  'ANALYSIS_PENDING',
+  'ANALYSIS_IN_PROGRESS',
+  'ARBITRATOR_REVIEW',
+  'DECIDED',
+  'CLOSED',
+];
+const KYC_STATUSES: KYCStatus[] = ['NOT_STARTED', 'PENDING', 'VERIFIED', 'FAILED', 'EXPIRED'];
 
 async function handleGet(_request: AuthenticatedRequest) {
   const [
@@ -58,7 +71,7 @@ async function handleGet(_request: AuthenticatedRequest) {
   ]);
 
   // Format role stats
-  const roleStats = Object.values(UserRole).reduce(
+  const roleStats = USER_ROLES.reduce(
     (acc, role) => {
       const found = usersByRole.find((r) => r.role === role);
       acc[role] = found?._count.role ?? 0;
@@ -68,7 +81,7 @@ async function handleGet(_request: AuthenticatedRequest) {
   );
 
   // Format KYC stats
-  const kycStats = Object.values(KYCStatus).reduce(
+  const kycStats = KYC_STATUSES.reduce(
     (acc, status) => {
       const found = usersByKycStatus.find((k) => k.status === status);
       acc[status] = found?._count.status ?? 0;
@@ -82,7 +95,7 @@ async function handleGet(_request: AuthenticatedRequest) {
   kycStats.NOT_STARTED = totalUsers - usersWithKyc + (kycStats.NOT_STARTED ?? 0);
 
   // Format case stats
-  const caseStats = Object.values(CaseStatus).reduce(
+  const caseStats = CASE_STATUSES.reduce(
     (acc, status) => {
       const found = casesByStatus.find((c) => c.status === status);
       acc[status] = found?._count.status ?? 0;
