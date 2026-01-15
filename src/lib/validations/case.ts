@@ -1,10 +1,11 @@
-import { DisputeType } from '@prisma/client';
 import { z } from 'zod';
 
 import { emailSchema, phoneSchema, jurisdictionSchema, currencySchema } from './index';
 
+const DISPUTE_TYPES = ['CONTRACT', 'PAYMENT', 'SERVICE', 'GOODS', 'OTHER'] as const;
+
 export const createCaseSchema = z.object({
-  disputeType: z.nativeEnum(DisputeType),
+  disputeType: z.enum(DISPUTE_TYPES),
   jurisdiction: jurisdictionSchema,
   description: z
     .string()
