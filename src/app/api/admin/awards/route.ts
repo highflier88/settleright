@@ -10,7 +10,7 @@ import type { NextRequest } from 'next/server';
 import { requireRole } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 
-import type { PrevailingParty } from '@prisma/client';
+type PrevailingParty = 'CLAIMANT' | 'RESPONDENT' | 'SPLIT';
 
 export const dynamic = 'force-dynamic';
 
