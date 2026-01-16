@@ -52,9 +52,19 @@ export async function getAuthUser(): Promise<User | null> {
   const { userId: clerkId } = auth();
   if (!clerkId) return null;
 
-  const user = await prisma.user.findUnique({
+  let user = await prisma.user.findUnique({
     where: { clerkId },
   });
+
+  // If user exists in Clerk but not in database, sync them
+  if (!user) {
+    try {
+      user = await syncUserFromClerk();
+    } catch {
+      // If sync fails, return null
+      return null;
+    }
+  }
 
   return user;
 }
