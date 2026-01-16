@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:check": "./scripts/vercel-build-check.sh",
     "build:vercel": "vercel build --prod",
     "start": "next start",
     "lint": "next lint",
