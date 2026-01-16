@@ -23,6 +23,7 @@
     "test:load": "echo 'Run: k6 run load-tests/api-load.js'",
     "test:load:case-flow": "echo 'Run: k6 run load-tests/case-flow-load.js'",
     "test:load:arbitrator": "echo 'Run: k6 run load-tests/arbitrator-load.js'",
+    "postinstall": "prisma generate",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
