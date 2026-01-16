@@ -98,10 +98,11 @@ jobs:
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: settleright
-          SENTRY_PROJECT: settleright-web
+          SENTRY_PROJECT: javascript-nextjs
         with:
           environment: production
           sourcemaps: '.next'
+          ignore_missing: true
 
   # ============================================================
   # Post-deployment verification
