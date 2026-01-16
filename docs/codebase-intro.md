@@ -442,6 +442,25 @@ dispatchNotification({
 | POST   | `/api/user/identity/start`  | Start KYC        |
 | GET    | `/api/user/identity/status` | Check KYC status |
 
+### Scheduled Jobs (Cron)
+
+**Active cron jobs** (configured in `vercel.json`):
+
+| Route                        | Schedule | Description                    |
+| ---------------------------- | -------- | ------------------------------ |
+| `/api/cron/check-deadlines`  | 6 AM UTC | Check and notify about deadlines |
+| `/api/cron/send-reminders`   | 9 AM UTC | Send daily reminder notifications |
+
+**Disabled cron jobs** (removed due to Vercel Hobby plan limit of 2 crons):
+
+| Route                        | Previous Schedule | Description                    |
+| ---------------------------- | ----------------- | ------------------------------ |
+| `/api/cron/expire-invitations` | Midnight UTC    | Expire old case invitations    |
+| `/api/cron/cleanup-sessions`   | 3 AM UTC        | Clean up expired sessions      |
+| `/api/cron/check-expired-kyc`  | Midnight UTC    | Check for expired KYC verifications |
+
+> **Note:** The disabled cron endpoints still exist and can be triggered manually or via an external scheduler (e.g., GitHub Actions, cron-job.org) if needed. Upgrade to Vercel Pro to re-enable all cron jobs.
+
 ---
 
 ## 8. Authentication & Authorization
