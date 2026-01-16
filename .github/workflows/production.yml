@@ -99,7 +99,7 @@ jobs:
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: settleright
-          SENTRY_PROJECT: javascript-nextjs
+          SENTRY_PROJECT: settleright-web
         with:
           environment: production
           sourcemaps: '.next'
