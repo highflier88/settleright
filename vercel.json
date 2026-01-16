@@ -22,18 +22,6 @@
     {
       "path": "/api/cron/send-reminders",
       "schedule": "0 9 * * *"
-    },
-    {
-      "path": "/api/cron/expire-invitations",
-      "schedule": "0 0 * * *"
-    },
-    {
-      "path": "/api/cron/cleanup-sessions",
-      "schedule": "0 3 * * *"
-    },
-    {
-      "path": "/api/cron/check-expired-kyc",
-      "schedule": "0 0 * * *"
     }
   ],
   "headers": [
