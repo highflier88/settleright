@@ -4,12 +4,17 @@ import { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { AlertTriangle, CheckCircle, Clock, RefreshCw, Shield, XCircle } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Clock, Lightbulb, RefreshCw, Shield, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  getErrorDetails,
+  getRetryGuidance,
+} from '@/lib/services/stripe-identity-errors';
 import { formatDate } from '@/lib/utils';
 import type { IdentityVerification, KYCStatus, User } from '@/types/shared';
 
@@ -28,6 +33,8 @@ interface VerificationStatus {
   documentType: string | null;
   failureReason: string | null;
   initiatedAt: string | null;
+  failureCount: number;
+  lastFailureCode: string | null;
 }
 
 const STATUS_CONFIG = {
@@ -67,6 +74,64 @@ const STATUS_CONFIG = {
     color: 'red',
   },
 };
+
+// Component to show failure guidance and tips
+function FailureGuidanceCard({
+  failureCode,
+  failureCount,
+}: {
+  failureCode: string | null;
+  failureCount: number;
+}) {
+  const errorDetails = getErrorDetails(failureCode);
+  const guidance = getRetryGuidance(errorDetails.category);
+
+  return (
+    <Card className="border-destructive/50">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 text-destructive">
+          <Lightbulb className="h-5 w-5" />
+          Tips for Successful Verification
+        </CardTitle>
+        <CardDescription>
+          {errorDetails.tip}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {failureCount >= 3 && (
+          <Alert variant="destructive">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Multiple Failed Attempts</AlertTitle>
+            <AlertDescription>
+              You have failed verification {failureCount} times. If you continue to experience
+              issues, please contact support for assistance.
+            </AlertDescription>
+          </Alert>
+        )}
+
+        <div>
+          <h4 className="mb-2 font-medium">Try the following:</h4>
+          <ul className="list-inside list-disc space-y-1 text-sm text-muted-foreground">
+            {guidance.map((tip, index) => (
+              <li key={index}>{tip}</li>
+            ))}
+          </ul>
+        </div>
+
+        {!errorDetails.retryable && (
+          <Alert>
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Verification Not Possible</AlertTitle>
+            <AlertDescription>
+              Based on the verification result, you may not be able to complete verification
+              automatically. Please contact support@settleright.ai for assistance.
+            </AlertDescription>
+          </Alert>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
 
 export function IdentityVerificationCard({
   user: _user,
@@ -268,6 +333,14 @@ export function IdentityVerificationCard({
           </div>
         </CardContent>
       </Card>
+
+      {/* Error Tips Card - shown when verification failed */}
+      {currentStatus === 'FAILED' && (
+        <FailureGuidanceCard
+          failureCode={status?.lastFailureCode ?? initialVerification?.lastFailureCode ?? null}
+          failureCount={status?.failureCount ?? initialVerification?.failureCount ?? 0}
+        />
+      )}
 
       {/* Information Card */}
       <Card>

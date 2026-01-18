@@ -89,6 +89,7 @@ export const EMAIL_TEMPLATES = {
   evidenceNotification: process.env.SENDGRID_TEMPLATE_EVIDENCE_NOTIFICATION,
   deadlineReminder: process.env.SENDGRID_TEMPLATE_DEADLINE_REMINDER,
   awardIssued: process.env.SENDGRID_TEMPLATE_AWARD_ISSUED,
+  kycExpirationReminder: process.env.SENDGRID_TEMPLATE_KYC_EXPIRATION,
 } as const;
 
 // Pre-built email functions for common scenarios
@@ -317,6 +318,73 @@ The Settleright.ai Team
       </div>
       <p><a href="${data.caseUrl}">View Full Award</a></p>
       <p style="color: #666; font-size: 14px;">This award is final and legally binding.</p>
+      <p>Best,<br>The Settleright.ai Team</p>
+    `,
+  });
+}
+
+export async function sendKYCExpirationReminderEmail(
+  to: string,
+  data: {
+    userName: string;
+    daysRemaining: number;
+    expirationDate: string;
+    reverifyUrl: string;
+  }
+): Promise<SendEmailResult> {
+  const isExpired = data.daysRemaining <= 0;
+  const subject = isExpired
+    ? 'Your identity verification has expired'
+    : `Your identity verification expires in ${data.daysRemaining} days`;
+
+  if (EMAIL_TEMPLATES.kycExpirationReminder) {
+    return sendEmail({
+      to,
+      subject,
+      templateId: EMAIL_TEMPLATES.kycExpirationReminder,
+      dynamicTemplateData: {
+        ...data,
+        isExpired,
+      },
+    });
+  }
+
+  const urgencyText = isExpired
+    ? 'Your identity verification has expired. You will need to complete a new verification before you can file or respond to cases.'
+    : `Your identity verification will expire on ${data.expirationDate}. To avoid any interruption in using Settleright.ai, please complete a new verification before the expiration date.`;
+
+  return sendEmail({
+    to,
+    subject,
+    text: `
+Hi ${data.userName},
+
+${urgencyText}
+
+Re-verify your identity here: ${data.reverifyUrl}
+
+Why is this important?
+- Identity verification is required to participate in binding arbitration
+- Without verification, you cannot file new cases or respond to existing ones
+- The verification process takes only a few minutes
+
+If you have any questions, please contact support@settleright.ai.
+
+Best,
+The Settleright.ai Team
+    `,
+    html: `
+      <h2>${isExpired ? 'Identity Verification Expired' : 'Identity Verification Expiring Soon'}</h2>
+      <p>Hi ${data.userName},</p>
+      <p>${urgencyText}</p>
+      <p><a href="${data.reverifyUrl}" style="display: inline-block; padding: 12px 24px; background: ${isExpired ? '#dc2626' : '#f59e0b'}; color: white; text-decoration: none; border-radius: 6px;">Re-verify Your Identity</a></p>
+      <h3>Why is this important?</h3>
+      <ul>
+        <li>Identity verification is required to participate in binding arbitration</li>
+        <li>Without verification, you cannot file new cases or respond to existing ones</li>
+        <li>The verification process takes only a few minutes</li>
+      </ul>
+      <p style="color: #666; font-size: 14px;">If you have any questions, please contact support@settleright.ai.</p>
       <p>Best,<br>The Settleright.ai Team</p>
     `,
   });

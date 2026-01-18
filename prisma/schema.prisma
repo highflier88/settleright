@@ -237,6 +237,21 @@ enum OnboardingStatus {
   COMPLETED
 }
 
+// KYC Admin Features Enums
+enum KYCAdminActionType {
+  MANUAL_OVERRIDE
+  NOTE_ADDED
+  EXPIRATION_EXTENDED
+  VERIFICATION_REVOKED
+}
+
+enum KYCReminderType {
+  THIRTY_DAYS
+  FOURTEEN_DAYS
+  SEVEN_DAYS
+  EXPIRED
+}
+
 // Legal Knowledge Base Enums
 enum LegalSourceType {
   STATUTE
@@ -355,10 +370,55 @@ model IdentityVerification {
   failedAt      DateTime?
   failureReason String?
 
+  // Failure tracking (Phase 4: Enhanced Failure Handling)
+  failureCount    Int     @default(0)
+  lastFailureCode String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // Relations for KYC Admin Features
+  adminActions KYCAdminAction[]
+  reminders    KYCExpirationReminder[]
+
   @@map("identity_verifications")
+}
+
+// KYC Admin Action Log - tracks all admin actions on verifications
+model KYCAdminAction {
+  id                     String               @id @default(cuid())
+  identityVerificationId String
+  identityVerification   IdentityVerification @relation(fields: [identityVerificationId], references: [id], onDelete: Cascade)
+
+  adminId    String
+  actionType KYCAdminActionType
+
+  previousStatus KYCStatus?
+  newStatus      KYCStatus?
+
+  reason String
+  notes  String? @db.Text
+
+  createdAt DateTime @default(now())
+
+  @@index([identityVerificationId])
+  @@index([adminId])
+  @@map("kyc_admin_actions")
+}
+
+// KYC Expiration Reminder - tracks reminders sent to users
+model KYCExpirationReminder {
+  id                     String               @id @default(cuid())
+  identityVerificationId String
+  identityVerification   IdentityVerification @relation(fields: [identityVerificationId], references: [id], onDelete: Cascade)
+
+  reminderType KYCReminderType
+  sentAt       DateTime        @default(now())
+  emailSent    Boolean         @default(false)
+
+  @@unique([identityVerificationId, reminderType])
+  @@index([identityVerificationId])
+  @@map("kyc_expiration_reminders")
 }
 
 model ArbitratorProfile {

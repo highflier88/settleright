@@ -3,6 +3,7 @@ import Stripe from 'stripe';
 
 import { prisma } from '@/lib/db';
 import { createAuditLog } from '@/lib/services/audit';
+import { getErrorDetails, shouldNotifyAdmin } from '@/lib/services/stripe-identity-errors';
 
 // Initialize Stripe
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
@@ -273,7 +274,30 @@ export async function processVerificationUpdate(sessionId: string, status: strin
 
   if (kycStatus === KYCStatus.FAILED) {
     updateData.failedAt = new Date();
-    updateData.failureReason = session.lastError?.reason ?? 'Verification failed';
+
+    // Get user-friendly error details
+    const errorCode = session.lastError?.code ?? null;
+    const errorDetails = getErrorDetails(errorCode);
+
+    updateData.failureReason = errorDetails.message;
+    updateData.lastFailureCode = errorCode;
+
+    // Increment failure count
+    const currentVerification = await prisma.identityVerification.findUnique({
+      where: { userId },
+      select: { failureCount: true },
+    });
+
+    const newFailureCount = (currentVerification?.failureCount ?? 0) + 1;
+    updateData.failureCount = newFailureCount;
+
+    // Log warning if user has failed multiple times
+    if (shouldNotifyAdmin(newFailureCount)) {
+      console.warn(
+        `[KYC Admin Alert] User ${userId} has failed verification ${newFailureCount} times. Latest error: ${errorCode}`
+      );
+      // TODO: Send notification to admin (email or Slack webhook)
+    }
   }
 
   // Update the verification record

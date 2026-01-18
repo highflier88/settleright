@@ -171,6 +171,8 @@ export interface IdentityVerification {
   expiresAt: Date | null;
   failedAt: Date | null;
   failureReason: string | null;
+  failureCount: number;
+  lastFailureCode: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
